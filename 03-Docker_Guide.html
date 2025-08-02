@@ -850,10 +850,45 @@ ENTRYPOINT ["/app/script.sh"]
                 </div>
             </div>
 
-            <div class="interactive-demo">
-                <h3>🎮 מעבדת Dockerfile</h3>
-                <button class="demo-button" onclick="dockerfileLab()">נסה לבנות Dockerfile</button>
-                <div id="dockerfile-lab" style="margin-top:15px;"></div>
+      <!-- Dockerfile Guide Section -->
+        <div id="dockerfile-guide" class="content-section">
+            <h2 class="section-title">📋 Docker How-to & Dockerfile Guide</h2>
+            
+            <h3>🎯 Docker How-to Process</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📝 Dockerfile</h3>
+                    <p>קובץ מניפסט המתאר את container image (המתכון)</p>
+                    <ul style="text-align:right; margin-top:10px; line-height:1.6;">
+                        <li>Build Arguments</li>
+                        <li>Content (filesystem layers)</li>
+                        <li>Mappings (ports, volumes)</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔨 Build</h3>
+                    <p>בנייה של docker image מתוך ה-dockerfile</p>
+                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
+                        docker build -t image-name .
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🏷️ Tag/Push/Pull</h3>
+                    <p>תיוג והעלאה/הורדה של images</p>
+                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
+                        docker push/pull image-name
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🚀 Run</h3>
+                    <p>הרצת ה-docker image כקונטיינר</p>
+                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
+                        docker run image-name
+                    </div>
+                </div>
             </div>
 
             <h3>🔨 בניית קונטיינרים - Docker Build</h3>
