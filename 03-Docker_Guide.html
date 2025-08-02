@@ -1342,44 +1342,6 @@ docker search nginx
 docker inspect nginx:latest
             </div>
 
-            <div class="exercise-container">
-                <div class="exercise-title">🌐 Exercise - Mapping Ports</div>
-                <div class="exercise-steps">
-                    <p style="text-align:right; line-height:1.8;">
-                        The following image from Docker Hub is an hello world web app: <strong>crccheck/hello-world</strong>
-                    </p>
-                    <ul style="text-align:right; line-height:1.8; margin-top:15px;">
-                        <li>Run the image:</li>
-                        <ul style="margin-right:20px; margin-top:10px;">
-                            <li>In the background</li>
-                            <li>Name the container "hello-world-webtest"</li>
-                            <li>Map port 8080 inside the container to port 9999 on your host</li>
-                        </ul>
-                        <li>Browse to <a href="http://localhost:9999" style="color:#4a90e2;">http://localhost:9999</a> to view the hello world message</li>
-                    </ul>
-                </div>
-
-                <div class="solution-box">
-                    <button class="demo-button" onclick="showSolution('port-mapping')">הצג פתרון</button>
-                    <div id="port-mapping-solution" style="display:none; margin-top:15px;">
-                        <div class="code-block">
-# הרצה עם מיפוי פורטים
-docker run -d --name hello-world-webtest -p 9999:8080 crccheck/hello-world
-
-# בדיקת הקונטיינר
-docker ps
-
-# צפייה בלוגים
-docker logs hello-world-webtest
-
-# עצירה וניקוי
-docker stop hello-world-webtest
-docker rm hello-world-webtest
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="interactive-demo">
                 <h3>🔍 חיפוש ב-Docker Hub</h3>
                 <input type="text" id="search-input" placeholder="חפש Image..." style="padding:10px; border-radius:5px; border:1px solid #ddd; width:200px; margin-left:10px;">
