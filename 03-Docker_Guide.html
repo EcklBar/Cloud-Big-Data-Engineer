@@ -435,6 +435,7 @@
                             <li>✅ זמן התחלה מהיר</li>
                             <li>✅ שימוש יעיל במשאבים</li>
                             <li>✅ ניידות גבוהה</li>
+                            <li>✅ קל לניהול</li>
                         </ul>
                     </div>
                 </div>
@@ -462,6 +463,7 @@
                             <li>✅ אבטחה גבוהה</li>
                             <li>✅ תמיכה במספר OS</li>
                             <li>❌ כבד במשאבים</li>
+                            <li>❌ איטי בהפעלה</li>
                         </ul>
                     </div>
                 </div>
@@ -830,21 +832,27 @@ ENTRYPOINT ["/app/script.sh"]
                     <div style="font-size:2em;">📝</div>
                     <h4>1. כתיבת Dockerfile</h4>
                     <p>יצירת קובץ המניפסט</p>
+                    <p>Build Arguments</p>
+                    <p>Content (filesystem layers)</p>
+                    <p>Mappings (ports, volumes)</p>
                 </div>
                 <div style="background:#e8f5e8; padding:20px; border-radius:10px; text-align:center;">
                     <div style="font-size:2em;">🔨</div>
                     <h4>2. Build</h4>
                     <p>בנייה של ה-image</p>
+                    <p>docker build -t image-name .</p>
                 </div>
                 <div style="background:#fff3e0; padding:20px; border-radius:10px; text-align:center;">
                     <div style="font-size:2em;">🏷️</div>
                     <h4>3. Tag/Push/Pull</h4>
                     <p>תיוג והעלאה/הורדה</p>
+                    <p>docker push/pull image-name</p>
                 </div>
                 <div style="background:#fce4ec; padding:20px; border-radius:10px; text-align:center;">
                     <div style="font-size:2em;">🚀</div>
                     <h4>4. Run</h4>
                     <p>הרצת ה-image כקונטיינר</p>
+                    <p>docker run image-name</p>
                 </div>
             </div>
 
@@ -1293,21 +1301,50 @@ docker push localhost:5000/my-app
             </div>
 
             <h3>🔄 פקודות Registry בסיסיות</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📤 Docker Push</h3>
+                    <p>העלאת images ל-registry</p>
+                    <div class="code-block">docker push username/image-name:tag</div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📥 Docker Pull</h3>
+                    <p>הורדת images מה-registry (docker run מוריד אוטומטית)</p>
+                    <div class="code-block">docker pull username/image-name:tag</div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🏷️ Image Tagging</h3>
+                    <p>Image ללא registry spec נדחף ל-Docker Hub</p>
+                    <div class="code-block">hello-world:v1 → docker.io/username/hello-world:v1</div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔍 חיפוש ומידע</h3>
+                    <p>חיפוש והצגת מידע על images</p>
+                    <div class="code-block">
+docker search nginx
+docker inspect nginx:latest
+                    </div>
+                </div>
+            </div>
+
             <div class="code-block">
                 <button class="copy-btn" onclick="copyCode(this)">העתק</button>
 # התחברות ל-Registry
 docker login
 
-# העלאת Image
-docker push username/repository:tag
+# תיוג images
+docker tag hello-world:v1 hello-world:june2023
+docker tag hello-world:v1 registry.com/hello-world-app:june2023
 
-# הורדת Image
+# העלאה והורדה
+docker push username/repository:tag
 docker pull username/repository:tag
 
-# חיפוש Images
+# חיפוש והצגת מידע
 docker search nginx
-
-# הצגת מידע על Image
 docker inspect nginx:latest
             </div>
 
