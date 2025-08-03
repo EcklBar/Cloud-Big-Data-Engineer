@@ -980,6 +980,9 @@
         const allCards = document.querySelectorAll('.command-card, .definition-card');
         const allSections = document.querySelectorAll('.section');
 
+        allCards.forEach(card => {card.originalHTML = card.innerHTML;});
+
+
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             
@@ -987,7 +990,7 @@
                 // Reset view
                 allCards.forEach(card => {
                     card.style.display = 'block';
-                    card.innerHTML = card.innerHTML.replace(/<span class="highlight">(.*?)<\/span>/g, '$1');
+                    card.innerHTML = card.originalHTML;
                 });
                 allSections.forEach(section => section.classList.remove('active'));
                 document.getElementById('definitions').classList.add('active');
@@ -1004,14 +1007,13 @@
                     card.style.display = 'block';
                     hasResults = true;
                     
-                    // Highlight search term
-                    const regex = new RegExp(`(${searchTerm})`, 'gi');
-                    card.innerHTML = card.innerHTML.replace(/<span class="highlight">(.*?)<\/span>/g, '$1');
-                    card.innerHTML = card.innerHTML.replace(regex, '<span class="highlight">$1</span>');
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            // Highlight search term - שנה את השורות האלה:
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            card.innerHTML = card.originalHTML.replace(regex, '<span class="highlight">$1</span>'); // 👈 שנה את השורה הזו ומחק את הקודמת
+        } else {
+            card.style.display = 'none';
+        }
+    });
 
             // Show all sections when searching
             if (hasResults) {
