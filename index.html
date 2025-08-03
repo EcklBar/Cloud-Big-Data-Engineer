@@ -1,108 +1,396 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="he"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud & Big Data Engineer</title>
+    <title>Cloud &amp; Big Data Engineer</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-            line-height: 1.6;
-        }
-        
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-        
-        .nav-container {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        ul {
-            list-style: none;
+        * {
+            margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
-        
-        li {
-            margin: 15px 0;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: #333;
+            line-height: 1.6;
+            direction: rtl;
+            min-height: 100vh;
         }
-        
-        li:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
-        
-        a {
-            display: block;
-            padding: 15px 20px;
-            color: white;
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-20px, -10px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .header .description {
+            font-size: 1.1rem;
+            color: #777;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .guide-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 32px;
             text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .guide-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .guide-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .guide-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .guide-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .guide-description {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .guide-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .guide-category {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 500;
-            font-size: 16px;
-            border-radius: 8px;
         }
-        
-        a:hover {
-            color: #f8f9fa;
+
+        .guide-arrow {
+            color: #667eea;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
         }
-        
-        .description {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 5px;
+
+        .guide-card:hover .guide-arrow {
+            transform: translateX(-5px);
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .footer .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            
+            .header {
+                padding: 40px 24px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .guides-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .guide-card {
+                padding: 24px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body>
-    <h1>Welcome to My Site</h1>
-    
-    <div class="nav-container">
-        <ul>
-            <li>
-                <a href="01-BigData-Introduction.html">
-                    Big Data Introduction
-                    <div class="description">Introduction to the world of Big Data and leading technologies</div>
-                </a>
-            </li>
-            <li>
-                <a href="02-Linux-Basics-Guide.html">
-                    Linux Basics
-                    <div class="description">Basic guide for working with Linux operating system</div>
-                </a>
-            </li>
-            <li>
-                <a href="02-Linux-Command-Guide-Complete.html">
-                    Complete Linux Command Guide
-                    <div class="description">Comprehensive guide to advanced Linux commands</div>
-                </a>
-            </li>
-            <li>
-                 <a href="03-Docker_Guide.html">
-                    Docker Guide
-                    <div class="description">Complete guide to working with Docker containers</div>
-                </a>
-            </li>
-            <li>
-                 <a href="03-Docker_Commands.html">
-                    Docker Commands
-                    <div class="description">Essential Docker commands for development</div>
-                </a>
-            </li>
-        </ul>
+<body dir="rtl">
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>ברוך הבא לאתר שלי</h1>
+                <p class="subtitle">Cloud &amp; Big Data Engineer</p>
+                <p class="description">
+                    מדריכים מקצועיים וכלים חיוניים למהנדסי נתונים ופיתוח ענן. 
+                    כאן תמצא כל מה שאתה צריך כדי להתקדם בתחום הביג דאטה והענן.
+                </p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">מדריכים מקצועיים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">תוכן מעודכן</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">זמינות</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="guides-grid">
+            <a href="01-BigData-Introduction.html" class="guide-card">
+                <div class="guide-icon">📊</div>
+                <div class="guide-title">מבוא לביג דאטה</div>
+                <div class="guide-description">
+                    היכרות ראשונית עם עולם הביג דאטה, כלים בסיסיים וטכנולוגיות מרכזיות בתחום
+                </div>
+                <div class="guide-meta">
+                    <span class="guide-category">Big Data</span>
+                    <span class="guide-arrow">←</span>
+                </div>
+            </a>
+
+            <a href="02-Linux-Basics-Guide.html" class="guide-card">
+                <div class="guide-icon">🐧</div>
+                <div class="guide-title">יסודות לינוקס</div>
+                <div class="guide-description">
+                    מדריך בסיסי ללינוקס - פקודות יסוד, ניהול קבצים ומושגי בסיס שכל מהנדס צריך לדעת
+                </div>
+                <div class="guide-meta">
+                    <span class="guide-category">Linux</span>
+                    <span class="guide-arrow">←</span>
+                </div>
+            </a>
+
+            <a href="02-Linux-Command-Guide-Complete.html" class="guide-card">
+                <div class="guide-icon">⌨️</div>
+                <div class="guide-title">מדריך פקודות לינוקס מלא</div>
+                <div class="guide-description">
+                    אוסף מקיף של פקודות לינוקס עם דוגמאות מעשיות ושימושים יומיומיים
+                </div>
+                <div class="guide-meta">
+                    <span class="guide-category">Linux</span>
+                    <span class="guide-arrow">←</span>
+                </div>
+            </a>
+
+            <a href="03-Docker_Commands.html" class="guide-card">
+                <div class="guide-icon">🐳</div>
+                <div class="guide-title">פקודות דוקר</div>
+                <div class="guide-description">
+                    רשימה מסודרת של פקודות דוקר החיוניות לעבודה יומיומית עם קונטיינרים
+                </div>
+                <div class="guide-meta">
+                    <span class="guide-category">Docker</span>
+                    <span class="guide-arrow">←</span>
+                </div>
+            </a>
+
+            <a href="03-Docker_Guide.html" class="guide-card">
+                <div class="guide-icon">📦</div>
+                <div class="guide-title">מדריך דוקר</div>
+                <div class="guide-description">
+                    מדריך מקיף ללמידת דוקר מהיסודות ועד לשימושים מתקדמים בסביבת ייצור
+                </div>
+                <div class="guide-meta">
+                    <span class="guide-category">Docker</span>
+                    <span class="guide-arrow">←</span>
+                </div>
+            </a>
+
+            <a href="dbt-installation-guide.html" class="guide-card">
+                <div class="guide-icon">🔧</div>
+                <div class="guide-title">מדריך התקנת dbt</div>
+                <div class="guide-description">
+                    מדריך שלב אחר שלב להתקנה ולהגדרת dbt עם BigQuery לצורכי טרנספורמציה של נתונים
+                </div>
+                <div class="guide-meta">
+                    <span class="guide-category">dbt</span>
+                    <span class="guide-arrow">←</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>נבנה עם ❤️ על ידי <span class="highlight">Cloud &amp; Big Data Engineer</span></p>
+            <p>כל המדריכים מעודכנים ומבוססים על הפרקטיקות הטובות ביותר בתעשייה</p>
+        </div>
     </div>
-</body>
-</html>
+
+</body></html>
