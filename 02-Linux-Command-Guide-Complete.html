@@ -874,7 +874,6 @@
                         <div class="command-example">count=100 <span class="comment"># משתנה נומרי</span></div>
                         <div class="command-example">export VAR="value" <span class="comment"># משתנה סביבה</span></div>
                         <div class="command-example">export PATH="/usr/local/bin:$PATH" <span class="comment"># הוספה ל-PATH</span></div>
-                        <div class="command-example">export DATABASE_URL="postgresql://localhost:5432/mydb"</div>
                         <div class="command-example">readonly VAR="value" <span class="comment"># משתנה לקריאה בלבד</span></div>
                         <div class="command-example">unset VAR <span class="comment"># מחיקת משתנה</span></div>
                     </div>
@@ -937,6 +936,60 @@
                         <div class="command-example"># שרשור מחרוזות עם סוגריים מסולסלים</div>
                         <div class="command-example">prefix="hello"</div>
                         <div class="command-example">echo "${prefix}-world" <span class="comment"># פלט: hello-world</span></div>
+                    </div>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-header">
+                        <code class="command-name">תיחום משתנים</code>
+                    </div>
+                    <p class="command-description">שימוש בסוגריים מסולסלים</p>
+                    <div class="command-examples">
+                        <div class="command-example">prefix=$user</div>
+                        <div class="command-example">echo Hello ${prefix}man and ${prefix}girl</div>
+                        <div class="command-example">${VAR:-default} <span class="comment"># אם VAR ריק, השתמש ב-default</span></div>
+                        <div class="command-example">${#VAR} <span class="comment"># אורך המשתנה</span></div>
+                    </div>
+                </div>
+                
+                <div class="command-card">
+                    <div class="command-header">
+                        <code class="command-name">Pound Sign (#)</code>
+                    </div>
+                    <p class="command-description">הערות ותיעוד</p>
+                    <div class="command-examples">
+                        <div class="command-example"># זוהי הערה - מתעלמים ממנה</div>
+                        <div class="command-example">echo hello # הערה בסוף שורה</div>
+                        <div class="command-example">ls # is it empty?</div>
+                        <div class="command-example">echo #aaa <span class="comment"># ההערה לא תודפס</span></div>
+                    </div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-header">
+                        <code class="command-name">Backslash (\)</code>
+                    </div>
+                    <p class="command-description">Escaping וחיבור שורות</p>
+                    <div class="command-examples">
+                        <div class="command-example">echo hello \r world</div>
+                        <div class="command-example">echo escaping \\\ \$\ \`\ \"\ \'</div>
+                        <div class="command-example">echo escaping \\\?\*\"\'</div>
+                        <div class="command-example">echo This command line \<br>is split in three \<br>> parts</div>
+                    </div>
+                </div>
+                
+                 <div class="command-card">
+                    <div class="command-header">
+                        <code class="command-name">Wildcards</code>
+                    </div>
+                    <p class="command-description">תווים מיוחדים להתאמת קבצים</p>
+                    <div class="command-examples">
+                        <div class="command-example">ls *.txt <span class="comment"># כל קבצי txt</span></div>
+                        <div class="command-example">ls part* <span class="comment"># כל מה שמתחיל ב-part</span></div>
+                        <div class="command-example">ls file?.txt <span class="comment"># file1.txt, file2.txt וכו'</span></div>
+                        <div class="command-example">ls file[123].txt <span class="comment"># file1.txt, file2.txt, file3.txt</span></div>
+                        <div class="command-example">ls [a-z]*.txt <span class="comment"># קבצים שמתחילים באות קטנה</span></div>
+                        <div class="command-example">rm *.tmp <span class="comment"># מחיקת כל קבצי tmp</span></div>
                     </div>
                 </div>
             </div>
