@@ -1,0 +1,1621 @@
+        <!-- Commands and Arguments Section -->
+        <div id="redirection" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">Command Substitution</div>
+                    <div class="command-subtitle">החלפת פקודות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">מאפשר להקציב את הפלט של פקודה למשתנה<br><strong>result=$(command)</strong></div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">$</span> <span class="command">currentDateTime=$(date +%Y-%m-%d_%H:%M:%S)</span><br>
+                        <span class="prompt">$</span> <span class="command">echo $currentDateTime</span><br>
+                        2023-07-17_14:21:26
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('currentDateTime=$(date)', '2023-07-17_14:21:26')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">> append</div>
+                    <div class="command-subtitle">הוספה לקובץ</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">השתמש ב-(>>) כדי להוסיף פלט לקובץ</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">$</span> <span class="command">echo It is cold today! >> winter.txt</span><br>
+                        <span class="prompt">$</span> <span class="command">cat winter.txt</span><br>
+                        <span class="prompt">$</span> <span class="command">echo Where is the summer ? >> winter.txt</span><br>
+                        <span class="prompt">$</span> <span class="command">cat winter.txt</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('echo >> file.txt', 'Text appended to file!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">2> Error Redirection</div>
+                    <div class="command-subtitle">הפניית שגיאות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>הפניית stderr נעשית עם 2></li>
+                            <li>זה יכול להיות שימושי מאוד כדי למנוע הודעות שגיאה מלהציף את המסך</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">$</span> <span class="command">echo It is cold today! > winter.txt 2> err.log</span><br>
+                        <span class="prompt">$</span> <span class="command">cat winter.txt</span><br>
+                        <span class="prompt">$</span> <span class="command">cat err.log</span><br>
+                        <span class="prompt">$</span> <span class="command">cat a > emptyfile.log 2> err.log</span><br>
+                        <span class="prompt">$</span> <span class="command">cat err.log</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('command 2> err.log', 'Errors redirected to file!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">< Input Redirection</div>
+                    <div class="command-subtitle">הפניית קלט</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">הפניית stdin נעשית עם < (קיצור של 0-<)</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat linux1.txt</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">tac < linux1.txt</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">tac < linux1.txt > sorted</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat sorted</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('tac < file.txt', 'File content reversed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div id="filters" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">| Pipe</div>
+                    <div class="command-subtitle">צינור</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>Piping משמש על ידי האופרטור ( | )</li>
+                            <li>אופרטור זה מזין את הפלט מהתוכנית בצד שמאל כקלט לתוכנית בצד ימין</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls | head -3</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls | head -3 | tail -1</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls | head -3 | tail -1 > file</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('ls | head -3', 'First 3 files displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">grep</div>
+                    <div class="command-subtitle">חיפוש תבניות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>מסנן grep מפורסם בקרב משתמשי Unix / Linux</li>
+                            <li>השימוש הנפוץ ביותר של grep הוא לסנן שורות טקסט המכילות (או לא מכילות) מחרוזת מסוימת</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">$</span> <span class="command">sudo cat /var/log/messages</span><br>
+                        <span class="prompt">$</span> <span class="command">sudo cat /var/log/messages | grep mysql</span><br>
+                        <span class="prompt">$</span> <span class="command">sudo grep mysql /var/log/messages</span><br>
+                        <span class="prompt">$</span> <span class="command">cat linux1.txt | grep -v first</span><br>
+                        <span class="prompt">$</span> <span class="command">grep --help</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('grep mysql /var/log/messages', 'Found 5 lines containing mysql')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">wc</div>
+                    <div class="command-subtitle">ספירת מילים</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">Word Count - ספירת מילים, שורות ותווים קלה עם wc</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">wc --help</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">wc linux1.txt</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">wc -l linux1.txt</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat linux1.txt | wc -l</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('wc linux1.txt', '  10  45  234 linux1.txt')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">sort</div>
+                    <div class="command-subtitle">מיון</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">מסנן sort יבצע כברירת מחדל מיון אלפביתי</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat sort.example</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">sort sort.example</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">sort -r sort.example</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">sort -r < sort.example</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('sort file.txt', 'File content sorted alphabetically!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">uniq</div>
+                    <div class="command-subtitle">הסרת כפילויות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">עם uniq תוכל להסיר כפילויות מרשימה ממוינת</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">$</span> <span class="command">cat uniq.example</span><br>
+                        <span class="prompt">$</span> <span class="command">uniq uniq.example</span><br>
+                        <span class="prompt">$</span> <span class="command">uniq -c uniq.example</span><br>
+                        <span class="prompt">$</span> <span class="command">cat uniq.example | uniq | sort -r</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('uniq file.txt', 'Duplicates removed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">cut</div>
+                    <div class="command-subtitle">חיתוך עמודות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">מסנן cut יכול לבחור עמודות מקבצים, תלוי במפריד או בספירת בתים</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat employees.csv</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cut -d, -f1 employees.csv</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cut -d, -f1,2 employees.csv</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cut -d, -f1,3 employees.csv</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('cut -d, -f1 file.csv', 'First column extracted!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div id="tools" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">find</div>
+                    <div class="command-subtitle">חיפוש קבצים</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">פקודת find יכולה להיות שימושית מאוד בתחילת צינור לחיפוש קבצים</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">$</span> <span class="command">find /home/naya/tutorial/linux/ > fileslist</span><br>
+                        <span class="prompt">$</span> <span class="command">find . -name "*.example"</span><br>
+                        <span class="prompt">$</span> <span class="command">find . -newer winter.txt</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('find . -name *.txt', 'Found 3 .txt files')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">date</div>
+                    <div class="command-subtitle">תאריך ושעה</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">פקודת date יכולה להציג את התאריך, השעה, אזור הזמן ועוד</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">date</span><br>
+                        Mon Jul 17 14:29:10 UTC 2023
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('date', 'Mon Jul 17 14:29:10 UTC 2023')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">gzip / gunzip</div>
+                    <div class="command-subtitle">דחיסה</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>דחיסה מגיעה בשימוש כדי לחסוך במקום דיסק</li>
+                            <li>פקודת gzip יכולה לגרום לקבצים לתפוס פחות מקום</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ll -h</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">gzip system.log</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">gunzip system.log.gz</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('gzip file.txt', 'File compressed to file.txt.gz')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">zcat / zmore</div>
+                    <div class="command-subtitle">צפייה בקבצים דחוסים</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">קבצי טקסט שדחוסים עם gzip ניתן לצפות בהם עם zcat ו-zmore</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">gzip system.log</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat system.log.gz</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">zcat system.log.gz</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">zmore system.log.gz</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('zcat file.gz', 'Compressed file content displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vi Editor Section -->
+        <div id="vi" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">מבוא ל-Vi</div>
+                    <div class="command-subtitle">Introduction To Vi</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>עורך vi מותקן כמעט בכל מערכת Unix</li>
+                            <li>Linux לעתים קרובות מתקין vim (vi improved) שהוא דומה</li>
+                            <li>כל מנהל מערכת / מפתח צריך לדעת vi(m) כי זה כלי קל לסקריפטים / פתרון בעיות</li>
+                            <li>עורך vi אינו אינטואיטיבי, אבל ברגע שאתה לומד אותו, vi הופך ליישום רב עוצמה מאוד</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">vi</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">vi file1</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('vi file.txt', 'Vi editor opened!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">מצבי Vi</div>
+                    <div class="command-subtitle">Command Mode And Insert Mode</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>עורך vi מתחיל במצב פקודה</li>
+                            <li>במצב פקודה, אנחנו יכולים להקליד פקודות</li>
+                            <li>חלק מהפקודות יביאו אותנו למצב הוספה</li>
+                            <li>במצב הוספה, אתה יכול להקליד טקסט</li>
+                            <li>מקש ה-escape יחזיר אותך למצב פקודה</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">מקשים</div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="background: #4facfe; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Key</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Action</th>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Esc</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">set vi(m) in command mode</td>
+                        </tr>
+                    </table>
+                    <button class="try-button" onclick="simulateCommand('Press Esc', 'Switched to command mode!')">נסה מקש Esc</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">פקודות Vi בסיסיות</div>
+                    <div class="command-subtitle">Basic vi commands</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">להלן כמה פקודות Vi לעריכת קבצי טקסט בסיסית</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">טבלת פקודות</div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="background: #4facfe; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Command</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Action</th>
+                        </tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">i</td><td style="padding: 8px; border: 1px solid #ddd;">Change to insert mode and start typing</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">Esc</td><td style="padding: 8px; border: 1px solid #ddd;">Change to edit mode and accept commands</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">:wq</td><td style="padding: 8px; border: 1px solid #ddd;">Save and exit (in edit mode)</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">:q!</td><td style="padding: 8px; border: 1px solid #ddd;">Exit without saving (Discard changes)</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">dd</td><td style="padding: 8px; border: 1px solid #ddd;">Delete the current row</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">x</td><td style="padding: 8px; border: 1px solid #ddd;">Delete a single character</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">u</td><td style="padding: 8px; border: 1px solid #ddd;">Undo the last operation</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">/string</td><td style="padding: 8px; border: 1px solid #ddd;">Search for a specific string ("n" for next)</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">Replace</td><td style="padding: 8px; border: 1px solid #ddd;">replace foo with bar on all lines:</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">string</td><td style="padding: 8px; border: 1px solid #ddd;">:1,$ s/foo/bar/g</td></tr>
+                    </table>
+                    <button class="try-button" onclick="simulateCommand('vi commands', 'Vi commands reference displayed!')">הצג פקודות Vi</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">whoami</div>
+                    <div class="command-subtitle">זיהוי משתמש</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">פקודת whoami אומרת לך את שם המשתמש שלך</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">whoami</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('whoami', 'naya')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">su</div>
+                    <div class="command-subtitle">החלפת משתמש</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>פקודת su מאפשרת למשתמש להריץ shell כמשתמש אחר</li>
+                            <li>אתה יכול גם לעשות su להפוך ל-root, אתה חייב לדעת את סיסמת root</li>
+                            <li>משתמש root יכול להפוך לכל משתמש קיים ללא ידיעת סיסמת המשתמש</li>
+                            <li>כאשר לא מסופק שם משתמש ל-su או su -, הפקודה תניח שroot הוא היעד</li>
+                            <li>כדי להפוך למשתמש אחר ולקבל גם את סביבת המשתמש היעד, הוצא פקודת su - ואחריה שם המשתמש היעד</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">su naya</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">su root</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">su &lt;UserName&gt;</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">su - &lt;UserName&gt;</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('su root', 'Switched to root user!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">sudo</div>
+                    <div class="command-subtitle">הרצת פקודות כמשתמש אחר</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>תוכנית sudo מאפשרת למשתמש להתחיל תוכנית עם האישורים של משתמש אחר</li>
+                            <li>מנהל המערכת צריך להגדיר את קובץ /etc/sudoers - visudo</li>
+                            <li>השתמש ב-sudo עם bash -c כדי להריץ פקודה כמשתמש אחר</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">/usr/sbin/useradd -m newuser</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">sudo /usr/sbin/useradd -m newuser</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">sudo -u root bash -c 'echo "I am $USER, with uid $UID"'</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('sudo command', 'Command executed with elevated privileges!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">הרשאות קבצים</div>
+                    <div class="command-subtitle">File Ownership</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">לכל קובץ יש בעלים משתמש ובעלי קבוצה</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ll -lh</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('ll -lh', 'File permissions and ownership displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">chown</div>
+                    <div class="command-subtitle">שינוי בעלות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>ניתן לשנות את הבעלים של קובץ באמצעות פקודת chown</li>
+                            <li>השתמש ב-chown כדי לשנות גם את הבעלים והבעלי הקבוצה</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">chown root file1</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">chown naya:nayatech file1</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('chown user:group file', 'File ownership changed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">הרשאות</div>
+                    <div class="command-subtitle">Permissions</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>תשעת התווים העוקבים אחר סוג הקובץ מציינים את ההרשאות בשלוש שלישיות</li>
+                            <li>הרשאה יכולה להיות:</li>
+                            <li style="margin-right: 20px;">r לגישת קריאה</li>
+                            <li style="margin-right: 20px;">w לגישת כתיבה</li>
+                            <li style="margin-right: 20px;">x לביצוע</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">טבלת הרשאות</div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="background: #4facfe; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Permission</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">On A File</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">On A Directory</th>
+                        </tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">r (read)</td><td style="padding: 8px; border: 1px solid #ddd;">read file contents (cat)</td><td style="padding: 8px; border: 1px solid #ddd;">read directory contents (ls)</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">w (write)</td><td style="padding: 8px; border: 1px solid #ddd;">change file contents (vi)</td><td style="padding: 8px; border: 1px solid #ddd;">create files in (touch)</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">x (execute)</td><td style="padding: 8px; border: 1px solid #ddd;">execute the file</td><td style="padding: 8px; border: 1px solid #ddd;">enter the directory (cd)</td></tr>
+                    </table>
+                    <button class="try-button" onclick="simulateCommand('ls -l', 'File permissions displayed!')">הצג הרשאות</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">chmod</div>
+                    <div class="command-subtitle">שינוי הרשאות</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>ניתן לשנות הרשאות באמצעות chmod</li>
+                            <li>הדוגמה הראשונה נותנת למשתמש הבעלים הרשאות ביצוע</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">chmod u+x permissions.txt</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">chmod g+r permissions.txt</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">chmod 777 permissions.txt</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('chmod 755 file', 'File permissions changed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">הרשאות מספריות</div>
+                    <div class="command-subtitle">Numeric Permissions</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>כבעלים של קובץ, הרשאות הבעלים חלות עליך, שאר ההרשאות אין להן השפעה על הגישה שלך לקובץ</li>
+                            <li>כאשר אתה שייך לקבוצה שהיא הבעלי הקבוצה של קובץ, אז הרשאות בעלי הקבוצה חלות עליך</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">טבלת מיקומים</div>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <tr style="background: #4facfe; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd;">Position</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Characters</th>
+                            <th style="padding: 8px; border: 1px solid #ddd;">Function</th>
+                        </tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">1</td><td style="padding: 8px; border: 1px solid #ddd;">-</td><td style="padding: 8px; border: 1px solid #ddd;">this is a regular file</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">2-4</td><td style="padding: 8px; border: 1px solid #ddd;">rwx</td><td style="padding: 8px; border: 1px solid #ddd;">permissions for the user owner</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">5-7</td><td style="padding: 8px; border: 1px solid #ddd;">r-x</td><td style="padding: 8px; border: 1px solid #ddd;">permissions for the group owner</td></tr>
+                        <tr><td style="padding: 8px; border: 1px solid #ddd;">8-10</td><td style="padding: 8px; border: 1px solid #ddd;">r--</td><td style="padding: 8px; border: 1px solid #ddd;">permissions for others</td></tr>
+                    </table>
+                    <button class="try-button" onclick="simulateCommand('chmod 755', 'rwxr-xr-x permissions set!')">דוגמה מספרית</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commands and Arguments Section - keeping original -->
+        <div id="commands" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">echo</div>
+                    <div class="command-subtitle">Print Input</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">השתמש ב-echo להדפסת הקלט שהוא מקבל</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo hello world</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('echo', 'hello world')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">man</div>
+                    <div class="command-subtitle">Manual Pages</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>Manual pages - דפי העזרה של Linux</li>
+                            <li>כמעט לכל פקודה יש דף man מפורט</li>
+                            <li>השתמש ב-q כדי לצאת מדף ה-man</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">man ls</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">man grep</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('man', 'Manual page displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">history</div>
+                    <div class="command-subtitle">Command History</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>מציג את היסטוריית הפקודות שהוקלדו</li>
+                            <li>השתמש ב-!! לחזרה על הפקודה האחרונה</li>
+                            <li>השתמש ב-!n לחזרה על פקודה מספר n</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">history</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">!!</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('history', 'Command history displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+                        <!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐧 מדריך פקודות Linux אינטראקטיבי</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .command-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .command-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .command-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .command-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .command-info {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 15px;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #333;
+            padding: 8px 0;
+            border-right: 3px solid #4facfe;
+            padding-right: 15px;
+        }
+
+        .info-content {
+            padding: 8px 0;
+            line-height: 1.6;
+        }
+
+        .info-content ul {
+            margin-right: 20px;
+        }
+
+        .info-content li {
+            margin-bottom: 8px;
+        }
+
+        .example-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-right: 4px solid #4facfe;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .terminal {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .terminal .prompt {
+            color: #00aaff;
+        }
+
+        .terminal .command {
+            color: #ffff00;
+        }
+
+        .try-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .try-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            width: 300px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            direction: rtl;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .command-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .search-input {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐧 מדריך פקודות Linux אינטראקטיבי</h1>
+            <p>מדריך מקיף לפקודות Linux הכי שימושיות עם דוגמאות מעשיות</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="חפש פקודה..." id="searchInput">
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('directories')">עבודה עם תיקיות</button>
+            <button class="nav-btn" onclick="showSection('files')">עבודה עם קבצים</button>
+            <button class="nav-btn" onclick="showSection('content')">תוכן קבצים</button>
+            <button class="nav-btn" onclick="showSection('variables')">משתני Shell</button>
+            <button class="nav-btn" onclick="showSection('redirection')">הפניות קלט/פלט</button>
+            <button class="nav-btn" onclick="showSection('filters')">מסננים וצינורות</button>
+            <button class="nav-btn" onclick="showSection('tools')">כלי Linux בסיסיים</button>
+            <button class="nav-btn" onclick="showSection('vi')">עורך Vi</button>
+            <button class="nav-btn" onclick="showSection('users')">משתמשים והרשאות</button>
+        </div>
+
+        <!-- Working With Directories Section -->
+        <div id="directories" class="section active">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">pwd</div>
+                    <div class="command-subtitle">Print Working Directory</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">הכלי pwd (Print Working Directory) מציג את התיקייה הנוכחית</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">pwd</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('pwd', '/home/naya')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">cd</div>
+                    <div class="command-subtitle">Change Directory</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">הכלי cd (change directory) משמש לשינוי תיקיות</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /etc</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">pwd</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /home/naya</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">pwd</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('cd', 'Directory changed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">ls</div>
+                    <div class="command-subtitle">List Directory Contents</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">משמש להצגת תוכן התיקייה</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('ls', 'Documents  Downloads  Pictures  Videos')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">mkdir</div>
+                    <div class="command-subtitle">Make Directory</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>mkdir הוא הפקודה ליצירת תיקיות חדשות</li>
+                            <li>mkdir חייב לקבל לפחות פרמטר אחד - שם התיקייה החדשה ליצירה</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /home/naya/tutorial/linux</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">mkdir test</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls -l</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('mkdir', 'Directory created successfully!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Working With Files Section -->
+        <div id="files" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">touch</div>
+                    <div class="command-subtitle">Create / Change timestamp of a file</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>דרך קלה ליצירת קובץ ריק היא שימוש ב-touch</li>
+                            <li>משנה את זמן הגישה (-a) או זמן השינוי (-m) של קבצים</li>
+                            <li>יוצר קבצים שלא קיימים כבר</li>
+                            <li>השתמש ב-(-t) כדי לקבוע זמן של הקובץ לתאריך ושעה ספציפיים</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /home/naya/tutorial/linux</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">touch file1</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">touch file2 file3</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls -l</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">touch -t 201811011932 file1</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('touch', 'File created successfully!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">cp</div>
+                    <div class="command-subtitle">Copy Files</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">להעתקת קובץ, השתמש ב-cp עם מקור ויעד</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-linux-naya ~]$</span> <span class="command">touch file1</span><br>
+                        <span class="prompt">[naya@ent7-linux-naya ~]$</span> <span class="command">cp file1 file1_bck</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('cp', 'File copied successfully!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">mv</div>
+                    <div class="command-subtitle">Move/Rename Files</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">השתמש ב-mv לשינוי שם קובץ או להעברת הקובץ לתיקייה אחרת</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">mv file1 file123</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('mv', 'File moved/renamed successfully!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">rm</div>
+                    <div class="command-subtitle">Remove Files</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>השתמש ב-rm להסרת קובץ/תיקייה שכבר לא נחוץ</li>
+                            <li>שורת הפקודה אינה כוללת פח אשפה לשחזור קבצים</li>
+                            <li>יש גם אפשרות לבטל עם undo</li>
+                            <li>השתמש ב-rm -rf יימחק הכל (בתנאי שיש לך הרשאות לעשות זאת)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">rm file1</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">rm file2 file3</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">rm -rf file1</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls -l</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('rm', 'File removed successfully!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Contents Section -->
+        <div id="content" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">cat</div>
+                    <div class="command-subtitle">Display Content of a File</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>פקודת cat היא אחד הכלים האוניברסליים ביותר</li>
+                            <li>העתקת קלט סטנדרטי לפלט סטנדרטי</li>
+                            <li>השתמש ב-cat להצגת קובץ על המסך אבל יכול לשמש למטרות רבות</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cat system.log</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('cat', 'File content displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">head</div>
+                    <div class="command-subtitle">Display Lines from Top</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>השתמש ב-head להצגת n השורות הראשונות של קובץ</li>
+                            <li>Head ללא ארגומנט יחזיר את 10 השורות הראשונות</li>
+                            <li>וגם head יכול להציג את n הבתים הראשונים באמצעות (-c)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">head -5 head.exercise</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">head head.exercise</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">head -c1000 head.exercise</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('head', 'First 10 lines displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">tail</div>
+                    <div class="command-subtitle">Display Lines from Bottom</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>דומה ל-head, tail יציג את 10 השורות האחרונות של קובץ</li>
+                            <li>השתמש ב-tail להצגת n השורות האחרונות של קובץ</li>
+                            <li>וגם tail יכול להציג את n הבתים האחרונים באמצעות (-c)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">tail -5 system.log</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">tail system.log</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">tail -c1000 system.log</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('tail', 'Last 10 lines displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">grep</div>
+                    <div class="command-subtitle">Search Patterns in Text</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">חיפוש תבניות בטקסט - כלי חיפוש רב-עוצמה לקבצי טקסט</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">grep "error" system.log</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">grep -i "Error" system.log</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('grep', 'Pattern found in 3 lines!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commands and Arguments Section -->
+        <div id="commands" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">echo</div>
+                    <div class="command-subtitle">Print Input</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">השתמש ב-echo להדפסת הקלט שהוא מקבל</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo hello world</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('echo', 'hello world')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">man</div>
+                    <div class="command-subtitle">Manual Pages</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>Manual pages - דפי העזרה של Linux</li>
+                            <li>כמעט לכל פקודה יש דף man מפורט</li>
+                            <li>השתמש ב-q כדי לצאת מדף ה-man</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">man ls</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">man grep</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('man', 'Manual page displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">history</div>
+                    <div class="command-subtitle">Command History</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>מציג את היסטוריית הפקודות שהוקלדו</li>
+                            <li>השתמש ב-!! לחזרה על הפקודה האחרונה</li>
+                            <li>השתמש ב-!n לחזרה על פקודה מספר n</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">history</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">!!</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('history', 'Command history displayed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shell Variables Section -->
+        <div id="variables" class="section">
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">$</div>
+                    <div class="command-subtitle">Dollar Sign - Variables</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>תו חשוב מאוד שמתפרש על ידי ה-shell הוא $</li>
+                            <li>ה-shell יחפש משתנה סביבה בשם הדומה למחרוזת שאחרי סימן הדולר ויחליף אותו בערך המשתנה (או בכלום אם המשתנה לא קיים)</li>
+                            <li>דוגמה זו מראה שמשתני shell רגישים לאותיות!</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמאות</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo $USER</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo $HOSTNAME</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo This is the $SHELL shell</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo This is $SHELL on $HOSTNAME</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('echo $USER', 'naya')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">Creating Variables</div>
+                    <div class="command-subtitle">יצירת משתנים</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>דוגמה זו יוצרת את המשתנה $var וקובעת את ערכו.</li>
+                            <li>לאחר מכן משתמשת ב-echo כדי לוודא את הערך</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">var=123</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo $var</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo $Var</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('var=123', 'Variable created!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">export</div>
+                    <div class="command-subtitle">Export Variables</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>אנחנו יכולים לייצא משתני shell לשאר ה-shells באמצעות פקודת export</li>
+                            <li>זה יייצא את המשתנה ל-child shells</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">mysql_home=/var/lib/mysql</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">export mysql_home</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('export', 'Variable exported!')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">$PATH</div>
+                    <div class="command-subtitle">PATH Variable</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">
+                        <ul>
+                            <li>המשתנה $PATH קובע איפה ה-shell מחפש פקודות להרצה</li>
+                            <li>משתנה זה מכיל רשימה של תיקיות מופרדות בנקודותיים</li>
+                            <li>הנתיב עשוי להיות שונה עבור משתמשים שונים כי ה-$PATH ייקח על עצמו את הסביבה של המשתמש היעד</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo $PATH</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('echo $PATH', '/usr/local/bin:/usr/bin:/bin')">נסה את הפקודה</button>
+                </div>
+            </div>
+
+            <div class="command-card">
+                <div class="command-header">
+                    <div class="command-title">unset</div>
+                    <div class="command-subtitle">Remove Variables</div>
+                </div>
+                <div class="command-info">
+                    <div class="info-label">מידע</div>
+                    <div class="info-content">השתמש בפקודת unset כדי להסיר משתנה מסביבת shell</div>
+                </div>
+                <div class="example-section">
+                    <div class="example-title">דוגמה</div>
+                    <div class="terminal">
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">unset var</span><br>
+                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">echo $var</span>
+                    </div>
+                    <button class="try-button" onclick="simulateCommand('unset', 'Variable removed!')">נסה את הפקודה</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>💻 מדריך Linux אינטראקטיבי</h3>
+            <p>נוצר בהשראת מדריכי NAYA Technologies</p>
+            <p>לחץ על הכפתורים כדי לנסות את הפקודות ולראות את התוצאות!</p>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all nav buttons
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Command simulation functionality
+        function simulateCommand(command, output) {
+            // Create a modal-like overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 1000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            `;
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                background: #1e1e1e;
+                color: #00ff00;
+                padding: 30px;
+                border-radius: 15px;
+                font-family: 'Courier New', monospace;
+                min-width: 400px;
+                max-width: 600px;
+                border: 2px solid #00ff00;
+                box-shadow: 0 0 30px rgba(0,255,0,0.3);
+            `;
+
+            modal.innerHTML = `
+                <div style="color: #00aaff; margin-bottom: 15px;">
+                    [naya@ent7-naya-cdh6 ~]$ <span style="color: #ffff00;">${command}</span>
+                </div>
+                <div style="margin-bottom: 20px; padding: 10px 0; border-top: 1px solid #333;">
+                    ${output}
+                </div>
+                <div style="text-align: center;">
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                            style="background: #00ff00; color: #1e1e1e; border: none; padding: 10px 20px; 
+                                   border-radius: 5px; cursor: pointer; font-weight: bold;">
+                        סגור
+                    </button>
+                </div>
+            `;
+
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            // Close on overlay click
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                }
+            });
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const commandCards = document.querySelectorAll('.command-card');
+
+            commandCards.forEach(card => {
+                const title = card.querySelector('.command-title').textContent.toLowerCase();
+                const subtitle = card.querySelector('.command-subtitle').textContent.toLowerCase();
+                const content = card.querySelector('.info-content').textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || subtitle.includes(searchTerm) || content.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // If searching, show all sections
+            if (searchTerm) {
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.display = 'block';
+                });
+            } else {
+                // Reset to normal navigation
+                document.querySelectorAll('.section').forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.querySelector('.section.active').style.display = 'block';
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Escape key closes any open modals
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('[style*="position: fixed"]');
+                modals.forEach(modal => modal.remove());
+            }
+
+            // Ctrl+F focuses search
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        // Add smooth scrolling animation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add loading animation for command simulation
+        function enhancedSimulateCommand(command, output) {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+            button.textContent = 'מריץ פקודה...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+                simulateCommand(command, output);
+            }, 800);
+        }
+
+        // Update all try buttons to use enhanced simulation
+        document.querySelectorAll('.try-button').forEach(btn => {
+            const onclick = btn.getAttribute('onclick');
+            btn.setAttribute('onclick', onclick.replace('simulateCommand', 'enhancedSimulateCommand'));
+        });
+
+        // Add terminal typing effect
+        function typeEffect(element, text, speed = 50) {
+            element.textContent = '';
+            let i = 0;
+            const timer = setInterval(() => {
+                element.textContent += text.charAt(i);
+                i++;
+                if (i > text.length) {
+                    clearInterval(timer);
+                }
+            }, speed);
+        }
+
+        // Add copy code functionality
+        document.querySelectorAll('.terminal').forEach(terminal => {
+            terminal.style.position = 'relative';
+            terminal.style.cursor = 'pointer';
+            terminal.title = 'לחץ להעתקה';
+            
+            terminal.addEventListener('click', function() {
+                const text = this.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalBg = this.style.background;
+                    this.style.background = '#0f4f3c';
+                    setTimeout(() => {
+                        this.style.background = originalBg;
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
