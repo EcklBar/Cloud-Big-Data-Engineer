@@ -963,30 +963,8 @@
                 <div class="example-section">
                     <div class="example-title">דוגמה</div>
                     <div class="terminal">
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">pwd</span>
+                        <span class="prompt">$</span> <span class="command">pwd</span>
                     </div>
-                    <button class="try-button" onclick="simulateCommand('pwd', '/home/naya')">נסה את הפקודה</button>
-                </div>
-            </div>
-
-            <div class="command-card">
-                <div class="command-header">
-                    <div class="command-title">cd</div>
-                    <div class="command-subtitle">Change Directory</div>
-                </div>
-                <div class="command-info">
-                    <div class="info-label">מידע</div>
-                    <div class="info-content">הכלי cd (change directory) משמש לשינוי תיקיות</div>
-                </div>
-                <div class="example-section">
-                    <div class="example-title">דוגמאות</div>
-                    <div class="terminal">
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /etc</span><br>
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">pwd</span><br>
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /home/naya</span><br>
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">pwd</span>
-                    </div>
-                    <button class="try-button" onclick="simulateCommand('cd', 'Directory changed!')">נסה את הפקודה</button>
                 </div>
             </div>
 
@@ -1001,12 +979,17 @@
                 </div>
                 <div class="example-section">
                     <div class="example-title">דוגמה</div>
-                    <div class="terminal">
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">cd /</span><br>
-                        <span class="prompt">[naya@ent7-naya-cdh6 ~]$</span> <span class="command">ls</span>
-                    </div>
-                    <button class="try-button" onclick="simulateCommand('ls', 'Documents  Downloads  Pictures  Videos')">נסה את הפקודה</button>
-                </div>
+                   <div class="terminal">
+                        <div><span class="prompt">$</span> <span class="command">ls -l</span> <span class="comment"># רשימה מפורטת עם פרטים</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ll</span> <span class="comment"># קיצור ל־ls -l</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -la</span> <span class="comment"># כולל קבצים נסתרים</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -lh</span> <span class="comment"># גדלים בפורמט קריא לאדם</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -lt</span> <span class="comment"># ממוין לפי זמן שינוי</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -lS</span> <span class="comment"># ממוין לפי גודל</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -a</span> <span class="comment"># מציג גם קבצים נסתרים</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -r</span> <span class="comment"># בסדר הפוך</span></div>
+                        <div><span class="prompt">$</span> <span class="command">ls -lR</span> <span class="comment"># רקורסיבי</span></div>
+                   </div>
             </div>
 
             <div class="command-card">
