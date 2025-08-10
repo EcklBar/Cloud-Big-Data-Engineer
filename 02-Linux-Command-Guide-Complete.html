@@ -1251,16 +1251,17 @@
                     </div>
                     <p class="command-description">שינוי הרשאות</p>
                     <div class="command-examples">
-                        <div class="command-example">chmod 755 file <span class="comment"># rwxr-xr-x</span></div>
-                        <div class="command-example">chmod 644 file <span class="comment"># rw-r--r--</span></div>
-                        <div class="command-example">chmod 600 file <span class="comment"># rw-------</span></div>
-                        <div class="command-example">chmod 777 file <span class="comment"># rwxrwxrwx (לא מומלץ!)</span></div>
                         <div class="command-example">chmod u+x file <span class="comment"># הוסף הרצה לבעלים</span></div>
                         <div class="command-example">chmod g-w file <span class="comment"># הסר כתיבה מקבוצה</span></div>
+                        <div class="command-example">chmod g+w file <span class="comment"># להוסיף כתיבה לקבוצה</span></div>
+                        <div class="command-example">chmod go-w file <span class="comment"># הסרת כתיבה לקבוצה</span></div>
                         <div class="command-example">chmod o+r file <span class="comment"># הוסף קריאה לאחרים</span></div>
+                        <div class="command-example">chmod o-r file <span class="comment"># להסיר קריאה מאחרים</span></div>
                         <div class="command-example">chmod a+x file <span class="comment"># הוסף הרצה לכולם</span></div>
-                        <div class="command-example">chmod -R 644 dir/ <span class="comment"># רקורסיבי לתיקייה</span></div>
                         <div class="command-example">chmod u=rw,g=r,o= file <span class="comment"># קבע הרשאות מדויקות</span></div>
+                        <div class="command-example">chmod u+s file <span class="comment"># הגדרת setuid - הרצת התוכנית עם הרשאות הבעלים</span></div>
+                        <div class="command-example">chmod g+s directory <span class="comment"># הגדרת setgid - קבצים חדשים יקבלו קבוצת בעלות של התיקייה</span></div>
+                        <div class="command-example">chmod +t directory <span class="comment"># Sticky bit - מונע מחיקת קבצים על ידי משתמשים אחרים בתיקייה</span></div>
                     </div>
                 </div>
 
@@ -1306,12 +1307,14 @@
                     </div>
                     <p class="command-description">ערכים מומלצים</p>
                     <div class="command-examples">
-                        <div class="command-example">644 <span class="comment"># rw-r--r-- - קבצים רגילים</span></div>
-                        <div class="command-example">755 <span class="comment"># rwxr-xr-x - סקריפטים וקבצים הניתנים להרצה</span></div>
-                        <div class="command-example">600 <span class="comment"># rw------- - קבצים פרטיים/sensitive</span></div>
-                        <div class="command-example">755 <span class="comment"># rwxr-xr-x - תיקיות רגילות</span></div>
-                        <div class="command-example">700 <span class="comment"># rwx------ - תיקיות פרטיות</span></div>
+                        <div class="command-example">644 <span class="comment"># rw-r--r-- - בעלים יכול לקרוא ולכתוב, אחרים רק לקרוא</span></div>
+                        <div class="command-example">755 <span class="comment"># rwxr-xr-x - בעלים יכול הכל, אחרים לקרוא ולהריץ</span></div>
+                        <div class="command-example">600 <span class="comment"># rw------- - רק בעלים יכול לקרוא ולכתוב/sensitive</span></div>
+                        <div class="command-example">755 <span class="comment"># rwxr-xr-x - בעלים יכול הכל, אחרים לקרוא ולהריץ</span></div>
+                        <div class="command-example">700 <span class="comment"># rwx------ - רק בעל הקובץ יכול לגשת</span></div>
                         <div class="command-example">775 <span class="comment"># rwxrwxr-x - תיקיות משותפות לקבוצה</span></div>
+                        <div class="command-example">chmod 777 file <span class="comment"># rwxrwxrwx (לא מומלץ!) כולם יכולים לקרוא, לכתוב ולהריץ</span></div>
+                        <div class="command-example">444 <span class="comment"># r--r--r-- - רק קריאה לכולם</span></div>
                     </div>
                 </div>
             </div>
