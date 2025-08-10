@@ -389,12 +389,16 @@
                             <div class="command-code">docker ps --all</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">List all containers matching a condition</div>
-                            <div class="command-code">docker ps --filter "{key}={value}"</div>
+                            <div class="command-usage">Filter running container on name</div>
+                            <div class="command-code">docker ps -f "name=[container-name]"</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">Show container log output</div>
-                            <div class="command-code">docker logs --follow [container]</div>
+                            <div class="command-usage">See existing logs for container</div>
+                            <div class="command-code">docker logs [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">See live logs for container</div>
+                            <div class="command-code">docker logs -f [container-id]</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">Show container log output with timestamps</div>
@@ -434,6 +438,10 @@
                         <div class="command-card">
                             <div class="command-usage">Kill and remove a container</div>
                             <div class="command-code">docker rm --force [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Remove stopped container</div>
+                            <div class="command-code">docker container rm [containeר]</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">Stop then start a container</div>
