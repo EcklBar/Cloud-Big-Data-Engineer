@@ -432,6 +432,14 @@
                             <div class="command-code">docker stop [container]</div>
                         </div>
                         <div class="command-card">
+                            <div class="command-usage">Pause a container</div>
+                            <div class="command-code">docker pause [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Unpause a container</div>
+                            <div class="command-code">docker unpause [container]</div>
+                        </div>
+                        <div class="command-card">
                             <div class="command-usage">Kill a container</div>
                             <div class="command-code">docker kill [container]</div>
                         </div>
@@ -440,16 +448,28 @@
                             <div class="command-code">docker rm --force [container]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">Remove stopped container</div>
-                            <div class="command-code">docker container rm [containeר]</div>
+                            <div class="command-usage">Remove a stopped container</div>
+                            <div class="command-code">docker rm [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Remove a stopped container (modern syntax)</div>
+                            <div class="command-code">docker container rm [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Force remove (modern syntax)</div>
+                            <div class="command-code">docker container rm --force [container]</div>
+                        </div>    
+                        <div class="command-card">
+                            <div class="command-usage">Stop and remove in one command</div>
+                            <div class="command-code">docker rm -f [container]</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">Stop then start a container</div>
                             <div class="command-code">docker restart [container]</div>
                         </div>
-                        <div class="command-card">
-                            <div class="command-usage">Delete stopped containers</div>
-                            <div class="command-code">docker container prune</div>
+                            <div class="command-card">
+                            <div class="command-usage">Delete all stopped containers</div>
+                        <div class="command-code">docker container prune</div>
                         </div>
                     </div>
                 </section>
