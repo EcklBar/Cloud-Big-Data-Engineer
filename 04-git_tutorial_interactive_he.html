@@ -243,15 +243,23 @@
 
         .git-logo {
             display: inline-block;
-            width: 40px;
-            height: 40px;
-            background: #f1502f;
-            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #f1502f 0%, #e8441e 100%);
+            border-radius: 12px;
             color: white;
             text-align: center;
-            line-height: 40px;
+            line-height: 50px;
             font-weight: bold;
-            margin-left: 10px;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(241, 80, 47, 0.3);
+            font-size: 24px;
+            vertical-align: middle;
+            transition: transform 0.3s ease;
+        }
+
+        .git-logo:hover {
+            transform: scale(1.1);
         }
 
         .progress-bar {
@@ -608,7 +616,7 @@
             </div>
         </div>
 
-        <div id="commands" class="section">
+<div id="commands" class="section">
             <h2>פקודות Git חיוניות</h2>
             
             <div class="content-grid">
@@ -617,33 +625,65 @@
                     <div class="command-box">
                         <div class="command">git init</div> - צור מאגר מקומי חדש<br>
                         <div class="command">git clone</div> - הורד עותק של מאגר מרוחק<br>
-                        <div class="command">git status</div> - הצג את המצב (אינדקס) של תיקיית העבודה
+                        <div class="command">git status</div> - הצג את המצב (אינדקס) של תיקיית העבודה<br>
+                        <div class="command">git remote -v</div> - רשימת כל המאגרים המרוחקים<br>
+                        <div class="command">git remote add origin &lt;url&gt;</div> - הוסף מאגר מרוחק חדש
                     </div>
                 </div>
                 <div class="card">
                     <h3>הכנה ו-Committing</h3>
                     <div class="command-box">
                         <div class="command">git add</div> - הכן קבצים (הוסף לאינדקס)<br>
+                        <div class="command">git add .</div> - הכן את כל השינויים בתיקייה הנוכחית<br>
                         <div class="command">git reset</div> - בטל הכנת קבצים (הסר מהאינדקס)<br>
-                        <div class="command">git commit</div> - צור commit חדש (קבוצת שינויים) במאגר המקומי
+                        <div class="command">git reset --hard</div> - אפס את תיקיית העבודה ל-commit האחרון<br>
+                        <div class="command">git commit</div> - צור commit חדש (קבוצת שינויים) במאגר המקומי<br>
+                        <div class="command">git commit -m "message"</div> - Commit עם הודעה בשורה אחת
                     </div>
                 </div>
             </div>
-
             <div class="content-grid">
                 <div class="card">
-                    <h3>ענפים</h3>
+                    <h3>ענפים ואיחוד</h3>
                     <div class="command-box">
-                        <div class="command">git checkout</div> - הגדר את תיקיית העבודה לעבוד על commit, tag או ענף אחר<br>
-                        <div class="command">git log</div> - צפה בהיסטוריה של המאגר המקומי (commits)<br>
-                        <div class="command">git diff</div> - השווה גרסאות (שינויים מקומיים, שינויים מוכנים, commits שונים וכו')
+                        <div class="command">git branch</div> - רשימת כל הענפים<br>
+                        <div class="command">git branch &lt;name&gt;</div> - צור ענף חדש<br>
+                        <div class="command">git branch -d &lt;name&gt;</div> - מחק ענף<br>
+                        <div class="command">git checkout &lt;branch&gt;</div> - עבור לענף אחר<br>
+                        <div class="command">git checkout -b &lt;name&gt;</div> - צור ועבור לענף חדש<br>
+                        <div class="command">git merge &lt;branch&gt;</div> - אחד ענף לענף הנוכחי
                     </div>
                 </div>
                 <div class="card">
                     <h3>פעולות מרוחקות</h3>
                     <div class="command-box">
-                        <div class="command">git fetch</div> - הבא מידע (commits, ענפים) מהמאגר המרוחק<br>
-                        <div class="command">git pull</div> - Fetch ו-checkout של ה-commit האחרון של הענף הנוכחי
+                        <div class="command">git fetch</div> - הבאת מידע (קומיטים, ברנצ'ים) מהריפוזיטורי המרוחק<br>
+                        <div class="command">git pull</div> - משיכה ועדכון לקומיט האחרון של הברנץ' הנוכחי<br>
+                        <div class="command">git push</div> - העלאת הקומיטים שלך לריפוזיטורי המרוחק<br>
+                        <div class="command">git push origin &lt;branch&gt;</div> - העלאת ברנץ' ספציפי למרוחק<br>
+                        <div class="command">git push -u origin &lt;branch&gt;</div> - העלאה והגדרת ברנץ' upstream
+                    </div>
+                </div>
+            </div>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>היסטוריה ומידע</h3>
+                    <div class="command-box">
+                        <div class="command">git log</div> - הצגת היסטוריית הריפוזיטורי המקומי (קומיטים)<br>
+                        <div class="command">git log --oneline</div> - היסטוריית קומיטים קומפקטית<br>
+                        <div class="command">git show &lt;commit&gt;</div> - הצגת פרטי קומיט ספציפי<br>
+                        <div class="command">git diff</div> - השוואת גרסאות (שינויים מקומיים, שינויים בשלב, קומיטים שונים וכו')<br>
+                        <div class="command">git blame &lt;file&gt;</div> - הצגת מי שינה כל שורה בקובץ
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>ביטול שינויים</h3>
+                    <div class="command-box">
+                        <div class="command">git checkout &lt;file&gt;</div> - שחזור קובץ למצב הקומיט האחרון<br>
+                        <div class="command">git revert &lt;commit&gt;</div> - יצירת קומיט חדש שמבטל שינויים<br>
+                        <div class="command">git reset HEAD &lt;file&gt;</div> - הוצאת קובץ ספציפי מהשלב<br>
+                        <div class="command">git reset --soft HEAD~1</div> - ביטול קומיט אחרון, שמירת שינויים בשלב<br>
+                        <div class="command">git reset --hard HEAD~1</div> - ביטול קומיט אחרון ומחיקת שינויים
                     </div>
                 </div>
             </div>
