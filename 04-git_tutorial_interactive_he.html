@@ -635,9 +635,10 @@
                     <div class="command-box">
                         <div class="command">git add</div> - הכן קבצים (הוסף לאינדקס)<br>
                         <div class="command">git add .</div> - הכן את כל השינויים בתיקייה הנוכחית<br>
+                        <div class="command">git restore --staged &lt;file&gt;</div> - הסר קובץ מהשלב (זהה ל־reset עבור הקובץ)<br>
+                        <div class="command">git restore --staged</div> - הסר את כל הקבצים מהשלב (staging)<br>
                         <div class="command">git reset</div> - בטל הכנת קבצים (הסר מהאינדקס)<br>
-                        <div class="command">git restore --staged &lt;file&gt;</div> - הסר קובץ מ־staging (זהה ל reset")
-                        <div class="command">git reset --hard</div> - אפס את תיקיית העבודה ל-commit האחרון<br>
+                        <div class="command">git reset --hard</div> - אפס את תיקיית העבודה ל־commit האחרון<br>
                         <div class="command">git commit</div> - צור commit חדש (קבוצת שינויים) במאגר המקומי<br>
                         <div class="command">git commit -m "message"</div> - Commit עם הודעה בשורה אחת
                     </div>
@@ -674,8 +675,10 @@
                     <div class="command-box">
                         <div class="command">git log</div> - הצגת היסטוריית הריפוזיטורי המקומי (קומיטים)<br>
                         <div class="command">git log --oneline</div> - היסטוריית קומיטים קומפקטית<br>
+                        <div class="command">git log --since="YYYY-MM-DD" --until="YYYY-MM-DD"</div> - הצגת היסטוריית קומיטים בטווח תאריכים<br>
                         <div class="command">git show &lt;commit&gt;</div> - הצגת פרטי קומיט ספציפי<br>
-                        <div class="command">git diff</div> - השוואת גרסאות (שינויים מקומיים, שינויים בשלב, קומיטים שונים וכו')<br>
+                        <div class="command">git diff</div> - הצגת השינויים מול הקומיט האחרון או בין קומיטים שונים<br>
+                        <div class="command">git diff --staged</div> - השוואת הקבצים המוכנים (staged) לגרסה בקומיט האחרון<br>
                         <div class="command">git blame &lt;file&gt;</div> - הצגת מי שינה כל שורה בקובץ
                         <div class="command">git tag &lt;tag-name&gt;</div> - צור תג (tag) מקומי ל־commit הנוכחי, כדי לסמן גרסה חשובה בהיסטוריה
                     </div>
@@ -684,13 +687,34 @@
                     <h3>ביטול שינויים</h3>
                     <div class="command-box">
                         <div class="command">git checkout &lt;file&gt;</div> - שחזור קובץ למצב הקומיט האחרון<br>
-                        <div class="command">git revert &lt;commit&gt;</div> - יצירת קומיט חדש שמבטל שינויים<br>
-                        <div class="command">git reset HEAD &lt;file&gt;</div> - הוצאת קובץ ספציפי מהשלב<br>
-                        <div class="command">git reset --soft HEAD~1</div> - ביטול קומיט אחרון, שמירת שינויים בשלב<br>
-                        <div class="command">git reset --hard HEAD~1</div> - ביטול קומיט אחרון ומחיקת שינויים
+                        <div class="command">git revert &lt;commit&gt;</div> - יצירת קומיט חדש שמבטל את השינויים של קומיט מסוים<br>
+                        <div class="command">git revert &lt;commit&gt; --no-edit</div> - ביטול קומיט מבלי לפתוח עורך טקסט<br>
+                        <div class="command">git revert &lt;commit&gt; -n</div> - ביטול קומיט מבלי ליצור קומיט חדש<br>
+                        <div class="command">git reset HEAD &lt;file&gt;</div> - הוצאת קובץ מסוים מהשלב (unstage)<br>
+                        <div class="command">git reset --soft HEAD~1</div> - ביטול הקומיט האחרון והשארת השינויים מוכנים (staged)<br>
+                        <div class="command">git reset --hard HEAD~1</div> - ביטול הקומיט האחרון ומחיקת השינויים
                     </div>
                 </div>
             </div>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Rebase (שכתוב היסטוריה)</h3>
+                    <div class="command-box">
+                    <div class="command">git rebase -i master</div> - Rebase אינטראקטיבי של הענף הנוכחי על <code>master</code>, מאפשר עריכה, מיזוג או הסרה של קומיטים.<br>
+                    <ol>
+                        <li>p, pick   = השתמש בקומיט כמו שהוא</li>
+                        <li>r, reword = השתמש בקומיט, אך ערוך את הודעת הקומיט</li>
+                        <li>e, edit   = השתמש בקומיט, אך עצור לעריכה</li>
+                        <li>s, squash = מיזוג הקומיט עם הקודם (שומר את שתי ההודעות)</li>
+                        <li>f, fixup  = מיזוג הקומיט עם הקודם (מתעלם מהודעת הקומיט הנוכחי)</li>
+                        <li>x, exec   = הפעל פקודת shell בזמן ה־rebase</li>
+                        <li>d, drop   = מחיקת הקומיט לגמרי</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
         </div>
 
         <div id="exercises" class="section">
