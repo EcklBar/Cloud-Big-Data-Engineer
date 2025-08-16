@@ -427,6 +427,24 @@
                         <li><strong>Commit:</strong> The version of the tree + metadata (author, dates, log messages, etc.)</li>
                         <li><strong>Tag:</strong> A label associated with a commit, e.g., a version number</li>
                     </ul>
+                    <h3>The Commit Structure</h3>
+                    <h5>Git commits have three parts:</h5>
+                    <ul>
+                       <li>
+                        <strong>1. Commit:</strong> 
+                            Contains the metadata - author, log message, commit time
+                       </li>
+                       <li>
+                        <strong>2. Tree:</strong> 
+                        Tracks the names and locations of files and directories in the repo. 
+                        Like a dictionary - mapping keys to files/directories
+                       </li>
+                        <li>
+                        <strong>3. Blob:</strong> 
+                        Binary Large Object. May contain data of any kind. 
+                        A compressed snapshot of a file's contents
+                        </li>
+                    </ul>
                 </div>
                 <div class="card">
                     <h3>Delta Storage</h3>
