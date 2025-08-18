@@ -569,14 +569,27 @@
                 </ul>
             </div>
 
-            <div class="command-box">
-                <strong>Conflict Example:</strong><br>
-                &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>
-                <span style="color: #68d391;">new text on main</span><br>
-                =======<br>
-                <span style="color: #ffa726;">text from side branch</span><br>
-                &gt;&gt;&gt;&gt;&gt;&gt;&gt; my_side_branch
-            </div>
+<div style="display:flex; gap:20px; align-items:flex-start; font-family:Arial, sans-serif;">
+
+  <!-- ההסברים בצד שמאל -->
+  <div style="font-size:14px; color:#333; display:flex; flex-direction:column; gap:35px;">
+    <span>In both branches</span>
+    <span>feature branch</span>
+    <span>Current branch (HEAD)</span>
+    <span>In both branches</span>
+  </div>
+
+  <!-- קופסת הקונפליקט -->
+  <div class="command-box" style="background:#111; color:#eee; padding:15px; border-radius:8px; font-family:monospace; white-space:pre; line-height:1.5em;">
+<strong>Conflict Example:</strong><br>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>
+<span style="color:#68d391;">new text on main</span><br>
+=======<br>
+<span style="color:#ffa726;">text from side branch</span><br>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; my_side_branch
+  </div>
+
+</div>
 
             <div class="content-grid">
                 <div class="card">
