@@ -659,7 +659,9 @@
                 <div class="command">git checkout &lt;branch&gt;</div> - Switch to a different branch<br>
                 <div class="command">git checkout -b &lt;name&gt;</div> - Create and switch to a new branch (fails if branch exists)<br>
                 <div class="command">git checkout -B &lt;name&gt;</div> - Create or reset an existing branch to the current HEAD<br>
-                <div class="command">git merge &lt;branch&gt;</div> - Merge a branch into the current branch
+                <div class="command">git merge &lt;branch&gt;</div> - Merge a branch into the current branch<br>
+                <div class="command">git merge &lt;branch&gt; --ff-only</div> - Merge only if fast-forward is possible<br>
+                <div class="command">git merge --no-ff &lt;branch&gt;</div> - Always create a merge commit, even if fast-forward is possible
             </div>
         </div>
         <div class="card">
