@@ -615,62 +615,62 @@
                 </ol>
             </div>
             
-            <div class="content-grid">
-                <div class="card">
-                <h2>Merge Types & Conflicts</h2>
+<div class="content-grid">
+    <div class="card">
+        <h2>Merge Types & Conflicts</h2>
 
         <div class="merge-explanation">
-        <h3>1. Regular Merge</h3>
-        <pre>
-            feature
+            <h3>1. Regular Merge</h3>
+            <pre>
+        feature
           /
 A---B---M
           \
-            main
-        </pre>
+           main
+            </pre>
 
-        <h3>2. Fast-Forward Only</h3>
-        <pre>
+            <h3>2. Fast-Forward Only</h3>
+            <pre>
 main:    A---B
                  \
 feature:          C---D
 
 main/feature: A---B---C---D
-        </pre>
-        <h3>3. No Fast-Forward</h3>
-        <pre>
-            feature
+            </pre>
+
+            <h3>3. No Fast-Forward</h3>
+            <pre>
+        feature
           /
 A---B---M
           \
-            main
-        </pre>
+           main
+            </pre>
 
-        <h3>4. Squash Merge</h3>
-        <pre>
+            <h3>4. Squash Merge</h3>
+            <pre>
 main:    A---B
-                \
+                 \
 feature:          C---D---E
-
-
 
 main:    A---B---F
 feature:          C---D---E
-         </pre>
+            </pre>
 
-        <h3>5. Octopus Merge</h3>
-        <pre>
+            <h3>5. Octopus Merge</h3>
+            <pre>
         feature1
-        /
+          /
 A---B---M
-        \
-        feature2
-        \
-        feature3
-        </pre>
+          \
+          feature2
+           \
+           feature3
+            </pre>
         </div>
     </div>
 </div>
+
 
 <div id="commands" class="section">
     <h2>Essential Git Commands</h2>
