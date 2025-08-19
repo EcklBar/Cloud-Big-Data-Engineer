@@ -661,7 +661,9 @@
                 <div class="command">git checkout -B &lt;name&gt;</div> - Create or reset an existing branch to the current HEAD<br>
                 <div class="command">git merge &lt;branch&gt;</div> - Merge a branch into the current branch<br>
                 <div class="command">git merge &lt;branch&gt; --ff-only</div> - Merge only if fast-forward is possible<br>
-                <div class="command">git merge --no-ff &lt;branch&gt;</div> - Always create a merge commit, even if fast-forward is possible
+                <div class="command">git merge --no-ff &lt;branch&gt;</div> - Always create a merge commit, even if fast-forward is possible<br>
+                <div class="command">git merge --squash &lt;branch&gt;</div> - Combine all commits from the branch into a single commit without creating a merge commit<br>
+                <div class="command">git merge -s octopus &lt;branch1&gt; &lt;branch2&gt; ...</div> - Merge multiple branches into the current branch with a single merge commit
             </div>
         </div>
         <div class="card">
