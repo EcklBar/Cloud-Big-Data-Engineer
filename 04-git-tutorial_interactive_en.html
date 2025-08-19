@@ -619,58 +619,54 @@
                 <div class="card">
                 <h2>Merge Types & Conflicts</h2>
 
-                <div class="merge-explanation">
-                <h3>1. Regular Merge</h3>
-                <p>
-                When using <code>git merge &lt;branch&gt;</code>, Git tries to fast-forward if possible.
-                If changes conflict, a merge commit is created and you need to resolve conflicts manually.
-                </p>
+        <div class="merge-explanation">
+        <h3>1. Regular Merge</h3>
         <pre>
-        feature
-          /
-A---B---M
-        \
-        main
-        </pre>
-
-        <h3>2. Fast-Forward Only</h3>
-        <p>
-            <code>git merge &lt;branch&gt; --ff-only</code> merges only if a fast-forward is possible.
-            If conflicts exist (i.e., no direct continuation), the merge is aborted.
-        </p>
-
-        <h3>3. No Fast-Forward</h3>
-        <p>
-            <code>git merge --no-ff &lt;branch&gt;</code> always creates a merge commit.
-            Even if fast-forward is possible, conflicts may arise and must be resolved.
-        </p>
-        <pre>
-        feature
-          /
-A---B---M
-        \
-        main
-        </pre>
-
-        <h3>4. Squash Merge</h3>
-        <p>
-            <code>git merge --squash &lt;branch&gt;</code> combines all commits from the branch into a single commit.
-            Conflicts can still happen during the squash and must be resolved manually.
-        </p>
-
-        <h3>5. Octopus Merge</h3>
-        <p>
-            <code>git merge -s octopus &lt;branch1&gt; &lt;branch2&gt; ...</code> merges multiple branches into a single merge commit.
-            If there are complex conflicts between branches, the merge will fail and need manual resolution.
-        </p>
-        <pre>
-        feature1
+            feature
           /
 A---B---M
           \
-          feature2
-           \
-           feature3
+            main
+        </pre>
+
+        <h3>2. Fast-Forward Only</h3>
+        <pre>
+main:    A---B
+                 \
+feature:          C---D
+
+main/feature: A---B---C---D
+        </pre>
+        <h3>3. No Fast-Forward</h3>
+        <pre>
+            feature
+          /
+A---B---M
+          \
+            main
+        </pre>
+
+        <h3>4. Squash Merge</h3>
+        <pre>
+main:    A---B
+                \
+feature:          C---D---E
+
+
+
+main:    A---B---F
+feature:          C---D---E
+         </pre>
+
+        <h3>5. Octopus Merge</h3>
+        <pre>
+        feature1
+        /
+A---B---M
+        \
+        feature2
+        \
+        feature3
         </pre>
         </div>
     </div>
