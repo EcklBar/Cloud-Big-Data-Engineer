@@ -975,6 +975,7 @@
                 <div class="command">git revert &lt;commit&gt; -n</div> - Revert without creating a new commit<br>
                 <div class="command">git reset HEAD &lt;file&gt;</div> - Unstage a specific file<br>
                 <div class="command">git reset --soft HEAD~1</div> - Undo last commit but keep changes staged<br>
+                <div class="command">git reset --mixed HEAD~1</div> - Undo last commit, keep changes in working directory but unstaged<br>
                 <div class="command">git reset --hard HEAD~1</div> - Undo last commit and discard changes
             </div>
         </div>
@@ -1029,8 +1030,19 @@
             </div>
         </div>
     </div>
-</div>
 
+    <div class="content-grid">
+        <div class="card">
+            <h3>Worktree</h3>
+            <div class="command-box">
+                <div class="command">git worktree</div> - Manage multiple working directories<br>
+                <div class="command">git worktree add &lt;path&gt; &lt;branch&gt;</div> - Create a new working tree at a path for a branch<br>
+                <div class="command">git worktree list</div> - Show all linked working trees<br>
+                <div class="command">git worktree remove &lt;path&gt;</div> - Remove a working tree<br>
+            </div>
+        </div>
+    </div>
+</div>
 
     
         <div id="exercises" class="section">
