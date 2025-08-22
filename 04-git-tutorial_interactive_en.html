@@ -890,7 +890,6 @@
     </div>
 </div>
 
-
 <div id="commands" class="section">
     <h2>Essential Git Commands</h2>
     
@@ -942,13 +941,12 @@
             </div>
         </div>
         <div class="card">
-            <h3>Remote Operations</h3>
+            <h3>Cherry-pick</h3>
             <div class="command-box">
-                <div class="command">git fetch</div> - Fetch information (commits, branches) from the remote repository<br>
-                <div class="command">git pull</div> - Fetch and apply the latest commit to your current branch<br>
-                <div class="command">git push</div> - Push your commits to the remote repository<br>
-                <div class="command">git push origin &lt;branch&gt;</div> - Push a specific branch to the remote<br>
-                <div class="command">git push -u origin &lt;branch&gt;</div> - Push and set upstream branch
+                <div class="command">git cherry-pick &lt;commit-hash&gt;</div> - Apply a commit from another branch<br>
+                <div class="command">git cherry-pick &lt;hash1&gt; &lt;hash2&gt;</div> - Apply multiple commits<br>
+                <div class="command">git cherry-pick --continue</div> - Continue after resolving conflicts<br>
+                <div class="command">git cherry-pick --abort</div> - Cancel cherry-pick process<br>
             </div>
         </div>
     </div>
@@ -998,9 +996,43 @@
                 </ol>
             </div>
         </div>
+        <div class="card">
+            <h3>Bisect</h3>
+            <div class="command-box">
+                <div class="command">git bisect</div> - Start binary search to find a bug<br>
+                <div class="command">git bisect start</div> - Begin the bisect session<br>
+                <div class="command">git bisect bad</div> - Mark current commit as bad<br>
+                <div class="command">git bisect good &lt;commit-hash&gt;</div> - Mark a known good commit<br>
+                <div class="command">git bisect run &lt;script_name&gt;</div> - Automate testing with a script<br>
+                <div class="command">git bisect reset</div> - End bisect and return to original state<br>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="card">
+            <h3>Filter Repo</h3>
+            <div class="command-box">
+                <div class="command">git install git-filter-repo</div> - Install filter-repo tool<br>
+                <div class="command">git filter-repo --path secret.txt --invert-paths</div> - Remove specific file from history<br>
+                <div class="command">git filter-repo --path config.ini --invert-paths --force</div> - Force remove file from history<br>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Reflog</h3>
+            <div class="command-box">
+                <div class="command">git reflog</div> - Show reference log<br>
+                <div class="command">git reflog show</div> - Show reflog details<br>
+                <div class="command">git reflog expire</div> - Clean up old reflog entries<br>
+                <div class="command">git reflog --since</div> - Show reflog entries since a given time<br>
+                <div class="command">git reflog --until</div> - Show reflog entries until a given time<br>
+            </div>
+        </div>
     </div>
 </div>
 
+
+    
         <div id="exercises" class="section">
             <h2>Practice Exercises</h2>
             
