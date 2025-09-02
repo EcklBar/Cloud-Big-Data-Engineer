@@ -306,11 +306,11 @@
             .header h1 {
                 font-size: 2.5rem;
             }
-            
+
             .assembly-line {
                 flex-direction: column;
             }
-            
+
             .assembly-step {
                 width: 100%;
                 margin: 5px 0;
@@ -327,575 +327,6 @@
 
         <div class="progress-container">
             <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🎬 Introduction to GitHub Actions</div>
-            </div>
-            <div class="section-content">
-                <div class="highlight">
-                    <h2>Welcome to GitHub Actions! 🎉</h2>
-                    <p>Get ready to learn the most popular CI/CD platform that will revolutionize your development workflow!</p>
-                </div>
-                <button class="btn" onclick="startLearning()">🚀 Start Learning Journey</button>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🔍 What is GitHub Actions?</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">GitHub Actions (GHA) Definition</div>
-                    <div class="component-description">
-                        GitHub Actions is a <strong>built-in automation and CI/CD system</strong> provided by GitHub that allows you to automate your build, test, and deployment pipeline directly within your GitHub repositories.
-                    </div>
-                </div>
-                
-                <div class="interactive-example">
-                    <h3>💡 Key Concept: Pipeline</h3>
-                    <p>A pipeline is a sequence of interconnected steps or stages that represent the flow of work and data in a software development or deployment process.</p>
-                    <button class="btn" onclick="showPipelineExample()">View Pipeline Example</button>
-                </div>
-
-                <div id="pipelineExample" style="display: none;">
-                    <div class="code-block">
-Pipeline Flow: Code → Build → Test → Deploy → Monitor
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🏭 Assembly Line Analogy</div>
-            </div>
-            <div class="section-content">
-                <h3>🚗 Car Assembly Line vs GitHub Actions</h3>
-                <div class="assembly-line">
-                    <div class="assembly-step" onclick="highlightStep(this)">
-                        <h4>🔧 Engine</h4>
-                        <p>Attach Engine</p>
-                        <small>≈ Code Building</small>
-                    </div>
-                    <div class="assembly-step" onclick="highlightStep(this)">
-                        <h4>🎨 Paint</h4>
-                        <p>Paint Car</p>
-                        <small>≈ Code Testing</small>
-                    </div>
-                    <div class="assembly-step" onclick="highlightStep(this)">
-                        <h4>🏁 Final</h4>
-                        <p>Quality Check</p>
-                        <small>≈ Deployment</small>
-                    </div>
-                </div>
-                
-                <div class="highlight">
-                    <p><strong>Just like a car assembly line</strong>, GitHub Actions automates software development with seamless, efficient steps that follow a specific order!</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">⚡ Events - The Trigger</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card" onclick="animateCard(this)">
-                    <div class="component-title">🎯 What is an Event?</div>
-                    <div class="component-description">
-                        An event is a particular action within a repository that initiates the execution of a workflow.
-                    </div>
-                </div>
-
-                <h3>📋 Common GitHub Events:</h3>
-                <div class="workflow-diagram">
-                    <div class="workflow-step" onclick="triggerEvent('push')">📤 Push Commit</div>
-                    <div class="workflow-step" onclick="triggerEvent('pr')">🔄 Open Pull Request</div>
-                    <div class="workflow-step" onclick="triggerEvent('issue')">📝 Create Issue</div>
-                </div>
-
-                <div id="eventResult" style="display: none; margin-top: 20px;">
-                    <div class="highlight">
-                        <h4>🎊 Event Triggered!</h4>
-                        <p id="eventMessage"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">⚙️ Workflows - The Orchestrator</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">🗂️ Workflow Definition</div>
-                    <div class="component-description">
-                        A workflow is a customizable automated process that executes one or multiple jobs. Workflows are specified in YAML files stored in your repository.
-                    </div>
-                </div>
-
-                <div class="code-block">
-📁 Repository Structure:
-.github/
-  └── workflows/
-      ├── build-and-test.yml
-      ├── deploy.yml
-      └── label-issues.yml
-                </div>
-
-                <h3>🎯 Workflow Examples:</h3>
-                <div class="assembly-line">
-                    <div class="assembly-step">
-                        <h4>🔨 Build & Test</h4>
-                        <p>Pull Requests</p>
-                    </div>
-                    <div class="assembly-step">
-                        <h4>🚀 Deploy</h4>
-                        <p>Each Release</p>
-                    </div>
-                    <div class="assembly-step">
-                        <h4>🏷️ Label</h4>
-                        <p>New Issues</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🔧 Steps and Actions</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">👣 Steps</div>
-                    <div class="component-description">
-                        Individual units of work, executed in order and dependent on the previous step. Each step runs on the same compute machine and can share data.
-                    </div>
-                </div>
-
-                <div class="component-card">
-                    <div class="component-title">⚡ Actions</div>
-                    <div class="component-description">
-                        Custom applications that combine complex but frequently repeated tasks specific to the GitHub Actions platform.
-                    </div>
-                </div>
-
-                <div class="workflow-diagram">
-                    <h4>📝 Example Step Sequence:</h4>
-                    <div class="workflow-step">1️⃣ Build Application (Compile Code)</div>
-                    <div class="workflow-step">2️⃣ Test Application (Run Tests)</div>
-                    <div class="workflow-step">3️⃣ Deploy Application (Shell Script)</div>
-                </div>
-
-                <div class="highlight">
-                    <h4>🎯 Popular Actions Examples:</h4>
-                    <p>• Checkout Repository • Comment on Pull Request • Setup Node.js • Deploy to AWS</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🏃 Jobs and Runners</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">💼 Jobs</div>
-                    <div class="component-description">
-                        A set of steps in a workflow. Each job is independent and can run in parallel, but can be configured to depend on other jobs.
-                    </div>
-                </div>
-
-                <div class="component-card">
-                    <div class="component-title">🖥️ Runners</div>
-                    <div class="component-description">
-                        The compute machines where all steps in a single job are executed. Available runners include Ubuntu Linux, Windows, and macOS.
-                    </div>
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🔄 Parallel vs Sequential Jobs</h3>
-                    <button class="btn" onclick="demonstrateJobs('parallel')">Show Parallel Jobs</button>
-                    <button class="btn" onclick="demonstrateJobs('sequential')">Show Sequential Jobs</button>
-                </div>
-
-                <div id="jobsDemo" style="display: none;">
-                    <div class="workflow-diagram" id="jobsDiagram"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🎯 Simple Workflow Example</div>
-            </div>
-            <div class="section-content">
-                <div class="highlight">
-                    <h3>📝 Real Workflow Example</h3>
-                    <p>Push event triggers a workflow with a single job on Ubuntu Linux runner</p>
-                </div>
-
-                <div class="code-block">
-name: Simple Python Workflow
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Run Python Code
-        run: python app.py
-                </div>
-
-                <div class="workflow-diagram">
-                    <div class="workflow-step">🎯 Event: Push to Repository</div>
-                    <div class="workflow-step">⬇️</div>
-                    <div class="workflow-step">🏃 Job: Build (Ubuntu Linux)</div>
-                    <div class="workflow-step">⬇️</div>
-                    <div class="workflow-step">1️⃣ Step: Checkout Repository (Action)</div>
-                    <div class="workflow-step">2️⃣ Step: Run Python Code (Command)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🧩 Putting It All Together</div>
-            </div>
-            <div class="section-content">
-                <div class="highlight">
-                    <h3>🎊 Complete GitHub Actions Architecture</h3>
-                    <p>Understanding how all components work together</p>
-                </div>
-
-                <div class="workflow-diagram">
-                    <h4>📊 Complete Flow Diagram:</h4>
-                    <div class="workflow-step">📁 GitHub Repository</div>
-                    <div class="workflow-step">📄 .github/workflows/workflow.yml</div>
-                    <div class="workflow-step">⚡ Event Triggers (Push, PR, Issue)</div>
-                    <div class="workflow-step">⚙️ Workflow Execution</div>
-                    <div class="workflow-step">💼 Jobs (Parallel/Sequential)</div>
-                    <div class="workflow-step">👣 Steps (Scripts, Programs, Actions)</div>
-                    <div class="workflow-step">🖥️ Runner Machine (Ubuntu, Windows, macOS)</div>
-                    <div class="workflow-step">📦 Optional: Artifacts Output</div>
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🎯 Ready for Advanced YAML?</h3>
-                    <p>Now that you understand GitHub Actions basics, let's master the YAML syntax that powers your workflows!</p>
-                    <button class="btn" onclick="scrollToYAML()">🚀 Learn Advanced YAML</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- YAML Advanced Section -->
-        <div class="section yaml-section">
-            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #8E2DE2, #4A00E0);">
-                <div class="section-title expandable">📝 Intermediate YAML Mastery</div>
-                <div class="time-badge">New Section</div>
-            </div>
-            <div class="section-content">
-                <div class="highlight" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                    <h2>🎓 Level Up Your YAML Skills!</h2>
-                    <p>Master advanced YAML concepts essential for powerful GitHub Actions workflows</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">📄 Multiline Strings: Block Scalar Format</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">🎯 Block Scalar Strings</div>
-                    <div class="component-description">
-                        A way to represent multi-line strings with line breaks and indentation while preserving their formatting. Perfect for code snippets, shell commands, and configurations in CI/CD workflows.
-                    </div>
-                </div>
-
-                <div class="highlight">
-                    <h4>🛠️ Two Styles + Three Chomping Indicators</h4>
-                    <p><strong>Styles:</strong> Literal (|) & Fold (>) <br>
-                    <strong>Chomping:</strong> Clip (default), Strip (-), Keep (+)</p>
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🎮 Interactive YAML Playground</h3>
-                    <button class="btn" onclick="showYAMLDemo('intro')">🚀 Start YAML Demo</button>
-                </div>
-
-                <div id="yamlDemo" style="display: none;">
-                    <div class="code-block" id="yamlOutput"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">📐 Literal Style (|)</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">📏 Literal Style Preserves Everything</div>
-                    <div class="component-description">
-                        Preserves line breaks and indentation exactly as written. Perfect for shell commands, scripts, and formatted text.
-                    </div>
-                </div>
-
-                <div class="assembly-line">
-                    <div class="assembly-step" onclick="showLiteralExample('basic')">
-                        <h4>🔧 Basic</h4>
-                        <p>Simple Example</p>
-                    </div>
-                    <div class="assembly-step" onclick="showLiteralExample('shell')">
-                        <h4>🐚 Shell</h4>
-                        <p>Commands</p>
-                    </div>
-                    <div class="assembly-step" onclick="showLiteralExample('complex')">
-                        <h4>🎯 Complex</h4>
-                        <p>With Indentation</p>
-                    </div>
-                </div>
-
-                <div class="code-block" id="literalExample">
-# Click examples above to see literal style in action!
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🔄 Fold Style (>)</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">📦 Fold Style Collapses Lines</div>
-                    <div class="component-description">
-                        Removes line breaks and converts them to spaces. Useful for long text that spans multiple lines for readability.
-                    </div>
-                </div>
-
-                <div class="interactive-example">
-                    <h3>⚖️ Literal vs Fold Comparison</h3>
-                    <button class="btn" onclick="compareFoldLiteral()">🔍 Compare Styles</button>
-                </div>
-
-                <div id="foldComparison" style="display: none;">
-                    <div class="workflow-diagram">
-                        <h4>📝 Same Text, Different Results:</h4>
-                        <div class="workflow-step">
-                            <strong>Literal (|):</strong>
-                            <pre>Line 1
-Line 2
-Line 3</pre>
-                        </div>
-                        <div class="workflow-step">
-                            <strong>Fold (>):</strong>
-                            <pre>Line 1 Line 2 Line 3</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="code-block" id="foldExample">
-message: >
-  This is a very long message that spans
-  multiple lines for better readability
-  in your YAML file but will be folded
-  into a single line when parsed.
-
-# Result: "This is a very long message that spans multiple lines for better readability in your YAML file but will be folded into a single line when parsed."
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">✂️ Chomping Indicators</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">🎛️ Control Final Newlines</div>
-                    <div class="component-description">
-                        Special instructions that tell YAML how to handle blank lines at the end of multi-line text.
-                    </div>
-                </div>
-
-                <div class="assembly-line">
-                    <div class="assembly-step" onclick="showChompingExample('clip')">
-                        <h4>📎 Clip</h4>
-                        <p>Default (adds one newline)</p>
-                    </div>
-                    <div class="assembly-step" onclick="showChompingExample('strip')">
-                        <h4>✂️ Strip (-)</h4>
-                        <p>Removes all newlines</p>
-                    </div>
-                    <div class="assembly-step" onclick="showChompingExample('keep')">
-                        <h4>📌 Keep (+)</h4>
-                        <p>Preserves all newlines</p>
-                    </div>
-                </div>
-
-                <div class="workflow-diagram" id="chompingVisualization">
-                    <h4>🎯 Click examples above to see chomping in action!</h4>
-                </div>
-
-                <div class="highlight">
-                    <h4>💡 Pro Tip</h4>
-                    <p>Chomping indicators come AFTER style indicators: <code>|-</code> <code>|+</code> <code>>-</code> <code>>+</code></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">🔄 Dynamic Value Injection</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">💉 Expressions & Variables</div>
-                    <div class="component-description">
-                        Placeholders that represent values that can change when YAML is processed. Essential for flexible GitHub Actions workflows!
-                    </div>
-                </div>
-
-                <div class="code-block">
-# GitHub Actions Expression Examples:
-name: CI Pipeline
-on: push
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      BRANCH_NAME: ${{ github.ref_name }}
-    steps:
-      - name: Checkout
-        run: echo "Building on ${{ runner.os }}"
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🎮 Try Dynamic Expressions</h3>
-                    <button class="btn" onclick="showExpressionDemo()">🔍 Explore Expressions</button>
-                </div>
-
-                <div id="expressionDemo" style="display: none;">
-                    <div class="workflow-diagram">
-                        <div class="workflow-step" onclick="highlightExpression('secrets')">
-                            <strong>${{ secrets.API_KEY }}</strong> - Secure variables
-                        </div>
-                        <div class="workflow-step" onclick="highlightExpression('github')">
-                            <strong>${{ github.actor }}</strong> - GitHub context
-                        </div>
-                        <div class="workflow-step" onclick="highlightExpression('env')">
-                            <strong>${{ env.NODE_VERSION }}</strong> - Environment variables
-                        </div>
-                    </div>
-                    <div id="expressionResult" class="highlight" style="display: none;">
-                        <h4 id="expressionTitle"></h4>
-                        <p id="expressionDescription"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">📚 Multi-Document YAML</div>
-            </div>
-            <div class="section-content">
-                <div class="component-card">
-                    <div class="component-title">📑 Multiple Documents in One File</div>
-                    <div class="component-description">
-                        Store multiple independent YAML documents in a single file, separated by three dashes (---). Great for configuration management!
-                    </div>
-                </div>
-
-                <div class="code-block">
-# Document 1: Development Config
----
-name: Development
-database:
-  host: localhost
-  port: 5432
-
-# Document 2: Production Config  
----
-name: Production
-database:
-  host: prod-db.example.com
-  port: 5432
-  ssl: true
-
-# Document 3: Testing Config
----
-name: Testing
-database:
-  host: test-db.example.com
-  port: 5433
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🎯 Multi-Document Use Cases</h3>
-                    <div class="assembly-line">
-                        <div class="assembly-step">
-                            <h4>🏗️ Configs</h4>
-                            <p>Multiple Environments</p>
-                        </div>
-                        <div class="assembly-step">
-                            <h4>🎭 Kubernetes</h4>
-                            <p>Multiple Resources</p>
-                        </div>
-                        <div class="assembly-step">
-                            <h4>📋 Templates</h4>
-                            <p>Reusable Components</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <div class="section-title expandable">📋 YAML Summary & Quiz</div>
-            </div>
-            <div class="section-content">
-                <div class="workflow-diagram">
-                    <h4>🎯 YAML Symbols Reference:</h4>
-                    <div class="workflow-step">| - Literal style (preserves formatting)</div>
-                    <div class="workflow-step">> - Fold style (collapses to single line)</div>
-                    <div class="workflow-step">- - Strip chomping (removes trailing newlines)</div>
-                    <div class="workflow-step">+ - Keep chomping (preserves trailing newlines)</div>
-                    <div class="workflow-step">${{ }} - Expression syntax (GitHub Actions)</div>
-                    <div class="workflow-step">--- - Document separator</div>
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🎓 Master YAML Quiz</h3>
-                    <button class="btn" onclick="startYAMLQuiz()">🧠 Test Your YAML Knowledge</button>
-                </div>
-
-                <div id="yamlQuiz" style="display: none;">
-                    <div class="component-card">
-                        <h4 id="yamlQuizQuestion"></h4>
-                        <div id="yamlQuizOptions"></div>
-                        <button class="btn" onclick="nextYAMLQuestion()" id="yamlNextBtn" style="display: none;">Next Question</button>
-                    </div>
-                </div>
-                
-                <div class="highlight">
-                    <h3>🎊 Congratulations!</h3>
-                    <p>You now have mastery over both GitHub Actions fundamentals and advanced YAML concepts. You're ready to build powerful, flexible CI/CD workflows!</p>
-                </div>
-            </div>
         </div>
 
         <!-- Hands-On CI Pipeline Section -->
@@ -1074,7 +505,7 @@ Repository → Settings → Actions → General
 
 # Key Settings to Configure:
 ✅ Actions permissions: "Allow all actions and reusable workflows"
-✅ Fork pull request workflows: "Run workflows from fork pull requests"  
+✅ Fork pull request workflows: "Run workflows from fork pull requests"
 ✅ Workflow permissions: "Read and write permissions"
 ✅ Allow GitHub Actions to create and approve pull requests: ✓
                     </div>
@@ -1134,7 +565,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Run a multi-line script
       run: |
@@ -1142,7 +573,7 @@ jobs:
         echo "This is my first GitHub Action"
         echo "Pipeline executed successfully!"
                     </div>
-                    
+
                     <div class="workflow-diagram">
                         <h4>🔍 Workflow Breakdown:</h4>
                         <div class="workflow-step">
@@ -1228,7 +659,7 @@ jobs:
                             <strong>Artifacts</strong> - Files generated during workflow
                         </div>
                     </div>
-                    
+
                     <div id="toolExplanation" style="display: none;">
                         <div class="component-card">
                             <div class="component-title" id="toolTitle">Investigation Tool</div>
@@ -1262,7 +693,7 @@ jobs:
 2024-09-02T10:15:30.150Z shell: /usr/bin/bash -e {0}
 2024-09-02T10:15:30.151Z ##[endgroup]
 2024-09-02T10:15:30.180Z Hello, World!
-2024-09-02T10:15:30.181Z This is my first GitHub Action  
+2024-09-02T10:15:30.181Z This is my first GitHub Action
 2024-09-02T10:15:30.182Z Pipeline executed successfully!
 2024-09-02T10:15:30.200Z ##[group]Post job cleanup
 2024-09-02T10:15:30.205Z Cleaning up orphaned processes
@@ -1353,73 +784,145 @@ jobs:
 
                 <div class="highlight">
                     <h3>🎊 Congratulations!</h3>
-                    <p>You now have comprehensive knowledge of GitHub Actions fundamentals, advanced YAML concepts, and hands-on CI pipeline creation. You're ready to build production-ready workflows!</p>
+                    <p>You now have comprehensive knowledge of GitHub Actions fundamentals and hands-on CI pipeline creation. You're ready to build production-ready workflows!</p>
                 </div>
             </div>
         </div>
+    </div>
 
     <script>
         let currentProgress = 0;
-        let quizIndex = 0;
-        let quizScore = 0;
-        let yamlQuizIndex = 0;
-        let yamlQuizScore = 0;
+        let workflowStep = 0;
+        let ciQuizIndex = 0;
+        let ciQuizScore = 0;
 
-        const quizData = [
+        const workflowSteps = [
             {
-                question: "What does GHA stand for?",
-                options: ["GitHub Automation", "GitHub Actions", "Git Hub Actions", "GitHub API"],
-                correct: 1
+                code: `# Step 1: Workflow Name
+name: CI Pipeline`,
+                explanation: "🏷️ Every workflow needs a descriptive name that appears in the Actions tab"
             },
             {
-                question: "Where are workflow files stored?",
-                options: [".workflows/", ".github/workflows/", ".github/actions/", "workflows/"],
-                correct: 1
+                code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]`,
+                explanation: "⚡ Define what events trigger your workflow - pushes and PRs to main branch"
             },
             {
-                question: "What triggers a workflow?",
-                options: ["Steps", "Actions", "Events", "Runners"],
-                correct: 2
+                code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Step 3: Jobs
+jobs:
+  build:
+    runs-on: ubuntu-latest`,
+                explanation: "💼 Jobs define what work to do - this one runs on Ubuntu Linux"
+            },
+            {
+                code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Step 3: Jobs
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4`,
+                explanation: "👣 Steps are individual tasks - checkout gets your repository code"
+            },
+            {
+                code: `# Complete CI Workflow
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+
+    - name: Run tests
+      run: pytest`,
+                explanation: "🎯 Complete workflow with Python setup, dependency installation, and testing!"
             }
         ];
 
-        const yamlQuizData = [
+        const ciQuizData = [
             {
-                question: "Which YAML style preserves line breaks exactly?",
-                options: ["Fold (>)", "Literal (|)", "Strip (-)", "Keep (+)"],
+                question: "What file extension do GitHub Actions workflows use?",
+                options: [".yaml", ".yml", ".json", "Both .yaml and .yml"],
+                correct: 3
+            },
+            {
+                question: "Where should workflow files be located in your repository?",
+                options: [".github/workflows/", "workflows/", ".workflows/", ".github/actions/"],
+                correct: 0
+            },
+            {
+                question: "What does 'runs-on: ubuntu-latest' specify?",
+                options: ["The Ubuntu version", "The operating system for the runner", "The Python version", "The Node.js version"],
                 correct: 1
             },
             {
-                question: "What does the Strip chomping indicator (-) do?",
-                options: ["Adds newlines", "Removes all trailing newlines", "Preserves formatting", "Folds text"],
+                question: "Which action is commonly used to download repository code?",
+                options: ["actions/download@v4", "actions/checkout@v4", "actions/setup@v4", "actions/clone@v4"],
                 correct: 1
-            },
-            {
-                question: "How are multiple YAML documents separated in one file?",
-                options: ["...", "---", "===", "///"],
-                correct: 1
-            },
-            {
-                question: "What syntax is used for GitHub Actions expressions?",
-                options: ["{{ }}", "${ }", "${{ }}", "[ ]"],
-                correct: 2
             }
         ];
 
         function toggleSection(header) {
             const section = header.parentElement;
             const allSections = document.querySelectorAll('.section');
-            
+
             allSections.forEach(s => {
                 if (s !== section) {
                     s.classList.remove('active');
                     s.querySelector('.expandable').classList.remove('expanded');
                 }
             });
-            
+
             section.classList.toggle('active');
             header.querySelector('.expandable').classList.toggle('expanded');
-            
+
             updateProgress();
         }
 
@@ -1427,328 +930,398 @@ jobs:
             const activeSections = document.querySelectorAll('.section.active').length;
             const totalSections = document.querySelectorAll('.section').length;
             const progress = (activeSections / totalSections) * 100;
-            
+
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        function startLearning() {
-            document.querySelectorAll('.section')[1].querySelector('.section-header').click();
-        }
+        function buildWorkflowStep(step) {
+            const builder = document.getElementById('workflowBuilder');
+            const codeBlock = document.getElementById('workflowCode');
+            const explanation = document.getElementById('workflowExplanation');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const completeBtn = document.getElementById('completeBtn');
 
-        function showPipelineExample() {
-            const example = document.getElementById('pipelineExample');
-            example.style.display = example.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function highlightStep(step) {
-            document.querySelectorAll('.assembly-step').forEach(s => s.style.transform = 'scale(1)');
-            step.style.transform = 'scale(1.1) rotate(5deg)';
-            setTimeout(() => {
-                step.style.transform = 'scale(1)';
-            }, 1000);
-        }
-
-        function animateCard(card) {
-            card.style.animation = 'pulse 1s ease';
-            setTimeout(() => {
-                card.style.animation = '';
-            }, 1000);
-        }
-
-        function triggerEvent(eventType) {
-            const messages = {
-                'push': 'Push event triggered! Workflow will now build and test your code.',
-                'pr': 'Pull Request opened! Workflow will review and validate changes.',
-                'issue': 'Issue created! Workflow will automatically add labels.'
-            };
-            
-            document.getElementById('eventMessage').textContent = messages[eventType];
-            document.getElementById('eventResult').style.display = 'block';
-            
-            setTimeout(() => {
-                document.getElementById('eventResult').style.display = 'none';
-            }, 3000);
-        }
-
-        function demonstrateJobs(type) {
-            const diagram = document.getElementById('jobsDiagram');
-            let content = '';
-            
-            if (type === 'parallel') {
-                content = `
-                    <h4>🔄 Parallel Jobs Execution:</h4>
-                    <div style="display: flex; justify-content: space-around;">
-                        <div class="workflow-step">Job 1: Build</div>
-                        <div class="workflow-step">Job 2: Test</div>
-                        <div class="workflow-step">Job 3: Lint</div>
-                    </div>
-                    <p style="color: #4CAF50; margin-top: 15px;">✅ All jobs run simultaneously!</p>
-                `;
-            } else {
-                content = `
-                    <h4>⏭️ Sequential Jobs Execution:</h4>
-                    <div class="workflow-step">Job 1: Build</div>
-                    <div style="text-align: center; color: #ccc;">⬇️</div>
-                    <div class="workflow-step">Job 2: Test (depends on Job 1)</div>
-                    <div style="text-align: center; color: #ccc;">⬇️</div>
-                    <div class="workflow-step">Job 3: Deploy (depends on Job 2)</div>
-                    <p style="color: #ff9800; margin-top: 15px;">⏳ Jobs run one after another!</p>
-                `;
+            if (step === 1) {
+                workflowStep = 0;
+                builder.style.display = 'block';
+            } else if (step === 'next') {
+                workflowStep++;
+            } else if (step === 'prev') {
+                workflowStep--;
             }
-            
-            diagram.innerHTML = content;
-            document.getElementById('jobsDemo').style.display = 'block';
-        }
 
-        function startQuiz() {
-            quizIndex = 0;
-            quizScore = 0;
-            document.getElementById('quiz').style.display = 'block';
-            showQuestion();
-        }
+            if (workflowStep >= 0 && workflowStep < workflowSteps.length) {
+                codeBlock.textContent = workflowSteps[workflowStep].code;
+                explanation.innerHTML = `<p style="color: white; text-align: center; font-size: 1.1rem;">${workflowSteps[workflowStep].explanation}</p>`;
 
-        function showQuestion() {
-            if (quizIndex < quizData.length) {
-                const question = quizData[quizIndex];
-                document.getElementById('quizQuestion').textContent = question.question;
-                
-                let optionsHtml = '';
-                question.options.forEach((option, index) => {
-                    optionsHtml += `
-                        <div class="workflow-step" onclick="selectAnswer(${index})" style="margin: 10px 0; cursor: pointer;">
-                            ${option}
-                        </div>
-                    `;
-                });
-                
-                document.getElementById('quizOptions').innerHTML = optionsHtml;
-                document.getElementById('nextBtn').style.display = 'none';
-            } else {
-                endQuiz();
+                prevBtn.style.display = workflowStep > 0 ? 'inline-block' : 'none';
+                nextBtn.style.display = workflowStep < workflowSteps.length - 1 ? 'inline-block' : 'none';
+                completeBtn.style.display = workflowStep === workflowSteps.length - 1 ? 'inline-block' : 'none';
             }
         }
 
-        function selectAnswer(selectedIndex) {
-            const question = quizData[quizIndex];
-            const options = document.querySelectorAll('#quizOptions .workflow-step');
-            
-            options.forEach((option, index) => {
-                if (index === question.correct) {
-                    option.style.background = 'rgba(76, 175, 80, 0.3)';
-                    option.style.borderColor = '#4CAF50';
-                } else if (index === selectedIndex && index !== question.correct) {
-                    option.style.background = 'rgba(244, 67, 54, 0.3)';
-                    option.style.borderColor = '#f44336';
-                }
-                option.onclick = null;
-            });
-            
-            if (selectedIndex === question.correct) {
-                quizScore++;
-            }
-            
-            document.getElementById('nextBtn').style.display = 'block';
-        }
-
-        function nextQuestion() {
-            quizIndex++;
-            showQuestion();
-        }
-
-        function endQuiz() {
-            const percentage = Math.round((quizScore / quizData.length) * 100);
-            document.getElementById('quiz').innerHTML = `
+        function completeWorkflow() {
+            const explanation = document.getElementById('workflowExplanation');
+            explanation.innerHTML = `
                 <div class="highlight">
-                    <h3>🎊 Quiz Complete!</h3>
-                    <p>You scored ${quizScore}/${quizData.length} (${percentage}%)</p>
-                    <p>${percentage >= 70 ? '🏆 Excellent work! You understand GitHub Actions!' : '📚 Keep studying! Review the concepts above.'}</p>
-                    <button class="btn" onclick="startQuiz()">Retake Quiz</button>
+                    <h3>🎊 Workflow Complete!</h3>
+                    <p>You've successfully built a complete CI pipeline that:</p>
+                    <ul style="text-align: left; margin: 20px auto; max-width: 500px;">
+                        <li>✅ Triggers on push and PR events</li>
+                        <li>✅ Runs on Ubuntu Linux</li>
+                        <li>✅ Checks out your code</li>
+                        <li>✅ Sets up Python environment</li>
+                        <li>✅ Installs dependencies</li>
+                        <li>✅ Runs your tests</li>
+                    </ul>
+                    <p>Ready to create this in your repository!</p>
                 </div>
             `;
         }
 
-        // New YAML Functions
-        function scrollToYAML() {
-            document.querySelector('.yaml-section').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-                document.querySelector('.yaml-section .section-header').click();
-            }, 800);
-        }
+        function showRepoStep(stepNum) {
+            const details = document.getElementById('repoStepDetails');
+            const title = document.getElementById('repoStepTitle');
+            const description = document.getElementById('repoStepDescription');
+            const code = document.getElementById('repoStepCode');
 
-        function showYAMLDemo(type) {
-            const demo = document.getElementById('yamlDemo');
-            const output = document.getElementById('yamlOutput');
-            
-            let content = `# 🎯 YAML Block Scalar Formats Demo
-
-# Single-line (traditional)
-message: "This is a single line string"
-
-# Multi-line with Literal Style (|)
-script: |
-  echo "Line 1"
-  echo "Line 2" 
-  echo "Line 3"
-
-# Multi-line with Fold Style (>)  
-description: >
-  This is a long description that spans
-  multiple lines but will be folded into
-  a single line when processed.
-
-# 🎮 Explore the sections below for interactive examples!`;
-            
-            output.textContent = content;
-            demo.style.display = 'block';
-        }
-
-        function showLiteralExample(type) {
-            const example = document.getElementById('literalExample');
-            
-            const examples = {
-                basic: `# Basic Literal Style Example
-commands: |
-  npm install
-  npm test
-  npm run build
-  
-# Result preserves exact formatting:
-# "npm install\\nnpm test\\nnpm run build\\n"`,
-                
-                shell: `# Shell Commands Example  
-script: |
-  #!/bin/bash
-  echo "Starting deployment..."
-  docker build -t myapp .
-  docker push myapp:latest
-  echo "Deployment complete!"
-  
-# Perfect for multi-line shell scripts!`,
-                
-                complex: `# Complex with Indentation
-yaml_content: |
-  name: My Workflow
-  on:
-    push:
-      branches: [main]
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      
-# All indentation and formatting preserved exactly!`
-            };
-            
-            example.textContent = examples[type];
-        }
-
-        function compareFoldLiteral() {
-            const comparison = document.getElementById('foldComparison');
-            comparison.style.display = comparison.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function showChompingExample(type) {
-            const visualization = document.getElementById('chompingVisualization');
-            
-            const examples = {
-                clip: `
-<h4>📎 Clip (Default) - Adds single newline</h4>
-<div class="workflow-step">
-<pre>text: |
-  Line 1
-  Line 2
-  
-
-Result: "Line 1\\nLine 2\\n" (one final newline)</pre>
-</div>`,
-                
-                strip: `
-<h4>✂️ Strip (-) - Removes all trailing newlines</h4>
-<div class="workflow-step">
-<pre>text: |-
-  Line 1  
-  Line 2
-  
-
-Result: "Line 1\\nLine 2" (no final newlines)</pre>
-</div>`,
-                
-                keep: `
-<h4>📌 Keep (+) - Preserves all trailing newlines</h4>
-<div class="workflow-step">
-<pre>text: |+
-  Line 1
-  Line 2
-  
-
-Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
-</div>`
-            };
-            
-            visualization.innerHTML = examples[type];
-        }
-
-        function showExpressionDemo() {
-            const demo = document.getElementById('expressionDemo');
-            demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function highlightExpression(type) {
-            const result = document.getElementById('expressionResult');
-            const title = document.getElementById('expressionTitle');
-            const description = document.getElementById('expressionDescription');
-            
-            const info = {
-                secrets: {
-                    title: '🔒 Secrets Context',
-                    description: 'Access encrypted repository secrets safely. Never exposed in logs!'
+            const steps = {
+                1: {
+                    title: "🌐 Visit GitHub",
+                    description: "Navigate to github.com and click the 'New' button or go directly to github.com/new to create a new repository.",
+                    code: "URL: https://github.com/new"
                 },
-                github: {
-                    title: '🐙 GitHub Context', 
-                    description: 'Access repository info, actor, event data, and commit details.'
+                2: {
+                    title: "📝 Configure Repository",
+                    description: "Choose a descriptive name like 'my-first-ci-pipeline', add a description, and decide if it should be public or private.",
+                    code: `Repository name: my-first-ci-pipeline
+Description: Learning GitHub Actions CI/CD
+Visibility: Public (recommended for learning)`
                 },
-                env: {
-                    title: '🌍 Environment Variables',
-                    description: 'Reference environment variables and custom values.'
+                3: {
+                    title: "🔧 Add Essential Files",
+                    description: "Initialize with README, choose appropriate .gitignore (Python if building Python app), and select a license if desired.",
+                    code: `✅ Add a README file
+✅ Add .gitignore: Python
+✅ Choose a license: MIT License (optional)`
+                },
+                4: {
+                    title: "✅ Create Repository",
+                    description: "Click 'Create repository' to finalize. You'll be redirected to your new repository where you can start adding GitHub Actions workflows.",
+                    code: "🎉 Repository created successfully!"
                 }
             };
-            
-            title.textContent = info[type].title;
-            description.textContent = info[type].description;
-            result.style.display = 'block';
+
+            if (steps[stepNum]) {
+                title.textContent = steps[stepNum].title;
+                description.textContent = steps[stepNum].description;
+                code.textContent = steps[stepNum].code;
+                code.style.display = 'block';
+                details.style.display = 'block';
+            }
         }
 
-        function startYAMLQuiz() {
-            yamlQuizIndex = 0;
-            yamlQuizScore = 0;
-            document.getElementById('yamlQuiz').style.display = 'block';
-            showYAMLQuestion();
+        function validateRepoSetup() {
+            const checks = [
+                document.getElementById('check1').checked,
+                document.getElementById('check2').checked,
+                document.getElementById('check3').checked,
+                document.getElementById('check4').checked
+            ];
+
+            const validation = document.getElementById('repoValidation');
+            const result = document.getElementById('validationResult');
+            const message = document.getElementById('validationMessage');
+
+            const checkedCount = checks.filter(Boolean).length;
+
+            if (checkedCount === 4) {
+                result.textContent = "🎉 Perfect Setup!";
+                message.textContent = "Your repository is properly configured and ready for GitHub Actions workflows!";
+                result.style.color = "#4CAF50";
+            } else if (checkedCount >= 2) {
+                result.textContent = "👍 Good Progress!";
+                message.textContent = `You've completed ${checkedCount}/4 steps. Consider completing the remaining items for best practices.`;
+                result.style.color = "#ff9800";
+            } else {
+                result.textContent = "📋 More Setup Needed";
+                message.textContent = "Please complete more setup steps before proceeding with GitHub Actions.";
+                result.style.color = "#f44336";
+            }
+
+            validation.style.display = 'block';
         }
 
-        function showYAMLQuestion() {
-            if (yamlQuizIndex < yamlQuizData.length) {
-                const question = yamlQuizData[yamlQuizIndex];
-                document.getElementById('yamlQuizQuestion').textContent = question.question;
-                
+        function explainPermission(type) {
+            const explanation = document.getElementById('permissionExplanation');
+            const title = document.getElementById('permissionTitle');
+            const details = document.getElementById('permissionDetails');
+
+            const permissions = {
+                general: {
+                    title: "🔓 Allow All Actions",
+                    details: "This setting enables your workflows to use any action from the GitHub Marketplace or other repositories. Essential for using popular actions like checkout, setup-python, etc."
+                },
+                fork: {
+                    title: "🔄 Fork Pull Request Workflows",
+                    details: "Allows workflows to run when someone creates a pull request from a forked repository. Important for open source projects and collaboration."
+                },
+                token: {
+                    title: "🎫 GITHUB_TOKEN Permissions",
+                    details: "The GITHUB_TOKEN is automatically created for each workflow run. Read/write permissions allow your workflows to create releases, update issues, push code, etc."
+                }
+            };
+
+            if (permissions[type]) {
+                title.textContent = permissions[type].title;
+                details.textContent = permissions[type].details;
+                explanation.style.display = 'block';
+            }
+        }
+
+        function showWorkflowCreationStep(stepNum) {
+            const details = document.getElementById('workflowCreationDetails');
+            const title = document.getElementById('creationStepTitle');
+            const description = document.getElementById('creationStepDescription');
+
+            const steps = {
+                1: {
+                    title: "📂 Navigate to Actions Tab",
+                    description: "In your repository, click the 'Actions' tab at the top. This is where all your workflows will be displayed and managed."
+                },
+                2: {
+                    title: "🔍 Choose Workflow Template",
+                    description: "GitHub will suggest workflow templates based on your repository contents. Look for 'Simple workflow' or 'Set up a workflow yourself' option."
+                },
+                3: {
+                    title: "⚙️ Edit YAML Configuration",
+                    description: "GitHub opens a built-in editor with a basic YAML template. You can modify the name, triggers, jobs, and steps according to your needs."
+                },
+                4: {
+                    title: "💾 Commit Workflow File",
+                    description: "Click 'Start commit', add a commit message like 'Add CI workflow', and commit directly to the main branch or create a new branch."
+                }
+            };
+
+            if (steps[stepNum]) {
+                title.textContent = steps[stepNum].title;
+                description.textContent = steps[stepNum].description;
+                details.style.display = 'block';
+            }
+        }
+
+        function showCompleteWorkflow() {
+            const example = document.getElementById('completeWorkflowExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showStatusIndicator(status) {
+            const details = document.getElementById('statusDetails');
+            const title = document.getElementById('statusTitle');
+            const description = document.getElementById('statusDescription');
+
+            const statuses = {
+                pending: {
+                    title: "🟡 Pending Status",
+                    description: "Workflow is queued and waiting for an available runner. This usually takes a few seconds but can be longer during peak times."
+                },
+                running: {
+                    title: "🔄 Running Status",
+                    description: "Workflow is currently executing. You can click on the run to see real-time logs and progress of each step."
+                },
+                success: {
+                    title: "✅ Success Status",
+                    description: "All jobs and steps completed successfully! Green checkmarks indicate everything worked as expected."
+                },
+                failure: {
+                    title: "❌ Failed Status",
+                    description: "One or more steps failed. Click on the failed run to see error logs and identify what went wrong."
+                }
+            };
+
+            if (statuses[status]) {
+                title.textContent = statuses[status].title;
+                description.textContent = statuses[status].description;
+                details.style.display = 'block';
+            }
+        }
+
+        function showInvestigationTools() {
+            const tools = document.getElementById('investigationTools');
+            tools.style.display = tools.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainTool(tool) {
+            const explanation = document.getElementById('toolExplanation');
+            const title = document.getElementById('toolTitle');
+            const description = document.getElementById('toolDescription');
+
+            const tools = {
+                'actions-tab': {
+                    title: "📊 Actions Tab Overview",
+                    description: "Shows all workflow runs with status indicators, triggered events, and execution times. Great for getting a bird's-eye view of your CI/CD health."
+                },
+                'workflow-run': {
+                    title: "📄 Workflow Run Details",
+                    description: "Detailed view of a specific workflow execution showing all jobs, their status, execution time, and any artifacts produced."
+                },
+                'job-logs': {
+                    title: "📝 Job Execution Logs",
+                    description: "Step-by-step output showing exactly what commands ran, their output, and any error messages. Essential for debugging failures."
+                },
+                'artifacts': {
+                    title: "📦 Build Artifacts",
+                    description: "Files generated during workflow execution like test reports, built applications, or logs. Can be downloaded for further analysis."
+                }
+            };
+
+            if (tools[tool]) {
+                title.textContent = tools[tool].title;
+                description.textContent = tools[tool].description;
+                explanation.style.display = 'block';
+            }
+        }
+
+        function showLogExample() {
+            const example = document.getElementById('logExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainLogComponent(component) {
+            const explanation = document.getElementById('logComponentExplanation');
+            const title = document.getElementById('logComponentTitle');
+            const description = document.getElementById('logComponentDescription');
+
+            const components = {
+                timestamp: {
+                    title: "⏰ Timestamps",
+                    description: "ISO 8601 format timestamps showing exactly when each operation occurred. Useful for measuring performance and identifying bottlenecks."
+                },
+                groups: {
+                    title: "📁 Log Groups",
+                    description: "##[group] markers create collapsible sections in the UI to organize related log output. Makes long logs easier to navigate."
+                },
+                output: {
+                    title: "💬 Command Output",
+                    description: "The actual output from your commands and scripts. This is what you'd see if running the commands locally in your terminal."
+                },
+                system: {
+                    title: "🖥️ System Messages",
+                    description: "Information about the runner environment, cleanup operations, and GitHub Actions infrastructure. Usually can be ignored unless debugging runner issues."
+                }
+            };
+
+            if (components[component]) {
+                title.textContent = components[component].title;
+                description.textContent = components[component].description;
+                explanation.style.display = 'block';
+            }
+        }
+
+        function showTroubleshooting(issueType) {
+            const details = document.getElementById('troubleshootingDetails');
+            const title = document.getElementById('troubleshootingTitle');
+            const description = document.getElementById('troubleshootingDescription');
+            const solution = document.getElementById('troubleshootingSolution');
+
+            const issues = {
+                permission: {
+                    title: "🔒 Permission Issues",
+                    description: "Common when workflows try to access protected resources or write to repository.",
+                    solution: `# Common Solutions:
+1. Check repository settings → Actions → General
+2. Ensure "Read and write permissions" is enabled
+3. For protected branches, add branch protection rules
+4. Use secrets for sensitive tokens:
+   env:
+     GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}`
+                },
+                syntax: {
+                    title: "📝 YAML Syntax Errors",
+                    description: "YAML is indentation-sensitive and has strict formatting rules.",
+                    solution: `# Common YAML Fixes:
+✅ Use spaces, not tabs for indentation
+✅ Ensure consistent indentation (2 or 4 spaces)
+✅ Quote strings with special characters
+✅ Check array formatting:
+   branches: [ main, develop ]  # or
+   branches:
+     - main
+     - develop`
+                },
+                timeout: {
+                    title: "⏱️ Timeout Issues",
+                    description: "Jobs have default 6-hour timeout, steps have 10-minute default timeout.",
+                    solution: `# Increase timeouts:
+jobs:
+  build:
+    timeout-minutes: 60  # Job timeout
+    steps:
+    - name: Long running task
+      run: ./long-script.sh
+      timeout-minutes: 30  # Step timeout`
+                },
+                dependencies: {
+                    title: "📦 Dependency Problems",
+                    description: "Missing packages, wrong versions, or installation failures.",
+                    solution: `# Dependency Solutions:
+1. Pin specific versions:
+   - name: Setup Python
+     uses: actions/setup-python@v4
+     with:
+       python-version: '3.9.16'
+
+2. Cache dependencies:
+   - name: Cache pip
+     uses: actions/cache@v3
+     with:
+       path: ~/.cache/pip
+       key: \${{ runner.os }}-pip-\${{ hashFiles('requirements.txt') }}`
+                }
+            };
+
+            if (issues[issueType]) {
+                title.textContent = issues[issueType].title;
+                description.textContent = issues[issueType].description;
+                solution.textContent = issues[issueType].solution;
+                solution.style.display = 'block';
+                details.style.display = 'block';
+            }
+        }
+
+        function startCIQuiz() {
+            ciQuizIndex = 0;
+            ciQuizScore = 0;
+            document.getElementById('ciQuiz').style.display = 'block';
+            showCIQuestion();
+        }
+
+        function showCIQuestion() {
+            if (ciQuizIndex < ciQuizData.length) {
+                const question = ciQuizData[ciQuizIndex];
+                document.getElementById('ciQuizQuestion').textContent = question.question;
+
                 let optionsHtml = '';
                 question.options.forEach((option, index) => {
                     optionsHtml += `
-                        <div class="workflow-step" onclick="selectYAMLAnswer(${index})" style="margin: 10px 0; cursor: pointer;">
+                        <div class="workflow-step" onclick="selectCIAnswer(${index})" style="margin: 10px 0; cursor: pointer;">
                             ${option}
                         </div>
                     `;
                 });
-                
-                document.getElementById('yamlQuizOptions').innerHTML = optionsHtml;
-                document.getElementById('yamlNextBtn').style.display = 'none';
+
+                document.getElementById('ciQuizOptions').innerHTML = optionsHtml;
+                document.getElementById('ciNextBtn').style.display = 'none';
             } else {
-                endYAMLQuiz();
+                endCIQuiz();
             }
         }
 
-        function selectYAMLAnswer(selectedIndex) {
-            const question = yamlQuizData[yamlQuizIndex];
-            const options = document.querySelectorAll('#yamlQuizOptions .workflow-step');
-            
+        function selectCIAnswer(selectedIndex) {
+            const question = ciQuizData[ciQuizIndex];
+            const options = document.querySelectorAll('#ciQuizOptions .workflow-step');
+
             options.forEach((option, index) => {
                 if (index === question.correct) {
                     option.style.background = 'rgba(76, 175, 80, 0.3)';
@@ -1759,27 +1332,27 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
                 }
                 option.onclick = null;
             });
-            
+
             if (selectedIndex === question.correct) {
-                yamlQuizScore++;
+                ciQuizScore++;
             }
-            
-            document.getElementById('yamlNextBtn').style.display = 'block';
+
+            document.getElementById('ciNextBtn').style.display = 'block';
         }
 
-        function nextYAMLQuestion() {
-            yamlQuizIndex++;
-            showYAMLQuestion();
+        function nextCIQuestion() {
+            ciQuizIndex++;
+            showCIQuestion();
         }
 
-        function endYAMLQuiz() {
-            const percentage = Math.round((yamlQuizScore / yamlQuizData.length) * 100);
-            document.getElementById('yamlQuiz').innerHTML = `
+        function endCIQuiz() {
+            const percentage = Math.round((ciQuizScore / ciQuizData.length) * 100);
+            document.getElementById('ciQuiz').innerHTML = `
                 <div class="highlight">
-                    <h3>🎊 YAML Quiz Complete!</h3>
-                    <p>You scored ${yamlQuizScore}/${yamlQuizData.length} (${percentage}%)</p>
-                    <p>${percentage >= 75 ? '🏆 YAML Master! You understand advanced concepts!' : '📚 Good effort! Review the YAML sections for mastery.'}</p>
-                    <button class="btn" onclick="startYAMLQuiz()">Retake YAML Quiz</button>
+                    <h3>🎊 CI Pipeline Quiz Complete!</h3>
+                    <p>You scored ${ciQuizScore}/${ciQuizData.length} (${percentage}%)</p>
+                    <p>${percentage >= 75 ? '🏆 CI Pipeline Master! Ready for production workflows!' : '📚 Good progress! Review the CI pipeline concepts for mastery.'}</p>
+                    <button class="btn" onclick="startCIQuiz()">Retake CI Quiz</button>
                 </div>
             `;
         }
