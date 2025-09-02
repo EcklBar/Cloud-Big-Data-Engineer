@@ -1784,6 +1784,532 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
             `;
         }
 
+        // CI Pipeline Functions
+        let workflowStep = 0;
+        let ciQuizIndex = 0;
+        let ciQuizScore = 0;
+
+        const ciQuizData = [
+            {
+                question: "What file extension is used for GitHub Actions workflows?",
+                options: [".yaml", ".yml", "Both .yaml and .yml", ".json"],
+                correct: 2
+            },
+            {
+                question: "Where should you navigate to create your first workflow in GitHub?",
+                options: ["Settings tab", "Actions tab", "Pull Requests tab", "Issues tab"],
+                correct: 1
+            },
+            {
+                question: "What does 'runs-on: ubuntu-latest' specify?",
+                options: ["The programming language", "The runner environment", "The branch to use", "The deployment target"],
+                correct: 1
+            },
+            {
+                question: "Which permission is required for GitHub Actions to create pull requests?",
+                options: ["Read permissions only", "Write permissions only", "Allow GitHub Actions to create and approve pull requests", "No special permissions needed"],
+                correct: 2
+            }
+        ];
+
+        function buildWorkflowStep(step) {
+            const builder = document.getElementById('workflowBuilder');
+            const code = document.getElementById('workflowCode');
+            const explanation = document.getElementById('workflowExplanation');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const completeBtn = document.getElementById('completeBtn');
+            
+            builder.style.display = 'block';
+            
+            if (step === 'prev') {
+                workflowStep = Math.max(0, workflowStep - 1);
+            } else if (step === 'next') {
+                workflowStep = Math.min(5, workflowStep + 1);
+            } else if (typeof step === 'number') {
+                workflowStep = step;
+            }
+            
+            const steps = [
+                {
+                    code: `# Step 1: Workflow Name
+name: CI Pipeline`,
+                    explanation: "Every workflow starts with a name. This appears in the GitHub Actions tab."
+                },
+                {
+                    code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]`,
+                    explanation: "The 'on' section defines what events trigger this workflow. Here we trigger on pushes to the main branch."
+                },
+                {
+                    code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]
+
+# Step 3: Jobs Section
+jobs:
+  build:`,
+                    explanation: "Jobs define what work to do. Each job runs on a separate runner machine."
+                },
+                {
+                    code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]
+
+# Step 3: Jobs Section
+jobs:
+  build:
+    runs-on: ubuntu-latest`,
+                    explanation: "'runs-on' specifies the type of machine to run the job on. Ubuntu is the most common choice."
+                },
+                {
+                    code: `# Step 1: Workflow Name
+name: CI Pipeline
+
+# Step 2: Event Triggers
+on:
+  push:
+    branches: [ main ]
+
+# Step 3: Jobs Section
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:`,
+                    explanation: "Steps are the individual tasks that make up a job. They run sequentially."
+                },
+                {
+                    code: `# Complete Workflow
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Run tests
+      run: |
+        echo "Running tests..."
+        npm test`,
+                    explanation: "Complete workflow with checkout action and test step. This is a functional CI pipeline!"
+                }
+            ];
+            
+            code.textContent = steps[workflowStep].code;
+            explanation.innerHTML = `<div class="workflow-step">${steps[workflowStep].explanation}</div>`;
+            
+            prevBtn.style.display = workflowStep > 0 ? 'inline-block' : 'none';
+            nextBtn.style.display = workflowStep < 5 ? 'inline-block' : 'none';
+            completeBtn.style.display = workflowStep === 5 ? 'inline-block' : 'none';
+        }
+
+        function completeWorkflow() {
+            const explanation = document.getElementById('workflowExplanation');
+            explanation.innerHTML = `
+                <div class="highlight">
+                    <h4>🎉 Workflow Complete!</h4>
+                    <p>You've built a complete CI pipeline that:</p>
+                    <ul style="text-align: left; margin: 10px 0;">
+                        <li>✅ Triggers on pushes to main branch</li>
+                        <li>✅ Runs on Ubuntu Linux</li>
+                        <li>✅ Checks out your code</li>
+                        <li>✅ Runs your tests</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function showRepoStep(stepNum) {
+            const details = document.getElementById('repoStepDetails');
+            const title = document.getElementById('repoStepTitle');
+            const description = document.getElementById('repoStepDescription');
+            const code = document.getElementById('repoStepCode');
+            
+            details.style.display = 'block';
+            
+            const steps = {
+                1: {
+                    title: "🌐 Navigate to GitHub",
+                    description: "Go to GitHub.com and click the '+' icon in the top right, then select 'New repository'",
+                    code: "URL: https://github.com/new"
+                },
+                2: {
+                    title: "📝 Configure Repository",
+                    description: "Choose a descriptive name like 'my-ci-pipeline', add a description, and decide on public/private visibility",
+                    code: `Repository Name: my-ci-pipeline
+Description: Learning GitHub Actions CI/CD
+Visibility: Public (for learning) or Private`
+                },
+                3: {
+                    title: "🔧 Initialize Repository",
+                    description: "Check 'Add a README file', select appropriate .gitignore (e.g., Python, Node), and choose a license",
+                    code: `✅ Add README file
+✅ Add .gitignore: Python/Node.js
+✅ Choose license: MIT License`
+                },
+                4: {
+                    title: "✅ Create Repository",
+                    description: "Click 'Create repository' button to finalize. You'll be redirected to your new repository!",
+                    code: "🎉 Repository created successfully!"
+                }
+            };
+            
+            const step = steps[stepNum];
+            title.textContent = step.title;
+            description.textContent = step.description;
+            code.textContent = step.code;
+            code.style.display = 'block';
+        }
+
+        function validateRepoSetup() {
+            const checks = [
+                document.getElementById('check1').checked,
+                document.getElementById('check2').checked,
+                document.getElementById('check3').checked,
+                document.getElementById('check4').checked
+            ];
+            
+            const validation = document.getElementById('repoValidation');
+            const result = document.getElementById('validationResult');
+            const message = document.getElementById('validationMessage');
+            
+            const checkedCount = checks.filter(Boolean).length;
+            
+            validation.style.display = 'block';
+            
+            if (checkedCount === 4) {
+                result.textContent = "🎉 Perfect Setup!";
+                message.textContent = "Your repository is properly configured and ready for GitHub Actions!";
+            } else if (checkedCount >= 2) {
+                result.textContent = "⚠️ Good Progress";
+                message.textContent = `You've completed ${checkedCount}/4 items. Review the remaining items for best practices.`;
+            } else {
+                result.textContent = "❌ Needs Work";
+                message.textContent = "Please complete more setup items before proceeding with GitHub Actions.";
+            }
+        }
+
+        function explainPermission(type) {
+            const explanation = document.getElementById('permissionExplanation');
+            const title = document.getElementById('permissionTitle');
+            const details = document.getElementById('permissionDetails');
+            
+            const permissions = {
+                general: {
+                    title: "🔓 Allow All Actions and Reusable Workflows",
+                    details: "This setting enables your repository to use any action from the GitHub Marketplace or other public repositories. Essential for using popular actions like actions/checkout."
+                },
+                fork: {
+                    title: "🔄 Fork Pull Request Workflows",
+                    details: "Allows workflows to run on pull requests from forks. Important for open source projects where external contributors submit PRs."
+                },
+                token: {
+                    title: "🎫 GITHUB_TOKEN Permissions",
+                    details: "The GITHUB_TOKEN is automatically created for each workflow run. Write permissions allow it to create issues, update PR statuses, and push to repositories."
+                }
+            };
+            
+            const perm = permissions[type];
+            title.textContent = perm.title;
+            details.textContent = perm.details;
+            explanation.style.display = 'block';
+        }
+
+        function showWorkflowCreationStep(stepNum) {
+            const details = document.getElementById('workflowCreationDetails');
+            const title = document.getElementById('creationStepTitle');
+            const description = document.getElementById('creationStepDescription');
+            
+            details.style.display = 'block';
+            
+            const steps = {
+                1: {
+                    title: "📂 Navigate to Actions Tab",
+                    description: "In your repository, click on the 'Actions' tab in the top navigation bar. This is where all your workflows will be managed."
+                },
+                2: {
+                    title: "🔍 Find Simple Workflow",
+                    description: "GitHub will suggest workflows. Look for 'Simple workflow' or 'set up a workflow yourself' option and click 'Configure'."
+                },
+                3: {
+                    title: "⚙️ Edit the YAML File",
+                    description: "GitHub opens a web editor with a basic workflow. You can modify the name, triggers, and steps according to your needs."
+                },
+                4: {
+                    title: "💾 Commit the Workflow",
+                    description: "Click 'Start commit', add a commit message like 'Add CI workflow', and commit directly to main branch."
+                }
+            };
+            
+            const step = steps[stepNum];
+            title.textContent = step.title;
+            description.textContent = step.description;
+        }
+
+        function showCompleteWorkflow() {
+            const example = document.getElementById('completeWorkflowExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showStatusIndicator(status) {
+            const details = document.getElementById('statusDetails');
+            const title = document.getElementById('statusTitle');
+            const description = document.getElementById('statusDescription');
+            
+            const statuses = {
+                pending: {
+                    title: "🟡 Workflow Pending",
+                    description: "The workflow is queued and waiting for an available runner. This usually takes a few seconds to minutes depending on GitHub's current load."
+                },
+                running: {
+                    title: "🔄 Workflow Running", 
+                    description: "The workflow is currently executing. You can click on the run to see real-time logs of each step as they complete."
+                },
+                success: {
+                    title: "✅ Workflow Succeeded",
+                    description: "All jobs and steps completed successfully! The green checkmark indicates your code passed all tests and builds."
+                },
+                failure: {
+                    title: "❌ Workflow Failed",
+                    description: "One or more steps failed. Click on the failed run to see detailed logs and identify what went wrong."
+                }
+            };
+            
+            const stat = statuses[status];
+            title.textContent = stat.title;
+            description.textContent = stat.description;
+            details.style.display = 'block';
+        }
+
+        function showInvestigationTools() {
+            const tools = document.getElementById('investigationTools');
+            tools.style.display = tools.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainTool(toolType) {
+            const explanation = document.getElementById('toolExplanation');
+            const title = document.getElementById('toolTitle');
+            const description = document.getElementById('toolDescription');
+            
+            const tools = {
+                'actions-tab': {
+                    title: "📊 Actions Tab Overview",
+                    description: "Shows all workflow runs with status indicators. Filter by workflow, branch, or event. Click any run to see detailed information."
+                },
+                'workflow-run': {
+                    title: "🔍 Individual Workflow Run",
+                    description: "Detailed view of a specific run showing all jobs, their duration, and overall status. Access logs and artifacts from here."
+                },
+                'job-logs': {
+                    title: "📜 Step-by-Step Logs",
+                    description: "Real-time output from each step. Expandable sections show command execution, error messages, and timing information."
+                },
+                'artifacts': {
+                    title: "📦 Build Artifacts",
+                    description: "Files generated during workflow execution like test reports, build outputs, or deployment packages. Download for analysis."
+                }
+            };
+            
+            const tool = tools[toolType];
+            title.textContent = tool.title;
+            description.textContent = tool.description;
+            explanation.style.display = 'block';
+        }
+
+        function showLogExample() {
+            const example = document.getElementById('logExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainLogComponent(component) {
+            const explanation = document.getElementById('logComponentExplanation');
+            const title = document.getElementById('logComponentTitle');
+            const description = document.getElementById('logComponentDescription');
+            
+            const components = {
+                timestamp: {
+                    title: "⏰ Timestamp Information",
+                    description: "ISO format timestamps showing exactly when each action occurred. Useful for performance analysis and debugging timing issues."
+                },
+                groups: {
+                    title: "📁 Collapsible Groups",
+                    description: "##[group] and ##[endgroup] create foldable sections in logs. Helps organize output and reduce clutter in complex workflows."
+                },
+                output: {
+                    title: "📤 Command Output",
+                    description: "Direct output from your scripts and commands. This is what your code prints to stdout and stderr."
+                },
+                system: {
+                    title: "🖥️ System Information",
+                    description: "GitHub Actions runner information, setup messages, and cleanup activities. Shows the environment your code runs in."
+                }
+            };
+            
+            const comp = components[component];
+            title.textContent = comp.title;
+            description.textContent = comp.description;
+            explanation.style.display = 'block';
+        }
+
+        function showTroubleshooting(issueType) {
+            const details = document.getElementById('troubleshootingDetails');
+            const title = document.getElementById('troubleshootingTitle');
+            const description = document.getElementById('troubleshootingDescription');
+            const solution = document.getElementById('troubleshootingSolution');
+            
+            const issues = {
+                permission: {
+                    title: "🔒 Permission Denied Errors",
+                    description: "Common when GITHUB_TOKEN lacks necessary permissions or trying to access protected resources.",
+                    solution: `# Solutions:
+# 1. Update workflow permissions
+permissions:
+  contents: write
+  pull-requests: write
+
+# 2. Check repository settings
+# Settings → Actions → General → Workflow permissions`
+                },
+                syntax: {
+                    title: "📝 YAML Syntax Errors",
+                    description: "Invalid YAML structure prevents workflow from starting. Check indentation and special characters.",
+                    solution: `# Common YAML issues:
+# ❌ Wrong indentation (use spaces, not tabs)
+steps:
+- name: Test
+  run: echo "hello"
+
+# ❌ Missing quotes around special characters  
+run: echo "Don't forget quotes!"
+
+# ✅ Correct structure
+steps:
+  - name: Test
+    run: echo "hello"`
+                },
+                timeout: {
+                    title: "⏱️ Job Timeout Issues",
+                    description: "Jobs have default 6-hour limit. Long-running processes may need timeout adjustments.",
+                    solution: `# Set custom timeout (in minutes)
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Long running task
+        run: sleep 1800  # 30 minutes`
+                },
+                dependencies: {
+                    title: "📦 Missing Dependencies",
+                    description: "Workflow fails because required packages or tools aren't installed on the runner.",
+                    solution: `# Install dependencies before use
+steps:
+  - name: Setup Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: '18'
+      
+  - name: Install dependencies
+    run: npm install`
+                }
+            };
+            
+            const issue = issues[issueType];
+            title.textContent = issue.title;
+            description.textContent = issue.description;
+            solution.textContent = issue.solution;
+            solution.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        function startCIQuiz() {
+            ciQuizIndex = 0;
+            ciQuizScore = 0;
+            document.getElementById('ciQuiz').style.display = 'block';
+            showCIQuestion();
+        }
+
+        function showCIQuestion() {
+            if (ciQuizIndex < ciQuizData.length) {
+                const question = ciQuizData[ciQuizIndex];
+                document.getElementById('ciQuizQuestion').textContent = question.question;
+                
+                let optionsHtml = '';
+                question.options.forEach((option, index) => {
+                    optionsHtml += `
+                        <div class="workflow-step" onclick="selectCIAnswer(${index})" style="margin: 10px 0; cursor: pointer;">
+                            ${option}
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('ciQuizOptions').innerHTML = optionsHtml;
+                document.getElementById('ciNextBtn').style.display = 'none';
+            } else {
+                endCIQuiz();
+            }
+        }
+
+        function selectCIAnswer(selectedIndex) {
+            const question = ciQuizData[ciQuizIndex];
+            const options = document.querySelectorAll('#ciQuizOptions .workflow-step');
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.style.background = 'rgba(76, 175, 80, 0.3)';
+                    option.style.borderColor = '#4CAF50';
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.style.background = 'rgba(244, 67, 54, 0.3)';
+                    option.style.borderColor = '#f44336';
+                }
+                option.onclick = null;
+            });
+            
+            if (selectedIndex === question.correct) {
+                ciQuizScore++;
+            }
+            
+            document.getElementById('ciNextBtn').style.display = 'block';
+        }
+
+        function nextCIQuestion() {
+            ciQuizIndex++;
+            showCIQuestion();
+        }
+
+        function endCIQuiz() {
+            const percentage = Math.round((ciQuizScore / ciQuizData.length) * 100);
+            document.getElementById('ciQuiz').innerHTML = `
+                <div class="highlight">
+                    <h3>🎊 CI Pipeline Quiz Complete!</h3>
+                    <p>You scored ${ciQuizScore}/${ciQuizData.length} (${percentage}%)</p>
+                    <p>${percentage >= 75 ? '🏆 CI/CD Master! You understand pipeline creation!' : '📚 Good effort! Review the pipeline sections for mastery.'}</p>
+                    <button class="btn" onclick="startCIQuiz()">Retake CI Quiz</button>
+                </div>
+            `;
+        }
+
         // Intersection Observer for scroll animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
