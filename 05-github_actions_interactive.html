@@ -890,14 +890,474 @@ database:
                         <button class="btn" onclick="nextYAMLQuestion()" id="yamlNextBtn" style="display: none;">Next Question</button>
                     </div>
                 </div>
-
-                <div class="highlight">
-                    <h3>🎊 Congratulations!</h3>
-                    <p>You now have mastery over both GitHub Actions fundamentals and advanced YAML concepts. You're ready to build powerful, flexible CI/CD workflows!</p>
+                
+                <div class="interactive-example">
+                    <h3>🚀 Ready for Hands-On Practice?</h3>
+                    <p>Now let's build a real CI pipeline step by step!</p>
+                    <button class="btn" onclick="scrollToCIPipeline()">🔨 Start Building Pipeline</button>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Hands-On CI Pipeline Section -->
+        <div class="section ci-pipeline-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);">
+                <div class="section-title expandable">🔨 Hands-On: Build Your First CI Pipeline</div>
+                <div class="time-badge">Practical Guide</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);">
+                    <h2>🎬 Welcome to CI Pipeline Creation!</h2>
+                    <p>Follow along step-by-step to create your first continuous integration pipeline using GitHub Actions</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step">
+                        <h4>🏗️ Step 1</h4>
+                        <p>Workflow Anatomy</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>📦 Step 2</h4>
+                        <p>Create Repository</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>⚙️ Step 3</h4>
+                        <p>Setup Actions</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🎯 Step 4</h4>
+                        <p>Test & Debug</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔬 CI Workflow Anatomy Deep Dive</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📝 Complete Workflow Structure</div>
+                    <div class="component-description">
+                        Let's break down each component of a CI workflow and understand how they work together to create an automated pipeline.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive Workflow Builder</h3>
+                    <button class="btn" onclick="buildWorkflowStep(1)">Start Building</button>
+                </div>
+
+                <div id="workflowBuilder" style="display: none;">
+                    <div class="code-block" id="workflowCode">
+# Your workflow will be built here...
+                    </div>
+                    <div class="workflow-diagram" id="workflowExplanation">
+                        <p>Click "Start Building" to begin the interactive workflow creation process!</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn" onclick="buildWorkflowStep('prev')" id="prevBtn" style="display: none;">← Previous</button>
+                        <button class="btn" onclick="buildWorkflowStep('next')" id="nextBtn" style="display: none;">Next →</button>
+                        <button class="btn" onclick="completeWorkflow()" id="completeBtn" style="display: none;">✅ Complete Workflow</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🏗️ Repository Setup Walkthrough</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>📦 Creating Your GitHub Repository</h3>
+                    <p>Follow these steps to set up a new repository for your CI pipeline</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showRepoStep(1)">
+                        <h4>🌐 Step 1</h4>
+                        <p>Visit GitHub</p>
+                        <small>github.com/new</small>
+                    </div>
+                    <div class="assembly-step" onclick="showRepoStep(2)">
+                        <h4>📝 Step 2</h4>
+                        <p>Configure Repo</p>
+                        <small>Name & Settings</small>
+                    </div>
+                    <div class="assembly-step" onclick="showRepoStep(3)">
+                        <h4>🔧 Step 3</h4>
+                        <p>Add Files</p>
+                        <small>.gitignore & License</small>
+                    </div>
+                    <div class="assembly-step" onclick="showRepoStep(4)">
+                        <h4>✅ Step 4</h4>
+                        <p>Create Repository</p>
+                        <small>Final Step</small>
+                    </div>
+                </div>
+
+                <div id="repoStepDetails" class="component-card" style="display: none;">
+                    <div class="component-title" id="repoStepTitle">Select a step above</div>
+                    <div class="component-description" id="repoStepDescription">Click on any step above to see detailed instructions</div>
+                    <div id="repoStepCode" class="code-block" style="display: none;"></div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Repository Checklist</h3>
+                    <div class="workflow-diagram">
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check1"> Repository name is descriptive
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check2"> Added Python .gitignore
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check3"> Selected appropriate license
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check4"> Repository is public/private as needed
+                        </div>
+                    </div>
+                    <button class="btn" onclick="validateRepoSetup()">✅ Validate Setup</button>
+                </div>
+
+                <div id="repoValidation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="validationResult"></h4>
+                        <p id="validationMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚙️ GitHub Actions Configuration</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔐 Actions Permissions Setup</div>
+                    <div class="component-description">
+                        Before creating workflows, ensure GitHub Actions are properly configured with the right permissions.
+                    </div>
+                </div>
+
+                <div class="workflow-diagram">
+                    <h4>🛡️ Required Permission Settings:</h4>
+                    <div class="workflow-step" onclick="explainPermission('general')">
+                        <strong>Allow all actions and reusable workflows</strong>
+                        <br><small>Enables use of community actions from GitHub Marketplace</small>
+                    </div>
+                    <div class="workflow-step" onclick="explainPermission('fork')">
+                        <strong>Allow GitHub Actions to create and approve pull requests</strong>
+                        <br><small>Enables automated PR creation and approval</small>
+                    </div>
+                    <div class="workflow-step" onclick="explainPermission('token')">
+                        <strong>Read and write permissions for GITHUB_TOKEN</strong>
+                        <br><small>Allows workflows to interact with repository</small>
+                    </div>
+                </div>
+
+                <div id="permissionExplanation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="permissionTitle"></h4>
+                        <p id="permissionDetails"></p>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔧 Quick Actions Setup Guide</h3>
+                    <div class="code-block">
+# Navigation Path:
+Repository → Settings → Actions → General
+
+# Key Settings to Configure:
+✅ Actions permissions: "Allow all actions and reusable workflows"
+✅ Fork pull request workflows: "Run workflows from fork pull requests"  
+✅ Workflow permissions: "Read and write permissions"
+✅ Allow GitHub Actions to create and approve pull requests: ✓
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎯 Hello World Workflow Creation</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>👋 Your First GitHub Action</h3>
+                    <p>Create a simple "Hello World" workflow to test your setup</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(1)">
+                        <h4>📂 Navigate</h4>
+                        <p>Actions Tab</p>
+                    </div>
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(2)">
+                        <h4>🔍 Search</h4>
+                        <p>Simple Workflow</p>
+                    </div>
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(3)">
+                        <h4>⚙️ Configure</h4>
+                        <p>Edit YAML</p>
+                    </div>
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(4)">
+                        <h4>💾 Commit</h4>
+                        <p>Save Changes</p>
+                    </div>
+                </div>
+
+                <div id="workflowCreationDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="creationStepTitle">Workflow Creation Step</div>
+                        <div class="component-description" id="creationStepDescription">Select a step above to see details</div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>📝 Complete Hello World Workflow</h3>
+                    <button class="btn" onclick="showCompleteWorkflow()">📄 Show Complete YAML</button>
+                </div>
+
+                <div id="completeWorkflowExample" style="display: none;">
+                    <div class="code-block">
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Run a multi-line script
+      run: |
+        echo "Hello, World!"
+        echo "This is my first GitHub Action"
+        echo "Pipeline executed successfully!"
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>🔍 Workflow Breakdown:</h4>
+                        <div class="workflow-step">
+                            <strong>name:</strong> Workflow identifier shown in Actions tab
+                        </div>
+                        <div class="workflow-step">
+                            <strong>on.push.branches:</strong> Triggers on pushes to main branch
+                        </div>
+                        <div class="workflow-step">
+                            <strong>jobs.build:</strong> Single job named "build"
+                        </div>
+                        <div class="workflow-step">
+                            <strong>runs-on:</strong> Uses Ubuntu Linux runner
+                        </div>
+                        <div class="workflow-step">
+                            <strong>steps.run:</strong> Executes multi-line shell commands
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔍 Workflow Execution & Monitoring</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📊 Understanding Workflow Status</div>
+                    <div class="component-description">
+                        Learn to interpret the visual indicators that show your workflow's execution status.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showStatusIndicator('pending')">
+                        <h4>🟡 Pending</h4>
+                        <p>Workflow Queued</p>
+                        <small>Amber Circle</small>
+                    </div>
+                    <div class="assembly-step" onclick="showStatusIndicator('running')">
+                        <h4>🔄 Running</h4>
+                        <p>Currently Executing</p>
+                        <small>Animated Circle</small>
+                    </div>
+                    <div class="assembly-step" onclick="showStatusIndicator('success')">
+                        <h4>✅ Success</h4>
+                        <p>Completed Successfully</p>
+                        <small>Green Checkmark</small>
+                    </div>
+                    <div class="assembly-step" onclick="showStatusIndicator('failure')">
+                        <h4>❌ Failed</h4>
+                        <p>Error Occurred</p>
+                        <small>Red X Mark</small>
+                    </div>
+                </div>
+
+                <div id="statusDetails" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="statusTitle">Workflow Status</h4>
+                        <p id="statusDescription">Select a status above to learn more</p>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Workflow Investigation Tools</h3>
+                    <button class="btn" onclick="showInvestigationTools()">🕵️ Explore Tools</button>
+                </div>
+
+                <div id="investigationTools" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🛠️ Debugging Your Workflows:</h4>
+                        <div class="workflow-step" onclick="explainTool('actions-tab')">
+                            <strong>Actions Tab</strong> - Overview of all workflow runs
+                        </div>
+                        <div class="workflow-step" onclick="explainTool('workflow-run')">
+                            <strong>Workflow Run Page</strong> - Individual execution details
+                        </div>
+                        <div class="workflow-step" onclick="explainTool('job-logs')">
+                            <strong>Job Logs</strong> - Step-by-step execution output
+                        </div>
+                        <div class="workflow-step" onclick="explainTool('artifacts')">
+                            <strong>Artifacts</strong> - Files generated during workflow
+                        </div>
+                    </div>
+                    
+                    <div id="toolExplanation" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="toolTitle">Investigation Tool</div>
+                            <div class="component-description" id="toolDescription">Click on a tool above to learn more</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📋 Log Analysis & Troubleshooting</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔍 Reading Workflow Logs</div>
+                    <div class="component-description">
+                        Master the art of interpreting GitHub Actions logs to debug and optimize your workflows.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>📊 Sample Log Analysis</h3>
+                    <button class="btn" onclick="showLogExample()">📜 View Sample Logs</button>
+                </div>
+
+                <div id="logExample" style="display: none;">
+                    <div class="code-block">
+2024-09-02T10:15:30.123Z ##[group]Run Run a multi-line script
+2024-09-02T10:15:30.150Z shell: /usr/bin/bash -e {0}
+2024-09-02T10:15:30.151Z ##[endgroup]
+2024-09-02T10:15:30.180Z Hello, World!
+2024-09-02T10:15:30.181Z This is my first GitHub Action  
+2024-09-02T10:15:30.182Z Pipeline executed successfully!
+2024-09-02T10:15:30.200Z ##[group]Post job cleanup
+2024-09-02T10:15:30.205Z Cleaning up orphaned processes
+                    </div>
+
+                    <div class="workflow-diagram">
+                        <h4>🔬 Log Components Breakdown:</h4>
+                        <div class="workflow-step" onclick="explainLogComponent('timestamp')">
+                            <strong>Timestamps</strong> - Execution timing information
+                        </div>
+                        <div class="workflow-step" onclick="explainLogComponent('groups')">
+                            <strong>##[group]</strong> - Collapsible log sections
+                        </div>
+                        <div class="workflow-step" onclick="explainLogComponent('output')">
+                            <strong>Command Output</strong> - Your script results
+                        </div>
+                        <div class="workflow-step" onclick="explainLogComponent('system')">
+                            <strong>System Messages</strong> - Runner information
+                        </div>
+                    </div>
+                </div>
+
+                <div id="logComponentExplanation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="logComponentTitle">Log Component</h4>
+                        <p id="logComponentDescription">Click on a component above to learn more</p>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🚨 Common Issues & Solutions</div>
+                    <div class="component-description">
+                        Understanding typical workflow failures and their solutions.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showTroubleshooting('permission')">
+                        <h4>🔒 Permissions</h4>
+                        <p>Access Denied</p>
+                    </div>
+                    <div class="assembly-step" onclick="showTroubleshooting('syntax')">
+                        <h4>📝 YAML Syntax</h4>
+                        <p>Parse Errors</p>
+                    </div>
+                    <div class="assembly-step" onclick="showTroubleshooting('timeout')">
+                        <h4>⏱️ Timeouts</h4>
+                        <p>Job Limits</p>
+                    </div>
+                    <div class="assembly-step" onclick="showTroubleshooting('dependencies')">
+                        <h4>📦 Dependencies</h4>
+                        <p>Missing Packages</p>
+                    </div>
+                </div>
+
+                <div id="troubleshootingDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="troubleshootingTitle">Troubleshooting Guide</div>
+                        <div class="component-description" id="troubleshootingDescription">Select an issue type above</div>
+                        <div id="troubleshootingSolution" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎓 CI Pipeline Mastery Quiz</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>🧠 Test Your CI Pipeline Knowledge</h3>
+                    <p>Prove your understanding of GitHub Actions CI pipeline creation and management</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🏆 Advanced CI Quiz</h3>
+                    <button class="btn" onclick="startCIQuiz()">🚀 Start CI Quiz</button>
+                </div>
+
+                <div id="ciQuiz" style="display: none;">
+                    <div class="component-card">
+                        <h4 id="ciQuizQuestion"></h4>
+                        <div id="ciQuizOptions"></div>
+                        <button class="btn" onclick="nextCIQuestion()" id="ciNextBtn" style="display: none;">Next Question</button>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h3>🎊 Congratulations!</h3>
+                    <p>You now have comprehensive knowledge of GitHub Actions fundamentals, advanced YAML concepts, and hands-on CI pipeline creation. You're ready to build production-ready workflows!</p>
+                </div>
+            </div>
+        </div>
 
     <script>
         let currentProgress = 0;
