@@ -2817,6 +2817,195 @@ steps:
             `;
         }
 
+        // Pull Request Workflow Functions
+
+function showBranchCreation() {
+    const demo = document.getElementById('branchCreationDemo');
+    demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+}
+
+function explainBranchStep(stepNum) {
+    const explanation = document.getElementById('branchStepExplanation');
+    const title = document.getElementById('branchStepTitle');
+    const description = document.getElementById('branchStepDescription');
+    
+    const steps = {
+        1: {
+            title: "📂 Navigate to Repository",
+            description: "From your repository's main page, look for the branch dropdown (usually shows 'main') and click on it to see branch management options."
+        },
+        2: {
+            title: "🌿 Create New Branch",
+            description: "Click 'View all branches' then 'New branch' button. This opens the branch creation interface."
+        },
+        3: {
+            title: "📝 Name Your Branch",
+            description: "Choose a descriptive name like 'pr-workflow' or 'feature/add-tests'. Use hyphens or underscores, avoid spaces."
+        },
+        4: {
+            title: "✅ Verify Active Branch",
+            description: "After creation, the repository should show your new branch name in the branch dropdown, confirming you're working on the feature branch."
+        }
+    };
+    
+    const step = steps[stepNum];
+    title.textContent = step.title;
+    description.textContent = step.description;
+    explanation.style.display = 'block';
+}
+
+function showPythonExample() {
+    const example = document.getElementById('pythonCodeExample');
+    example.style.display = example.style.display === 'none' ? 'block' : 'none';
+}
+
+function compareTriggers() {
+    const comparison = document.getElementById('triggerComparison');
+    comparison.style.display = comparison.style.display === 'none' ? 'block' : 'none';
+}
+
+function exploreActionSyntax() {
+    const demo = document.getElementById('actionSyntaxDemo');
+    demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+}
+
+function explainSyntaxPart(part) {
+    const explanation = document.getElementById('syntaxExplanation');
+    const title = document.getElementById('syntaxPartTitle');
+    const description = document.getElementById('syntaxPartDescription');
+    
+    const parts = {
+        structure: {
+            title: "📚 Action Repository Structure",
+            description: "Actions follow the format 'owner/repository@version'. For example: 'actions/checkout@v3' means the 'checkout' action from the 'actions' organization, version 3."
+        },
+        uses: {
+            title: "🔗 Uses Keyword",
+            description: "The 'uses' keyword tells GitHub Actions to run a pre-built action instead of a shell command. It's like importing a function in programming."
+        },
+        with: {
+            title: "⚙️ With Parameters",
+            description: "The 'with' section passes configuration parameters to the action, similar to function arguments. Each action documents its available parameters."
+        }
+    };
+    
+    const partInfo = parts[part];
+    title.textContent = partInfo.title;
+    description.textContent = partInfo.description;
+    explanation.style.display = 'block';
+}
+
+function explainWorkflowStep(stepType) {
+    const details = document.getElementById('workflowStepDetails');
+    const title = document.getElementById('stepDetailTitle');
+    const description = document.getElementById('stepDetailDescription');
+    const code = document.getElementById('stepDetailCode');
+    
+    const steps = {
+        checkout: {
+            title: "📥 Checkout Repository",
+            description: "Downloads your repository's source code to the runner machine so subsequent steps can access your files.",
+            code: `- name: Checkout repository
+  uses: actions/checkout@v3
+  # Downloads all files from your repo to /github/workspace/`
+        },
+        setup: {
+            title: "🐍 Setup Python Environment", 
+            description: "Installs and configures Python with the specified version, making python command available for subsequent steps.",
+            code: `- name: Setup Python
+  uses: actions/setup-python@v4
+  with:
+    python-version: '3.9'
+  # Installs Python 3.9 and adds it to PATH`
+        },
+        run: {
+            title: "▶️ Execute Python Script",
+            description: "Runs your Python script using the configured Python environment. Output appears in the workflow logs.",
+            code: `- name: Run Python script
+  run: python hello_world.py
+  # Executes your script and shows output in logs`
+        }
+    };
+    
+    const step = steps[stepType];
+    title.textContent = step.title;
+    description.textContent = step.description;
+    code.textContent = step.code;
+    code.style.display = 'block';
+    details.style.display = 'block';
+}
+
+function showCompletePRWorkflow() {
+    const workflow = document.getElementById('completePRWorkflow');
+    workflow.style.display = workflow.style.display === 'none' ? 'block' : 'none';
+}
+
+function simulatePRCreation() {
+    const simulator = document.getElementById('prCreationSimulator');
+    simulator.style.display = simulator.style.display === 'none' ? 'block' : 'none';
+}
+
+function showPRStatus(status) {
+    const details = document.getElementById('prStatusDetails');
+    const title = document.getElementById('prStatusTitle');
+    const description = document.getElementById('prStatusDescription');
+    
+    const statuses = {
+        pending: {
+            title: "🟡 Pull Request Checks Pending",
+            description: "The workflow is queued and will start soon. You'll see a yellow dot next to the check name in the PR."
+        },
+        running: {
+            title: "🔄 Pull Request Checks Running",
+            description: "The workflow is actively executing. You can click 'Details' to watch the real-time progress of each step."
+        },
+        success: {
+            title: "✅ Pull Request Checks Passed",
+            description: "All checks completed successfully! The PR shows a green checkmark and can be safely merged."
+        },
+        failure: {
+            title: "❌ Pull Request Checks Failed",
+            description: "One or more checks failed. The PR is blocked from merging until issues are resolved. Click 'Details' to see what went wrong."
+        }
+    };
+    
+    const statusInfo = statuses[status];
+    title.textContent = statusInfo.title;
+    description.textContent = statusInfo.description;
+    details.style.display = 'block';
+}
+
+function showPRLogs() {
+    const logs = document.getElementById('prLogsExample');
+    logs.style.display = logs.style.display === 'none' ? 'block' : 'none';
+}
+
+function explainLogSection(section) {
+    const details = document.getElementById('logSectionDetails');
+    const title = document.getElementById('logSectionTitle');
+    const description = document.getElementById('logSectionDescription');
+    
+    const sections = {
+        checkout: {
+            title: "📥 Checkout Action Logs",
+            description: "Shows the process of downloading your repository code, including Git operations, branch switching, and file synchronization to the runner."
+        },
+        python: {
+            title: "🐍 Python Setup Logs",
+            description: "Details the Python installation process, version verification, and environment configuration. Shows which Python version was installed and where."
+        },
+        script: {
+            title: "📜 Script Execution Logs",
+            description: "Contains the actual output from your Python script - this is where you'll see your print statements, error messages, and script results."
+        }
+    };
+    
+    const sectionInfo = sections[section];
+    title.textContent = sectionInfo.title;
+    description.textContent = sectionInfo.description;
+    details.style.display = 'block';
+}
+
         // Intersection Observer for scroll animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
