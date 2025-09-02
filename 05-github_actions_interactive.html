@@ -1358,6 +1358,520 @@ jobs:
             </div>
         </div>
 
+        <!-- Pull Request Workflow Section -->
+        <div class="section pr-workflow-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #9b59b6, #3498db);">
+                <div class="section-title expandable">🔄 Pull Request Workflows</div>
+                <div class="time-badge">Collaborative Development</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight" style="background: linear-gradient(135deg, #9b59b6, #3498db);">
+                    <h2>🤝 Collaborative Development with PR Workflows</h2>
+                    <p>Learn to trigger workflows on pull requests for code review and quality assurance</p>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🌟 Why Pull Request Workflows?</div>
+                    <div class="component-description">
+                        In collaborative environments, multiple developers work simultaneously. Feature branches organize related work, and pull requests enable code review. CI/CD workflows automatically test changes before merging, catching issues early and ensuring high-quality code.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step">
+                        <h4>🌿 Step 1</h4>
+                        <p>Create Feature Branch</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>📝 Step 2</h4>
+                        <p>Add Repository Code</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>⚙️ Step 3</h4>
+                        <p>Configure PR Workflow</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🔍 Step 4</h4>
+                        <p>Test & Review</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🌿 Creating Feature Branches</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔀 Shared Repository Model</div>
+                    <div class="component-description">
+                        Multiple developers working on the same repository create feature branches for related work. When complete, they open pull requests for code review, triggering automated quality checks.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive Branch Creation</h3>
+                    <button class="btn" onclick="showBranchCreation()">🌿 Create Feature Branch</button>
+                </div>
+
+                <div id="branchCreationDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>📋 Branch Creation Steps:</h4>
+                        <div class="workflow-step" onclick="explainBranchStep(1)">
+                            <strong>1. Navigate to Repository</strong> - Click "branch" on landing page
+                        </div>
+                        <div class="workflow-step" onclick="explainBranchStep(2)">
+                            <strong>2. Create New Branch</strong> - Click "New branch" button
+                        </div>
+                        <div class="workflow-step" onclick="explainBranchStep(3)">
+                            <strong>3. Name Your Branch</strong> - Use descriptive names like "pr-workflow"
+                        </div>
+                        <div class="workflow-step" onclick="explainBranchStep(4)">
+                            <strong>4. Verify Active Branch</strong> - Check repository landing page
+                        </div>
+                    </div>
+                    
+                    <div id="branchStepExplanation" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="branchStepTitle">Branch Creation Step</h4>
+                            <p id="branchStepDescription">Click on steps above for detailed explanations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Example branch naming conventions:
+feature/user-authentication
+bugfix/login-validation
+hotfix/security-patch
+pr-workflow  # Our example branch
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📝 Adding Repository Code</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🐍 Sample Python Script</div>
+                    <div class="component-description">
+                        Add actual code to test your workflow. We'll create a simple Python script that demonstrates basic functionality.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>💻 Create hello_world.py</h3>
+                    <button class="btn" onclick="showPythonExample()">📄 View Python Code</button>
+                </div>
+
+                <div id="pythonCodeExample" style="display: none;">
+                    <div class="code-block">
+# hello_world.py
+import datetime
+
+def main():
+    print("Hello, World!")
+    current_time = datetime.datetime.now()
+    print(f"Current time: {current_time}")
+    print("This script is running in GitHub Actions!")
+
+if __name__ == "__main__":
+    main()
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>💡 Why This Example?</h4>
+                        <div class="workflow-step">
+                            <strong>Simple Output</strong> - Easy to verify execution
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Time Stamp</strong> - Shows when workflow ran
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Import Test</strong> - Verifies Python environment
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>📁 File Creation Steps</h4>
+                    <p>1. Navigate to your feature branch<br>
+                    2. Click "Add file" → "Create new file"<br>
+                    3. Name it "hello_world.py"<br>
+                    4. Paste the Python code above<br>
+                    5. Commit with message "Add hello world script"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚙️ Pull Request Workflow Configuration</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔄 Event Trigger Change</div>
+                    <div class="component-description">
+                        Modify your existing workflow to trigger on pull requests instead of pushes. This enables automated testing before code merges.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>⚖️ Push vs Pull Request Triggers</h3>
+                    <button class="btn" onclick="compareTriggers()">🔍 Compare Triggers</button>
+                </div>
+
+                <div id="triggerComparison" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step">
+                            <h4>📤 Push Trigger</h4>
+                            <p>Runs after code is merged</p>
+                            <small>on: push</small>
+                        </div>
+                        <div class="assembly-step">
+                            <h4>🔄 PR Trigger</h4>
+                            <p>Runs before code is merged</p>
+                            <small>on: pull_request</small>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <h4>🎯 Key Difference</h4>
+                        <p><strong>Pull Request triggers:</strong> Test changes BEFORE merging<br>
+                        <strong>Push triggers:</strong> Test changes AFTER merging</p>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Before: Push trigger
+name: CI
+on:
+  push:
+    branches: [ main ]
+
+# After: Pull Request trigger  
+name: CI
+on:
+  pull_request:
+    branches: [ main ]  # Target branch (where PR merges into)
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🎯 Target Branch Specification</div>
+                    <div class="component-description">
+                        The "branches" key specifies the target branch of the pull request - where the code will be merged into (typically "main").
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🛠️ GitHub Actions Syntax Deep Dive</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📚 Actions Syntax Structure</div>
+                    <div class="component-description">
+                        Actions are reusable components defined under the "uses" key. Think of them as functions with parameters passed through the "with" key.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Action Syntax Explorer</h3>
+                    <button class="btn" onclick="exploreActionSyntax()">🧩 Explore Syntax</button>
+                </div>
+
+                <div id="actionSyntaxDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔧 Action Syntax Breakdown:</h4>
+                        <div class="workflow-step" onclick="explainSyntaxPart('structure')">
+                            <strong>organization/repository@version</strong>
+                            <br><small>username/repo-name@v3</small>
+                        </div>
+                        <div class="workflow-step" onclick="explainSyntaxPart('uses')">
+                            <strong>uses:</strong> Specifies which Action to run
+                            <br><small>Like importing a function</small>
+                        </div>
+                        <div class="workflow-step" onclick="explainSyntaxPart('with')">
+                            <strong>with:</strong> Passes arguments to Action
+                            <br><small>Like function parameters</small>
+                        </div>
+                    </div>
+                    
+                    <div id="syntaxExplanation" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="syntaxPartTitle">Syntax Component</h4>
+                            <p id="syntaxPartDescription">Click on components above for explanations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Action syntax examples:
+- name: Checkout repository
+  uses: actions/checkout@v3        # Organization/repo@version
+  
+- name: Setup Python
+  uses: actions/setup-python@v4    # Another action
+  with:                           # Parameters/arguments
+    python-version: '3.9'
+                </div>
+
+                <div class="highlight">
+                    <h4>🏪 GitHub Marketplace</h4>
+                    <p>Find thousands of ready-to-use Actions at <strong>github.com/marketplace</strong> for common tasks like deployment, testing, and notifications.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔧 Essential Workflow Steps</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📋 Required Steps for Code Execution</div>
+                    <div class="component-description">
+                        To run repository code, you need to checkout the repository and configure the runtime environment. We'll use two essential Actions for this.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="explainWorkflowStep('checkout')">
+                        <h4>📥 Checkout</h4>
+                        <p>Download Repository</p>
+                        <small>actions/checkout@v3</small>
+                    </div>
+                    <div class="assembly-step" onclick="explainWorkflowStep('setup')">
+                        <h4>🐍 Setup Python</h4>
+                        <p>Configure Environment</p>
+                        <small>actions/setup-python@v4</small>
+                    </div>
+                    <div class="assembly-step" onclick="explainWorkflowStep('run')">
+                        <h4>▶️ Run Script</h4>
+                        <p>Execute Code</p>
+                        <small>python hello_world.py</small>
+                    </div>
+                </div>
+
+                <div id="workflowStepDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="stepDetailTitle">Workflow Step</div>
+                        <div class="component-description" id="stepDetailDescription">Click on steps above for details</div>
+                        <div id="stepDetailCode" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Complete PR Workflow</h3>
+                    <button class="btn" onclick="showCompletePRWorkflow()">📄 Show Complete YAML</button>
+                </div>
+
+                <div id="completePRWorkflow" style="display: none;">
+                    <div class="code-block">
+name: PR Workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Run Python script
+      run: python hello_world.py
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>🔍 Workflow Flow:</h4>
+                        <div class="workflow-step">
+                            <strong>Trigger:</strong> Pull request to main branch
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Environment:</strong> Ubuntu Linux runner
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Step 1:</strong> Download repository code
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Step 2:</strong> Install Python 3.9
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Step 3:</strong> Execute hello_world.py
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🚀 Creating and Testing Pull Requests</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📝 Pull Request Creation Process</div>
+                    <div class="component-description">
+                        After committing your workflow changes to the feature branch, create a pull request to trigger the automated workflow and test your changes.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 PR Creation Simulator</h3>
+                    <button class="btn" onclick="simulatePRCreation()">🔄 Create Pull Request</button>
+                </div>
+
+                <div id="prCreationSimulator" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>📋 Pull Request Steps:</h4>
+                        <div class="workflow-step pulse">
+                            <strong>1. Navigate to Repository</strong>
+                            <br><small>You'll see "Compare & pull request" button</small>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>2. Compare Branches</strong>
+                            <br><small>From: pr-workflow → To: main</small>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>3. Add PR Details</strong>
+                            <br><small>Title: "Add Python script and PR workflow"</small>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>4. Create Pull Request</strong>
+                            <br><small>Workflow triggers immediately!</small>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <h4>⚡ Automatic Trigger</h4>
+                        <p>The moment you create the PR, GitHub Actions will start running your workflow. You'll see status checks appear in the PR!</p>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">📊 Monitoring Workflow Status</div>
+                    <div class="component-description">
+                        Pull requests show workflow status directly in the PR interface. Click "Details" next to any check to view detailed logs.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showPRStatus('pending')">
+                        <h4>🟡 Pending</h4>
+                        <p>Workflow Starting</p>
+                    </div>
+                    <div class="assembly-step" onclick="showPRStatus('running')">
+                        <h4>🔄 Running</h4>
+                        <p>Tests Executing</p>
+                    </div>
+                    <div class="assembly-step" onclick="showPRStatus('success')">
+                        <h4>✅ Success</h4>
+                        <p>Ready to Merge</p>
+                    </div>
+                    <div class="assembly-step" onclick="showPRStatus('failure')">
+                        <h4>❌ Failed</h4>
+                        <p>Needs Fixes</p>
+                    </div>
+                </div>
+
+                <div id="prStatusDetails" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="prStatusTitle">PR Status</h4>
+                        <p id="prStatusDescription">Click on status indicators above</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📜 Understanding Workflow Logs</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔍 Enhanced Log Analysis</div>
+                    <div class="component-description">
+                        PR workflows show additional steps compared to simple workflows. Learn to interpret the checkout and setup-python logs alongside your script execution.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>📊 Sample PR Workflow Logs</h3>
+                    <button class="btn" onclick="showPRLogs()">📜 View PR Logs</button>
+                </div>
+
+                <div id="prLogsExample" style="display: none;">
+                    <div class="code-block">
+2024-09-02T10:20:15.123Z ##[group]Run actions/checkout@v3
+2024-09-02T10:20:15.150Z Syncing repository: user/my-repo
+2024-09-02T10:20:15.180Z Getting Git version info
+2024-09-02T10:20:15.200Z Downloading the repository
+2024-09-02T10:20:16.500Z ##[endgroup]
+
+2024-09-02T10:20:16.600Z ##[group]Run actions/setup-python@v4
+2024-09-02T10:20:16.650Z Installed Python 3.9.18
+2024-09-02T10:20:16.700Z Successfully set up Python 3.9.18
+2024-09-02T10:20:16.750Z ##[endgroup]
+
+2024-09-02T10:20:16.800Z ##[group]Run python hello_world.py
+2024-09-02T10:20:16.850Z Hello, World!
+2024-09-02T10:20:16.851Z Current time: 2024-09-02 10:20:16.851234
+2024-09-02T10:20:16.852Z This script is running in GitHub Actions!
+2024-09-02T10:20:16.900Z ##[endgroup]
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>📋 Log Sections Breakdown:</h4>
+                        <div class="workflow-step" onclick="explainLogSection('checkout')">
+                            <strong>Checkout Logs</strong> - Repository download and Git operations
+                        </div>
+                        <div class="workflow-step" onclick="explainLogSection('python')">
+                            <strong>Python Setup Logs</strong> - Environment configuration
+                        </div>
+                        <div class="workflow-step" onclick="explainLogSection('script')">
+                            <strong>Script Execution</strong> - Your Python code output
+                        </div>
+                    </div>
+                </div>
+
+                <div id="logSectionDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="logSectionTitle">Log Section</div>
+                        <div class="component-description" id="logSectionDescription">Click on sections above for detailed explanations</div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>🎯 Success Indicators</h4>
+                    <p>✅ Repository successfully downloaded<br>
+                    ✅ Python 3.9 installed and configured<br>
+                    ✅ Python script executed with expected output<br>
+                    ✅ Current timestamp shows execution time</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hands-On CI Pipeline Section -->
+        <div class="section ci-pipeline-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);">
+                <div class="section-title expandable">🔨 Hands-On: Build Your First CI Pipeline</div>
+                <div class="time-badge">Practical Guide</div>
+            </div>
+
     <script>
         let currentProgress = 0;
         let quizIndex = 0;
