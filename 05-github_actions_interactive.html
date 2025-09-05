@@ -1864,6 +1864,626 @@ jobs:
                 </div>
             </div>
         </div>
+
+            <div class="container">
+        <div class="header">
+            <h1>🔐 Environment Variables & Secrets</h1>
+            <p>Master secure configuration management in GitHub Actions</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Introduction Section -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎯 Introduction to Configuration Management</div>
+                <div class="time-badge">Essential Skills</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h2>🛠️ Why Configuration Matters</h2>
+                    <p>Every application needs configuration - API keys, database URLs, feature flags. Learn to manage these securely in GitHub Actions!</p>
+                </div>
+                
+                <div class="component-card">
+                    <div class="component-title">🔄 Two Types of Configuration Data</div>
+                    <div class="component-description">
+                        <strong>Variables:</strong> Non-sensitive data stored as plain text<br>
+                        <strong>Secrets:</strong> Sensitive data encrypted and hidden from logs
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive Learning Path</h3>
+                    <button class="btn" onclick="startConfigJourney()">🚀 Begin Configuration Journey</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Context Deep Dive -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🌐 GitHub Actions Context System</div>
+                <div class="time-badge">Core Concept</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📊 What is Context?</div>
+                    <div class="component-description">
+                        Context refers to predefined environment variables and data that GitHub provides for each workflow run. Think of them as built-in information sources your workflows can access.
+                    </div>
+                </div>
+
+                <div class="context-demo">
+                    <h3>🔍 Context Expression Syntax</h3>
+                    <div class="code-block">
+# Context access pattern:
+${{ context_name.property }}
+
+# Examples:
+${{ github.actor }}        # Username who triggered workflow
+${{ env.NODE_VERSION }}    # Environment variable
+${{ secrets.API_KEY }}     # Secret value
+${{ job.status }}          # Current job status
+${{ runner.os }}           # Operating system
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🧭 Explore Context Types</h3>
+                    <button class="btn" onclick="exploreContexts()">🔍 Discover Contexts</button>
+                </div>
+
+                <div id="contextExplorer" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step" onclick="showContext('github')">
+                            <h4>🐙 github</h4>
+                            <p>Workflow Info</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContext('env')">
+                            <h4>🌍 env</h4>
+                            <p>Variables</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContext('secrets')">
+                            <h4>🔒 secrets</h4>
+                            <p>Secure Data</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContext('job')">
+                            <h4>💼 job</h4>
+                            <p>Job Status</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContext('runner')">
+                            <h4>🏃 runner</h4>
+                            <p>Machine Info</p>
+                        </div>
+                    </div>
+
+                    <div id="contextDetails" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="contextTitle">Context Details</div>
+                            <div class="component-description" id="contextDescription">Select a context above</div>
+                            <div id="contextExample" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environment Variables -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🌍 Environment Variables Deep Dive</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📝 Variables Characteristics</div>
+                    <div class="component-description">
+                        Environment variables are stored as <strong>plain text</strong> and used for non-sensitive configuration like compiler flags, usernames, API endpoints, or feature toggles.
+                    </div>
+                </div>
+
+                <div class="workflow-diagram">
+                    <h4>📋 Variable Scope Levels:</h4>
+                    <div class="workflow-step" onclick="explainVariableScope('workflow')">
+                        <strong>Workflow Level</strong> - Available to all jobs in the workflow
+                    </div>
+                    <div class="workflow-step" onclick="explainVariableScope('job')">
+                        <strong>Job Level</strong> - Available to all steps in that job
+                    </div>
+                    <div class="workflow-step" onclick="explainVariableScope('step')">
+                        <strong>Step Level</strong> - Available only to that specific step
+                    </div>
+                </div>
+
+                <div id="variableScopeDetails" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="scopeTitle">Variable Scope</h4>
+                        <p id="scopeDescription">Click on scope levels above</p>
+                        <div id="scopeExample" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>⚙️ Build Variable Example</h3>
+                    <button class="btn" onclick="buildVariableExample()">🔧 Create Variables</button>
+                </div>
+
+                <div id="variableBuilder" style="display: none;">
+                    <div class="code-block" id="variableCode">
+# Your variable configuration will appear here
+                    </div>
+                    <div class="assembly-line" id="variableOptions">
+                        <div class="assembly-step" onclick="addVariable('workflow')">Add Workflow Var</div>
+                        <div class="assembly-step" onclick="addVariable('job')">Add Job Var</div>
+                        <div class="assembly-step" onclick="addVariable('step')">Add Step Var</div>
+                        <div class="assembly-step" onclick="clearVariables()">Clear All</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secrets Management -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔐 Secrets Management</div>
+            </div>
+            <div class="section-content">
+                <div class="secret-card">
+                    <div class="component-title">🛡️ What Makes Secrets Special?</div>
+                    <div class="component-description">
+                        Secrets are <strong>encrypted in storage</strong> and used for sensitive data. GitHub Actions automatically redacts secret values from logs as a security measure.
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Security First!</h4>
+                    <p>Never commit secrets to your repository. Always use GitHub's secure secrets storage.</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showSecretType('api')">
+                        <h4>🔑 API Keys</h4>
+                        <p>Service Access</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecretType('db')">
+                        <h4>🗄️ Database URLs</h4>
+                        <p>Connection Strings</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecretType('token')">
+                        <h4>🎫 Access Tokens</h4>
+                        <p>Authentication</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecretType('cert')">
+                        <h4>📜 Certificates</h4>
+                        <p>SSL/TLS</p>
+                    </div>
+                </div>
+
+                <div id="secretTypeDetails" style="display: none;">
+                    <div class="secret-card">
+                        <div class="component-title" id="secretTypeTitle">Secret Type</div>
+                        <div class="component-description" id="secretTypeDescription">Select a secret type above</div>
+                        <div id="secretTypeExample" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Secret Usage Patterns</h3>
+                    <button class="btn" onclick="showSecretUsage()">📖 Learn Usage</button>
+                </div>
+
+                <div id="secretUsageDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔧 Three Ways to Use Secrets:</h4>
+                        <div class="workflow-step" onclick="explainSecretUsage('env')">
+                            <strong>Environment Variable:</strong> env: API_KEY: ${{ secrets.API_KEY }}
+                        </div>
+                        <div class="workflow-step" onclick="explainSecretUsage('with')">
+                            <strong>Action Input:</strong> with: api-key: ${{ secrets.API_KEY }}
+                        </div>
+                        <div class="workflow-step" onclick="explainSecretUsage('run')">
+                            <strong>Direct in Command:</strong> run: curl -H "Auth: ${{ secrets.API_KEY }}"
+                        </div>
+                    </div>
+
+                    <div id="secretUsageDetails" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="usageTitle">Secret Usage Method</h4>
+                            <p id="usageDescription">Click on usage patterns above</p>
+                            <div id="usageExample" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setting Secrets Guide -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚙️ Setting Up Repository Secrets</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🗂️ Secret Storage Levels</div>
+                    <div class="component-description">
+                        Secrets can be stored at different levels: Repository, Environment, or Organization. Repository-level secrets are most common for individual projects.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive Secret Setup</h3>
+                    <button class="btn" onclick="startSecretSetup()">🔧 Setup Secrets</button>
+                </div>
+
+                <div id="secretSetupDemo" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step" onclick="showSetupStep(1)">
+                            <h4>📂 Navigate</h4>
+                            <p>Repository Settings</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(2)">
+                            <h4>🔒 Security</h4>
+                            <p>Secrets Section</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(3)">
+                            <h4>➕ Add Secret</h4>
+                            <p>New Repository Secret</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(4)">
+                            <h4>✅ Configure</h4>
+                            <p>Name & Value</p>
+                        </div>
+                    </div>
+
+                    <div id="setupStepDetails" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="setupStepTitle">Setup Step</div>
+                            <div class="component-description" id="setupStepDescription">Follow the interactive guide</div>
+                            <div id="setupStepVisual" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h4>🎯 Secret Naming Best Practices</h4>
+                    <p>Use UPPERCASE with underscores: API_KEY, DATABASE_URL, AUTH_TOKEN</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GITHUB_TOKEN -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎫 GITHUB_TOKEN - The Built-in Secret</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🤖 Automatic Authentication</div>
+                    <div class="component-description">
+                        GITHUB_TOKEN is automatically created for every workflow run, providing authentication to interact with your repository and GitHub API without manual setup.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Explore GITHUB_TOKEN Powers</h3>
+                    <button class="btn" onclick="exploreGithubToken()">⚡ Discover Capabilities</button>
+                </div>
+
+                <div id="githubTokenDemo" style="display: none;">
+                    <div class="context-demo">
+                        <h4>🛠️ GITHUB_TOKEN Capabilities:</h4>
+                        <div class="context-item" onclick="showTokenCapability('clone')">
+                            <strong>🔄 Clone Repository:</strong> Access your repo code and files
+                        </div>
+                        <div class="context-item" onclick="showTokenCapability('issues')">
+                            <strong>📝 Manage Issues:</strong> Open, close, and comment on issues
+                        </div>
+                        <div class="context-item" onclick="showTokenCapability('pr')">
+                            <strong>🔀 Handle PRs:</strong> Create, update, and merge pull requests
+                        </div>
+                        <div class="context-item" onclick="showTokenCapability('status')">
+                            <strong>✅ Update Status:</strong> Set commit status checks
+                        </div>
+                    </div>
+
+                    <div id="tokenCapabilityDetails" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="capabilityTitle">GITHUB_TOKEN Capability</h4>
+                            <p id="capabilityDescription">Click on capabilities above</p>
+                            <div id="capabilityExample" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🎛️ Permissions Configuration</div>
+                    <div class="component-description">
+                        GITHUB_TOKEN permissions are automatically set based on workflow triggers, but you can customize them for enhanced security or additional capabilities.
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Customize GITHUB_TOKEN permissions
+permissions:
+  contents: read      # Access repository content
+  issues: write       # Create and modify issues  
+  pull-requests: write # Manage pull requests
+  statuses: write     # Update commit statuses
+  checks: write       # Create check runs
+                </div>
+            </div>
+        </div>
+
+        <!-- Practical Example -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">💡 Hands-On: PR Comment Bot</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>🤖 Build a Pull Request Comment Bot</h3>
+                    <p>Create a workflow that automatically comments on pull requests using GITHUB_TOKEN</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Interactive Bot Builder</h3>
+                    <button class="btn" onclick="buildCommentBot()">🤖 Build Bot</button>
+                </div>
+
+                <div id="commentBotBuilder" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step" onclick="addBotComponent('trigger')">
+                            <h4>⚡ Trigger</h4>
+                            <p>PR Events</p>
+                        </div>
+                        <div class="assembly-step" onclick="addBotComponent('permissions')">
+                            <h4>🔑 Permissions</h4>
+                            <p>PR Write Access</p>
+                        </div>
+                        <div class="assembly-step" onclick="addBotComponent('action')">
+                            <h4>💬 Comment Action</h4>
+                            <p>Add Comment</p>
+                        </div>
+                        <div class="assembly-step" onclick="addBotComponent('message')">
+                            <h4>📝 Custom Message</h4>
+                            <p>Personalize</p>
+                        </div>
+                    </div>
+
+                    <div class="code-block" id="botWorkflowCode">
+# Your PR comment bot workflow will be built here
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn" onclick="resetBotBuilder()">🔄 Reset</button>
+                        <button class="btn" onclick="completeBotWorkflow()">✅ Complete Bot</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Best Practices -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🛡️ Security Best Practices</div>
+            </div>
+            <div class="section-content">
+                <div class="warning-box">
+                    <h4>⚠️ Critical Security Rules</h4>
+                    <p>Follow these rules to keep your secrets and workflows secure</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showSecurityPractice('never-commit')">
+                        <h4>🚫 Never Commit</h4>
+                        <p>Secrets in Code</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecurityPractice('minimal-scope')">
+                        <h4>🎯 Minimal Scope</h4>
+                        <p>Least Privilege</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecurityPractice('rotation')">
+                        <h4>🔄 Regular Rotation</h4>
+                        <p>Update Secrets</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecurityPractice('audit')">
+                        <h4>📊 Audit Access</h4>
+                        <p>Monitor Usage</p>
+                    </div>
+                </div>
+
+                <div id="securityPracticeDetails" style="display: none;">
+                    <div class="secret-card">
+                        <div class="component-title" id="practiceTitle">Security Practice</div>
+                        <div class="component-description" id="practiceDescription">Select a practice above</div>
+                        <div id="practiceExample" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Security Checklist</h3>
+                    <button class="btn" onclick="runSecurityAudit()">🛡️ Run Security Audit</button>
+                </div>
+
+                <div id="securityAudit" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔒 Security Audit Results:</h4>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="audit1"> No secrets in repository code
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="audit2"> Minimal GITHUB_TOKEN permissions
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="audit3"> Secrets have descriptive names
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="audit4"> Regular secret rotation schedule
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="audit5"> No secrets in workflow logs
+                        </div>
+                    </div>
+                    <button class="btn" onclick="validateSecurityAudit()">✅ Validate Security</button>
+                </div>
+
+                <div id="auditResults" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="auditScore">Security Audit Results</h4>
+                        <p id="auditFeedback">Complete the checklist above</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Topics -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🚀 Advanced Configuration Techniques</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🌍 Environment-Specific Secrets</div>
+                    <div class="component-description">
+                        Use different secrets for development, staging, and production environments to maintain security boundaries and prevent accidental deployments.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Environment Strategy Builder</h3>
+                    <button class="btn" onclick="buildEnvironmentStrategy()">🏗️ Build Strategy</button>
+                </div>
+
+                <div id="environmentStrategy" style="display: none;">
+                    <div class="context-demo">
+                        <h4>🏭 Multi-Environment Setup:</h4>
+                        <div class="context-item" onclick="showEnvironmentSetup('dev')">
+                            <strong>Development:</strong> DEV_API_KEY, DEV_DATABASE_URL
+                        </div>
+                        <div class="context-item" onclick="showEnvironmentSetup('staging')">
+                            <strong>Staging:</strong> STAGING_API_KEY, STAGING_DATABASE_URL  
+                        </div>
+                        <div class="context-item" onclick="showEnvironmentSetup('prod')">
+                            <strong>Production:</strong> PROD_API_KEY, PROD_DATABASE_URL
+                        </div>
+                    </div>
+
+                    <div id="environmentSetupDetails" style="display: none;">
+                        <div class="code-block" id="environmentCode"></div>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🔀 Conditional Secret Usage</div>
+                    <div class="component-description">
+                        Use GitHub's conditional expressions to load different secrets based on branch names, event types, or other workflow context.
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Conditional secret selection based on branch
+env:
+  API_KEY: ${{ 
+    github.ref == 'refs/heads/main' && secrets.PROD_API_KEY ||
+    github.ref == 'refs/heads/staging' && secrets.STAGING_API_KEY ||
+    secrets.DEV_API_KEY 
+  }}
+  
+# Or using if conditions in steps
+- name: Deploy to production
+  if: github.ref == 'refs/heads/main'
+  run: deploy.sh
+  env:
+    API_KEY: ${{ secrets.PROD_API_KEY }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🧠 Master Quiz: Variables & Secrets</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>🎓 Test Your Knowledge</h3>
+                    <p>Prove your mastery of GitHub Actions environment variables and secrets management</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🏆 Ultimate Challenge</h3>
+                    <button class="btn" onclick="startSecretsQuiz()">🚀 Start Quiz</button>
+                </div>
+
+                <div id="secretsQuiz" style="display: none;">
+                    <div class="component-card">
+                        <h4 id="quizQuestion">Question will appear here</h4>
+                        <div id="quizOptions"></div>
+                        <button class="btn" onclick="nextQuizQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+                        <button class="btn" onclick="showQuizResults()" id="resultsBtn" style="display: none;">Show Results</button>
+                    </div>
+                </div>
+
+                <div id="quizResults" style="display: none;">
+                    <div class="highlight">
+                        <h3 id="finalScore">Quiz Complete!</h3>
+                        <p id="scoreDescription">Your results will appear here</p>
+                        <button class="btn" onclick="startSecretsQuiz()">🔄 Retake Quiz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Summary -->
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎉 Congratulations - You're a Configuration Master!</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h2>🎊 What You've Mastered</h2>
+                    <p>You now understand the complete GitHub Actions configuration management system!</p>
+                </div>
+
+                <div class="workflow-diagram">
+                    <h4>🎯 Your New Skills:</h4>
+                    <div class="workflow-step">
+                        ✅ Context system and expression syntax
+                    </div>
+                    <div class="workflow-step">
+                        ✅ Environment variables and scope management
+                    </div>
+                    <div class="workflow-step">
+                        ✅ Secure secrets storage and usage
+                    </div>
+                    <div class="workflow-step">
+                        ✅ GITHUB_TOKEN capabilities and permissions
+                    </div>
+                    <div class="workflow-step">
+                        ✅ Security best practices and audit techniques
+                    </div>
+                    <div class="workflow-step">
+                        ✅ Advanced conditional configuration strategies
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🚀 Ready for Production</h3>
+                    <p>You're now equipped to build secure, configurable workflows that follow industry best practices!</p>
+                    <button class="btn" onclick="celebrateCompletion()">🎉 Celebrate Success</button>
+                </div>
+
+                <div id="celebration" style="display: none;">
+                    <div class="highlight">
+                        <h3>🏆 GitHub Actions Configuration Expert!</h3>
+                        <p>You've mastered one of the most critical aspects of CI/CD security. Well done!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
      
     <script>
         let currentProgress = 0;
