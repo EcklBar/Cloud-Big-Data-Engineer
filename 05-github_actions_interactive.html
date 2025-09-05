@@ -2356,6 +2356,7 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
                         branches: [ main ]`,
                     explanation: "The 'on' section defines what events trigger this workflow. Here we trigger on pushes to the main branch."
                 },
+                
                 {
                     code: `# Step 1: Workflow Name 
                     name: CI Pipeline
@@ -2373,6 +2374,7 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
                     
                     explanation: "Jobs define what work to do. Each job runs on a separate runner machine."
                 },
+                
                 {
                     code: `# Step 1: Workflow Name
                     name: CI Pipeline
@@ -2383,29 +2385,31 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
                       push:
                         branches: [ main ]
 
-# Step 3: Jobs Section
-jobs:
-  build:
-    runs-on: ubuntu-latest`,
+                    # Step 3: Jobs Section
+                    jobs:
+                      build:
+                        runs-on: ubuntu-latest`,
                     explanation: "'runs-on' specifies the type of machine to run the job on. Ubuntu is the most common choice."
                 },
+                
                 {
                     code: `# Step 1: Workflow Name
-name: CI Pipeline
-
-# Step 2: Event Triggers
-on:
-  push:
-    branches: [ main ]
-
-# Step 3: Jobs Section
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:`,
+                    name: CI Pipeline
+                    
+                    # Step 2: Event Triggers
+                    on:
+                      push:
+                        branches: [ main ]
+                    
+                    # Step 3: Jobs Section
+                    jobs:
+                      build:
+                        runs-on: ubuntu-latest
+                        
+                        steps:`,
                     explanation: "Steps are the individual tasks that make up a job. They run sequentially."
                 },
+                
                 {
                     code: `# Complete Workflow
 name: CI Pipeline
