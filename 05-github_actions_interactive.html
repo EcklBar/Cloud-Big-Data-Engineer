@@ -2348,35 +2348,40 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
                 {
                     code: `# Step 1: Workflow Name
                     name: CI Pipeline
+
                     
                     # Step 2: Event Triggers
-on:
-  push:
-    branches: [ main ]`,
+                    on:
+                      push:
+                        branches: [ main ]`,
                     explanation: "The 'on' section defines what events trigger this workflow. Here we trigger on pushes to the main branch."
                 },
                 {
-                    code: `# Step 1: Workflow Name
-name: CI Pipeline
+                    code: `# Step 1: Workflow Name 
+                    name: CI Pipeline
 
-# Step 2: Event Triggers
-on:
-  push:
-    branches: [ main ]
+                    
+                    # Step 2: Event Triggers
+                    on:
+                      push:
+                        branches: [ main ]
 
-# Step 3: Jobs Section
-jobs:
-  build:`,
+
+                    # Step 3: Jobs Section
+                    jobs:
+                      build:`,
+                    
                     explanation: "Jobs define what work to do. Each job runs on a separate runner machine."
                 },
                 {
                     code: `# Step 1: Workflow Name
-name: CI Pipeline
+                    name: CI Pipeline
 
-# Step 2: Event Triggers
-on:
-  push:
-    branches: [ main ]
+
+                    # Step 2: Event Triggers
+                    on:
+                      push:
+                        branches: [ main ]
 
 # Step 3: Jobs Section
 jobs:
