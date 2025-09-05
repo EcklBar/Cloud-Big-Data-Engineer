@@ -2339,15 +2339,17 @@ Result: "Line 1\\nLine 2\\n\\n" (all newlines kept)</pre>
             
             const steps = [
                 {
-                    code: `# Step 1: Workflow Name
-name: CI Pipeline`,
+                    code: `# Step 1: Workflow Name 
+                    name: CI Pipeline`,
+                    
                     explanation: "Every workflow starts with a name. This appears in the GitHub Actions tab."
                 },
+                
                 {
                     code: `# Step 1: Workflow Name
-name: CI Pipeline
-
-# Step 2: Event Triggers
+                    name: CI Pipeline
+                    
+                    # Step 2: Event Triggers
 on:
   push:
     branches: [ main ]`,
