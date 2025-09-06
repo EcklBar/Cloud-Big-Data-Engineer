@@ -1864,6 +1864,261 @@ jobs:
                 </div>
             </div>
         </div>
+
+        <!-- Environment Variables and Secrets Section -->
+<div class="section secrets-section">
+    <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+        <div class="section-title expandable">Environment Variables & Secrets</div>
+        <div class="time-badge">Security Focus</div>
+    </div>
+    <div class="section-content">
+        <div class="highlight" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <h2>Secure Configuration Management</h2>
+            <p>Learn to manage environment variables and secrets securely in GitHub Actions workflows</p>
+        </div>
+
+        <!-- Context Introduction -->
+        <div class="component-card">
+            <div class="component-title">Understanding GitHub Actions Context</div>
+            <div class="component-description">
+                Context refers to predefined environment variables and data that GitHub provides for each workflow run. These context variables contain information about the repository, workflow, event, and the environment where the workflow is running. They provide a way to dynamically adjust the workflow's behavior based on available information.
+            </div>
+        </div>
+
+        <div class="code-block">
+# Context expression syntax:
+${{ context_name.property }}
+
+# Common examples:
+${{ github.actor }}        # Username who triggered workflow  
+${{ env.NODE_VERSION }}    # Environment variable
+${{ secrets.API_KEY }}     # Secret value
+${{ runner.os }}           # Operating system
+        </div>
+
+        <!-- Context Explorer -->
+        <div class="interactive-example">
+            <h3>Context Types Explorer</h3>
+            <button class="btn" onclick="exploreContextTypes()">Explore Context System</button>
+        </div>
+
+        <div id="contextExplorer" style="display: none;">
+            <div class="assembly-line">
+                <div class="assembly-step" onclick="showContextDetails('github')">
+                    <h4>github</h4>
+                    <p>Workflow Info</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('env')">
+                    <h4>env</h4>
+                    <p>Variables</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('secrets')">
+                    <h4>secrets</h4>
+                    <p>Secure Data</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('job')">
+                    <h4>job</h4>
+                    <p>Job Status</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('runner')">
+                    <h4>runner</h4>
+                    <p>Machine Info</p>
+                </div>
+            </div>
+            
+            <div id="contextDetails" style="display: none;">
+                <div class="component-card">
+                    <div class="component-title" id="contextTitle">Context Details</div>
+                    <div class="component-description" id="contextDescription">Select a context type above</div>
+                    <div id="contextExample" class="code-block" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environment Variables -->
+        <div class="component-card">
+            <div class="component-title">Environment Variables</div>
+            <div class="component-description">
+                Variables are stored as plain text and used for non-sensitive data such as compiler flags, usernames, API endpoints, or configuration settings. Variables can be declared at workflow, job, or step level, with scope controlled by where they are declared.
+            </div>
+        </div>
+
+        <div class="interactive-example">
+            <h3>Variable Scope Demonstration</h3>
+            <button class="btn" onclick="showVariableScopes()">Show Variable Scopes</button>
+        </div>
+
+        <div id="variableScopeDemo" style="display: none;">
+            <div class="workflow-diagram">
+                <h4>Variable Scope Levels:</h4>
+                <div class="workflow-step" onclick="explainScope('workflow')">
+                    <strong>Workflow Level:</strong> Available to all jobs
+                </div>
+                <div class="workflow-step" onclick="explainScope('job')">
+                    <strong>Job Level:</strong> Available to all steps in job
+                </div>
+                <div class="workflow-step" onclick="explainScope('step')">
+                    <strong>Step Level:</strong> Available to specific step only
+                </div>
+            </div>
+            
+            <div id="scopeExample" style="display: none;">
+                <div class="code-block" id="scopeCode"></div>
+            </div>
+        </div>
+
+        <!-- Secrets Management -->
+        <div class="component-card" style="border-left: 5px solid #e74c3c;">
+            <div class="component-title">Secrets Management</div>
+            <div class="component-description">
+                Secrets are encrypted in storage and used for sensitive data such as passwords, API keys, or access tokens. GitHub Actions automatically redacts secret values from logs as a security measure. Never commit secrets to your repository code.
+            </div>
+        </div>
+
+        <div class="warning-box" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center;">
+            <h4>Critical Security Rule</h4>
+            <p>Never commit secrets to your repository. Always use GitHub's secure secrets storage.</p>
+        </div>
+
+        <!-- Secrets Setup Guide -->
+        <div class="interactive-example">
+            <h3>Secret Setup Guide</h3>
+            <button class="btn" onclick="showSecretSetup()">Learn Secret Setup</button>
+        </div>
+
+        <div id="secretSetupGuide" style="display: none;">
+            <div class="assembly-line">
+                <div class="assembly-step" onclick="showSetupStep(1)">
+                    <h4>Navigate</h4>
+                    <p>Repository Settings</p>
+                </div>
+                <div class="assembly-step" onclick="showSetupStep(2)">
+                    <h4>Security</h4>
+                    <p>Secrets Section</p>
+                </div>
+                <div class="assembly-step" onclick="showSetupStep(3)">
+                    <h4>Add Secret</h4>
+                    <p>New Repository Secret</p>
+                </div>
+                <div class="assembly-step" onclick="showSetupStep(4)">
+                    <h4>Configure</h4>
+                    <p>Name & Value</p>
+                </div>
+            </div>
+            
+            <div id="setupStepDetails" style="display: none;">
+                <div class="component-card">
+                    <div class="component-title" id="setupStepTitle">Setup Step</div>
+                    <div class="component-description" id="setupStepDescription">Click on a step above</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GITHUB_TOKEN -->
+        <div class="component-card">
+            <div class="component-title">GITHUB_TOKEN - The Built-in Secret</div>
+            <div class="component-description">
+                The GITHUB_TOKEN secret is automatically provided by GitHub Actions for every workflow run. It allows workflows to authenticate with GitHub API and perform actions like cloning repositories, commenting on issues and pull requests, and updating commit statuses.
+            </div>
+        </div>
+
+        <div class="code-block">
+# Using GITHUB_TOKEN in workflows
+- name: Comment on PR
+  uses: actions/github-script@v6
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    script: |
+      github.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: 'Hello from GitHub Actions!'
+      })
+        </div>
+
+        <!-- Practical Example -->
+        <div class="interactive-example">
+            <h3>Build a PR Comment Bot</h3>
+            <button class="btn" onclick="buildPRBot()">Create Comment Bot</button>
+        </div>
+
+        <div id="prBotBuilder" style="display: none;">
+            <div class="code-block" id="botWorkflowCode">
+# Click the button above to build a PR comment bot workflow
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="addBotTrigger()">Add PR Trigger</button>
+                <button class="btn" onclick="addBotPermissions()">Add Permissions</button>
+                <button class="btn" onclick="addBotComment()">Add Comment Action</button>
+                <button class="btn" onclick="resetBot()">Reset</button>
+            </div>
+        </div>
+
+        <!-- Security Best Practices -->
+        <div class="component-card">
+            <div class="component-title">Security Best Practices</div>
+            <div class="component-description">
+                Follow security best practices: never commit secrets to code, use minimal necessary permissions, regularly rotate secrets, and audit secret usage. Use environment-specific secrets for different deployment stages.
+            </div>
+        </div>
+
+        <div class="interactive-example">
+            <h3>Security Audit</h3>
+            <button class="btn" onclick="runSecurityCheck()">Run Security Check</button>
+        </div>
+
+        <div id="securityAudit" style="display: none;">
+            <div class="workflow-diagram">
+                <h4>Security Checklist:</h4>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check1"> No secrets in repository code
+                </div>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check2"> Using minimal GITHUB_TOKEN permissions
+                </div>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check3"> Secrets have descriptive names
+                </div>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check4"> Regular secret rotation schedule
+                </div>
+            </div>
+            <button class="btn" onclick="validateSecurity()">Validate Security</button>
+            
+            <div id="securityResults" style="display: none;">
+                <div class="highlight">
+                    <h4 id="securityScore">Security Results</h4>
+                    <p id="securityFeedback">Complete the checklist above</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="interactive-example">
+            <h3>Test Your Knowledge</h3>
+            <button class="btn" onclick="startSecretsQuiz()">Take Quiz</button>
+        </div>
+
+        <div id="secretsQuiz" style="display: none;">
+            <div class="component-card">
+                <h4 id="quizQuestion">Question will appear here</h4>
+                <div id="quizOptions"></div>
+                <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+                <button class="btn" onclick="showResults()" id="resultsBtn" style="display: none;">Show Results</button>
+            </div>
+        </div>
+
+        <div id="quizResults" style="display: none;">
+            <div class="highlight">
+                <h3 id="finalScore">Quiz Complete!</h3>
+                <p id="scoreMessage">Your results will appear here</p>
+                <button class="btn" onclick="startSecretsQuiz()">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
      
     <script>
         let currentProgress = 0;
@@ -3015,6 +3270,435 @@ function explainLogSection(section) {
     title.textContent = sectionInfo.title;
     description.textContent = sectionInfo.description;
     details.style.display = 'block';
+}
+
+        // Environment Variables and Secrets JavaScript Functions
+
+// Global variables for quiz and bot builder
+let quizIndex = 0;
+let quizScore = 0;
+let botComponents = [];
+
+// Quiz data
+const secretsQuizData = [
+    {
+        question: "What is the main difference between environment variables and secrets?",
+        options: [
+            "Variables are faster to access than secrets",
+            "Variables are stored as plain text, secrets are encrypted", 
+            "Variables can only be used in jobs, secrets in steps",
+            "There is no difference"
+        ],
+        correct: 1
+    },
+    {
+        question: "How do you access a secret named API_KEY in a workflow?",
+        options: [
+            "${{ env.API_KEY }}",
+            "${{ secrets.API_KEY }}",
+            "${{ variables.API_KEY }}",
+            "${{ github.API_KEY }}"
+        ],
+        correct: 1
+    },
+    {
+        question: "What does GITHUB_TOKEN automatically provide?",
+        options: [
+            "Access to third-party APIs",
+            "Database connection strings", 
+            "Authentication to interact with GitHub API",
+            "SSH keys for deployment"
+        ],
+        correct: 2
+    },
+    {
+        question: "Which scope level makes variables available to all jobs in a workflow?",
+        options: [
+            "Step level",
+            "Job level",
+            "Workflow level", 
+            "Repository level"
+        ],
+        correct: 2
+    }
+];
+
+// Context explorer functionality
+function exploreContextTypes() {
+    const explorer = document.getElementById('contextExplorer');
+    explorer.style.display = explorer.style.display === 'none' ? 'block' : 'none';
+}
+
+function showContextDetails(contextType) {
+    const details = document.getElementById('contextDetails');
+    const title = document.getElementById('contextTitle');
+    const description = document.getElementById('contextDescription');
+    const example = document.getElementById('contextExample');
+    
+    const contexts = {
+        github: {
+            title: "GitHub Context",
+            description: "Contains information about the workflow run, repository, and triggering event.",
+            example: `# GitHub context examples:
+${{ github.actor }}          # Username who triggered workflow
+${{ github.repository }}     # Repository name (owner/repo)  
+${{ github.ref }}           # Branch or tag ref
+${{ github.sha }}           # Commit SHA
+${{ github.event_name }}    # Event that triggered workflow`
+        },
+        env: {
+            title: "Environment Context",
+            description: "Provides access to environment variables set at workflow, job, or step level.",
+            example: `# Environment variables usage:
+env:
+  NODE_VERSION: "18"
+  API_ENDPOINT: "https://api.example.com"
+
+steps:
+  - name: Use variables  
+    run: |
+      echo "Node: ${{ env.NODE_VERSION }}"
+      curl ${{ env.API_ENDPOINT }}/health`
+        },
+        secrets: {
+            title: "Secrets Context", 
+            description: "Secure access to encrypted secrets stored in repository settings.",
+            example: `# Secrets usage examples:
+env:
+  API_KEY: ${{ secrets.API_KEY }}
+  
+- name: Deploy
+  uses: deploy-action@v1
+  with:
+    api-key: ${{ secrets.DEPLOY_KEY }}`
+        },
+        job: {
+            title: "Job Context",
+            description: "Information about the currently running job including status.",
+            example: `# Job context examples:
+${{ job.status }}           # Current job status
+  
+- name: Cleanup on failure
+  if: job.status == 'failure'
+  run: cleanup.sh`
+        },
+        runner: {
+            title: "Runner Context", 
+            description: "Information about the runner machine executing the workflow.",
+            example: `# Runner context examples:
+${{ runner.os }}            # OS (Linux, Windows, macOS)
+${{ runner.arch }}          # Architecture (X64, ARM64)
+  
+- name: Install dependencies
+  run: |
+    if [ "${{ runner.os }}" == "Linux" ]; then
+      sudo apt-get update
+    fi`
+        }
+    };
+    
+    const context = contexts[contextType];
+    title.textContent = context.title;
+    description.textContent = context.description;
+    example.textContent = context.example;
+    example.style.display = 'block';
+    details.style.display = 'block';
+}
+
+// Variable scope functionality
+function showVariableScopes() {
+    const demo = document.getElementById('variableScopeDemo');
+    demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+}
+
+function explainScope(scope) {
+    const example = document.getElementById('scopeExample');
+    const code = document.getElementById('scopeCode');
+    
+    const scopes = {
+        workflow: `# Workflow Level Variables
+name: My Workflow
+env:
+  GLOBAL_VAR: "Available everywhere"
+  NODE_VERSION: "18"
+
+jobs:
+  build:
+    steps:
+      - run: echo "Node: ${{ env.NODE_VERSION }}"
+  test:
+    steps:
+      - run: echo "Global: ${{ env.GLOBAL_VAR }}"`,
+        
+        job: `# Job Level Variables  
+jobs:
+  build:
+    env:
+      BUILD_ENV: "production"
+      COMPILER_FLAGS: "-O2"
+    steps:
+      - run: echo "Building: ${{ env.BUILD_ENV }}"
+      - run: gcc ${{ env.COMPILER_FLAGS }} main.c
+  
+  test:
+    # BUILD_ENV not available here
+    steps:
+      - run: echo "Testing..."`,
+      
+        step: `# Step Level Variables
+jobs:
+  deploy:
+    steps:
+      - name: Deploy to staging
+        env:
+          DEPLOY_ENV: "staging"
+          TARGET_URL: "https://staging.example.com"
+        run: |
+          echo "Deploying to: ${{ env.DEPLOY_ENV }}"
+          curl ${{ env.TARGET_URL }}/deploy
+      
+      - name: Different step
+        # DEPLOY_ENV not available here
+        run: echo "Another step"`
+    };
+    
+    code.textContent = scopes[scope];
+    example.style.display = 'block';
+}
+
+// Secret setup functionality
+function showSecretSetup() {
+    const guide = document.getElementById('secretSetupGuide');
+    guide.style.display = guide.style.display === 'none' ? 'block' : 'none';
+}
+
+function showSetupStep(step) {
+    const details = document.getElementById('setupStepDetails');
+    const title = document.getElementById('setupStepTitle');
+    const description = document.getElementById('setupStepDescription');
+    
+    const steps = {
+        1: {
+            title: "Navigate to Repository Settings",
+            description: "Go to your repository on GitHub and click the 'Settings' tab in the top navigation bar."
+        },
+        2: {
+            title: "Find Security Section", 
+            description: "In the left sidebar, click 'Security' section, then 'Secrets and variables' → 'Actions'."
+        },
+        3: {
+            title: "Add New Repository Secret",
+            description: "Click 'Secrets' tab, then 'New repository secret' button to create a new secret."
+        },
+        4: {
+            title: "Configure Name and Value",
+            description: "Enter a descriptive name (use UPPERCASE_WITH_UNDERSCORES) and paste your secret value. Click 'Add secret'."
+        }
+    };
+    
+    const stepInfo = steps[step];
+    title.textContent = stepInfo.title;
+    description.textContent = stepInfo.description;
+    details.style.display = 'block';
+}
+
+// PR Bot builder functionality
+function buildPRBot() {
+    const builder = document.getElementById('prBotBuilder');
+    builder.style.display = builder.style.display === 'none' ? 'block' : 'none';
+    
+    if (botComponents.length === 0) {
+        document.getElementById('botWorkflowCode').textContent = '# Click buttons below to build your PR comment bot';
+    }
+}
+
+function addBotTrigger() {
+    if (!botComponents.includes('trigger')) {
+        botComponents.push('trigger');
+        updateBotWorkflow();
+    }
+}
+
+function addBotPermissions() {
+    if (!botComponents.includes('permissions')) {
+        botComponents.push('permissions');
+        updateBotWorkflow();
+    }
+}
+
+function addBotComment() {
+    if (!botComponents.includes('comment')) {
+        botComponents.push('comment');
+        updateBotWorkflow();
+    }
+}
+
+function updateBotWorkflow() {
+    const code = document.getElementById('botWorkflowCode');
+    let workflow = '';
+    
+    if (botComponents.includes('trigger')) {
+        workflow += `name: PR Comment Bot
+
+on:
+  pull_request:
+    types: [opened, synchronize]`;
+    }
+    
+    if (botComponents.includes('permissions')) {
+        workflow += `
+
+permissions:
+  pull-requests: write
+  contents: read`;
+    }
+    
+    if (botComponents.includes('comment')) {
+        workflow += `
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v6
+        with:
+          github-token: \${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Hello! This PR has been automatically reviewed by our bot.'
+            })`;
+    }
+    
+    code.textContent = workflow;
+}
+
+function resetBot() {
+    botComponents = [];
+    document.getElementById('botWorkflowCode').textContent = '# Click buttons below to build your PR comment bot';
+}
+
+// Security audit functionality
+function runSecurityCheck() {
+    const audit = document.getElementById('securityAudit');
+    audit.style.display = audit.style.display === 'none' ? 'block' : 'none';
+}
+
+function validateSecurity() {
+    const checks = [
+        document.getElementById('check1').checked,
+        document.getElementById('check2').checked,
+        document.getElementById('check3').checked,
+        document.getElementById('check4').checked
+    ];
+    
+    const results = document.getElementById('securityResults');
+    const score = document.getElementById('securityScore');
+    const feedback = document.getElementById('securityFeedback');
+    
+    const checkedCount = checks.filter(Boolean).length;
+    const percentage = Math.round((checkedCount / checks.length) * 100);
+    
+    results.style.display = 'block';
+    
+    if (percentage === 100) {
+        score.textContent = "Perfect Security Score!";
+        feedback.textContent = "Excellent! You follow all security best practices.";
+    } else if (percentage >= 75) {
+        score.textContent = `Good Security (${percentage}%)`;
+        feedback.textContent = "You're following most security practices. Review unchecked items.";
+    } else if (percentage >= 50) {
+        score.textContent = `Needs Improvement (${percentage}%)`;
+        feedback.textContent = "Several security gaps identified. Please address missing practices.";
+    } else {
+        score.textContent = `Security Risk (${percentage}%)`;
+        feedback.textContent = "Critical security issues detected. Immediate action required.";
+    }
+}
+
+// Quiz functionality
+function startSecretsQuiz() {
+    quizIndex = 0;
+    quizScore = 0;
+    document.getElementById('secretsQuiz').style.display = 'block';
+    document.getElementById('quizResults').style.display = 'none';
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    if (quizIndex < secretsQuizData.length) {
+        const question = secretsQuizData[quizIndex];
+        document.getElementById('quizQuestion').textContent = `Question ${quizIndex + 1}: ${question.question}`;
+        
+        let optionsHtml = '';
+        question.options.forEach((option, index) => {
+            optionsHtml += `
+                <div class="workflow-step quiz-option" onclick="selectAnswer(${index})" style="cursor: pointer; margin: 10px 0;">
+                    ${option}
+                </div>
+            `;
+        });
+        
+        document.getElementById('quizOptions').innerHTML = optionsHtml;
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('resultsBtn').style.display = 'none';
+    }
+}
+
+function selectAnswer(selectedIndex) {
+    const question = secretsQuizData[quizIndex];
+    const options = document.querySelectorAll('.quiz-option');
+    
+    options.forEach((option, index) => {
+        if (index === question.correct) {
+            option.style.backgroundColor = 'rgba(76, 175, 80, 0.3)';
+            option.style.borderColor = '#4CAF50';
+        } else if (index === selectedIndex && index !== question.correct) {
+            option.style.backgroundColor = 'rgba(244, 67, 54, 0.3)';
+            option.style.borderColor = '#f44336';
+        }
+        option.onclick = null;
+    });
+    
+    if (selectedIndex === question.correct) {
+        quizScore++;
+    }
+    
+    if (quizIndex < secretsQuizData.length - 1) {
+        document.getElementById('nextBtn').style.display = 'inline-block';
+    } else {
+        document.getElementById('resultsBtn').style.display = 'inline-block';
+    }
+}
+
+function nextQuestion() {
+    quizIndex++;
+    showQuizQuestion();
+}
+
+function showResults() {
+    const percentage = Math.round((quizScore / secretsQuizData.length) * 100);
+    const results = document.getElementById('quizResults');
+    const score = document.getElementById('finalScore');
+    const message = document.getElementById('scoreMessage');
+    
+    document.getElementById('secretsQuiz').style.display = 'none';
+    results.style.display = 'block';
+    
+    score.textContent = `Final Score: ${quizScore}/${secretsQuizData.length} (${percentage}%)`;
+    
+    if (percentage === 100) {
+        message.textContent = "Perfect! You're a GitHub Actions security expert!";
+    } else if (percentage >= 75) {
+        message.textContent = "Excellent! You have a solid understanding of secrets management.";
+    } else if (percentage >= 50) {
+        message.textContent = "Good job! Review the concepts you missed and try again.";
+    } else {
+        message.textContent = "Keep studying! Review the sections above to improve your understanding.";
+    }
 }
 
         // Intersection Observer for scroll animations
