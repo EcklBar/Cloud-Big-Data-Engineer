@@ -315,6 +315,38 @@
                 width: 100%;
                 margin: 5px 0;
             }
+            .warning-box {
+                background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+                color: white;
+                border-radius: 15px;
+                padding: 20px;
+                margin: 20px 0;
+                text-align: center;
+            }
+            
+            .quiz-option {
+                background: rgba(52, 152, 219, 0.1);
+                border: 2px solid #3498db;
+                border-radius: 10px;
+                padding: 15px;
+                margin: 10px 0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .quiz-option:hover {
+                background: rgba(52, 152, 219, 0.2);
+            }
+            
+            .quiz-option.correct {
+                background: rgba(76, 175, 80, 0.3);
+                border-color: #4CAF50;
+            }
+            
+            .quiz-option.incorrect {
+                background: rgba(244, 67, 54, 0.3);
+                border-color: #f44336;
+            }
         }
     </style>
 </head>
@@ -1864,6 +1896,261 @@ jobs:
                 </div>
             </div>
         </div>
+
+        <!-- Environment Variables and Secrets Section -->
+<div class="section secrets-section">
+    <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+        <div class="section-title expandable">Environment Variables & Secrets</div>
+        <div class="time-badge">Security Focus</div>
+    </div>
+    <div class="section-content">
+        <div class="highlight" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <h2>Secure Configuration Management</h2>
+            <p>Learn to manage environment variables and secrets securely in GitHub Actions workflows</p>
+        </div>
+
+        <!-- Context Introduction -->
+        <div class="component-card">
+            <div class="component-title">Understanding GitHub Actions Context</div>
+            <div class="component-description">
+                Context refers to predefined environment variables and data that GitHub provides for each workflow run. These context variables contain information about the repository, workflow, event, and the environment where the workflow is running. They provide a way to dynamically adjust the workflow's behavior based on available information.
+            </div>
+        </div>
+
+        <div class="code-block">
+# Context expression syntax:
+${{ context_name.property }}
+
+# Common examples:
+${{ github.actor }}        # Username who triggered workflow  
+${{ env.NODE_VERSION }}    # Environment variable
+${{ secrets.API_KEY }}     # Secret value
+${{ runner.os }}           # Operating system
+        </div>
+
+        <!-- Context Explorer -->
+        <div class="interactive-example">
+            <h3>Context Types Explorer</h3>
+            <button class="btn" onclick="exploreContextTypes()">Explore Context System</button>
+        </div>
+
+        <div id="contextExplorer" style="display: none;">
+            <div class="assembly-line">
+                <div class="assembly-step" onclick="showContextDetails('github')">
+                    <h4>github</h4>
+                    <p>Workflow Info</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('env')">
+                    <h4>env</h4>
+                    <p>Variables</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('secrets')">
+                    <h4>secrets</h4>
+                    <p>Secure Data</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('job')">
+                    <h4>job</h4>
+                    <p>Job Status</p>
+                </div>
+                <div class="assembly-step" onclick="showContextDetails('runner')">
+                    <h4>runner</h4>
+                    <p>Machine Info</p>
+                </div>
+            </div>
+            
+            <div id="contextDetails" style="display: none;">
+                <div class="component-card">
+                    <div class="component-title" id="contextTitle">Context Details</div>
+                    <div class="component-description" id="contextDescription">Select a context type above</div>
+                    <div id="contextExample" class="code-block" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environment Variables -->
+        <div class="component-card">
+            <div class="component-title">Environment Variables</div>
+            <div class="component-description">
+                Variables are stored as plain text and used for non-sensitive data such as compiler flags, usernames, API endpoints, or configuration settings. Variables can be declared at workflow, job, or step level, with scope controlled by where they are declared.
+            </div>
+        </div>
+
+        <div class="interactive-example">
+            <h3>Variable Scope Demonstration</h3>
+            <button class="btn" onclick="showVariableScopes()">Show Variable Scopes</button>
+        </div>
+
+        <div id="variableScopeDemo" style="display: none;">
+            <div class="workflow-diagram">
+                <h4>Variable Scope Levels:</h4>
+                <div class="workflow-step" onclick="explainScope('workflow')">
+                    <strong>Workflow Level:</strong> Available to all jobs
+                </div>
+                <div class="workflow-step" onclick="explainScope('job')">
+                    <strong>Job Level:</strong> Available to all steps in job
+                </div>
+                <div class="workflow-step" onclick="explainScope('step')">
+                    <strong>Step Level:</strong> Available to specific step only
+                </div>
+            </div>
+            
+            <div id="scopeExample" style="display: none;">
+                <div class="code-block" id="scopeCode"></div>
+            </div>
+        </div>
+
+        <!-- Secrets Management -->
+        <div class="component-card" style="border-left: 5px solid #e74c3c;">
+            <div class="component-title">Secrets Management</div>
+            <div class="component-description">
+                Secrets are encrypted in storage and used for sensitive data such as passwords, API keys, or access tokens. GitHub Actions automatically redacts secret values from logs as a security measure. Never commit secrets to your repository code.
+            </div>
+        </div>
+
+        <div class="warning-box" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center;">
+            <h4>Critical Security Rule</h4>
+            <p>Never commit secrets to your repository. Always use GitHub's secure secrets storage.</p>
+        </div>
+
+        <!-- Secrets Setup Guide -->
+        <div class="interactive-example">
+            <h3>Secret Setup Guide</h3>
+            <button class="btn" onclick="showSecretSetup()">Learn Secret Setup</button>
+        </div>
+
+        <div id="secretSetupGuide" style="display: none;">
+            <div class="assembly-line">
+                <div class="assembly-step" onclick="showSetupStep(1)">
+                    <h4>Navigate</h4>
+                    <p>Repository Settings</p>
+                </div>
+                <div class="assembly-step" onclick="showSetupStep(2)">
+                    <h4>Security</h4>
+                    <p>Secrets Section</p>
+                </div>
+                <div class="assembly-step" onclick="showSetupStep(3)">
+                    <h4>Add Secret</h4>
+                    <p>New Repository Secret</p>
+                </div>
+                <div class="assembly-step" onclick="showSetupStep(4)">
+                    <h4>Configure</h4>
+                    <p>Name & Value</p>
+                </div>
+            </div>
+            
+            <div id="setupStepDetails" style="display: none;">
+                <div class="component-card">
+                    <div class="component-title" id="setupStepTitle">Setup Step</div>
+                    <div class="component-description" id="setupStepDescription">Click on a step above</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GITHUB_TOKEN -->
+        <div class="component-card">
+            <div class="component-title">GITHUB_TOKEN - The Built-in Secret</div>
+            <div class="component-description">
+                The GITHUB_TOKEN secret is automatically provided by GitHub Actions for every workflow run. It allows workflows to authenticate with GitHub API and perform actions like cloning repositories, commenting on issues and pull requests, and updating commit statuses.
+            </div>
+        </div>
+
+        <div class="code-block">
+# Using GITHUB_TOKEN in workflows
+- name: Comment on PR
+  uses: actions/github-script@v6
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    script: |
+      github.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: 'Hello from GitHub Actions!'
+      })
+        </div>
+
+        <!-- Practical Example -->
+        <div class="interactive-example">
+            <h3>Build a PR Comment Bot</h3>
+            <button class="btn" onclick="buildPRBot()">Create Comment Bot</button>
+        </div>
+
+        <div id="prBotBuilder" style="display: none;">
+            <div class="code-block" id="botWorkflowCode">
+# Click the button above to build a PR comment bot workflow
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="addBotTrigger()">Add PR Trigger</button>
+                <button class="btn" onclick="addBotPermissions()">Add Permissions</button>
+                <button class="btn" onclick="addBotComment()">Add Comment Action</button>
+                <button class="btn" onclick="resetBot()">Reset</button>
+            </div>
+        </div>
+
+        <!-- Security Best Practices -->
+        <div class="component-card">
+            <div class="component-title">Security Best Practices</div>
+            <div class="component-description">
+                Follow security best practices: never commit secrets to code, use minimal necessary permissions, regularly rotate secrets, and audit secret usage. Use environment-specific secrets for different deployment stages.
+            </div>
+        </div>
+
+        <div class="interactive-example">
+            <h3>Security Audit</h3>
+            <button class="btn" onclick="runSecurityCheck()">Run Security Check</button>
+        </div>
+
+        <div id="securityAudit" style="display: none;">
+            <div class="workflow-diagram">
+                <h4>Security Checklist:</h4>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check1"> No secrets in repository code
+                </div>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check2"> Using minimal GITHUB_TOKEN permissions
+                </div>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check3"> Secrets have descriptive names
+                </div>
+                <div class="workflow-step">
+                    <input type="checkbox" id="check4"> Regular secret rotation schedule
+                </div>
+            </div>
+            <button class="btn" onclick="validateSecurity()">Validate Security</button>
+            
+            <div id="securityResults" style="display: none;">
+                <div class="highlight">
+                    <h4 id="securityScore">Security Results</h4>
+                    <p id="securityFeedback">Complete the checklist above</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="interactive-example">
+            <h3>Test Your Knowledge</h3>
+            <button class="btn" onclick="startSecretsQuiz()">Take Quiz</button>
+        </div>
+
+        <div id="secretsQuiz" style="display: none;">
+            <div class="component-card">
+                <h4 id="quizQuestion">Question will appear here</h4>
+                <div id="quizOptions"></div>
+                <button class="btn" onclick="nextQuestion()" id="nextBtn" style="display: none;">Next Question</button>
+                <button class="btn" onclick="showResults()" id="resultsBtn" style="display: none;">Show Results</button>
+            </div>
+        </div>
+
+        <div id="quizResults" style="display: none;">
+            <div class="highlight">
+                <h3 id="finalScore">Quiz Complete!</h3>
+                <p id="scoreMessage">Your results will appear here</p>
+                <button class="btn" onclick="startSecretsQuiz()">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+</div>
      
     <script>
         let currentProgress = 0;
