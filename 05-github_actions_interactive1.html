@@ -2097,4 +2097,1750 @@ ${{ runner.os }}           # Operating system
                             <p>New Repository Secret</p>
                         </div>
                         <div class="assembly-step" onclick="showSetupStep(4)">
-                            <h4>⚙️ Configure
+                                                        <h4>⚙️ Configure</h4>
+                            <p>Name & Value</p>
+                        </div>
+                    </div>
+                    
+                    <div id="setupStepDetails" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="setupStepTitle">Setup Step</div>
+                            <div class="component-description" id="setupStepDescription">Click on steps above for details</div>
+                            <div id="setupStepCode" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Using secrets in workflows:
+name: Deploy Application
+on: push
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "Deploying with API key..."
+          # Secret values are automatically redacted in logs
+                </div>
+
+                <div class="highlight">
+                    <h4>🛡️ Built-in Security Features</h4>
+                    <p>• Secrets are encrypted at rest<br>
+                    • Values are redacted from logs<br>
+                    • Only available during workflow execution<br>
+                    • GITHUB_TOKEN is automatically provided</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🤖 Practical Example: PR Comment Bot</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">💬 Automated PR Comments</div>
+                    <div class="component-description">
+                        Build a bot that automatically comments on pull requests using the built-in GITHUB_TOKEN. This demonstrates practical use of secrets and GitHub API integration.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔨 Build Your PR Comment Bot</h3>
+                    <button class="btn" onclick="buildPRBot()">🤖 Start Bot Builder</button>
+                </div>
+
+                <div id="prBotBuilder" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🛠️ Bot Components:</h4>
+                        <div class="workflow-step" onclick="addBotTrigger()" id="botTrigger">
+                            <strong>1. Trigger:</strong> Pull Request Events
+                        </div>
+                        <div class="workflow-step" onclick="addBotPermissions()" id="botPermissions" style="opacity: 0.5;">
+                            <strong>2. Permissions:</strong> Write Access
+                        </div>
+                        <div class="workflow-step" onclick="addBotComment()" id="botComment" style="opacity: 0.5;">
+                            <strong>3. Comment:</strong> Welcome Message
+                        </div>
+                    </div>
+                    
+                    <div id="botWorkflow" class="code-block">
+# Your PR Comment Bot will be built here...
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn" onclick="updateBotWorkflow()" id="updateBotBtn" style="display: none;">🔄 Update Workflow</button>
+                        <button class="btn" onclick="resetBot()" id="resetBotBtn" style="display: none;">🔄 Reset Bot</button>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>🎯 Bot Capabilities</h4>
+                    <p>Using GITHUB_TOKEN, your bot can:<br>
+                    • Comment on pull requests<br>
+                    • Add labels to issues<br>
+                    • Create issues<br>
+                    • Update repository content</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🛡️ Security Best Practices</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card" style="border-left: 5px solid #e74c3c;">
+                    <div class="component-title">🔐 Security Checklist</div>
+                    <div class="component-description">
+                        Follow these essential security practices when working with environment variables and secrets in GitHub Actions.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showSecurityPractice('principle')">
+                        <h4>🎯 Least Privilege</h4>
+                        <p>Minimal Permissions</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecurityPractice('rotation')">
+                        <h4>🔄 Key Rotation</h4>
+                        <p>Regular Updates</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecurityPractice('scope')">
+                        <h4>📍 Scope Limitation</h4>
+                        <p>Environment Specific</p>
+                    </div>
+                    <div class="assembly-step" onclick="showSecurityPractice('audit')">
+                        <h4>📊 Regular Audits</h4>
+                        <p>Access Reviews</p>
+                    </div>
+                </div>
+
+                <div id="securityPracticeDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="securityPracticeTitle">Security Practice</div>
+                        <div class="component-description" id="securityPracticeDescription">Click on practices above</div>
+                        <div id="securityPracticeExample" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Security Audit Tool</h3>
+                    <button class="btn" onclick="runSecurityCheck()">🛡️ Run Security Check</button>
+                </div>
+
+                <div id="securityAudit" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔍 Security Audit Results:</h4>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="secretsCheck"> Secrets properly configured
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="permissionsCheck"> Minimal permissions granted
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="logsCheck"> No secrets in logs
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="scopeCheck"> Appropriate variable scope
+                        </div>
+                    </div>
+                    <button class="btn" onclick="validateSecurity()">✅ Validate Security</button>
+                </div>
+
+                <div id="securityValidation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="securityResult"></h4>
+                        <p id="securityMessage"></p>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h4>🚨 Common Security Mistakes</h4>
+                    <p>• Hardcoding secrets in workflow files<br>
+                    • Using overly broad permissions<br>
+                    • Not rotating keys regularly<br>
+                    • Exposing secrets in error messages</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎓 Secrets & Security Mastery Quiz</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>🧠 Test Your Security Knowledge</h3>
+                    <p>Prove your understanding of environment variables, secrets, and security best practices</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🏆 Security Mastery Quiz</h3>
+                    <button class="btn" onclick="startSecretsQuiz()">🚀 Start Security Quiz</button>
+                </div>
+
+                <div id="secretsQuiz" style="display: none;">
+                    <div class="component-card">
+                        <h4 id="secretsQuizQuestion"></h4>
+                        <div id="secretsQuizOptions"></div>
+                        <button class="btn" onclick="nextQuestion()" id="secretsNextBtn" style="display: none;">Next Question</button>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h3>🎊 Congratulations!</h3>
+                    <p>You now have comprehensive knowledge of GitHub Actions, including security best practices for managing environment variables and secrets. You're ready to build secure, production-ready workflows!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        let totalSections = document.querySelectorAll('.section').length;
+        let yamlQuizIndex = 0;
+        let yamlQuizScore = 0;
+        let ciQuizIndex = 0;
+        let ciQuizScore = 0;
+        let workflowStep = 0;
+        let secretsQuizIndex = 0;
+        let secretsQuizScore = 0;
+        let secretsBotComponents = [];
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const content = section.querySelector('.section-content');
+            const expandable = header.querySelector('.expandable');
+            
+            section.classList.toggle('active');
+            expandable.classList.toggle('expanded');
+            
+            if (section.classList.contains('active')) {
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            currentSection++;
+            const progress = Math.min((currentSection / totalSections) * 100, 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function startLearning() {
+            alert('🚀 Welcome to your GitHub Actions journey! Click on each section header to expand and explore the content.');
+            updateProgress();
+        }
+
+        function showPipelineExample() {
+            const example = document.getElementById('pipelineExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function highlightStep(step) {
+            step.style.transform = 'translateY(-10px) rotate(5deg) scale(1.1)';
+            step.style.boxShadow = '0 20px 40px rgba(0,0,0,0.3)';
+            setTimeout(() => {
+                step.style.transform = 'translateY(-10px) rotate(2deg)';
+                step.style.boxShadow = '0 15px 30px rgba(0,0,0,0.2)';
+            }, 300);
+        }
+
+        function animateCard(card) {
+            card.style.animation = 'pulse 0.6s ease';
+            setTimeout(() => {
+                card.style.animation = '';
+            }, 600);
+        }
+
+        function triggerEvent(eventType) {
+            const result = document.getElementById('eventResult');
+            const message = document.getElementById('eventMessage');
+            
+            const messages = {
+                'push': 'Push event triggered! Your workflow will now build and test the code.',
+                'pr': 'Pull Request event triggered! Your workflow will validate the proposed changes.',
+                'issue': 'Issue event triggered! Your workflow will automatically label and assign the issue.'
+            };
+            
+            message.textContent = messages[eventType];
+            result.style.display = 'block';
+            result.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function demonstrateJobs(type) {
+            const demo = document.getElementById('jobsDemo');
+            const diagram = document.getElementById('jobsDiagram');
+            
+            if (type === 'parallel') {
+                diagram.innerHTML = `
+                    <h4>🔄 Parallel Jobs (Default):</h4>
+                    <div style="display: flex; justify-content: space-around;">
+                        <div class="workflow-step">Job 1: Build</div>
+                        <div class="workflow-step">Job 2: Test</div>
+                        <div class="workflow-step">Job 3: Lint</div>
+                    </div>
+                    <p style="text-align: center; margin-top: 15px;">All jobs run simultaneously ⚡</p>
+                `;
+            } else {
+                diagram.innerHTML = `
+                    <h4>⬇️ Sequential Jobs (with dependencies):</h4>
+                    <div class="workflow-step">Job 1: Build</div>
+                    <div style="text-align: center;">⬇️</div>
+                    <div class="workflow-step">Job 2: Test (needs: build)</div>
+                    <div style="text-align: center;">⬇️</div>
+                    <div class="workflow-step">Job 3: Deploy (needs: test)</div>
+                    <p style="text-align: center; margin-top: 15px;">Jobs run one after another 🔄</p>
+                `;
+            }
+            
+            demo.style.display = 'block';
+        }
+
+        function scrollToYAML() {
+            document.querySelector('.yaml-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // YAML Demo Functions
+        function showYAMLDemo(type) {
+            const demo = document.getElementById('yamlDemo');
+            const output = document.getElementById('yamlOutput');
+            
+            output.textContent = `
+# YAML Block Scalar Demonstration
+description: |
+  This is a literal block scalar.
+  Line breaks are preserved.
+  Indentation is maintained.
+  
+summary: >
+  This is a folded block scalar.
+  Line breaks become spaces.
+  Perfect for long descriptions.
+            `;
+            
+            demo.style.display = 'block';
+        }
+
+        function showLiteralExample(type) {
+            const example = document.getElementById('literalExample');
+            
+            const examples = {
+                'basic': `
+# Basic literal example
+script: |
+  echo "Line 1"
+  echo "Line 2"
+  echo "Line 3"
+# Output preserves all line breaks
+                `,
+                'shell': `
+# Shell commands example
+deploy: |
+  npm install
+  npm run build
+  npm run test
+  npm run deploy
+# Each command on separate line
+                `,
+                'complex': `
+# Complex with indentation
+config: |
+  server:
+    host: localhost
+    port: 8080
+  database:
+    url: postgres://localhost
+# Indentation preserved exactly
+                `
+            };
+            
+            example.textContent = examples[type];
+        }
+
+        function compareFoldLiteral() {
+            const comparison = document.getElementById('foldComparison');
+            comparison.style.display = comparison.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showChompingExample(type) {
+            const visualization = document.getElementById('chompingVisualization');
+            
+            const examples = {
+                'clip': `
+<h4>📎 Clip (Default):</h4>
+<div class="workflow-step">
+<strong>Input:</strong><br>
+text: |<br>
+&nbsp;&nbsp;Line 1<br>
+&nbsp;&nbsp;Line 2<br>
+<br>
+<strong>Output:</strong> "Line 1\\nLine 2\\n" (adds final newline)
+</div>
+                `,
+                'strip': `
+<h4>✂️ Strip (-):</h4>
+<div class="workflow-step">
+<strong>Input:</strong><br>
+text: |-<br>
+&nbsp;&nbsp;Line 1<br>
+&nbsp;&nbsp;Line 2<br>
+<br>
+<strong>Output:</strong> "Line 1\\nLine 2" (removes all trailing newlines)
+</div>
+                `,
+                'keep': `
+<h4>📌 Keep (+):</h4>
+<div class="workflow-step">
+<strong>Input:</strong><br>
+text: |+<br>
+&nbsp;&nbsp;Line 1<br>
+&nbsp;&nbsp;Line 2<br>
+<br>
+<br>
+<strong>Output:</strong> "Line 1\\nLine 2\\n\\n\\n" (preserves all newlines)
+</div>
+                `
+            };
+            
+            visualization.innerHTML = examples[type];
+        }
+
+        function showExpressionDemo() {
+            const demo = document.getElementById('expressionDemo');
+            demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function highlightExpression(type) {
+            const result = document.getElementById('expressionResult');
+            const title = document.getElementById('expressionTitle');
+            const description = document.getElementById('expressionDescription');
+            
+            const expressions = {
+                'secrets': {
+                    title: '🔐 Secrets Context',
+                    description: 'Access encrypted secrets like API keys, passwords, and tokens. Values are automatically redacted from logs for security.'
+                },
+                'github': {
+                    title: '🐙 GitHub Context',
+                    description: 'Access information about the workflow run, repository, and the event that triggered the workflow.'
+                },
+                'env': {
+                    title: '🌍 Environment Context',
+                    description: 'Access environment variables set at workflow, job, or step level. Perfect for configuration values.'
+                }
+            };
+            
+            title.textContent = expressions[type].title;
+            description.textContent = expressions[type].description;
+            result.style.display = 'block';
+        }
+
+        // YAML Quiz Functions
+        const yamlQuizData = [
+            {
+                question: "Which YAML style preserves line breaks exactly as written?",
+                options: ["Fold style (>)", "Literal style (|)", "Plain style", "Quoted style"],
+                correct: 1,
+                explanation: "Literal style (|) preserves line breaks and indentation exactly as written in the YAML file."
+            },
+            {
+                question: "What does the chomping indicator '-' do?",
+                options: ["Adds extra newlines", "Removes all trailing newlines", "Preserves all newlines", "Does nothing"],
+                correct: 1,
+                explanation: "The strip chomping indicator (-) removes all trailing newlines from the end of the string."
+            },
+            {
+                question: "How do you access a secret in GitHub Actions?",
+                options: ["${{ env.SECRET_NAME }}", "${{ secrets.SECRET_NAME }}", "${{ vars.SECRET_NAME }}", "${{ github.SECRET_NAME }}"],
+                correct: 1,
+                explanation: "Secrets are accessed using the secrets context: ${{ secrets.SECRET_NAME }}"
+            },
+            {
+                question: "What separates multiple YAML documents in one file?",
+                options: ["...", "---", "===", "|||"],
+                correct: 1,
+                explanation: "Three dashes (---) separate multiple YAML documents in a single file."
+            }
+        ];
+
+        function startYAMLQuiz() {
+            yamlQuizIndex = 0;
+            yamlQuizScore = 0;
+            document.getElementById('yamlQuiz').style.display = 'block';
+            showYAMLQuizQuestion();
+        }
+
+        function showYAMLQuizQuestion() {
+            const question = yamlQuizData[yamlQuizIndex];
+            document.getElementById('yamlQuizQuestion').textContent = `Question ${yamlQuizIndex + 1}: ${question.question}`;
+            
+            const optionsHtml = question.options.map((option, index) => 
+                `<div class="quiz-option" onclick="selectYAMLAnswer(${index})">${option}</div>`
+            ).join('');
+            
+            document.getElementById('yamlQuizOptions').innerHTML = optionsHtml;
+            document.getElementById('yamlNextBtn').style.display = 'none';
+        }
+
+        function selectYAMLAnswer(selectedIndex) {
+            const question = yamlQuizData[yamlQuizIndex];
+            const options = document.querySelectorAll('#yamlQuizOptions .quiz-option');
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (selectedIndex === question.correct) {
+                yamlQuizScore++;
+            }
+            
+            setTimeout(() => {
+                alert(question.explanation);
+                document.getElementById('yamlNextBtn').style.display = 'inline-block';
+            }, 1000);
+        }
+
+        function nextYAMLQuestion() {
+            yamlQuizIndex++;
+            if (yamlQuizIndex < yamlQuizData.length) {
+                showYAMLQuizQuestion();
+            } else {
+                showYAMLResults();
+            }
+        }
+
+        function showYAMLResults() {
+            const percentage = (yamlQuizScore / yamlQuizData.length) * 100;
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '🎉 Excellent! You have mastered YAML concepts!';
+            } else if (percentage >= 60) {
+                message = '👍 Good job! Review the concepts you missed.';
+            } else {
+                message = '📚 Keep studying! Review the YAML sections again.';
+            }
+            
+            document.getElementById('yamlQuizOptions').innerHTML = `
+                <div class="highlight">
+                    <h4>Quiz Results</h4>
+                    <p>Score: ${yamlQuizScore}/${yamlQuizData.length} (${percentage}%)</p>
+                    <p>${message}</p>
+                </div>
+            `;
+            document.getElementById('yamlNextBtn').style.display = 'none';
+        }
+
+        // CI Pipeline Functions
+        function buildWorkflowStep(step) {
+            const builder = document.getElementById('workflowBuilder');
+            const code = document.getElementById('workflowCode');
+            const explanation = document.getElementById('workflowExplanation');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const completeBtn = document.getElementById('completeBtn');
+            
+            if (step === 1 || (typeof step === 'number' && step === 1)) {
+                workflowStep = 1;
+                builder.style.display = 'block';
+                code.textContent = 'name: CI Pipeline';
+                explanation.innerHTML = '<p><strong>Step 1:</strong> Every workflow starts with a name. This appears in the Actions tab.</p>';
+                nextBtn.style.display = 'inline-block';
+            } else if (step === 'next') {
+                workflowStep++;
+                if (workflowStep === 2) {
+                    code.textContent = `name: CI Pipeline
+on:
+  push:
+    branches: [ main ]`;
+                    explanation.innerHTML = '<p><strong>Step 2:</strong> Define when the workflow runs. This triggers on pushes to the main branch.</p>';
+                    prevBtn.style.display = 'inline-block';
+                } else if (workflowStep === 3) {
+                    code.textContent = `name: CI Pipeline
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest`;
+                    explanation.innerHTML = '<p><strong>Step 3:</strong> Define jobs and the runner environment. Ubuntu is the most common choice.</p>';
+                } else if (workflowStep === 4) {
+                    code.textContent = `name: CI Pipeline
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3`;
+                    explanation.innerHTML = '<p><strong>Step 4:</strong> Add steps to the job. First step is usually checking out the repository code.</p>';
+                } else if (workflowStep === 5) {
+                    code.textContent = `name: CI Pipeline
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run tests
+        run: echo "Running tests..."`;
+                    explanation.innerHTML = '<p><strong>Step 5:</strong> Add your actual build/test commands. This is where your CI logic goes.</p>';
+                    nextBtn.style.display = 'none';
+                    completeBtn.style.display = 'inline-block';
+                }
+            } else if (step === 'prev') {
+                workflowStep--;
+                buildWorkflowStep('next');
+                workflowStep -= 2;
+                buildWorkflowStep('next');
+            }
+        }
+
+        function completeWorkflow() {
+            alert('🎉 Congratulations! You\'ve built your first CI pipeline workflow!');
+            document.getElementById('completeBtn').style.display = 'none';
+        }
+
+        function showRepoStep(step) {
+            const details = document.getElementById('repoStepDetails');
+            const title = document.getElementById('repoStepTitle');
+            const description = document.getElementById('repoStepDescription');
+            const code = document.getElementById('repoStepCode');
+            
+            const steps = {
+                1: {
+                    title: '🌐 Navigate to GitHub',
+                    description: 'Go to github.com/new or click the "+" icon in the top right corner and select "New repository".',
+                    code: ''
+                },
+                2: {
+                    title: '📝 Configure Repository',
+                    description: 'Choose a descriptive name like "my-ci-pipeline" and decide if it should be public or private.',
+                    code: 'Repository name: my-ci-pipeline\nDescription: Learning GitHub Actions CI/CD\nVisibility: Public (for learning)'
+                },
+                3: {
+                    title: '🔧 Add Initial Files',
+                    description: 'Select "Add a README file" and choose appropriate .gitignore template (e.g., Python) if you plan to add code.',
+                    code: '✅ Add a README file\n✅ Add .gitignore (Python)\n✅ Choose a license (MIT)'
+                },
+                4: {
+                    title: '✅ Create Repository',
+                    description: 'Click "Create repository" to finalize the setup. You\'ll be redirected to your new repository.',
+                    code: ''
+                }
+            };
+            
+            title.textContent = steps[step].title;
+            description.textContent = steps[step].description;
+            if (steps[step].code) {
+                code.textContent = steps[step].code;
+                code.style.display = 'block';
+            } else {
+                code.style.display = 'none';
+            }
+            details.style.display = 'block';
+        }
+
+        function validateRepoSetup() {
+            const checks = ['check1', 'check2', 'check3', 'check4'];
+            const checkedCount = checks.filter(id => document.getElementById(id).checked).length;
+            const validation = document.getElementById('repoValidation');
+            const result = document.getElementById('validationResult');
+            const message = document.getElementById('validationMessage');
+            
+            if (checkedCount === 4) {
+                result.textContent = '🎉 Perfect Setup!';
+                message.textContent = 'Your repository is properly configured and ready for GitHub Actions!';
+            } else if (checkedCount >= 2) {
+                result.textContent = '👍 Good Progress!';
+                message.textContent = `You've completed ${checkedCount}/4 steps. Consider completing the remaining items for best practices.`;
+            } else {
+                result.textContent = '📋 More Setup Needed';
+                message.textContent = 'Please complete more setup steps to ensure your repository is properly configured.';
+            }
+            
+            validation.style.display = 'block';
+        }
+
+        function explainPermission(type) {
+            const explanation = document.getElementById('permissionExplanation');
+            const title = document.getElementById('permissionTitle');
+            const details = document.getElementById('permissionDetails');
+            
+            const permissions = {
+                'general': {
+                    title: '🌍 Allow All Actions',
+                    details: 'This setting allows your workflows to use any action from the GitHub Marketplace or other repositories. Essential for using community-created actions like checkout, setup-python, etc.'
+                },
+                'fork': {
+                    title: '🔀 Fork Pull Request Workflows',
+                    details: 'Enables workflows to run on pull requests from forks. Important for open-source projects where external contributors submit PRs.'
+                },
+                'token': {
+                    title: '🔑 GITHUB_TOKEN Permissions',
+                    details: 'Controls what the automatically provided GITHUB_TOKEN can do. "Read and write" allows workflows to create issues, comment on PRs, and modify repository content.'
+                }
+            };
+            
+            title.textContent = permissions[type].title;
+            details.textContent = permissions[type].details;
+            explanation.style.display = 'block';
+        }
+
+        function showWorkflowCreationStep(step) {
+            const details = document.getElementById('workflowCreationDetails');
+            const title = document.getElementById('creationStepTitle');
+            const description = document.getElementById('creationStepDescription');
+            
+            const steps = {
+                1: {
+                    title: '📂 Navigate to Actions Tab',
+                    description: 'In your repository, click the "Actions" tab. If this is your first workflow, you\'ll see suggested workflow templates.'
+                },
+                2: {
+                    title: '🔍 Find Simple Workflow',
+                    description: 'Look for "Simple workflow" or "Blank workflow" template. Click "Configure" to start editing the YAML file.'
+                },
+                3: {
+                    title: '⚙️ Edit the YAML',
+                    description: 'GitHub will open an editor with a basic workflow template. You can modify the name, triggers, and steps as needed.'
+                },
+                4: {
+                    title: '💾 Commit the Workflow',
+                    description: 'Click "Start commit", add a commit message like "Add CI workflow", and click "Commit new file" to save.'
+                }
+            };
+            
+            title.textContent = steps[step].title;
+            description.textContent = steps[step].description;
+            details.style.display = 'block';
+        }
+
+        function showCompleteWorkflow() {
+            const example = document.getElementById('completeWorkflowExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showStatusIndicator(status) {
+            const details = document.getElementById('statusDetails');
+            const title = document.getElementById('statusTitle');
+            const description = document.getElementById('statusDescription');
+            
+            const statuses = {
+                'pending': {
+                    title: '🟡 Pending Status',
+                    description: 'The workflow is queued and waiting for an available runner. This usually takes a few seconds to a minute depending on GitHub\'s current load.'
+                },
+                'running': {
+                    title: '🔄 Running Status',
+                    description: 'The workflow is currently executing. You can click on the workflow run to see real-time logs and progress of each step.'
+                },
+                'success': {
+                    title: '✅ Success Status',
+                    description: 'All jobs and steps completed successfully without errors. The green checkmark indicates your code passed all checks.'
+                },
+                'failure': {
+                    title: '❌ Failure Status',
+                    description: 'One or more steps failed during execution. Click "Details" to view logs and identify what went wrong.'
+                }
+            };
+            
+            title.textContent = statuses[status].title;
+            description.textContent = statuses[status].description;
+            details.style.display = 'block';
+        }
+
+        function showInvestigationTools() {
+            const tools = document.getElementById('investigationTools');
+            tools.style.display = tools.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainTool(tool) {
+            const explanation = document.getElementById('toolExplanation');
+            const title = document.getElementById('toolTitle');
+            const description = document.getElementById('toolDescription');
+            
+            const tools = {
+                'actions-tab': {
+                    title: '📊 Actions Tab Overview',
+                    description: 'Shows all workflow runs with status indicators, trigger events, and execution times. Filter by workflow, branch, or status to find specific runs.'
+                },
+                'workflow-run': {
+                    title: '🔍 Individual Workflow Run',
+                    description: 'Detailed view of a specific execution showing all jobs, their status, execution time, and any artifacts produced.'
+                },
+                'job-logs': {
+                    title: '📜 Detailed Job Logs',
+                    description: 'Step-by-step execution logs showing commands run, output produced, and any errors encountered. Essential for debugging failures.'
+                },
+                'artifacts': {
+                    title: '📦 Workflow Artifacts',
+                    description: 'Files generated during workflow execution like test reports, build outputs, or logs. Can be downloaded for further analysis.'
+                }
+            };
+            
+            title.textContent = tools[tool].title;
+            description.textContent = tools[tool].description;
+            explanation.style.display = 'block';
+        }
+
+        function showLogExample() {
+            const example = document.getElementById('logExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainLogComponent(component) {
+            const explanation = document.getElementById('logComponentExplanation');
+            const title = document.getElementById('logComponentTitle');
+            const description = document.getElementById('logComponentDescription');
+            
+            const components = {
+                'timestamp': {
+                    title: '⏰ Timestamps',
+                    description: 'ISO 8601 format timestamps showing exactly when each command or action was executed. Useful for performance analysis and debugging timing issues.'
+                },
+                'groups': {
+                    title: '📁 Log Groups',
+                    description: 'Collapsible sections that organize related log entries. ##[group] starts a group, ##[endgroup] ends it. Helps keep logs organized and readable.'
+                },
+                'output': {
+                    title: '📤 Command Output',
+                    description: 'The actual output from your scripts and commands. This is what you would see if running the commands locally in a terminal.'
+                },
+                'system': {
+                    title: '⚙️ System Messages',
+                    description: 'Messages from GitHub Actions runner about environment setup, cleanup, and internal operations. Usually prefixed with ##[...]'
+                }
+            };
+            
+            title.textContent = components[component].title;
+            description.textContent = components[component].description;
+            explanation.style.display = 'block';
+        }
+
+        function showTroubleshooting(issue) {
+            const details = document.getElementById('troubleshootingDetails');
+            const title = document.getElementById('troubleshootingTitle');
+            const description = document.getElementById('troubleshootingDescription');
+            const solution = document.getElementById('troubleshootingSolution');
+            
+            const issues = {
+                'permission': {
+                    title: '🔒 Permission Denied Errors',
+                    description: 'Common when workflows try to access resources without proper permissions.',
+                    solution: `# Solution: Add permissions to workflow
+name: CI
+on: push
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3`
+                },
+                'syntax': {
+                    title: '📝 YAML Syntax Errors',
+                    description: 'Invalid YAML structure prevents workflow from running.',
+                    solution: `# Common YAML mistakes:
+# ❌ Wrong indentation
+jobs:
+build:  # Should be indented
+  runs-on: ubuntu-latest
+
+# ✅ Correct indentation  
+jobs:
+  build:
+    runs-on: ubuntu-latest`
+                },
+                'timeout': {
+                    title: '⏱️ Job Timeout Issues',
+                    description: 'Jobs that run longer than the default 6-hour limit.',
+                    solution: `# Solution: Set custom timeout
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30  # Set appropriate limit
+    steps:
+      - name: Long running task
+        run: ./long-script.sh`
+                },
+                'dependencies': {
+                    title: '📦 Missing Dependencies',
+                    description: 'Required packages or tools not available in the runner environment.',
+                    solution: `# Solution: Install dependencies
+steps:
+  - uses: actions/checkout@v3
+  - name: Setup Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: '18'
+  - name: Install dependencies
+    run: npm install`
+                }
+            };
+            
+            title.textContent = issues[issue].title;
+            description.textContent = issues[issue].description;
+            solution.textContent = issues[issue].solution;
+            solution.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        // CI Quiz Functions
+        const ciQuizData = [
+            {
+                question: "What is the correct way to trigger a workflow on pull requests?",
+                options: ["on: pull_request", "on: pr", "trigger: pull_request", "event: pull_request"],
+                correct: 0,
+                explanation: "Use 'on: pull_request' to trigger workflows when pull requests are opened, updated, or synchronized."
+            },
+            {
+                question: "Which action is typically used first in most workflows?",
+                options: ["actions/setup-node", "actions/upload-artifact", "actions/checkout", "actions/cache"],
+                correct: 2,
+                explanation: "actions/checkout is usually the first step as it downloads your repository code to the runner."
+            },
+            {
+                question: "What does 'runs-on: ubuntu-latest' specify?",
+                options: ["The Ubuntu version", "The runner environment", "The job name", "The workflow trigger"],
+                correct: 1,
+                explanation: "'runs-on' specifies which type of virtual machine (runner) to use for executing the job."
+            },
+            {
+                question: "How do you pass parameters to an action?",
+                options: ["params:", "args:", "with:", "inputs:"],
+                correct: 2,
+                explanation: "Use the 'with:' key to pass parameters/inputs to actions, similar to function arguments."
+            }
+        ];
+
+        function startCIQuiz() {
+            ciQuizIndex = 0;
+            ciQuizScore = 0;
+            document.getElementById('ciQuiz').style.display = 'block';
+            showCIQuizQuestion();
+        }
+
+        function showCIQuizQuestion() {
+            const question = ciQuizData[ciQuizIndex];
+            document.getElementById('ciQuizQuestion').textContent = `Question ${ciQuizIndex + 1}: ${question.question}`;
+            
+            const optionsHtml = question.options.map((option, index) => 
+                `<div class="quiz-option" onclick="selectCIAnswer(${index})">${option}</div>`
+            ).join('');
+            
+            document.getElementById('ciQuizOptions').innerHTML = optionsHtml;
+            document.getElementById('ciNextBtn').style.display = 'none';
+        }
+
+        function selectCIAnswer(selectedIndex) {
+            const question = ciQuizData[ciQuizIndex];
+            const options = document.querySelectorAll('#ciQuizOptions .quiz-option');
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (selectedIndex === question.correct) {
+                ciQuizScore++;
+            }
+            
+            setTimeout(() => {
+                alert(question.explanation);
+                document.getElementById('ciNextBtn').style.display = 'inline-block';
+            }, 1000);
+        }
+
+        function nextCIQuestion() {
+            ciQuizIndex++;
+            if (ciQuizIndex < ciQuizData.length) {
+                showCIQuizQuestion();
+            } else {
+                showCIResults();
+            }
+        }
+
+        function showCIResults() {
+            const percentage = (ciQuizScore / ciQuizData.length) * 100;
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '🎉 Excellent! You have mastered CI pipeline concepts!';
+            } else if (percentage >= 60) {
+                message = '👍 Good job! Review the concepts you missed.';
+            } else {
+                message = '📚 Keep studying! Review the CI pipeline sections again.';
+            }
+            
+            document.getElementById('ciQuizOptions').innerHTML = `
+                <div class="highlight">
+                    <h4>Quiz Results</h4>
+                    <p>Score: ${ciQuizScore}/${ciQuizData.length} (${percentage}%)</p>
+                    <p>${message}</p>
+                </div>
+            `;
+            document.getElementById('ciNextBtn').style.display = 'none';
+        }
+
+        // PR Workflow Functions
+        function showBranchCreation() {
+            const demo = document.getElementById('branchCreationDemo');
+            demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainBranchStep(step) {
+            const explanation = document.getElementById('branchStepExplanation');
+            const title = document.getElementById('branchStepTitle');
+            const description = document.getElementById('branchStepDescription');
+            
+            const steps = {
+                1: {
+                    title: '🏠 Repository Navigation',
+                    description: 'From your repository\'s main page, look for the branch dropdown (usually shows "main") near the top left. This shows your current branch and allows switching.'
+                },
+                2: {
+                    title: '🌿 New Branch Creation',
+                    description: 'Click the branch dropdown, then click "View all branches" or the "New branch" button. This opens the branch creation interface.'
+                },
+                3: {
+                    title: '📝 Branch Naming',
+                    description: 'Choose a descriptive name like "pr-workflow" or "feature/add-ci". Good names describe what you\'re working on. Avoid spaces and special characters.'
+                },
+                4: {
+                    title: '✅ Verification',
+                    description: 'After creating the branch, verify you\'re on the new branch by checking the branch dropdown. It should now show your new branch name instead of "main".'
+                }
+            };
+            
+            title.textContent = steps[step].title;
+            description.textContent = steps[step].description;
+            explanation.style.display = 'block';
+        }
+
+        function showPythonExample() {
+            const example = document.getElementById('pythonCodeExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function compareTriggers() {
+            const comparison = document.getElementById('triggerComparison');
+            comparison.style.display = comparison.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function exploreActionSyntax() {
+            const demo = document.getElementById('actionSyntaxDemo');
+            demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainSyntaxPart(part) {
+            const explanation = document.getElementById('syntaxExplanation');
+            const title = document.getElementById('syntaxPartTitle');
+            const description = document.getElementById('syntaxPartDescription');
+            
+            const parts = {
+                'structure': {
+                    title: '📋 Action Reference Structure',
+                    description: 'Actions follow the format "owner/repository@version". For example, "actions/checkout@v3" refers to version 3 of the checkout action from the actions organization.'
+                },
+                'uses': {
+                    title: '🔧 Uses Keyword',
+                    description: 'The "uses" keyword tells GitHub Actions to run a pre-built action instead of a shell command. Think of it as importing and calling a function.'
+                },
+                'with': {
+                    title: '⚙️ With Parameters',
+                    description: 'The "with" keyword passes input parameters to the action. Each action documents what parameters it accepts and which are required.'
+                }
+            };
+            
+            title.textContent = parts[part].title;
+            description.textContent = parts[part].description;
+            explanation.style.display = 'block';
+        }
+
+        function explainWorkflowStep(step) {
+            const details = document.getElementById('workflowStepDetails');
+            const title = document.getElementById('stepDetailTitle');
+            const description = document.getElementById('stepDetailDescription');
+            const code = document.getElementById('stepDetailCode');
+            
+            const steps = {
+                'checkout': {
+                    title: '📥 Repository Checkout',
+                    description: 'Downloads your repository code to the runner. Without this step, the runner has no access to your files.',
+                    code: `- name: Checkout repository
+  uses: actions/checkout@v3
+  # Downloads all files from your repo to the runner`
+                },
+                'setup': {
+                    title: '🐍 Python Environment Setup',
+                    description: 'Installs and configures Python on the runner. You can specify the Python version to ensure consistency.',
+                    code: `- name: Setup Python
+  uses: actions/setup-python@v4
+  with:
+    python-version: '3.9'  # Specify Python version`
+                },
+                'run': {
+                    title: '▶️ Script Execution',
+                    description: 'Runs your Python script using the configured environment. This is where your actual code gets executed.',
+                    code: `- name: Run Python script
+  run: python hello_world.py
+  # Executes your Python file`
+                }
+            };
+            
+            title.textContent = steps[step].title;
+            description.textContent = steps[step].description;
+            code.textContent = steps[step].code;
+            code.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        function showCompletePRWorkflow() {
+            const workflow = document.getElementById('completePRWorkflow');
+            workflow.style.display = workflow.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function simulatePRCreation() {
+            const simulator = document.getElementById('prCreationSimulator');
+            simulator.style.display = simulator.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showPRStatus(status) {
+            const details = document.getElementById('prStatusDetails');
+            const title = document.getElementById('prStatusTitle');
+            const description = document.getElementById('prStatusDescription');
+            
+            const statuses = {
+                'pending': {
+                    title: '🟡 Workflow Pending',
+                    description: 'The PR workflow is queued and will start shortly. You\'ll see "Some checks haven\'t completed yet" in the PR.'
+                },
+                'running': {
+                    title: '🔄 Workflow Running',
+                    description: 'The workflow is actively executing. You can click "Details" to watch the real-time progress and logs.'
+                },
+                'success': {
+                    title: '✅ All Checks Passed',
+                    description: 'The workflow completed successfully! The PR shows "All checks have passed" and is ready for review and merge.'
+                },
+                'failure': {
+                    title: '❌ Checks Failed',
+                    description: 'The workflow encountered an error. The PR shows "Some checks were not successful" and should not be merged until fixed.'
+                }
+            };
+            
+            title.textContent = statuses[status].title;
+            description.textContent = statuses[status].description;
+            details.style.display = 'block';
+        }
+
+        function showPRLogs() {
+            const example = document.getElementById('prLogsExample');
+            example.style.display = example.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainLogSection(section) {
+            const details = document.getElementById('logSectionDetails');
+            const title = document.getElementById('logSectionTitle');
+            const description = document.getElementById('logSectionDescription');
+            
+            const sections = {
+                'checkout': {
+                    title: '📥 Checkout Action Logs',
+                    description: 'Shows the process of downloading your repository code, including Git operations, file synchronization, and any checkout-specific configurations.'
+                },
+                'python': {
+                    title: '🐍 Python Setup Logs',
+                    description: 'Details the Python installation process, version verification, and environment configuration. Confirms the correct Python version is available.'
+                },
+                'script': {
+                    title: '📜 Script Execution Logs',
+                    description: 'Your actual Python script output. This is where you\'ll see print statements, error messages, and the results of your code execution.'
+                }
+            };
+            
+            title.textContent = sections[section].title;
+            description.textContent = sections[section].description;
+            details.style.display = 'block';
+        }
+
+        // Global variables for secrets quiz and bot builder
+        let secretsQuizIndex = 0;
+        let secretsQuizScore = 0;
+        let secretsBotComponents = [];
+
+        // Secrets Quiz data
+        const secretsQuizData = [
+            {
+                question: "What is the correct way to access a secret in GitHub Actions?",
+                options: ["${{ env.SECRET_NAME }}", "${{ secrets.SECRET_NAME }}", "${{ vars.SECRET_NAME }}", "${{ github.SECRET_NAME }}"],
+                correct: 1,
+                explanation: "Secrets are accessed using the secrets context: ${{ secrets.SECRET_NAME }}. This ensures they are properly encrypted and redacted from logs."
+            },
+            {
+                question: "Where should you NEVER store sensitive information?",
+                options: ["Repository secrets", "Environment variables", "Workflow files", "Organization secrets"],
+                correct: 2,
+                explanation: "Never store secrets directly in workflow files or any code files. Always use GitHub's secure secrets storage."
+            },
+            {
+                question: "What happens to secret values in workflow logs?",
+                options: ["They are displayed in plain text", "They are automatically redacted", "They are base64 encoded", "They are not logged at all"],
+                correct: 1,
+                explanation: "GitHub Actions automatically redacts (masks) secret values in logs to prevent accidental exposure."
+            },
+            {
+                question: "Which token is automatically provided to all workflows?",
+                options: ["PERSONAL_ACCESS_TOKEN", "API_TOKEN", "GITHUB_TOKEN", "WORKFLOW_TOKEN"],
+                correct: 2,
+                explanation: "GITHUB_TOKEN is automatically provided to all workflows and can be used to interact with the GitHub API."
+            }
+        ];
+
+        // Context explorer functionality
+        function exploreContextTypes() {
+            const explorer = document.getElementById('contextExplorer');
+            explorer.style.display = explorer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showContextDetails(contextType) {
+            const details = document.getElementById('contextDetails');
+            const title = document.getElementById('contextTitle');
+            const description = document.getElementById('contextDescription');
+            const example = document.getElementById('contextExample');
+            
+            const contexts = {
+                'github': {
+                    title: '🐙 GitHub Context',
+                    description: 'Contains information about the workflow run, repository, and triggering event.',
+                    example: `# GitHub context examples:
+${{ github.actor }}          # Username who triggered workflow
+${{ github.repository }}     # Repository name (owner/repo)
+${{ github.event_name }}     # Event that triggered workflow
+${{ github.ref }}            # Branch or tag reference
+${{ github.sha }}            # Commit SHA that triggered workflow`
+                },
+                'env': {
+                    title: '🌍 Environment Context',
+                    description: 'Access to environment variables defined at workflow, job, or step level.',
+                    example: `# Environment variables usage:
+env:
+  NODE_VERSION: '18'
+  BUILD_ENV: 'production'
+
+steps:
+  - name: Use environment variables
+    run: |
+      echo "Node version: ${{ env.NODE_VERSION }}"
+      echo "Environment: ${{ env.BUILD_ENV }}"`
+                },
+                'secrets': {
+                    title: '🔐 Secrets Context',
+                    description: 'Secure access to encrypted secrets stored in repository or organization settings.',
+                    example: `# Secrets usage (values are redacted in logs):
+steps:
+  - name: Deploy application
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    run: ./deploy.sh`
+                },
+                'job': {
+                    title: '💼 Job Context',
+                    description: 'Information about the currently running job and its status.',
+                    example: `# Job context examples:
+${{ job.status }}            # Current job status
+${{ job.container.id }}      # Container ID (if using containers)
+${{ job.services }}          # Information about services`
+                },
+                'runner': {
+                    title: '🖥️ Runner Context',
+                    description: 'Information about the runner executing the workflow.',
+                    example: `# Runner context examples:
+${{ runner.os }}             # Operating system (Linux, Windows, macOS)
+${{ runner.arch }}           # Architecture (X86, X64, ARM, ARM64)
+${{ runner.name }}           # Name of the runner
+${{ runner.temp }}           # Temporary directory path`
+                }
+            };
+            
+            title.textContent = contexts[contextType].title;
+            description.textContent = contexts[contextType].description;
+            example.textContent = contexts[contextType].example;
+            example.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        // Variable scope functionality
+        function showVariableScopes() {
+            const demo = document.getElementById('variableScopeDemo');
+            demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainScope(scope) {
+            const example = document.getElementById('scopeExample');
+            const code = document.getElementById('scopeCode');
+            
+            const scopes = {
+                'workflow': {
+                    code: `# Workflow-level variables (available to all jobs)
+name: CI Pipeline
+env:
+  NODE_VERSION: '18'
+  BUILD_ENV: 'production'
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Node: ${{ env.NODE_VERSION }}"
+  
+  test:
+    runs-on: ubuntu-latest  
+    steps:
+      - run: echo "Environment: ${{ env.BUILD_ENV }}"`
+                },
+                'job': {
+                    code: `# Job-level variables (available to all steps in job)
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PACKAGE_MANAGER: 'npm'
+      BUILD_COMMAND: 'build:prod'
+    steps:
+      - run: echo "Using ${{ env.PACKAGE_MANAGER }}"
+      - run: echo "Command: ${{ env.BUILD_COMMAND }}"`
+                },
+                'step': {
+                    code: `# Step-level variables (available to specific step only)
+steps:
+  - name: Build application
+    env:
+      TEMP_DIR: '/tmp/build'
+      DEBUG_MODE: 'true'
+    run: |
+      echo "Building in ${{ env.TEMP_DIR }}"
+      echo "Debug mode: ${{ env.DEBUG_MODE }}"
+      
+  - name: Next step
+    run: echo "TEMP_DIR not available here"`
+                }
+            };
+            
+            code.textContent = scopes[scope].code;
+            example.style.display = 'block';
+        }
+
+        function showVariableExample(type) {
+            const details = document.getElementById('variableExampleDetails');
+            const title = document.getElementById('variableExampleTitle');
+            const description = document.getElementById('variableExampleDescription');
+            const code = document.getElementById('variableExampleCode');
+            
+            const examples = {
+                'config': {
+                    title: '⚙️ Configuration Variables',
+                    description: 'Use environment variables for build settings, compiler flags, and application configuration.',
+                    code: `# Configuration example
+env:
+  NODE_VERSION: '18'
+  BUILD_MODE: 'production'
+  OPTIMIZATION_LEVEL: '2'
+  
+steps:
+  - name: Setup Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: ${{ env.NODE_VERSION }}
+      
+  - name: Build with optimization
+    run: npm run build --optimization=${{ env.OPTIMIZATION_LEVEL }}`
+                },
+                'environment': {
+                    title: '🌐 Environment-Specific Variables',
+                    description: 'Different values for development, staging, and production environments.',
+                    code: `# Environment-specific variables
+env:
+  API_ENDPOINT: ${{ github.ref == 'refs/heads/main' && 'https://api.prod.com' || 'https://api.dev.com' }}
+  DATABASE_NAME: ${{ github.ref == 'refs/heads/main' && 'prod_db' || 'dev_db' }}
+  
+steps:
+  - name: Deploy to environment
+    run: |
+      echo "Deploying to: ${{ env.API_ENDPOINT }}"
+      echo "Using database: ${{ env.DATABASE_NAME }}"`
+                },
+                'feature': {
+                    title: '🎛️ Feature Flags',
+                    description: 'Toggle features or behaviors using environment variables.',
+                    code: `# Feature flags example
+env:
+  ENABLE_TESTS: 'true'
+  ENABLE_LINTING: 'true'
+  ENABLE_SECURITY_SCAN: 'false'
+  
+steps:
+  - name: Run tests
+    if: env.ENABLE_TESTS == 'true'
+    run: npm test
+    
+  - name: Run linting
+    if: env.ENABLE_LINTING == 'true'
+    run: npm run lint
+    
+  - name: Security scan
+    if: env.ENABLE_SECURITY_SCAN == 'true'
+    run: npm audit`
+                }
+            };
+            
+            title.textContent = examples[type].title;
+            description.textContent = examples[type].description;
+            code.textContent = examples[type].code;
+            code.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        // Secret setup functionality
+        function showSecretSetup() {
+            const guide = document.getElementById('secretSetupGuide');
+            guide.style.display = guide.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSetupStep(step) {
+            const details = document.getElementById('setupStepDetails');
+            const title = document.getElementById('setupStepTitle');
+            const description = document.getElementById('setupStepDescription');
+            const code = document.getElementById('setupStepCode');
+            
+            const steps = {
+                1: {
+                    title: '🌐 Navigate to Repository Settings',
+                    description: 'Go to your repository and click the "Settings" tab. Make sure you have admin access to the repository.',
+                    code: ''
+                },
+                2: {
+                    title: '🔒 Find Secrets Section',
+                    description: 'In the left sidebar, look for "Security" section and click on "Secrets and variables" → "Actions".',
+                    code: ''
+                },
+                3: {
+                    title: '➕ Add New Secret',
+                    description: 'Click "New repository secret" button to create a new secret for your workflows.',
+                    code: ''
+                },
+                4: {
+                    title: '⚙️ Configure Secret',
+                    description: 'Enter a name (e.g., API_KEY) and the secret value. Names must be uppercase with underscores.',
+                    code: `# Secret naming conventions:
+API_KEY          ✅ Good
+DATABASE_URL     ✅ Good  
+MY_SECRET_TOKEN  ✅ Good
+
+api-key          ❌ Bad (lowercase, hyphen)
+My Secret        ❌ Bad (spaces, mixed case)`
+                }
+            };
+            
+            title.textContent = steps[step].title;
+            description.textContent = steps[step].description;
+            if (steps[step].code) {
+                code.textContent = steps[step].code;
+                code.style.display = 'block';
+            } else {
+                code.style.display = 'none';
+            }
+            details.style.display = 'block';
+        }
+
+        // PR Bot builder functionality
+        function buildPRBot() {
+            const builder = document.getElementById('prBotBuilder');
+            builder.style.display = builder.style.display === 'none' ? 'block' : 'none';
+            secretsBotComponents = [];
+            updateBotWorkflow();
+        }
+
+        function addBotTrigger() {
+            if (!secretsBotComponents.includes('trigger')) {
+                secretsBotComponents.push('trigger');
+                document.getElementById('botTrigger').style.opacity = '1';
+                document.getElementById('botPermissions').style.opacity = '1';
+                updateBotWorkflow();
+            }
+        }
+
+        function addBotPermissions() {
+            if (secretsBotComponents.includes('trigger') && !secretsBotComponents.includes('permissions')) {
+                secretsBotComponents.push('permissions');
+                document.getElementById('botPermissions').style.opacity = '1';
+                document.getElementById('botComment').style.opacity = '1';
+                updateBotWorkflow();
+            }
+        }
+
+        function addBotComment() {
+            if (secretsBotComponents.includes('permissions') && !secretsBotComponents.includes('comment')) {
+                secretsBotComponents.push('comment');
+                document.getElementById('botComment').style.opacity = '1';
+                document.getElementById('updateBotBtn').style.display = 'inline-block';
+                document.getElementById('resetBotBtn').style.display = 'inline-block';
+                updateBotWorkflow();
+            }
+        }
+
+        function updateBotWorkflow() {
+            const workflow = document.getElementById('botWorkflow');
+            let code = '# PR Comment Bot Workflow\n';
+            
+            if (secretsBotComponents.includes('trigger')) {
+                code += `name: PR Comment Bot
+on:
+  pull_request:
+    types: [opened]
+
+`;
+            }
+            
+            if (secretsBotComponents.includes('permissions')) {
+                code += `permissions:
+  pull-requests: write
+  issues: write
+
+`;
+            }
+            
+            if (secretsBotComponents.includes('comment')) {
+                code += `jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v6
+        with:
+          github-token: \${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for your contribution! This PR will be reviewed soon.'
+            })`;
+            }
+            
+            workflow.textContent = code;
+        }
+
+        function resetBot() {
+            secretsBotComponents = [];
+            document.getElementById('botTrigger').style.opacity = '0.5';
+            document.getElementById('botPermissions').style.opacity = '0.5';
+            document.getElementById('botComment').style.opacity = '0.5';
+            document.getElementById('updateBotBtn').style.display = 'none';
+            document.getElementById('resetBotBtn').style.display = 'none';
+            updateBotWorkflow();
+        }
+
+        // Security audit functionality
+        function runSecurityCheck() {
+            const audit = document.getElementById('securityAudit');
+            audit.style.display = audit.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function validateSecurity() {
+            const checks = ['secretsCheck', 'permissionsCheck', 'logsCheck', 'scopeCheck'];
+            const checkedCount = checks.filter(id => document.getElementById(id).checked).length;
+            const validation = document.getElementById('securityValidation');
+            const result = document.getElementById('securityResult');
+            const message = document.getElementById('securityMessage');
+            
+            if (checkedCount === 4) {
+                result.textContent = '🛡️ Excellent Security!';
+                message.textContent = 'Your workflow follows all security best practices. Well done!';
+            } else if (checkedCount >= 2) {
+                result.textContent = '⚠️ Good Security Practices';
+                message.textContent = `You've implemented ${checkedCount}/4 security measures. Consider addressing the remaining items.`;
+            } else {
+                result.textContent = '🚨 Security Improvements Needed';
+                message.textContent = 'Please review and implement more security best practices for your workflows.';
+            }
+            
+            validation.style.display = 'block';
+        }
+
+        function showSecurityPractice(practice) {
+            const details = document.getElementById('securityPracticeDetails');
+            const title = document.getElementById('securityPracticeTitle');
+            const description = document.getElementById('securityPracticeDescription');
+            const example = document.getElementById('securityPracticeExample');
+            
+            const practices = {
+                'principle': {
+                    title: '🎯 Principle of Least Privilege',
+                    description: 'Grant only the minimum permissions necessary for workflows to function. Avoid overly broad permissions.',
+                    example: `# ❌ Too broad permissions
+permissions: write-all
+
+# ✅ Specific permissions only
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write`
+                },
+                'rotation': {
+                    title: '🔄 Regular Key Rotation',
+                    description: 'Regularly update and rotate secrets, especially API keys and access tokens. Set up monitoring for secret usage.',
+                    example: `# Best practices for key rotation:
+# 1. Set expiration dates for API keys when possible
+# 2. Monitor secret usage in workflow logs
+# 3. Update secrets quarterly or after team changes
+# 4. Use short-lived tokens when available`
+                },
+                'scope': {
+                    title: '📍 Environment-Specific Secrets',
+                    description: 'Use different secrets for different environments. Never use production secrets in development workflows.',
+                    example: `# Environment-specific secret usage
+jobs:
+  deploy-dev:
+    if: github.ref == 'refs/heads/develop'
+    env:
+      API_KEY: \${{ secrets.DEV_API_KEY }}
+      
+  deploy-prod:
+    if: github.ref == 'refs/heads/main'
+    env:
+      API_KEY: \${{ secrets.PROD_API_KEY }}`
+                },
+                'audit': {
+                    title: '📊 Regular Security Audits',
+                    description: 'Regularly review secret usage, permissions, and access patterns. Remove unused secrets and update team access.',
+                    example: `# Security audit checklist:
+# ✅ Review all repository secrets monthly
+# ✅ Remove secrets for departed team members
+# ✅ Check workflow permissions are minimal
+# ✅ Verify no secrets in workflow files
+# ✅ Monitor for secret exposure in logs`
+                }
+            };
+            
+            title.textContent = practices[practice].title;
+            description.textContent = practices[practice].description;
+            example.textContent = practices[practice].example;
+            example.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        // Secrets Quiz functionality
+        function startSecretsQuiz() {
+            secretsQuizIndex = 0;
+            secretsQuizScore = 0;
+            document.getElementById('secretsQuiz').style.display = 'block';
+            showSecretsQuizQuestion();
+        }
+
+        function showSecretsQuizQuestion() {
+            const question = secretsQuizData[secretsQuizIndex];
+            document.getElementById('secretsQuizQuestion').textContent = `Question ${secretsQuizIndex + 1}: ${question.question}`;
+            
+            const optionsHtml = question.options.map((option, index) => 
+                `<div class="quiz-option" onclick="selectSecretsAnswer(${index})">${option}</div>`
+            ).join('');
+            
+            document.getElementById('secretsQuizOptions').innerHTML = optionsHtml;
+            document.getElementById('secretsNextBtn').style.display = 'none';
+        }
+
+        function selectSecretsAnswer(selectedIndex) {
+            const question = secretsQuizData[secretsQuizIndex];
+            const options = document.querySelectorAll('#secretsQuizOptions .quiz-option');
+            
+            options.forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (selectedIndex === question.correct) {
+                secretsQuizScore++;
+            }
+            
+            setTimeout(() => {
+                alert(question.explanation);
+                document.getElementById('secretsNextBtn').style.display = 'inline-block';
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            secretsQuizIndex++;
+            if (secretsQuizIndex < secretsQuizData.length) {
+                showSecretsQuizQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const percentage = (secretsQuizScore / secretsQuizData.length) * 100;
+            let message = '';
+            
+            if (percentage >= 80) {
+                message = '🎉 Excellent! You have mastered secrets and security concepts!';
+            } else if (percentage >= 60) {
+                message = '👍 Good job! Review the security concepts you missed.';
+            } else {
+                message = '📚 Keep studying! Review the secrets and security sections again.';
+            }
+            
+            document.getElementById('secretsQuizOptions').innerHTML = `
+                <div class="highlight">
+                    <h4>Quiz Results</h4>
+                    <p>Score: ${secretsQuizScore}/${secretsQuizData.length} (${percentage}%)</p>
+                    <p>${message}</p>
+                </div>
+            `;
+            document.getElementById('secretsNextBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
