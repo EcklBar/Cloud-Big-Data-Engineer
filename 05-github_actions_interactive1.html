@@ -68,7 +68,7 @@
             margin: 30px 0;
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transform: translateY(50px);
+            transform: translateY(0);
             opacity: 1;
             transition: all 0.6s ease;
             backdrop-filter: blur(20px);
@@ -2097,7 +2097,7 @@ ${{ runner.os }}           # Operating system
                             <p>New Repository Secret</p>
                         </div>
                         <div class="assembly-step" onclick="showSetupStep(4)">
-                                                        <h4>⚙️ Configure</h4>
+                            <h4>⚙️ Configure</h4>
                             <p>Name & Value</p>
                         </div>
                     </div>
@@ -2158,7 +2158,7 @@ jobs:
                 <div id="prBotBuilder" style="display: none;">
                     <div class="workflow-diagram">
                         <h4>🛠️ Bot Components:</h4>
-                        <div class="workflow-step" onclick="addBotTrigger()" id="botTrigger">
+                                        <div class="workflow-step" onclick="addBotTrigger()" id="botTrigger">
                             <strong>1. Trigger:</strong> Pull Request Events
                         </div>
                         <div class="workflow-step" onclick="addBotPermissions()" id="botPermissions" style="opacity: 0.5;">
@@ -2332,10 +2332,15 @@ jobs:
             const expandable = header.querySelector('.expandable');
             
             section.classList.toggle('active');
-            expandable.classList.toggle('expanded');
+            if (expandable) {
+                expandable.classList.toggle('expanded');
+            }
             
             if (section.classList.contains('active')) {
+                content.style.display = 'block';
                 updateProgress();
+            } else {
+                content.style.display = 'none';
             }
         }
 
@@ -3301,11 +3306,6 @@ steps:
             details.style.display = 'block';
         }
 
-        // Global variables for secrets quiz and bot builder
-        let secretsQuizIndex = 0;
-        let secretsQuizScore = 0;
-        let secretsBotComponents = [];
-
         // Secrets Quiz data
         const secretsQuizData = [
             {
@@ -3841,6 +3841,15 @@ jobs:
             `;
             document.getElementById('secretsNextBtn').style.display = 'none';
         }
+
+        // Ensure all sections are visible and clickable on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make sure all sections are visible
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
+            });
+        });
     </script>
 </body>
 </html>
