@@ -68,7 +68,15 @@
             margin: 30px 0;
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            opacity: 1;
+            transition: all 0.6s ease;
             backdrop-filter: blur(20px);
+        }
+
+        .section.visible {
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .section-header {
@@ -80,7 +88,6 @@
             justify-content: space-between;
             align-items: center;
             transition: all 0.3s ease;
-            user-select: none;
         }
 
         .section-header:hover {
@@ -103,11 +110,11 @@
         .section-content {
             padding: 30px;
             display: none;
+            animation: slideDown 0.5s ease;
         }
 
         .section.active .section-content {
             display: block;
-            animation: slideDown 0.5s ease;
         }
 
         .component-card {
@@ -117,6 +124,7 @@
             margin: 20px 0;
             border-left: 5px solid #3498db;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .component-card:hover {
@@ -145,6 +153,7 @@
             color: #fff;
             font-family: 'Courier New', monospace;
             overflow-x: auto;
+            position: relative;
         }
 
         .workflow-step {
@@ -213,14 +222,63 @@
             background: linear-gradient(135deg, #45a049, #4CAF50);
         }
 
+        .expandable {
+            cursor: pointer;
+        }
+
         .expandable::after {
             content: ' ▼';
             transition: transform 0.3s ease;
-            display: inline-block;
         }
 
-        .section.active .expandable::after {
+        .expandable.expanded::after {
             transform: rotate(180deg);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
         .code-block {
@@ -241,6 +299,7 @@
             border-radius: 15px;
             margin: 20px 0;
             text-align: center;
+            animation: pulse 3s infinite;
         }
 
         .warning-box {
@@ -276,25 +335,19 @@
             border-color: #f44336;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; max-height: 0; }
-            to { opacity: 1; max-height: 2000px; }
-        }
-
         @media (max-width: 768px) {
-            .header h1 { font-size: 2.5rem; }
-            .assembly-line { flex-direction: column; }
-            .assembly-step { width: 100%; margin: 5px 0; }
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .assembly-line {
+                flex-direction: column;
+            }
+            
+            .assembly-step {
+                width: 100%;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
@@ -310,7 +363,7 @@
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">🎬 Introduction to GitHub Actions</div>
             </div>
             <div class="section-content">
@@ -323,7 +376,7 @@
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">🔍 What is GitHub Actions?</div>
             </div>
             <div class="section-content">
@@ -341,13 +394,15 @@
                 </div>
 
                 <div id="pipelineExample" style="display: none;">
-                    <div class="code-block">Pipeline Flow: Code → Build → Test → Deploy → Monitor</div>
+                    <div class="code-block">
+Pipeline Flow: Code → Build → Test → Deploy → Monitor
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">🏭 Assembly Line Analogy</div>
             </div>
             <div class="section-content">
@@ -377,7 +432,7 @@
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">⚡ Events - The Trigger</div>
             </div>
             <div class="section-content">
@@ -405,7 +460,7 @@
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">⚙️ Workflows - The Orchestrator</div>
             </div>
             <div class="section-content">
@@ -416,12 +471,14 @@
                     </div>
                 </div>
 
-                <div class="code-block">📁 Repository Structure:
+                <div class="code-block">
+📁 Repository Structure:
 .github/
   └── workflows/
       ├── build-and-test.yml
       ├── deploy.yml
-      └── label-issues.yml</div>
+      └── label-issues.yml
+                </div>
 
                 <h3>🎯 Workflow Examples:</h3>
                 <div class="assembly-line">
@@ -442,7 +499,7 @@
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">🔧 Steps and Actions</div>
             </div>
             <div class="section-content">
@@ -475,7 +532,7 @@
         </div>
 
         <div class="section">
-            <div class="section-header">
+            <div class="section-header" onclick="toggleSection(this)">
                 <div class="section-title expandable">🏃 Jobs and Runners</div>
             </div>
             <div class="section-content">
@@ -505,70 +562,9 @@
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title expandable">🎯 Simple Workflow Example</div>
-            </div>
-            <div class="section-content">
-                <div class="highlight">
-                    <h3>📝 Real Workflow Example</h3>
-                    <p>Push event triggers a workflow with a single job on Ubuntu Linux runner</p>
-                </div>
-
-                <div class="code-block">name: Simple Python Workflow
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-      - name: Run Python Code
-        run: python app.py</div>
-
-                <div class="workflow-diagram">
-                    <div class="workflow-step">🎯 Event: Push to Repository</div>
-                    <div class="workflow-step">⬇️</div>
-                    <div class="workflow-step">🏃 Job: Build (Ubuntu Linux)</div>
-                    <div class="workflow-step">⬇️</div>
-                    <div class="workflow-step">1️⃣ Step: Checkout Repository (Action)</div>
-                    <div class="workflow-step">2️⃣ Step: Run Python Code (Command)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title expandable">🧩 Putting It All Together</div>
-            </div>
-            <div class="section-content">
-                <div class="highlight">
-                    <h3>🎊 Complete GitHub Actions Architecture</h3>
-                    <p>Understanding how all components work together</p>
-                </div>
-
-                <div class="workflow-diagram">
-                    <h4>📊 Complete Flow Diagram:</h4>
-                    <div class="workflow-step">📁 GitHub Repository</div>
-                    <div class="workflow-step">📄 .github/workflows/workflow.yml</div>
-                    <div class="workflow-step">⚡ Event Triggers (Push, PR, Issue)</div>
-                    <div class="workflow-step">⚙️ Workflow Execution</div>
-                    <div class="workflow-step">💼 Jobs (Parallel/Sequential)</div>
-                    <div class="workflow-step">👣 Steps (Scripts, Programs, Actions)</div>
-                    <div class="workflow-step">🖥️ Runner Machine (Ubuntu, Windows, macOS)</div>
-                    <div class="workflow-step">📦 Optional: Artifacts Output</div>
-                </div>
-
-                <div class="interactive-example">
-                    <h3>🎯 Ready for Advanced Topics?</h3>
-                    <p>Now that you understand GitHub Actions basics, let's explore environment variables and secrets!</p>
-                    <button class="btn" onclick="scrollToSecrets()">🔐 Learn About Secrets</button>
-                </div>
-            </div>
-        </div>
-
+        <!-- Environment Variables and Secrets Section -->
         <div class="section secrets-section">
-            <div class="section-header" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #667eea, #764ba2);">
                 <div class="section-title expandable">🔐 Environment Variables & Secrets</div>
                 <div class="time-badge">Security Focus</div>
             </div>
@@ -578,41 +574,26 @@ jobs:
                     <p>Learn to manage environment variables and secrets securely in GitHub Actions workflows</p>
                 </div>
 
-                <div class="assembly-line">
-                    <div class="assembly-step">
-                        <h4>🌍 Step 1</h4>
-                        <p>Context System</p>
-                    </div>
-                    <div class="assembly-step">
-                        <h4>📝 Step 2</h4>
-                        <p>Environment Variables</p>
-                    </div>
-                    <div class="assembly-step">
-                        <h4>🔐 Step 3</h4>
-                        <p>Secrets Management</p>
-                    </div>
-                    <div class="assembly-step">
-                        <h4>🛡️ Step 4</h4>
-                        <p>Security Best Practices</p>
-                    </div>
-                </div>
-
+                <!-- Context Introduction -->
                 <div class="component-card">
-                    <div class="component-title">🎯 What is Context?</div>
+                    <div class="component-title">🎯 Understanding GitHub Actions Context</div>
                     <div class="component-description">
                         Context refers to predefined environment variables and data that GitHub provides for each workflow run. These context variables contain information about the repository, workflow, event, and the environment where the workflow is running.
                     </div>
                 </div>
 
-                <div class="code-block"># Context expression syntax:
+                <div class="code-block">
+# Context expression syntax:
 ${{ context_name.property }}
 
 # Common examples:
 ${{ github.actor }}        # Username who triggered workflow  
 ${{ env.NODE_VERSION }}    # Environment variable
 ${{ secrets.API_KEY }}     # Secret value
-${{ runner.os }}           # Operating system</div>
+${{ runner.os }}           # Operating system
+                </div>
 
+                <!-- Context Explorer -->
                 <div class="interactive-example">
                     <h3>🎮 Context Types Explorer</h3>
                     <button class="btn" onclick="exploreContextTypes()">🔍 Explore Context System</button>
@@ -651,6 +632,7 @@ ${{ runner.os }}           # Operating system</div>
                     </div>
                 </div>
 
+                <!-- Environment Variables -->
                 <div class="component-card">
                     <div class="component-title">🌍 Environment Variables</div>
                     <div class="component-description">
@@ -658,24 +640,31 @@ ${{ runner.os }}           # Operating system</div>
                     </div>
                 </div>
 
-                <div class="code-block"># Environment Variables Example:
-name: CI Pipeline
-env:
-  NODE_VERSION: '18'
-  API_URL: 'https://api.example.com'
+                <div class="interactive-example">
+                    <h3>📊 Variable Scope Demonstration</h3>
+                    <button class="btn" onclick="showVariableScopes()">🔍 Show Variable Scopes</button>
+                </div>
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      BUILD_ENV: 'production'
-    steps:
-      - name: Use variables
-        run: |
-          echo "Node: ${{ env.NODE_VERSION }}"
-          echo "API: ${{ env.API_URL }}"
-          echo "Build: ${{ env.BUILD_ENV }}"</div>
+                <div id="variableScopeDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🎯 Variable Scope Levels:</h4>
+                        <div class="workflow-step" onclick="explainScope('workflow')">
+                            <strong>Workflow Level:</strong> Available to all jobs
+                        </div>
+                        <div class="workflow-step" onclick="explainScope('job')">
+                            <strong>Job Level:</strong> Available to all steps in job
+                        </div>
+                        <div class="workflow-step" onclick="explainScope('step')">
+                            <strong>Step Level:</strong> Available to specific step only
+                        </div>
+                    </div>
+                    
+                    <div id="scopeExample" style="display: none;">
+                        <div class="code-block" id="scopeCode"></div>
+                    </div>
+                </div>
 
+                <!-- Secrets Management -->
                 <div class="component-card" style="border-left: 5px solid #e74c3c;">
                     <div class="component-title">🔐 Secrets Management</div>
                     <div class="component-description">
@@ -688,22 +677,123 @@ jobs:
                     <p>Never commit secrets to your repository. Always use GitHub's secure secrets storage.</p>
                 </div>
 
-                <div class="code-block"># Secrets Usage Example:
-name: Deploy Application
-on: [push]
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to production
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Deploying with API key..."
-          # Secret values are automatically redacted in logs</div>
+                <!-- Secrets Setup Guide -->
+                <div class="interactive-example">
+                    <h3>🔧 Secret Setup Guide</h3>
+                    <button class="btn" onclick="showSecretSetup()">📚 Learn Secret Setup</button>
+                </div>
 
+                <div id="secretSetupGuide" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step" onclick="showSetupStep(1)">
+                            <h4>🌐 Navigate</h4>
+                            <p>Repository Settings</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(2)">
+                            <h4>🔒 Security</h4>
+                            <p>Secrets Section</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(3)">
+                            <h4>➕ Add Secret</h4>
+                            <p>New Repository Secret</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(4)">
+                            <h4>⚙️ Configure</h4>
+                            <p>Name & Value</p>
+                        </div>
+                    </div>
+                    
+                    <div id="setupStepDetails" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="setupStepTitle">Setup Step</div>
+                            <div class="component-description" id="setupStepDescription">Click on a step above for details</div>
+                            <div id="setupStepCode" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GITHUB_TOKEN -->
+                <div class="component-card">
+                    <div class="component-title">🎫 GITHUB_TOKEN - The Built-in Secret</div>
+                    <div class="component-description">
+                        The GITHUB_TOKEN secret is automatically provided by GitHub Actions for every workflow run. It allows workflows to authenticate with GitHub API and perform actions like cloning repositories, commenting on issues and pull requests, and updating commit statuses.
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Using GITHUB_TOKEN in workflows
+- name: Comment on PR
+  uses: actions/github-script@v6
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    script: |
+      github.rest.issues.createComment({
+        issue_number: context.issue.number,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        body: 'Hello from GitHub Actions!'
+      })
+                </div>
+
+                <!-- Practical Example -->
+                <div class="interactive-example">
+                    <h3>🤖 Build a PR Comment Bot</h3>
+                    <button class="btn" onclick="buildPRBot()">🚀 Create Comment Bot</button>
+                </div>
+
+                <div id="prBotBuilder" style="display: none;">
+                    <div class="code-block" id="botWorkflowCode">
+# Click the button above to build a PR comment bot workflow
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn" onclick="addBotTrigger()">🎯 Add PR Trigger</button>
+                        <button class="btn" onclick="addBotPermissions()">🔐 Add Permissions</button>
+                        <button class="btn" onclick="addBotComment()">💬 Add Comment Action</button>
+                        <button class="btn" onclick="resetBot()">🔄 Reset</button>
+                    </div>
+                </div>
+
+                <!-- Security Best Practices -->
+                <div class="component-card">
+                    <div class="component-title">🛡️ Security Best Practices</div>
+                    <div class="component-description">
+                        Follow security best practices: never commit secrets to code, use minimal necessary permissions, regularly rotate secrets, and audit secret usage. Use environment-specific secrets for different deployment stages.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Security Audit</h3>
+                    <button class="btn" onclick="runSecurityCheck()">🛡️ Run Security Check</button>
+                </div>
+
+                <div id="securityAudit" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔒 Security Checklist:</h4>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="securityCheck1"> No secrets in repository code
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="securityCheck2"> Using minimal GITHUB_TOKEN permissions
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="securityCheck3"> Secrets have descriptive names
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="securityCheck4"> Regular secret rotation schedule
+                        </div>
+                    </div>
+                    <button class="btn" onclick="validateSecurity()">✅ Validate Security</button>
+                    
+                    <div id="securityResults" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="securityScore">Security Results</h4>
+                            <p id="securityFeedback">Complete the checklist above</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
                 <div class="interactive-example">
                     <h3>🧠 Test Your Knowledge</h3>
                     <button class="btn" onclick="startSecretsQuiz()">🚀 Take Secrets Quiz</button>
@@ -727,7 +817,7 @@ jobs:
 
                 <div class="highlight">
                     <h3>🎊 Congratulations!</h3>
-                    <p>You now have comprehensive knowledge of GitHub Actions fundamentals, workflows, and security best practices. You're ready to build production-ready CI/CD pipelines!</p>
+                    <p>You now have comprehensive knowledge of GitHub Actions security, environment variables, and secrets management. You're ready to build secure, production-ready workflows!</p>
                 </div>
             </div>
         </div>
@@ -737,8 +827,9 @@ jobs:
         // Global variables
         let secretsQuizIndex = 0;
         let secretsQuizScore = 0;
+        let secretsBotComponents = [];
 
-        // Quiz data
+        // Secrets Quiz data
         const secretsQuizData = [
             {
                 question: "What is the difference between environment variables and secrets?",
@@ -762,31 +853,25 @@ jobs:
             }
         ];
 
-        // Initialize when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 GitHub Actions Tutorial loaded!');
-            
-            // Add click handlers to all section headers
-            document.querySelectorAll('.section-header').forEach(header => {
-                header.addEventListener('click', function() {
-                    toggleSection(this);
-                });
-            });
-        });
-
-        // MAIN TOGGLE FUNCTION - This makes sections work
+        // MAIN TOGGLE FUNCTION
         function toggleSection(header) {
             const section = header.parentElement;
-            const isActive = section.classList.contains('active');
+            const allSections = document.querySelectorAll('.section');
             
-            // Close all sections first
-            document.querySelectorAll('.section').forEach(s => {
-                s.classList.remove('active');
+            allSections.forEach(s => {
+                if (s !== section) {
+                    s.classList.remove('active');
+                    const expandable = s.querySelector('.expandable');
+                    if (expandable) {
+                        expandable.classList.remove('expanded');
+                    }
+                }
             });
             
-            // If this section wasn't active, open it
-            if (!isActive) {
-                section.classList.add('active');
+            section.classList.toggle('active');
+            const expandable = header.querySelector('.expandable');
+            if (expandable) {
+                expandable.classList.toggle('expanded');
             }
             
             updateProgress();
@@ -861,20 +946,20 @@ jobs:
             document.getElementById('jobsDemo').style.display = 'block';
         }
 
-        function scrollToSecrets() {
-            const secretsSection = document.querySelector('.secrets-section');
-            if (secretsSection) {
-                secretsSection.scrollIntoView({ behavior: 'smooth' });
-                setTimeout(() => toggleSection(secretsSection.querySelector('.section-header')), 800);
-            }
-        }
+        // ===== SECRETS SECTION FUNCTIONS =====
 
+        // Context explorer functionality
         function exploreContextTypes() {
             const explorer = document.getElementById('contextExplorer');
             explorer.style.display = explorer.style.display === 'none' ? 'block' : 'none';
         }
 
         function showContextDetails(contextType) {
+            const details = document.getElementById('contextDetails');
+            const title = document.getElementById('contextTitle');
+            const description = document.getElementById('contextDescription');
+            const example = document.getElementById('contextExample');
+            
             const contexts = {
                 github: {
                     title: '🐙 GitHub Context',
@@ -930,13 +1015,271 @@ ${{ runner.temp }}          # Temporary directory path`
             };
             
             const context = contexts[contextType];
-            document.getElementById('contextTitle').textContent = context.title;
-            document.getElementById('contextDescription').textContent = context.description;
-            document.getElementById('contextExample').textContent = context.example;
-            document.getElementById('contextExample').style.display = 'block';
-            document.getElementById('contextDetails').style.display = 'block';
+            title.textContent = context.title;
+            description.textContent = context.description;
+            example.textContent = context.example;
+            example.style.display = 'block';
+            details.style.display = 'block';
         }
 
+        // Variable scope functionality
+        function showVariableScopes() {
+            const demo = document.getElementById('variableScopeDemo');
+            demo.style.display = demo.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainScope(scope) {
+            const example = document.getElementById('scopeExample');
+            const code = document.getElementById('scopeCode');
+            
+            const scopes = {
+                workflow: {
+                    code: `# Workflow-level environment variables
+name: CI Pipeline
+env:
+  NODE_VERSION: '18'        # Available to ALL jobs
+  BUILD_ENV: 'production'   # Available to ALL jobs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use workflow variables
+        run: |
+          echo "Node: ${{ env.NODE_VERSION }}"
+          echo "Environment: ${{ env.BUILD_ENV }}"`
+                },
+                job: {
+                    code: `# Job-level environment variables
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      JOB_SPECIFIC: 'build-config'  # Available to ALL steps in this job
+    steps:
+      - name: Use job variable
+        run: echo "Config: ${{ env.JOB_SPECIFIC }}"
+      
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cannot access job variable from other job
+        run: echo "This won't work: ${{ env.JOB_SPECIFIC }}"`
+                },
+                step: {
+                    code: `# Step-level environment variables
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step with specific env
+        env:
+          STEP_VAR: 'only-for-this-step'  # Available ONLY to this step
+        run: echo "Step variable: ${{ env.STEP_VAR }}"
+        
+      - name: Cannot access step variable
+        run: echo "This won't work: ${{ env.STEP_VAR }}"`
+                }
+            };
+            
+            code.textContent = scopes[scope].code;
+            example.style.display = 'block';
+        }
+
+        // Secret setup functionality
+        function showSecretSetup() {
+            const guide = document.getElementById('secretSetupGuide');
+            guide.style.display = guide.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showSetupStep(step) {
+            const details = document.getElementById('setupStepDetails');
+            const title = document.getElementById('setupStepTitle');
+            const description = document.getElementById('setupStepDescription');
+            const code = document.getElementById('setupStepCode');
+            
+            const steps = {
+                1: {
+                    title: '🌐 Navigate to Repository Settings',
+                    description: 'Go to your repository on GitHub and click on the "Settings" tab in the top navigation bar.',
+                    code: `# Navigation Path:
+Repository → Settings → Secrets and variables → Actions`
+                },
+                2: {
+                    title: '🔒 Find Secrets Section',
+                    description: 'In the left sidebar, look for "Secrets and variables" and click on "Actions" to manage repository secrets.',
+                    code: `# Security Section Location:
+Settings → Security → Secrets and variables → Actions → Repository secrets`
+                },
+                3: {
+                    title: '➕ Add New Secret',
+                    description: 'Click the "New repository secret" button to create a new encrypted secret for your workflows.',
+                    code: `# Secret Creation:
+1. Click "New repository secret"
+2. Enter secret name (e.g., API_KEY)
+3. Enter secret value
+4. Click "Add secret"`
+                },
+                4: {
+                    title: '⚙️ Configure Secret',
+                    description: 'Give your secret a descriptive name (uppercase with underscores) and paste the sensitive value. The value will be encrypted and hidden.',
+                    code: `# Secret Naming Convention:
+API_KEY=your_api_key_here
+DATABASE_URL=postgresql://user:pass@host:port/db
+DEPLOY_TOKEN=ghp_xxxxxxxxxxxx
+
+# Usage in workflows:
+${{ secrets.API_KEY }}
+${{ secrets.DATABASE_URL }}
+${{ secrets.DEPLOY_TOKEN }}`
+                }
+            };
+            
+            const stepInfo = steps[step];
+            title.textContent = stepInfo.title;
+            description.textContent = stepInfo.description;
+            code.textContent = stepInfo.code;
+            code.style.display = 'block';
+            details.style.display = 'block';
+        }
+
+        // PR Bot builder functionality
+        function buildPRBot() {
+            const builder = document.getElementById('prBotBuilder');
+            const code = document.getElementById('botWorkflowCode');
+            
+            builder.style.display = builder.style.display === 'none' ? 'block' : 'none';
+            
+            if (builder.style.display === 'block') {
+                code.textContent = `# PR Comment Bot Workflow
+# Click the buttons below to build your bot step by step!
+
+name: PR Comment Bot
+# Add components using the buttons below`;
+                secretsBotComponents = [];
+            }
+        }
+
+        function addBotTrigger() {
+            if (!secretsBotComponents.includes('trigger')) {
+                secretsBotComponents.push('trigger');
+                updateBotWorkflow();
+            }
+        }
+
+        function addBotPermissions() {
+            if (!secretsBotComponents.includes('permissions')) {
+                secretsBotComponents.push('permissions');
+                updateBotWorkflow();
+            }
+        }
+
+        function addBotComment() {
+            if (!secretsBotComponents.includes('comment')) {
+                secretsBotComponents.push('comment');
+                updateBotWorkflow();
+            }
+        }
+
+        function updateBotWorkflow() {
+            const code = document.getElementById('botWorkflowCode');
+            let workflow = `name: PR Comment Bot
+
+`;
+
+            if (secretsBotComponents.includes('trigger')) {
+                workflow += `# ✅ Trigger: Run on pull requests
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+`;
+            }
+
+            if (secretsBotComponents.includes('permissions')) {
+                workflow += `# ✅ Permissions: Allow bot to comment
+permissions:
+  pull-requests: write
+  issues: write
+
+`;
+            }
+
+            workflow += `jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:`;
+
+            if (secretsBotComponents.includes('comment')) {
+                workflow += `
+    - name: Comment on PR
+      uses: actions/github-script@v6
+      with:
+        github-token: \${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🤖 Hello! This PR has been automatically reviewed by GitHub Actions!'
+          })`;
+            } else {
+                workflow += `
+    # Add comment action using the button above`;
+            }
+
+            code.textContent = workflow;
+        }
+
+        function resetBot() {
+            secretsBotComponents = [];
+            const code = document.getElementById('botWorkflowCode');
+            code.textContent = `# PR Comment Bot Workflow
+# Click the buttons below to build your bot step by step!
+
+name: PR Comment Bot
+# Add components using the buttons below`;
+        }
+
+        // Security audit functionality
+        function runSecurityCheck() {
+            const audit = document.getElementById('securityAudit');
+            audit.style.display = audit.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function validateSecurity() {
+            const checks = [
+                document.getElementById('securityCheck1').checked,
+                document.getElementById('securityCheck2').checked,
+                document.getElementById('securityCheck3').checked,
+                document.getElementById('securityCheck4').checked
+            ];
+            
+            const results = document.getElementById('securityResults');
+            const score = document.getElementById('securityScore');
+            const feedback = document.getElementById('securityFeedback');
+            
+            const checkedCount = checks.filter(Boolean).length;
+            const percentage = Math.round((checkedCount / 4) * 100);
+            
+            results.style.display = 'block';
+            
+            if (percentage === 100) {
+                score.textContent = '🏆 Perfect Security Score!';
+                feedback.textContent = 'Excellent! You follow all security best practices for GitHub Actions.';
+            } else if (percentage >= 75) {
+                score.textContent = '✅ Good Security Practices';
+                feedback.textContent = `You scored ${percentage}%. Review the unchecked items to improve security.`;
+            } else if (percentage >= 50) {
+                score.textContent = '⚠️ Security Needs Improvement';
+                feedback.textContent = `You scored ${percentage}%. Please address the security gaps identified.`;
+            } else {
+                score.textContent = '❌ Security Risks Detected';
+                feedback.textContent = `You scored ${percentage}%. Critical security improvements needed!`;
+            }
+        }
+
+        // Secrets Quiz functionality
         function startSecretsQuiz() {
             secretsQuizIndex = 0;
             secretsQuizScore = 0;
@@ -999,6 +1342,16 @@ ${{ runner.temp }}          # Temporary directory path`
             document.getElementById('secretsQuiz').style.display = 'none';
             document.getElementById('secretsQuizResults').style.display = 'block';
         }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 GitHub Actions Tutorial loaded successfully!');
+            
+            // Make all sections visible initially
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('visible');
+            });
+        });
     </script>
 </body>
 </html>
