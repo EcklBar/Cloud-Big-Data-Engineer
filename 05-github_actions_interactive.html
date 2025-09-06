@@ -316,6 +316,38 @@
                 margin: 5px 0;
             }
         }
+            .warning-box {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+            .quiz-option {
+                background: rgba(52, 152, 219, 0.1);
+                border: 2px solid #3498db;
+                border-radius: 10px;
+                padding: 15px;
+                margin: 10px 0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .quiz-option:hover {
+                background: rgba(52, 152, 219, 0.2);
+            }
+            
+            .quiz-option.correct {
+                background: rgba(76, 175, 80, 0.3);
+                border-color: #4CAF50;
+            }
+            
+            .quiz-option.incorrect {
+                background: rgba(244, 67, 54, 0.3);
+                border-color: #f44336;
+            }
     </style>
 </head>
 <body>
