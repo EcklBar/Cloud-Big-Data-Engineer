@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive GitHub Actions Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            padding: 10px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 15px;
+            width: 0%;
+            transition: width 0.8s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.6s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .section.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #34495e, #2980b9);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .time-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .section-content {
+            padding: 30px;
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .section.active .section-content {
+            display: block;
+        }
+
+        .component-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .component-card:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .component-title {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .component-description {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .workflow-diagram {
+            background: #1e1e1e;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .workflow-step {
+            background: rgba(52, 152, 219, 0.2);
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .workflow-step:hover {
+            background: rgba(52, 152, 219, 0.4);
+            transform: scale(1.05);
+        }
+
+        .assembly-line {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .assembly-step {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .assembly-step:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .interactive-example {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #45a049, #4CAF50);
+        }
+
+        .expandable {
+            cursor: pointer;
+        }
+
+        .expandable::after {
+            content: ' ▼';
+            transition: transform 0.3s ease;
+        }
+
+        .expandable.expanded::after {
+            transform: rotate(180deg);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #4299e1;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            animation: pulse 3s infinite;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .quiz-option {
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        .quiz-option.correct {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4CAF50;
+        }
+        
+        .quiz-option.incorrect {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #f44336;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .assembly-line {
+                flex-direction: column;
+            }
+            
+            .assembly-step {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 GitHub Actions</h1>
+            <p>Master CI/CD with Interactive Learning</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎬 Introduction to GitHub Actions</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h2>Welcome to GitHub Actions! 🎉</h2>
+                    <p>Get ready to learn the most popular CI/CD platform that will revolutionize your development workflow!</p>
+                </div>
+                <button class="btn" onclick="startLearning()">🚀 Start Learning Journey</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔍 What is GitHub Actions?</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">GitHub Actions (GHA) Definition</div>
+                    <div class="component-description">
+                        GitHub Actions is a <strong>built-in automation and CI/CD system</strong> provided by GitHub that allows you to automate your build, test, and deployment pipeline directly within your GitHub repositories.
+                    </div>
+                </div>
+                
+                <div class="interactive-example">
+                    <h3>💡 Key Concept: Pipeline</h3>
+                    <p>A pipeline is a sequence of interconnected steps or stages that represent the flow of work and data in a software development or deployment process.</p>
+                    <button class="btn" onclick="showPipelineExample()">View Pipeline Example</button>
+                </div>
+
+                <div id="pipelineExample" style="display: none;">
+                    <div class="code-block">
+Pipeline Flow: Code → Build → Test → Deploy → Monitor
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🏭 Assembly Line Analogy</div>
+            </div>
+            <div class="section-content">
+                <h3>🚗 Car Assembly Line vs GitHub Actions</h3>
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="highlightStep(this)">
+                        <h4>🔧 Engine</h4>
+                        <p>Attach Engine</p>
+                        <small>≈ Code Building</small>
+                    </div>
+                    <div class="assembly-step" onclick="highlightStep(this)">
+                        <h4>🎨 Paint</h4>
+                        <p>Paint Car</p>
+                        <small>≈ Code Testing</small>
+                    </div>
+                    <div class="assembly-step" onclick="highlightStep(this)">
+                        <h4>🏁 Final</h4>
+                        <p>Quality Check</p>
+                        <small>≈ Deployment</small>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <p><strong>Just like a car assembly line</strong>, GitHub Actions automates software development with seamless, efficient steps that follow a specific order!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚡ Events - The Trigger</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card" onclick="animateCard(this)">
+                    <div class="component-title">🎯 What is an Event?</div>
+                    <div class="component-description">
+                        An event is a particular action within a repository that initiates the execution of a workflow.
+                    </div>
+                </div>
+
+                <h3>📋 Common GitHub Events:</h3>
+                <div class="workflow-diagram">
+                    <div class="workflow-step" onclick="triggerEvent('push')">📤 Push Commit</div>
+                    <div class="workflow-step" onclick="triggerEvent('pr')">🔄 Open Pull Request</div>
+                    <div class="workflow-step" onclick="triggerEvent('issue')">📝 Create Issue</div>
+                </div>
+
+                <div id="eventResult" style="display: none; margin-top: 20px;">
+                    <div class="highlight">
+                        <h4>🎊 Event Triggered!</h4>
+                        <p id="eventMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚙️ Workflows - The Orchestrator</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🗂️ Workflow Definition</div>
+                    <div class="component-description">
+                        A workflow is a customizable automated process that executes one or multiple jobs. Workflows are specified in YAML files stored in your repository.
+                    </div>
+                </div>
+
+                <div class="code-block">
+📁 Repository Structure:
+.github/
+  └── workflows/
+      ├── build-and-test.yml
+      ├── deploy.yml
+      └── label-issues.yml
+                </div>
+
+                <h3>🎯 Workflow Examples:</h3>
+                <div class="assembly-line">
+                    <div class="assembly-step">
+                        <h4>🔨 Build & Test</h4>
+                        <p>Pull Requests</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🚀 Deploy</h4>
+                        <p>Each Release</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🏷️ Label</h4>
+                        <p>New Issues</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔧 Steps and Actions</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">👣 Steps</div>
+                    <div class="component-description">
+                        Individual units of work, executed in order and dependent on the previous step. Each step runs on the same compute machine and can share data.
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">⚡ Actions</div>
+                    <div class="component-description">
+                        Custom applications that combine complex but frequently repeated tasks specific to the GitHub Actions platform.
+                    </div>
+                </div>
+
+                <div class="workflow-diagram">
+                    <h4>📝 Example Step Sequence:</h4>
+                    <div class="workflow-step">1️⃣ Build Application (Compile Code)</div>
+                    <div class="workflow-step">2️⃣ Test Application (Run Tests)</div>
+                    <div class="workflow-step">3️⃣ Deploy Application (Shell Script)</div>
+                </div>
+
+                <div class="highlight">
+                    <h4>🎯 Popular Actions Examples:</h4>
+                    <p>• Checkout Repository • Comment on Pull Request • Setup Node.js • Deploy to AWS</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🏃 Jobs and Runners</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">💼 Jobs</div>
+                    <div class="component-description">
+                        A set of steps in a workflow. Each job is independent and can run in parallel, but can be configured to depend on other jobs.
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🖥️ Runners</div>
+                    <div class="component-description">
+                        The compute machines where all steps in a single job are executed. Available runners include Ubuntu Linux, Windows, and macOS.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔄 Parallel vs Sequential Jobs</h3>
+                    <button class="btn" onclick="demonstrateJobs('parallel')">Show Parallel Jobs</button>
+                    <button class="btn" onclick="demonstrateJobs('sequential')">Show Sequential Jobs</button>
+                </div>
+
+                <div id="jobsDemo" style="display: none;">
+                    <div class="workflow-diagram" id="jobsDiagram"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎯 Simple Workflow Example</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>📝 Real Workflow Example</h3>
+                    <p>Push event triggers a workflow with a single job on Ubuntu Linux runner</p>
+                </div>
+
+                <div class="code-block">
+name: Simple Python Workflow
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Run Python Code
+        run: python app.py
+                </div>
+
+                <div class="workflow-diagram">
+                    <div class="workflow-step">🎯 Event: Push to Repository</div>
+                    <div class="workflow-step">⬇️</div>
+                    <div class="workflow-step">🏃 Job: Build (Ubuntu Linux)</div>
+                    <div class="workflow-step">⬇️</div>
+                    <div class="workflow-step">1️⃣ Step: Checkout Repository (Action)</div>
+                    <div class="workflow-step">2️⃣ Step: Run Python Code (Command)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🧩 Putting It All Together</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>🎊 Complete GitHub Actions Architecture</h3>
+                    <p>Understanding how all components work together</p>
+                </div>
+
+                <div class="workflow-diagram">
+                    <h4>📊 Complete Flow Diagram:</h4>
+                    <div class="workflow-step">📁 GitHub Repository</div>
+                    <div class="workflow-step">📄 .github/workflows/workflow.yml</div>
+                    <div class="workflow-step">⚡ Event Triggers (Push, PR, Issue)</div>
+                    <div class="workflow-step">⚙️ Workflow Execution</div>
+                    <div class="workflow-step">💼 Jobs (Parallel/Sequential)</div>
+                    <div class="workflow-step">👣 Steps (Scripts, Programs, Actions)</div>
+                    <div class="workflow-step">🖥️ Runner Machine (Ubuntu, Windows, macOS)</div>
+                    <div class="workflow-step">📦 Optional: Artifacts Output</div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Ready for Advanced YAML?</h3>
+                    <p>Now that you understand GitHub Actions basics, let's master the YAML syntax that powers your workflows!</p>
+                    <button class="btn" onclick="scrollToYAML()">🚀 Learn Advanced YAML</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YAML Advanced Section -->
+        <div class="section yaml-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #8E2DE2, #4A00E0);">
+                <div class="section-title expandable">📝 Intermediate YAML Mastery</div>
+                <div class="time-badge">New Section</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <h2>🎓 Level Up Your YAML Skills!</h2>
+                    <p>Master advanced YAML concepts essential for powerful GitHub Actions workflows</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📄 Multiline Strings: Block Scalar Format</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🎯 Block Scalar Strings</div>
+                    <div class="component-description">
+                        A way to represent multi-line strings with line breaks and indentation while preserving their formatting. Perfect for code snippets, shell commands, and configurations in CI/CD workflows.
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>🛠️ Two Styles + Three Chomping Indicators</h4>
+                    <p><strong>Styles:</strong> Literal (|) & Fold (>) <br>
+                    <strong>Chomping:</strong> Clip (default), Strip (-), Keep (+)</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive YAML Playground</h3>
+                    <button class="btn" onclick="showYAMLDemo('intro')">🚀 Start YAML Demo</button>
+                </div>
+
+                <div id="yamlDemo" style="display: none;">
+                    <div class="code-block" id="yamlOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📐 Literal Style (|)</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📏 Literal Style Preserves Everything</div>
+                    <div class="component-description">
+                        Preserves line breaks and indentation exactly as written. Perfect for shell commands, scripts, and formatted text.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showLiteralExample('basic')">
+                        <h4>🔧 Basic</h4>
+                        <p>Simple Example</p>
+                    </div>
+                    <div class="assembly-step" onclick="showLiteralExample('shell')">
+                        <h4>🐚 Shell</h4>
+                        <p>Commands</p>
+                    </div>
+                    <div class="assembly-step" onclick="showLiteralExample('complex')">
+                        <h4>🎯 Complex</h4>
+                        <p>With Indentation</p>
+                    </div>
+                </div>
+
+                <div class="code-block" id="literalExample">
+# Click examples above to see literal style in action!
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔄 Fold Style (>)</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📦 Fold Style Collapses Lines</div>
+                    <div class="component-description">
+                        Removes line breaks and converts them to spaces. Useful for long text that spans multiple lines for readability.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>⚖️ Literal vs Fold Comparison</h3>
+                    <button class="btn" onclick="compareFoldLiteral()">🔍 Compare Styles</button>
+                </div>
+
+                <div id="foldComparison" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>📝 Same Text, Different Results:</h4>
+                        <div class="workflow-step">
+                            <strong>Literal (|):</strong>
+                            <pre>Line 1
+Line 2
+Line 3</pre>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Fold (>):</strong>
+                            <pre>Line 1 Line 2 Line 3</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block" id="foldExample">
+message: >
+  This is a very long message that spans
+  multiple lines for better readability
+  in your YAML file but will be folded
+  into a single line when parsed.
+
+# Result: "This is a very long message that spans multiple lines for better readability in your YAML file but will be folded into a single line when parsed."
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">✂️ Chomping Indicators</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🎛️ Control Final Newlines</div>
+                    <div class="component-description">
+                        Special instructions that tell YAML how to handle blank lines at the end of multi-line text.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showChompingExample('clip')">
+                        <h4>📎 Clip</h4>
+                        <p>Default (adds one newline)</p>
+                    </div>
+                    <div class="assembly-step" onclick="showChompingExample('strip')">
+                        <h4>✂️ Strip (-)</h4>
+                        <p>Removes all newlines</p>
+                    </div>
+                    <div class="assembly-step" onclick="showChompingExample('keep')">
+                        <h4>📌 Keep (+)</h4>
+                        <p>Preserves all newlines</p>
+                    </div>
+                </div>
+
+                <div class="workflow-diagram" id="chompingVisualization">
+                    <h4>🎯 Click examples above to see chomping in action!</h4>
+                </div>
+
+                <div class="highlight">
+                    <h4>💡 Pro Tip</h4>
+                    <p>Chomping indicators come AFTER style indicators: <code>|-</code> <code>|+</code> <code>>-</code> <code>>+</code></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔄 Dynamic Value Injection</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">💉 Expressions & Variables</div>
+                    <div class="component-description">
+                        Placeholders that represent values that can change when YAML is processed. Essential for flexible GitHub Actions workflows!
+                    </div>
+                </div>
+
+                <div class="code-block">
+# GitHub Actions Expression Examples:
+name: CI Pipeline
+on: push
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BRANCH_NAME: ${{ github.ref_name }}
+    steps:
+      - name: Checkout
+        run: echo "Building on ${{ runner.os }}"
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Try Dynamic Expressions</h3>
+                    <button class="btn" onclick="showExpressionDemo()">🔍 Explore Expressions</button>
+                </div>
+
+                <div id="expressionDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <div class="workflow-step" onclick="highlightExpression('secrets')">
+                            <strong>${{ secrets.API_KEY }}</strong> - Secure variables
+                        </div>
+                        <div class="workflow-step" onclick="highlightExpression('github')">
+                            <strong>${{ github.actor }}</strong> - GitHub context
+                        </div>
+                        <div class="workflow-step" onclick="highlightExpression('env')">
+                            <strong>${{ env.NODE_VERSION }}</strong> - Environment variables
+                        </div>
+                    </div>
+                    <div id="expressionResult" class="highlight" style="display: none;">
+                        <h4 id="expressionTitle"></h4>
+                        <p id="expressionDescription"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📚 Multi-Document YAML</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📑 Multiple Documents in One File</div>
+                    <div class="component-description">
+                        Store multiple independent YAML documents in a single file, separated by three dashes (---). Great for configuration management!
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Document 1: Development Config
+---
+name: Development
+database:
+  host: localhost
+  port: 5432
+
+# Document 2: Production Config  
+---
+name: Production
+database:
+  host: prod-db.example.com
+  port: 5432
+  ssl: true
+
+# Document 3: Testing Config
+---
+name: Testing
+database:
+  host: test-db.example.com
+  port: 5433
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Multi-Document Use Cases</h3>
+                    <div class="assembly-line">
+                        <div class="assembly-step">
+                            <h4>🏗️ Configs</h4>
+                            <p>Multiple Environments</p>
+                        </div>
+                        <div class="assembly-step">
+                            <h4>🎭 Kubernetes</h4>
+                            <p>Multiple Resources</p>
+                        </div>
+                        <div class="assembly-step">
+                            <h4>📋 Templates</h4>
+                            <p>Reusable Components</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📋 YAML Summary & Quiz</div>
+            </div>
+            <div class="section-content">
+                <div class="workflow-diagram">
+                    <h4>🎯 YAML Symbols Reference:</h4>
+                    <div class="workflow-step">| - Literal style (preserves formatting)</div>
+                    <div class="workflow-step">> - Fold style (collapses to single line)</div>
+                    <div class="workflow-step">- - Strip chomping (removes trailing newlines)</div>
+                    <div class="workflow-step">+ - Keep chomping (preserves trailing newlines)</div>
+                    <div class="workflow-step">${{ }} - Expression syntax (GitHub Actions)</div>
+                    <div class="workflow-step">--- - Document separator</div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎓 Master YAML Quiz</h3>
+                    <button class="btn" onclick="startYAMLQuiz()">🧠 Test Your YAML Knowledge</button>
+                </div>
+
+                <div id="yamlQuiz" style="display: none;">
+                    <div class="component-card">
+                        <h4 id="yamlQuizQuestion"></h4>
+                        <div id="yamlQuizOptions"></div>
+                        <button class="btn" onclick="nextYAMLQuestion()" id="yamlNextBtn" style="display: none;">Next Question</button>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <h3>🎊 Congratulations!</h3>
+                    <p>You now have mastery over both GitHub Actions fundamentals and advanced YAML concepts. You're ready to build powerful, flexible CI/CD workflows!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hands-On CI Pipeline Section -->
+        <div class="section ci-pipeline-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);">
+                <div class="section-title expandable">🔨 Hands-On: Build Your First CI Pipeline</div>
+                <div class="time-badge">Practical Guide</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);">
+                    <h2>🎬 Welcome to CI Pipeline Creation!</h2>
+                    <p>Follow along step-by-step to create your first continuous integration pipeline using GitHub Actions</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step">
+                        <h4>🏗️ Step 1</h4>
+                        <p>Workflow Anatomy</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>📦 Step 2</h4>
+                        <p>Create Repository</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>⚙️ Step 3</h4>
+                        <p>Setup Actions</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🎯 Step 4</h4>
+                        <p>Test & Debug</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔬 CI Workflow Anatomy Deep Dive</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📝 Complete Workflow Structure</div>
+                    <div class="component-description">
+                        Let's break down each component of a CI workflow and understand how they work together to create an automated pipeline.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive Workflow Builder</h3>
+                    <button class="btn" onclick="buildWorkflowStep(1)">Start Building</button>
+                </div>
+
+                <div id="workflowBuilder" style="display: none;">
+                    <div class="code-block" id="workflowCode">
+# Your workflow will be built here...
+                    </div>
+                    <div class="workflow-diagram" id="workflowExplanation">
+                        <p>Click "Start Building" to begin the interactive workflow creation process!</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn" onclick="buildWorkflowStep('prev')" id="prevBtn" style="display: none;">← Previous</button>
+                        <button class="btn" onclick="buildWorkflowStep('next')" id="nextBtn" style="display: none;">Next →</button>
+                        <button class="btn" onclick="completeWorkflow()" id="completeBtn" style="display: none;">✅ Complete Workflow</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🏗️ Repository Setup Walkthrough</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>📦 Creating Your GitHub Repository</h3>
+                    <p>Follow these steps to set up a new repository for your CI pipeline</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showRepoStep(1)">
+                        <h4>🌐 Step 1</h4>
+                        <p>Visit GitHub</p>
+                        <small>github.com/new</small>
+                    </div>
+                    <div class="assembly-step" onclick="showRepoStep(2)">
+                        <h4>📝 Step 2</h4>
+                        <p>Configure Repo</p>
+                        <small>Name & Settings</small>
+                    </div>
+                    <div class="assembly-step" onclick="showRepoStep(3)">
+                        <h4>🔧 Step 3</h4>
+                        <p>Add Files</p>
+                        <small>.gitignore & License</small>
+                    </div>
+                    <div class="assembly-step" onclick="showRepoStep(4)">
+                        <h4>✅ Step 4</h4>
+                        <p>Create Repository</p>
+                        <small>Final Step</small>
+                    </div>
+                </div>
+
+                <div id="repoStepDetails" class="component-card" style="display: none;">
+                    <div class="component-title" id="repoStepTitle">Select a step above</div>
+                    <div class="component-description" id="repoStepDescription">Click on any step above to see detailed instructions</div>
+                    <div id="repoStepCode" class="code-block" style="display: none;"></div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Repository Checklist</h3>
+                    <div class="workflow-diagram">
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check1"> Repository name is descriptive
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check2"> Added Python .gitignore
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check3"> Selected appropriate license
+                        </div>
+                        <div class="workflow-step">
+                            <input type="checkbox" id="check4"> Repository is public/private as needed
+                        </div>
+                    </div>
+                    <button class="btn" onclick="validateRepoSetup()">✅ Validate Setup</button>
+                </div>
+
+                <div id="repoValidation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="validationResult"></h4>
+                        <p id="validationMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚙️ GitHub Actions Configuration</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔐 Actions Permissions Setup</div>
+                    <div class="component-description">
+                        Before creating workflows, ensure GitHub Actions are properly configured with the right permissions.
+                    </div>
+                </div>
+
+                <div class="workflow-diagram">
+                    <h4>🛡️ Required Permission Settings:</h4>
+                    <div class="workflow-step" onclick="explainPermission('general')">
+                        <strong>Allow all actions and reusable workflows</strong>
+                        <br><small>Enables use of community actions from GitHub Marketplace</small>
+                    </div>
+                    <div class="workflow-step" onclick="explainPermission('fork')">
+                        <strong>Allow GitHub Actions to create and approve pull requests</strong>
+                        <br><small>Enables automated PR creation and approval</small>
+                    </div>
+                    <div class="workflow-step" onclick="explainPermission('token')">
+                        <strong>Read and write permissions for GITHUB_TOKEN</strong>
+                        <br><small>Allows workflows to interact with repository</small>
+                    </div>
+                </div>
+
+                <div id="permissionExplanation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="permissionTitle"></h4>
+                        <p id="permissionDetails"></p>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔧 Quick Actions Setup Guide</h3>
+                    <div class="code-block">
+# Navigation Path:
+Repository → Settings → Actions → General
+
+# Key Settings to Configure:
+✅ Actions permissions: "Allow all actions and reusable workflows"
+✅ Fork pull request workflows: "Run workflows from fork pull requests"  
+✅ Workflow permissions: "Read and write permissions"
+✅ Allow GitHub Actions to create and approve pull requests: ✓
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎯 Hello World Workflow Creation</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>👋 Your First GitHub Action</h3>
+                    <p>Create a simple "Hello World" workflow to test your setup</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(1)">
+                        <h4>📂 Navigate</h4>
+                        <p>Actions Tab</p>
+                    </div>
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(2)">
+                        <h4>🔍 Search</h4>
+                        <p>Simple Workflow</p>
+                    </div>
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(3)">
+                        <h4>⚙️ Configure</h4>
+                        <p>Edit YAML</p>
+                    </div>
+                    <div class="assembly-step" onclick="showWorkflowCreationStep(4)">
+                        <h4>💾 Commit</h4>
+                        <p>Save Changes</p>
+                    </div>
+                </div>
+
+                <div id="workflowCreationDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="creationStepTitle">Workflow Creation Step</div>
+                        <div class="component-description" id="creationStepDescription">Select a step above to see details</div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>📝 Complete Hello World Workflow</h3>
+                    <button class="btn" onclick="showCompleteWorkflow()">📄 Show Complete YAML</button>
+                </div>
+
+                <div id="completeWorkflowExample" style="display: none;">
+                    <div class="code-block">
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Run a multi-line script
+      run: |
+        echo "Hello, World!"
+        echo "This is my first GitHub Action"
+        echo "Pipeline executed successfully!"
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>🔍 Workflow Breakdown:</h4>
+                        <div class="workflow-step">
+                            <strong>name:</strong> Workflow identifier shown in Actions tab
+                        </div>
+                        <div class="workflow-step">
+                            <strong>on.push.branches:</strong> Triggers on pushes to main branch
+                        </div>
+                        <div class="workflow-step">
+                            <strong>jobs.build:</strong> Single job named "build"
+                        </div>
+                        <div class="workflow-step">
+                            <strong>runs-on:</strong> Uses Ubuntu Linux runner
+                        </div>
+                        <div class="workflow-step">
+                            <strong>steps.run:</strong> Executes multi-line shell commands
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔍 Workflow Execution & Monitoring</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📊 Understanding Workflow Status</div>
+                    <div class="component-description">
+                        Learn to interpret the visual indicators that show your workflow's execution status.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showStatusIndicator('pending')">
+                        <h4>🟡 Pending</h4>
+                        <p>Workflow Queued</p>
+                        <small>Amber Circle</small>
+                    </div>
+                    <div class="assembly-step" onclick="showStatusIndicator('running')">
+                        <h4>🔄 Running</h4>
+                        <p>Currently Executing</p>
+                        <small>Animated Circle</small>
+                    </div>
+                    <div class="assembly-step" onclick="showStatusIndicator('success')">
+                        <h4>✅ Success</h4>
+                        <p>Completed Successfully</p>
+                        <small>Green Checkmark</small>
+                    </div>
+                    <div class="assembly-step" onclick="showStatusIndicator('failure')">
+                        <h4>❌ Failed</h4>
+                        <p>Error Occurred</p>
+                        <small>Red X Mark</small>
+                    </div>
+                </div>
+
+                <div id="statusDetails" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="statusTitle">Workflow Status</h4>
+                        <p id="statusDescription">Select a status above to learn more</p>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Workflow Investigation Tools</h3>
+                    <button class="btn" onclick="showInvestigationTools()">🕵️ Explore Tools</button>
+                </div>
+
+                <div id="investigationTools" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🛠️ Debugging Your Workflows:</h4>
+                        <div class="workflow-step" onclick="explainTool('actions-tab')">
+                            <strong>Actions Tab</strong> - Overview of all workflow runs
+                        </div>
+                        <div class="workflow-step" onclick="explainTool('workflow-run')">
+                            <strong>Workflow Run Page</strong> - Individual execution details
+                        </div>
+                        <div class="workflow-step" onclick="explainTool('job-logs')">
+                            <strong>Job Logs</strong> - Step-by-step execution output
+                        </div>
+                        <div class="workflow-step" onclick="explainTool('artifacts')">
+                            <strong>Artifacts</strong> - Files generated during workflow
+                        </div>
+                    </div>
+                    
+                    <div id="toolExplanation" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="toolTitle">Investigation Tool</div>
+                            <div class="component-description" id="toolDescription">Click on a tool above to learn more</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📋 Log Analysis & Troubleshooting</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔍 Reading Workflow Logs</div>
+                    <div class="component-description">
+                        Master the art of interpreting GitHub Actions logs to debug and optimize your workflows.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>📊 Sample Log Analysis</h3>
+                    <button class="btn" onclick="showLogExample()">📜 View Sample Logs</button>
+                </div>
+
+                <div id="logExample" style="display: none;">
+                    <div class="code-block">
+2024-09-02T10:15:30.123Z ##[group]Run Run a multi-line script
+2024-09-02T10:15:30.150Z shell: /usr/bin/bash -e {0}
+2024-09-02T10:15:30.151Z ##[endgroup]
+2024-09-02T10:15:30.180Z Hello, World!
+2024-09-02T10:15:30.181Z This is my first GitHub Action  
+2024-09-02T10:15:30.182Z Pipeline executed successfully!
+2024-09-02T10:15:30.200Z ##[group]Post job cleanup
+2024-09-02T10:15:30.205Z Cleaning up orphaned processes
+                    </div>
+
+                    <div class="workflow-diagram">
+                        <h4>🔬 Log Components Breakdown:</h4>
+                        <div class="workflow-step" onclick="explainLogComponent('timestamp')">
+                            <strong>Timestamps</strong> - Execution timing information
+                        </div>
+                        <div class="workflow-step" onclick="explainLogComponent('groups')">
+                            <strong>##[group]</strong> - Collapsible log sections
+                        </div>
+                        <div class="workflow-step" onclick="explainLogComponent('output')">
+                            <strong>Command Output</strong> - Your script results
+                        </div>
+                        <div class="workflow-step" onclick="explainLogComponent('system')">
+                            <strong>System Messages</strong> - Runner information
+                        </div>
+                    </div>
+                </div>
+
+                <div id="logComponentExplanation" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="logComponentTitle">Log Component</h4>
+                        <p id="logComponentDescription">Click on a component above to learn more</p>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🚨 Common Issues & Solutions</div>
+                    <div class="component-description">
+                        Understanding typical workflow failures and their solutions.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showTroubleshooting('permission')">
+                        <h4>🔒 Permissions</h4>
+                        <p>Access Denied</p>
+                    </div>
+                    <div class="assembly-step" onclick="showTroubleshooting('syntax')">
+                        <h4>📝 YAML Syntax</h4>
+                        <p>Parse Errors</p>
+                    </div>
+                    <div class="assembly-step" onclick="showTroubleshooting('timeout')">
+                        <h4>⏱️ Timeouts</h4>
+                        <p>Job Limits</p>
+                    </div>
+                    <div class="assembly-step" onclick="showTroubleshooting('dependencies')">
+                        <h4>📦 Dependencies</h4>
+                        <p>Missing Packages</p>
+                    </div>
+                </div>
+
+                <div id="troubleshootingDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="troubleshootingTitle">Troubleshooting Guide</div>
+                        <div class="component-description" id="troubleshootingDescription">Select an issue type above</div>
+                        <div id="troubleshootingSolution" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🎓 CI Pipeline Mastery Quiz</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight">
+                    <h3>🧠 Test Your CI Pipeline Knowledge</h3>
+                    <p>Prove your understanding of GitHub Actions CI pipeline creation and management</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🏆 Advanced CI Quiz</h3>
+                    <button class="btn" onclick="startCIQuiz()">🚀 Start CI Quiz</button>
+                </div>
+
+                <div id="ciQuiz" style="display: none;">
+                    <div class="component-card">
+                        <h4 id="ciQuizQuestion"></h4>
+                        <div id="ciQuizOptions"></div>
+                        <button class="btn" onclick="nextCIQuestion()" id="ciNextBtn" style="display: none;">Next Question</button>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h3>🎊 Congratulations!</h3>
+                    <p>You now have comprehensive knowledge of GitHub Actions fundamentals, advanced YAML concepts, and hands-on CI pipeline creation. You're ready to build production-ready workflows!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pull Request Workflow Section -->
+        <div class="section pr-workflow-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #9b59b6, #3498db);">
+                <div class="section-title expandable">🔄 Pull Request Workflows</div>
+                <div class="time-badge">Collaborative Development</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight" style="background: linear-gradient(135deg, #9b59b6, #3498db);">
+                    <h2>🤝 Collaborative Development with PR Workflows</h2>
+                    <p>Learn to trigger workflows on pull requests for code review and quality assurance</p>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🌟 Why Pull Request Workflows?</div>
+                    <div class="component-description">
+                        In collaborative environments, multiple developers work simultaneously. Feature branches organize related work, and pull requests enable code review. CI/CD workflows automatically test changes before merging, catching issues early and ensuring high-quality code.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step">
+                        <h4>🌿 Step 1</h4>
+                        <p>Create Feature Branch</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>📝 Step 2</h4>
+                        <p>Add Repository Code</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>⚙️ Step 3</h4>
+                        <p>Configure PR Workflow</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🔍 Step 4</h4>
+                        <p>Test & Review</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🌿 Creating Feature Branches</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔀 Shared Repository Model</div>
+                    <div class="component-description">
+                        Multiple developers working on the same repository create feature branches for related work. When complete, they open pull requests for code review, triggering automated quality checks.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Interactive Branch Creation</h3>
+                    <button class="btn" onclick="showBranchCreation()">🌿 Create Feature Branch</button>
+                </div>
+
+                <div id="branchCreationDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>📋 Branch Creation Steps:</h4>
+                        <div class="workflow-step" onclick="explainBranchStep(1)">
+                            <strong>1. Navigate to Repository</strong> - Click "branch" on landing page
+                        </div>
+                        <div class="workflow-step" onclick="explainBranchStep(2)">
+                            <strong>2. Create New Branch</strong> - Click "New branch" button
+                        </div>
+                        <div class="workflow-step" onclick="explainBranchStep(3)">
+                            <strong>3. Name Your Branch</strong> - Use descriptive names like "pr-workflow"
+                        </div>
+                        <div class="workflow-step" onclick="explainBranchStep(4)">
+                            <strong>4. Verify Active Branch</strong> - Check repository landing page
+                        </div>
+                    </div>
+                    
+                    <div id="branchStepExplanation" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="branchStepTitle">Branch Creation Step</h4>
+                            <p id="branchStepDescription">Click on steps above for detailed explanations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Example branch naming conventions:
+feature/user-authentication
+bugfix/login-validation
+hotfix/security-patch
+pr-workflow  # Our example branch
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📝 Adding Repository Code</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🐍 Sample Python Script</div>
+                    <div class="component-description">
+                        Add actual code to test your workflow. We'll create a simple Python script that demonstrates basic functionality.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>💻 Create hello_world.py</h3>
+                    <button class="btn" onclick="showPythonExample()">📄 View Python Code</button>
+                </div>
+
+                <div id="pythonCodeExample" style="display: none;">
+                    <div class="code-block">
+# hello_world.py
+import datetime
+
+def main():
+    print("Hello, World!")
+    current_time = datetime.datetime.now()
+    print(f"Current time: {current_time}")
+    print("This script is running in GitHub Actions!")
+
+if __name__ == "__main__":
+    main()
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>💡 Why This Example?</h4>
+                        <div class="workflow-step">
+                            <strong>Simple Output</strong> - Easy to verify execution
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Time Stamp</strong> - Shows when workflow ran
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Import Test</strong> - Verifies Python environment
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>📁 File Creation Steps</h4>
+                    <p>1. Navigate to your feature branch<br>
+                    2. Click "Add file" → "Create new file"<br>
+                    3. Name it "hello_world.py"<br>
+                    4. Paste the Python code above<br>
+                    5. Commit with message "Add hello world script"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">⚙️ Pull Request Workflow Configuration</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔄 Event Trigger Change</div>
+                    <div class="component-description">
+                        Modify your existing workflow to trigger on pull requests instead of pushes. This enables automated testing before code merges.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>⚖️ Push vs Pull Request Triggers</h3>
+                    <button class="btn" onclick="compareTriggers()">🔍 Compare Triggers</button>
+                </div>
+
+                <div id="triggerComparison" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step">
+                            <h4>📤 Push Trigger</h4>
+                            <p>Runs after code is merged</p>
+                            <small>on: push</small>
+                        </div>
+                        <div class="assembly-step">
+                            <h4>🔄 PR Trigger</h4>
+                            <p>Runs before code is merged</p>
+                            <small>on: pull_request</small>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <h4>🎯 Key Difference</h4>
+                        <p><strong>Pull Request triggers:</strong> Test changes BEFORE merging<br>
+                        <strong>Push triggers:</strong> Test changes AFTER merging</p>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Before: Push trigger
+name: CI
+on:
+  push:
+    branches: [ main ]
+
+# After: Pull Request trigger  
+name: CI
+on:
+  pull_request:
+    branches: [ main ]  # Target branch (where PR merges into)
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">🎯 Target Branch Specification</div>
+                    <div class="component-description">
+                        The "branches" key specifies the target branch of the pull request - where the code will be merged into (typically "main").
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🛠️ GitHub Actions Syntax Deep Dive</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📚 Actions Syntax Structure</div>
+                    <div class="component-description">
+                        Actions are reusable components defined under the "uses" key. Think of them as functions with parameters passed through the "with" key.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🔍 Action Syntax Explorer</h3>
+                    <button class="btn" onclick="exploreActionSyntax()">🧩 Explore Syntax</button>
+                </div>
+
+                <div id="actionSyntaxDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔧 Action Syntax Breakdown:</h4>
+                        <div class="workflow-step" onclick="explainSyntaxPart('structure')">
+                            <strong>organization/repository@version</strong>
+                            <br><small>username/repo-name@v3</small>
+                        </div>
+                        <div class="workflow-step" onclick="explainSyntaxPart('uses')">
+                            <strong>uses:</strong> Specifies which Action to run
+                            <br><small>Like importing a function</small>
+                        </div>
+                        <div class="workflow-step" onclick="explainSyntaxPart('with')">
+                            <strong>with:</strong> Passes arguments to Action
+                            <br><small>Like function parameters</small>
+                        </div>
+                    </div>
+                    
+                    <div id="syntaxExplanation" style="display: none;">
+                        <div class="highlight">
+                            <h4 id="syntaxPartTitle">Syntax Component</h4>
+                            <p id="syntaxPartDescription">Click on components above for explanations</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Action syntax examples:
+- name: Checkout repository
+  uses: actions/checkout@v3        # Organization/repo@version
+  
+- name: Setup Python
+  uses: actions/setup-python@v4    # Another action
+  with:                           # Parameters/arguments
+    python-version: '3.9'
+                </div>
+
+                <div class="highlight">
+                    <h4>🏪 GitHub Marketplace</h4>
+                    <p>Find thousands of ready-to-use Actions at <strong>github.com/marketplace</strong> for common tasks like deployment, testing, and notifications.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔧 Essential Workflow Steps</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📋 Required Steps for Code Execution</div>
+                    <div class="component-description">
+                        To run repository code, you need to checkout the repository and configure the runtime environment. We'll use two essential Actions for this.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="explainWorkflowStep('checkout')">
+                        <h4>📥 Checkout</h4>
+                        <p>Download Repository</p>
+                        <small>actions/checkout@v3</small>
+                    </div>
+                    <div class="assembly-step" onclick="explainWorkflowStep('setup')">
+                        <h4>🐍 Setup Python</h4>
+                        <p>Configure Environment</p>
+                        <small>actions/setup-python@v4</small>
+                    </div>
+                    <div class="assembly-step" onclick="explainWorkflowStep('run')">
+                        <h4>▶️ Run Script</h4>
+                        <p>Execute Code</p>
+                        <small>python hello_world.py</small>
+                    </div>
+                </div>
+
+                <div id="workflowStepDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="stepDetailTitle">Workflow Step</div>
+                        <div class="component-description" id="stepDetailDescription">Click on steps above for details</div>
+                        <div id="stepDetailCode" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Complete PR Workflow</h3>
+                    <button class="btn" onclick="showCompletePRWorkflow()">📄 Show Complete YAML</button>
+                </div>
+
+                <div id="completePRWorkflow" style="display: none;">
+                    <div class="code-block">
+name: PR Workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Run Python script
+      run: python hello_world.py
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>🔍 Workflow Flow:</h4>
+                        <div class="workflow-step">
+                            <strong>Trigger:</strong> Pull request to main branch
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Environment:</strong> Ubuntu Linux runner
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Step 1:</strong> Download repository code
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Step 2:</strong> Install Python 3.9
+                        </div>
+                        <div class="workflow-step">
+                            <strong>Step 3:</strong> Execute hello_world.py
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🚀 Creating and Testing Pull Requests</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">📝 Pull Request Creation Process</div>
+                    <div class="component-description">
+                        After committing your workflow changes to the feature branch, create a pull request to trigger the automated workflow and test your changes.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 PR Creation Simulator</h3>
+                    <button class="btn" onclick="simulatePRCreation()">🔄 Create Pull Request</button>
+                </div>
+
+                <div id="prCreationSimulator" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>📋 Pull Request Steps:</h4>
+                        <div class="workflow-step pulse">
+                            <strong>1. Navigate to Repository</strong>
+                            <br><small>You'll see "Compare & pull request" button</small>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>2. Compare Branches</strong>
+                            <br><small>From: pr-workflow → To: main</small>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>3. Add PR Details</strong>
+                            <br><small>Title: "Add Python script and PR workflow"</small>
+                        </div>
+                        <div class="workflow-step">
+                            <strong>4. Create Pull Request</strong>
+                            <br><small>Workflow triggers immediately!</small>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight">
+                        <h4>⚡ Automatic Trigger</h4>
+                        <p>The moment you create the PR, GitHub Actions will start running your workflow. You'll see status checks appear in the PR!</p>
+                    </div>
+                </div>
+
+                <div class="component-card">
+                    <div class="component-title">📊 Monitoring Workflow Status</div>
+                    <div class="component-description">
+                        Pull requests show workflow status directly in the PR interface. Click "Details" next to any check to view detailed logs.
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showPRStatus('pending')">
+                        <h4>🟡 Pending</h4>
+                        <p>Workflow Starting</p>
+                    </div>
+                    <div class="assembly-step" onclick="showPRStatus('running')">
+                        <h4>🔄 Running</h4>
+                        <p>Tests Executing</p>
+                    </div>
+                    <div class="assembly-step" onclick="showPRStatus('success')">
+                        <h4>✅ Success</h4>
+                        <p>Ready to Merge</p>
+                    </div>
+                    <div class="assembly-step" onclick="showPRStatus('failure')">
+                        <h4>❌ Failed</h4>
+                        <p>Needs Fixes</p>
+                    </div>
+                </div>
+
+                <div id="prStatusDetails" style="display: none;">
+                    <div class="highlight">
+                        <h4 id="prStatusTitle">PR Status</h4>
+                        <p id="prStatusDescription">Click on status indicators above</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📜 Understanding Workflow Logs</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🔍 Enhanced Log Analysis</div>
+                    <div class="component-description">
+                        PR workflows show additional steps compared to simple workflows. Learn to interpret the checkout and setup-python logs alongside your script execution.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>📊 Sample PR Workflow Logs</h3>
+                    <button class="btn" onclick="showPRLogs()">📜 View PR Logs</button>
+                </div>
+
+                <div id="prLogsExample" style="display: none;">
+                    <div class="code-block">
+2024-09-02T10:20:15.123Z ##[group]Run actions/checkout@v3
+2024-09-02T10:20:15.150Z Syncing repository: user/my-repo
+2024-09-02T10:20:15.180Z Getting Git version info
+2024-09-02T10:20:15.200Z Downloading the repository
+2024-09-02T10:20:16.500Z ##[endgroup]
+
+2024-09-02T10:20:16.600Z ##[group]Run actions/setup-python@v4
+2024-09-02T10:20:16.650Z Installed Python 3.9.18
+2024-09-02T10:20:16.700Z Successfully set up Python 3.9.18
+2024-09-02T10:20:16.750Z ##[endgroup]
+
+2024-09-02T10:20:16.800Z ##[group]Run python hello_world.py
+2024-09-02T10:20:16.850Z Hello, World!
+2024-09-02T10:20:16.851Z Current time: 2024-09-02 10:20:16.851234
+2024-09-02T10:20:16.852Z This script is running in GitHub Actions!
+2024-09-02T10:20:16.900Z ##[endgroup]
+                    </div>
+                    
+                    <div class="workflow-diagram">
+                        <h4>📋 Log Sections Breakdown:</h4>
+                        <div class="workflow-step" onclick="explainLogSection('checkout')">
+                            <strong>Checkout Logs</strong> - Repository download and Git operations
+                        </div>
+                        <div class="workflow-step" onclick="explainLogSection('python')">
+                            <strong>Python Setup Logs</strong> - Environment configuration
+                        </div>
+                        <div class="workflow-step" onclick="explainLogSection('script')">
+                            <strong>Script Execution</strong> - Your Python code output
+                        </div>
+                    </div>
+                </div>
+
+                <div id="logSectionDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="logSectionTitle">Log Section</div>
+                        <div class="component-description" id="logSectionDescription">Click on sections above for detailed explanations</div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>🎯 Success Indicators</h4>
+                    <p>✅ Repository successfully downloaded<br>
+                    ✅ Python 3.9 installed and configured<br>
+                    ✅ Python script executed with expected output<br>
+                    ✅ Current timestamp shows execution time</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Environment Variables and Secrets Section -->
+        <div class="section secrets-section">
+            <div class="section-header" onclick="toggleSection(this)" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                <div class="section-title expandable">🔐 Environment Variables & Secrets</div>
+                <div class="time-badge">Security Focus</div>
+            </div>
+            <div class="section-content">
+                <div class="highlight" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    <h2>🔒 Secure Configuration Management</h2>
+                    <p>Learn to manage environment variables and secrets securely in GitHub Actions workflows</p>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step">
+                        <h4>🌍 Step 1</h4>
+                        <p>Context System</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>📝 Step 2</h4>
+                        <p>Environment Variables</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🔐 Step 3</h4>
+                        <p>Secrets Management</p>
+                    </div>
+                    <div class="assembly-step">
+                        <h4>🛡️ Step 4</h4>
+                        <p>Security Best Practices</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🌍 Understanding GitHub Actions Context</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🎯 What is Context?</div>
+                    <div class="component-description">
+                        Context refers to predefined environment variables and data that GitHub provides for each workflow run. These context variables contain information about the repository, workflow, event, and the environment where the workflow is running.
+                    </div>
+                </div>
+
+                <div class="code-block">
+# Context expression syntax:
+${{ context_name.property }}
+
+# Common examples:
+${{ github.actor }}        # Username who triggered workflow  
+${{ env.NODE_VERSION }}    # Environment variable
+${{ secrets.API_KEY }}     # Secret value
+${{ runner.os }}           # Operating system
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎮 Context Types Explorer</h3>
+                    <button class="btn" onclick="exploreContextTypes()">🔍 Explore Context System</button>
+                </div>
+
+                <div id="contextExplorer" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step" onclick="showContextDetails('github')">
+                            <h4>🐙 github</h4>
+                            <p>Workflow Info</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContextDetails('env')">
+                            <h4>🌍 env</h4>
+                            <p>Variables</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContextDetails('secrets')">
+                            <h4>🔐 secrets</h4>
+                            <p>Secure Data</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContextDetails('job')">
+                            <h4>💼 job</h4>
+                            <p>Job Status</p>
+                        </div>
+                        <div class="assembly-step" onclick="showContextDetails('runner')">
+                            <h4>🖥️ runner</h4>
+                            <p>Machine Info</p>
+                        </div>
+                    </div>
+                    
+                    <div id="contextDetails" style="display: none;">
+                        <div class="component-card">
+                            <div class="component-title" id="contextTitle">Context Details</div>
+                            <div class="component-description" id="contextDescription">Select a context type above</div>
+                            <div id="contextExample" class="code-block" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h4>💡 Key Benefits</h4>
+                    <p>Context provides dynamic access to workflow information, enabling flexible and responsive automation that adapts to different environments and events.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">📝 Environment Variables</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card">
+                    <div class="component-title">🌍 Environment Variables Overview</div>
+                    <div class="component-description">
+                        Variables are stored as plain text and used for non-sensitive data such as compiler flags, usernames, API endpoints, or configuration settings. Variables can be declared at workflow, job, or step level.
+                    </div>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🎯 Variable Scope Demonstration</h3>
+                    <button class="btn" onclick="showVariableScopes()">📊 Show Variable Scopes</button>
+                </div>
+
+                <div id="variableScopeDemo" style="display: none;">
+                    <div class="workflow-diagram">
+                        <h4>🔍 Variable Scope Levels:</h4>
+                        <div class="workflow-step" onclick="explainScope('workflow')">
+                            <strong>Workflow Level:</strong> Available to all jobs
+                        </div>
+                        <div class="workflow-step" onclick="explainScope('job')">
+                            <strong>Job Level:</strong> Available to all steps in job
+                        </div>
+                        <div class="workflow-step" onclick="explainScope('step')">
+                            <strong>Step Level:</strong> Available to specific step only
+                        </div>
+                    </div>
+                    
+                    <div id="scopeExample" style="display: none;">
+                        <div class="code-block" id="scopeCode"></div>
+                    </div>
+                </div>
+
+                <div class="assembly-line">
+                    <div class="assembly-step" onclick="showVariableExample('config')">
+                        <h4>⚙️ Configuration</h4>
+                        <p>Build Settings</p>
+                    </div>
+                    <div class="assembly-step" onclick="showVariableExample('environment')">
+                        <h4>🌐 Environment</h4>
+                        <p>Deployment Targets</p>
+                    </div>
+                    <div class="assembly-step" onclick="showVariableExample('feature')">
+                        <h4>🎛️ Feature Flags</h4>
+                        <p>Toggle Features</p>
+                    </div>
+                </div>
+
+                <div id="variableExampleDetails" style="display: none;">
+                    <div class="component-card">
+                        <div class="component-title" id="variableExampleTitle">Variable Use Case</div>
+                        <div class="component-description" id="variableExampleDescription">Click on examples above</div>
+                        <div id="variableExampleCode" class="code-block" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <div class="section-title expandable">🔐 Secrets Management</div>
+            </div>
+            <div class="section-content">
+                <div class="component-card" style="border-left: 5px solid #e74c3c;">
+                    <div class="component-title">🔒 Secrets Overview</div>
+                    <div class="component-description">
+                        Secrets are encrypted in storage and used for sensitive data such as passwords, API keys, or access tokens. GitHub Actions automatically redacts secret values from logs as a security measure.
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Critical Security Rule</h4>
+                    <p>Never commit secrets to your repository. Always use GitHub's secure secrets storage.</p>
+                </div>
+
+                <div class="interactive-example">
+                    <h3>🛠️ Secret Setup Guide</h3>
+                    <button class="btn" onclick="showSecretSetup()">📋 Learn Secret Setup</button>
+                </div>
+
+                <div id="secretSetupGuide" style="display: none;">
+                    <div class="assembly-line">
+                        <div class="assembly-step" onclick="showSetupStep(1)">
+                            <h4>🌐 Navigate</h4>
+                            <p>Repository Settings</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(2)">
+                            <h4>🔒 Security</h4>
+                            <p>Secrets Section</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(3)">
+                            <h4>➕ Add Secret</h4>
+                            <p>New Repository Secret</p>
+                        </div>
+                        <div class="assembly-step" onclick="showSetupStep(4)">
+                            <h4>⚙️ Configure
