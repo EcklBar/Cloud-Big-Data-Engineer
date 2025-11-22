@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git בקלות</title>
+    <title>Git למהנדסי נתונים - מדריך אינטראקטיבי</title>
     <style>
         * {
             margin: 0;
@@ -12,11 +12,11 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
-            text-align: right; /* יישור לימין כברירת מחדל */
+            direction: rtl;
         }
 
         .container {
@@ -89,14 +89,8 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section h2 {
@@ -134,21 +128,20 @@
 
         .card ul {
             list-style: none;
-            padding-left: 0;
-            padding-right: 0; /* RTL fix */
+            padding-right: 0;
         }
 
         .card li {
             margin-bottom: 10px;
-            padding-right: 25px; /* RTL fix */
+            padding-right: 25px;
             position: relative;
         }
 
         .card li::before {
-            content: "◀"; /* RTL Arrow */
+            content: "◀";
             color: #667eea;
             position: absolute;
-            right: 0; /* RTL fix */
+            right: 0;
             top: 0;
         }
 
@@ -156,17 +149,12 @@
             background: #2d3748;
             color: #e2e8f0;
             border-radius: 8px;
-            padding: 30px;
-            margin: 30px 0;
+            padding: 20px;
+            margin: 20px 0;
             font-family: 'Courier New', monospace;
-            font-size: 16px;
-            line-height: 1.8;
-            min-height: 150px;
             position: relative;
             overflow-x: auto;
-            
-            /* RTL Specifics for Code Box: Keep code LTR */
-            direction: ltr; 
+            direction: ltr; /* חשוב: פקודות נשארות משמאל לימין */
             text-align: left;
         }
 
@@ -174,7 +162,7 @@
             content: "Terminal";
             position: absolute;
             top: -10px;
-            right: 15px; /* RTL fix */
+            right: 15px;
             background: #667eea;
             color: white;
             padding: 5px 15px;
@@ -215,7 +203,7 @@
             font-size: 24px;
             color: #667eea;
             margin: 0 10px;
-            display: inline-block; /* Fix for rotation/flip */
+            display: inline-block;
         }
 
         .interactive-demo {
@@ -223,7 +211,7 @@
             border-radius: 12px;
             padding: 25px;
             margin: 20px 0;
-            border-right: 5px solid #2196f3; /* RTL fix */
+            border-right: 5px solid #2196f3;
         }
 
         .demo-title {
@@ -238,7 +226,7 @@
             border-radius: 12px;
             padding: 25px;
             margin: 20px 0;
-            border-right: 5px solid #ff9800; /* RTL fix */
+            border-right: 5px solid #ff9800;
         }
 
         .exercise-title {
@@ -258,7 +246,7 @@
             text-align: center;
             line-height: 50px;
             font-weight: bold;
-            margin-left: 15px; /* RTL fix */
+            margin-left: 15px;
             box-shadow: 0 4px 15px rgba(241, 80, 47, 0.3);
             font-size: 24px;
             vertical-align: middle;
@@ -286,41 +274,41 @@
             transition: width 0.3s ease;
         }
 
+        /* כפתורי הויזואליזציה */
+        .merge-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4a5568;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .merge-btn.active {
+            background: rgba(102, 126, 234, 0.9) !important;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .navigation {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .nav-btn {
-                width: 200px;
-            }
-            
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .workflow-step {
-                display: block;
-                margin: 10px 0;
-            }
-            
-            .arrow {
-                display: block;
-                transform: rotate(90deg);
-            }
+            .header h1 { font-size: 2em; }
+            .navigation { flex-direction: column; align-items: center; }
+            .nav-btn { width: 200px; }
+            .content-grid { grid-template-columns: 1fr; }
+            .workflow-step { display: block; margin: 10px 0; }
+            .arrow { display: block; transform: rotate(90deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><span class="git-logo">Git</span>Git בקלות</h1>
-            <div class="subtitle">חווית למידה אינטראקטיבית</div>
+            <h1><span class="git-logo">Git</span>Git למהנדסי נתונים</h1>
+            <div class="subtitle">חוויית למידה אינטראקטיבית</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressBar"></div>
             </div>
@@ -329,9 +317,9 @@
         <div class="navigation">
             <button class="nav-btn active" onclick="showSection('intro')">מבוא</button>
             <button class="nav-btn" onclick="showSection('basics')">יסודות Git</button>
-            <button class="nav-btn" onclick="showSection('workflow')">זרימת עבודה (Workflow)</button>
-            <button class="nav-btn" onclick="showSection('branching')">ענפים (Branching)</button>
-            <button class="nav-btn" onclick="showSection('conflicts')">התנגשויות מיזוג</button>
+            <button class="nav-btn" onclick="showSection('workflow')">זרימת עבודה</button>
+            <button class="nav-btn" onclick="showSection('branching')">ענפים</button>
+            <button class="nav-btn" onclick="showSection('conflicts')">קונפליקטים</button>
             <button class="nav-btn" onclick="showSection('visualization')">ויזואליזציה של מיזוג</button>
             <button class="nav-btn" onclick="showSection('commands')">פקודות</button>
             <button class="nav-btn" onclick="showSection('exercises')">תרגילים</button>
@@ -341,65 +329,41 @@
             <h2>מבוא ל-Git</h2>
             <div class="content-grid">
                 <div class="card">
-                    <h3>מהו ניהול גרסאות (Version Control)?</h3>
+                    <h3>מה זה בקרת גרסאות?</h3>
                     <ul>
-                        <li>מאחסן ומנהל כל גרסה ושינוי של הקבצים והקוד</li>
-                        <li>מאפשר שיתוף פעולה על קוד המקור וניהול גרסאות שחרור</li>
-                        <li>מאפשר חזרה (Roll back) לגרסאות קודמות כשמתגלים באגים</li>
-                        <li>VSC = מערכת לניהול גרסאות (Version Control System)</li>
+                        <li>מאחסנת ומנהלת כל גרסה ושינוי בקוד</li>
+                        <li>שיתוף פעולה על קוד מקור וניהול גרסאות שחרור</li>
+                        <li>חזרה לגרסאות קודמות כאשר מתגלים באגים</li>
+                        <li>VSC = מערכת בקרת גרסאות</li>
                     </ul>
                 </div>
                 <div class="card">
                     <h3>אודות Git</h3>
                     <ul>
-                        <li>נוצר על ידי לינוס טורבאלדס ב-2005 (עבור ליבת ה-Linux)</li>
-                        <li>מחליף כלים ישנים יותר (CVS, Subversion, Mercurial)</li>
+                        <li>נוצר על ידי לינוס טורוואלדס ב-2005 (עבור הליבה של לינוקס)</li>
+                        <li>מחליף כלים ישנים (CVS, SVN)</li>
                         <li>מתמקד בהפצת קוד מקור (לכל אחד יש עותק מלא)</li>
                         <li>מיישם אחסון קבצים יעיל במיוחד</li>
-                        <li>מבטיח את שלמות הקבצים (Integrity)</li>
                     </ul>
                 </div>
             </div>
             
-            <div class="content-grid">
-                <div class="card">
-                    <h3>יתרונות Git</h3>
-                    <ul>
-                        <li>פיתוח מבוזר (עבודה על עותק מקומי אצלך במחשב)</li>
-                        <li>ביצועים גבוהים</li>
-                        <li>קלות שימוש (לאחר עקומת למידה)</li>
-                        <li>תמיכה חזקה בענפים (Branching) וניהול היסטוריה</li>
-                        <li>כלים נרחבים לפעולות מתקדמות</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>אתגרים ב-Git</h3>
-                    <ul>
-                        <li>מודל חדש לניהול קוד (דורש שינוי תפיסה)</li>
-                        <li>עקומת למידה (הבנת הקונספט ופקודות הטרמינל)</li>
-                        <li>פעולות הרסניות אפשריות בשימוש לא נכון</li>
-                        <li>תמיכה מוגבלת בקבצים בינאריים גדולים</li>
-                    </ul>
-                </div>
-            </div>
-
             <div class="interactive-demo">
                 <div class="demo-title">🚀 שירותי VCS</div>
                 <div class="content-grid">
                     <div class="card">
                         <h3>GitHub</h3>
                         <ul>
-                            <li>שירות אירוח מבוסס רשת לניהול גרסאות באמצעות Git</li>
-                            <li>בקרת גישה, מעקב אחר באגים (Issues), תיעוד, אוטומציה</li>
-                            <li>שירות ה-VCS המוביל לקוד פתוח וארגונים</li>
-                            <li>נרכש על ידי מיקרוסופט ב-2018</li>
+                            <li>שירות אירוח מבוסס-ווב לקוד</li>
+                            <li>בקרת גישה, ניהול משימות, אוטומציה (Actions)</li>
+                            <li>הסטנדרט בתעשייה</li>
                         </ul>
                     </div>
                     <div class="card">
                         <h3>אלטרנטיבות</h3>
                         <ul>
-                            <li>GitLab</li>
-                            <li>BitBucket</li>
+                            <li>GitLab (חזק ב-CI/CD)</li>
+                            <li>BitBucket (אינטגרציה עם Jira)</li>
                         </ul>
                     </div>
                 </div>
@@ -408,90 +372,428 @@
 
         <div id="basics" class="section">
             <h2>יסודות Git</h2>
-            
-            <div class="interactive-demo">
-                <div class="demo-title">🔄 המודל המבוזר</div>
-                <div class="workflow-diagram">
-                    <div class="workflow-step">שכפול מאגר (Clone)</div>
-                    <span class="arrow">←</span>
-                    <div class="workflow-step">ביצוע שינויים מקומיים</div>
-                    <span class="arrow">←</span>
-                    <div class="workflow-step">Commit & Push</div>
-                </div>
-                <ul>
-                    <li><strong>קבל עותק</strong> של המאגר המלא מהשרת ("clone")</li>
-                    <li><strong>כל התוכן</strong> ו-<strong>כל ההיסטוריה</strong> אצלך במחשב</li>
-                    <li><strong>בצע שינויים מקומית</strong> (commits ו-branches)</li>
-                    <li><strong>דחוף שינויים חזרה</strong> (Push) לשרת המרוחק (Remote)</li>
-                </ul>
-            </div>
-
             <div class="content-grid">
                 <div class="card">
-                    <h3>סוגי אובייקטים ב-Git</h3>
+                    <h3>מושגי יסוד</h3>
                     <ul>
-                        <li><strong>Blob:</strong> התוכן הגולמי של הקובץ – ללא מטא-דאטה</li>
-                        <li><strong>Tree:</strong> רמה אחת של מידע על תיקייה (שמות קבצים, blobs, תתי-תיקיות)</li>
-                        <li><strong>Commit:</strong> הגרסה של ה-Tree + מטא-דאטה (מחבר, תאריכים, הודעות יומן וכו')</li>
-                        <li><strong>Tag:</strong> תווית המשויכת ל-commit מסוים, למשל, מספר גרסה (v1.0)</li>
+                        <li><strong>Repository (Repo):</strong> המאגר בו נשמר הפרויקט</li>
+                        <li><strong>Commit:</strong> שמירת נקודת ציון (Snapshot)</li>
+                        <li><strong>Branch:</strong> ענף פיתוח נפרד</li>
                     </ul>
                 </div>
                 <div class="card">
-                    <h3>אחסון דלתא (Delta Storage)</h3>
+                    <h3>טיפ למהנדסי נתונים: .gitignore</h3>
                     <ul>
-                        <li>כל קובץ נשמר כאובייקט שלם ונפרד כשהוא נוצר לראשונה</li>
-                        <li>שינויים לקובץ קיים נשמרים כ"דלתא" (ההבדל בלבד)</li>
-                        <li>Git משתמש במנגנון חכם ויעיל לאחסון שינויים</li>
-                        <li>התוצאה היא חיסכון משמעותי במקום וניהול היסטוריה יעיל</li>
+                        <li>חשוב מאוד למנוע העלאת קבצי דאטה רגישים או גדולים</li>
+                        <li>צור קובץ <code>.gitignore</code> בתיקייה הראשית</li>
+                        <li>הוסף סיומות כגון <code>*.csv</code>, <code>*.parquet</code>, <code>.env</code></li>
                     </ul>
                 </div>
             </div>
-
             <div class="command-box">
-                <div class="command">git init</div> - אתחול מאגר Git חדש<br>
-                <div class="command">git clone &lt;repository_url&gt;</div> - העתקת מאגר Git קיים<br>
-                <div class="command">git add &lt;file&gt;</div> - הוספת קבצים ל-Stage (מוכנות ל-Commit)<br>
-                <div class="command">git commit -m "Commit message"</div> - שמירת השינויים שנמצאים ב-Stage<br>
-                <div class="command">git status</div> - בדיקת סטטוס תיקיית העבודה
+                <div class="command">git init</div> - אתחל מאגר חדש<br>
+                <div class="command">git clone &lt;url&gt;</div> - שכפל מאגר קיים<br>
+                <div class="command">git status</div> - בדוק סטטוס קבצים
             </div>
         </div>
 
         <div id="workflow" class="section">
-            <h2>זרימת העבודה ב-Git ושלושת השלבים</h2>
+            <h2>זרימת עבודה (Workflow)</h2>
+            <div class="interactive-demo">
+                <div class="workflow-diagram">
+                    <div class="workflow-step">תיקיית עבודה</div>
+                    <span class="arrow">←</span>
+                    <div class="workflow-step">Staging (אינדקס)</div>
+                    <span class="arrow">←</span>
+                    <div class="workflow-step">Repository (מאגר)</div>
+                </div>
+            </div>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>שלושת השלבים</h3>
+                    <ul>
+                        <li><strong>Working Dir:</strong> איפה שאתה עורך את הקוד</li>
+                        <li><strong>Staging Area:</strong> קבצים שמיועדים להיכנס ל-Commit הבא</li>
+                        <li><strong>Repository:</strong> ההיסטוריה השמורה</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="command-box">
+                <div class="command">git add .</div> - הוסף את כל השינויים ל-Staging<br>
+                <div class="command">git commit -m "msg"</div> - שמור את השינויים בהיסטוריה<br>
+                <div class="command">git push</div> - דחף את השינויים לשרת
+            </div>
+        </div>
+
+        <div id="branching" class="section">
+            <h2>ענפים (Branching)</h2>
+            <div class="interactive-demo">
+                <div class="demo-title">🌳 למה ענפים?</div>
+                <p>מאפשרים לעבוד על פיצ'רים חדשים או תיקוני באגים במקביל, מבלי לשבור את הקוד הראשי (Main/Master).</p>
+            </div>
+            <div class="command-box">
+                <div class="command">git checkout -b new-feature</div> - צור ענף חדש ועבור אליו<br>
+                <div class="command">git checkout main</div> - חזור לענף הראשי<br>
+                <div class="command">git merge new-feature</div> - מזג את השינויים מהענף לתוך הראשי
+            </div>
+        </div>
+
+        <div id="conflicts" class="section">
+            <h2>קונפליקטים (Conflicts)</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>מהו קונפליקט?</h3>
+                    <p>כששני אנשים משנים את אותה שורה באותו קובץ, Git לא יודע איזו גרסה נכונה. עליך להחליט ידנית.</p>
+                </div>
+                <div class="card">
+                    <h3>איך פותרים?</h3>
+                    <ol>
+                        <li>פתח את הקובץ הבעייתי</li>
+                        <li>חפש את הסימונים <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code></li>
+                        <li>בחר את הקוד הנכון ומחק את הסימונים</li>
+                        <li>בצע <code>git add</code> ו-<code>git commit</code></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div id="visualization" class="section">
+            <h2>ויזואליזציה של מיזוג (Merge Types)</h2>
             
             <div class="interactive-demo">
-                <div class="demo-title">📁 שלושת השלבים</div>
-                <div class="workflow-diagram">
-                    <div class="workflow-step">תיקיית עבודה (Working Dir)</div>
-                    <span class="arrow">←</span>
-                    <div class="workflow-step">אזור ההערכות (Staging)</div>
-                    <span class="arrow">←</span>
-                    <div class="workflow-step">מאגר (Repository)</div>
-                </div>
+                <div class="demo-title">🔀 הדגמה אינטראקטיבית</div>
+                <p>לחץ על סוגי המיזוג השונים כדי לראות איך הם נראים בגרף וללמוד את הפקודות.</p>
             </div>
 
+            <div style="background: rgba(255, 255, 255, 0.95); border-radius: 15px; padding: 20px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 30px;">
+                    <button class="merge-btn active" onclick="showMergeType('fast-forward')">Fast-Forward</button>
+                    <button class="merge-btn" onclick="showMergeType('recursive')">Recursive (רגיל)</button>
+                    <button class="merge-btn" onclick="showMergeType('squash')">Squash</button>
+                    <button class="merge-btn" onclick="showMergeType('octopus')">Octopus</button>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 15px; height: 15px; border-radius: 50%; background: #3498db;"></div>
+                        <span>Main</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 15px; height: 15px; border-radius: 50%; background: #e74c3c;"></div>
+                        <span>Feature</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 15px; height: 15px; border-radius: 50%; background: #f39c12;"></div>
+                        <span>Merge Commit</span>
+                    </div>
+                </div>
+
+                <div id="git-graph" style="width: 100%; max-width: 800px; height: 400px; position: relative; background: #f8f9fa; border-radius: 10px; border: 2px solid #dee2e6; overflow: hidden; margin: 0 auto; direction: ltr;">
+                    </div>
+
+                <div id="merge-description" style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-right: 4px solid #667eea;">
+                    </div>
+            </div>
+        </div>
+
+        <div id="commands" class="section">
+            <h2>פקודות שימושיות נוספות</h2>
             <div class="content-grid">
                 <div class="card">
-                    <h3>תיקיית עבודה (Working Directory)</h3>
-                    <ul>
-                        <li>יצירה, עריכה ומחיקה של קבצים בפרויקט שלך</li>
-                        <li>חשוב על זה כ"ארגז החול" שבו אתה עובד על הקוד והנתונים</li>
-                    </ul>
+                    <h3>Logs & History</h3>
+                    <div class="command-box">
+                        <div class="command">git log --oneline --graph</div> - הצג עץ קומיטים ויזואלי<br>
+                        <div class="command">git diff</div> - ראה שינויים לפני הוספה<br>
+                        <div class="command">git blame filename</div> - ראה מי כתב כל שורה
+                    </div>
                 </div>
                 <div class="card">
-                    <h3>אזור ההערכות (Staging Area / Index)</h3>
-                    <ul>
-                        <li>רשימת בדיקה (Checklist) של שינויים שאתה רוצה להכניס ל-Commit הבא</li>
-                        <li>הכנה ובחירה של שינויים ספציפיים להיכלל בגרסה הבאה</li>
-                        <li>באמצעות git add, אתה מעביר שינויים מתיקיית העבודה ל-Staging</li>
-                    </ul>
+                    <h3>Undoing</h3>
+                    <div class="command-box">
+                        <div class="command">git restore filename</div> - בטל שינויים בקובץ (לפני add)<br>
+                        <div class="command">git reset HEAD~1</div> - בטל את ה-Commit האחרון אך שמור שינויים<br>
+                        <div class="command">git revert &lt;hash&gt;</div> - צור קומיט הפוך המבטל שינוי קודם
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="content-grid">
-                <div class="card">
-                    <h3>מאגר (Repository)</h3>
-                    <ul>
-                        <li>המאגר מאחסן את ההיסטוריה המלאה של הפרויקט</li>
-                        <li>כשאתה עושה git commit, השינויים ב-Staging נרשמים כ"תמונת מצב" (Snapshot) חדשה במאגר</li>
-                        <li>כל ההיסטוריה של הפרויקט שמורה כאן
+        <div id="exercises" class="section">
+            <h2>תרגול</h2>
+            <div class="exercise-box">
+                <div class="exercise-title">🎯 משימה 1: אתחול</div>
+                <ol>
+                    <li>צור תיקייה חדשה במחשב.</li>
+                    <li>פתח טרמינל והרצת <code>git init</code>.</li>
+                    <li>צור קובץ <code>data.csv</code> וקובץ <code>.gitignore</code>.</li>
+                    <li>הוסף את ה-csv ל-gitignore.</li>
+                    <li>נסה לעשות <code>git add .</code> וודא שה-csv לא מתווסף.</li>
+                </ol>
+            </div>
+            <div class="exercise-box">
+                <div class="exercise-title">🎯 משימה 2: קונפליקט</div>
+                <ol>
+                    <li>צור ענף חדש. שנה שורה בקובץ טקסט. בצע commit.</li>
+                    <li>חזור ל-main. שנה את אותה שורה אחרת. בצע commit.</li>
+                    <li>נסה למזג (merge) את הענף ל-main.</li>
+                    <li>פתור את הקונפליקט שנוצר.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Navigation Logic ---
+        let currentSection = 'intro';
+        let completedSections = new Set(['intro']);
+
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Update navigation buttons
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+            
+            // Highlight active button (handling potential null if clicked programmatically)
+            const activeBtn = Array.from(navBtns).find(btn => btn.getAttribute('onclick').includes(sectionId));
+            if(activeBtn) activeBtn.classList.add('active');
+
+            // Progress bar logic
+            if (!completedSections.has(sectionId)) {
+                completedSections.add(sectionId);
+                const totalSections = 7;
+                const progress = (completedSections.size / totalSections) * 100;
+                document.getElementById('progressBar').style.width = progress + '%';
+            }
+            
+            currentSection = sectionId;
+        }
+
+        // --- Visualization Logic (The Missing Part) ---
+        const mergeVisualizationTypes = {
+            'fast-forward': {
+                title: 'מיזוג מהיר (Fast-Forward)',
+                description: 'מתרחש כאשר ענף היעד (Main) לא השתנה מאז שנוצר ענף הפיצ\'ר. במקרה זה, Git פשוט מזיז את המצביע קדימה.',
+                benefits: [
+                    'יוצר היסטוריה ליניארית ונקייה',
+                    'ללא קומיט מיזוג מיותר',
+                    'קל להבנה'
+                ],
+                commands: [
+                    'git checkout main',
+                    'git merge feature-branch'
+                ],
+                commits: [
+                    { id: 'A', x: 100, y: 200, type: 'main', label: 'A' },
+                    { id: 'B', x: 200, y: 200, type: 'main', label: 'B' },
+                    { id: 'C', x: 300, y: 200, type: 'feature', label: 'C' },
+                    { id: 'D', x: 400, y: 200, type: 'feature', label: 'D' }
+                ],
+                lines: [
+                    { from: { x: 140, y: 200 }, to: { x: 160, y: 200 }, type: 'main' },
+                    { from: { x: 240, y: 200 }, to: { x: 260, y: 200 }, type: 'main' },
+                    { from: { x: 340, y: 200 }, to: { x: 360, y: 200 }, type: 'main' }
+                ]
+            },
+            'recursive': {
+                title: 'מיזוג רקורסיבי (Standard Merge)',
+                description: 'האסטרטגיה הנפוצה ביותר. מתרחשת כאשר שני הענפים התקדמו. Git יוצר Commit מיזוג חדש המשלב את השינויים.',
+                benefits: [
+                    'משמר את ההיסטוריה המלאה',
+                    'רואים בבירור מתי התבצע מיזוג',
+                    'מטפל בקונפליקטים אוטומטית כשאפשר'
+                ],
+                commands: [
+                    'git checkout main',
+                    'git merge feature-branch'
+                ],
+                commits: [
+                    { id: 'A', x: 100, y: 200, type: 'main', label: 'A' },
+                    { id: 'B', x: 200, y: 200, type: 'main', label: 'B' },
+                    { id: 'C', x: 300, y: 150, type: 'feature', label: 'C' },
+                    { id: 'D', x: 400, y: 150, type: 'feature', label: 'D' },
+                    { id: 'E', x: 300, y: 250, type: 'main', label: 'E' },
+                    { id: 'M', x: 500, y: 200, type: 'merge', label: 'M' }
+                ],
+                lines: [
+                    { from: { x: 140, y: 200 }, to: { x: 160, y: 200 }, type: 'main' },
+                    { from: { x: 240, y: 200 }, to: { x: 260, y: 175 }, type: 'feature' },
+                    { from: { x: 240, y: 200 }, to: { x: 260, y: 225 }, type: 'main' },
+                    { from: { x: 340, y: 150 }, to: { x: 360, y: 150 }, type: 'feature' },
+                    { from: { x: 340, y: 250 }, to: { x: 450, y: 225 }, type: 'main' },
+                    { from: { x: 440, y: 150 }, to: { x: 450, y: 175 }, type: 'feature' }
+                ]
+            },
+            'squash': {
+                title: 'מיזוג Squash',
+                description: 'לוקח את כל הקומיטים מענף הפיצ\'ר ומכווץ אותם לקומיט אחד בודד בענף הראשי. ההיסטוריה של ענף הפיצ\'ר נמחקת.',
+                benefits: [
+                    'היסטוריה ראשית נקייה מאוד',
+                    'מסתיר קומיטים של "work in progress"',
+                    'טוב לפיצ\'רים קטנים'
+                ],
+                commands: [
+                    'git checkout main',
+                    'git merge --squash feature-branch',
+                    'git commit -m "Add feature"'
+                ],
+                commits: [
+                    { id: 'A', x: 100, y: 200, type: 'main', label: 'A' },
+                    { id: 'B', x: 200, y: 200, type: 'main', label: 'B' },
+                    { id: 'C', x: 300, y: 150, type: 'feature', label: 'C', opacity: 0.5 },
+                    { id: 'D', x: 400, y: 150, type: 'feature', label: 'D', opacity: 0.5 },
+                    { id: 'S', x: 300, y: 200, type: 'main', label: 'S' }
+                ],
+                lines: [
+                    { from: { x: 140, y: 200 }, to: { x: 160, y: 200 }, type: 'main' },
+                    { from: { x: 240, y: 200 }, to: { x: 260, y: 200 }, type: 'main' },
+                    { from: { x: 240, y: 200 }, to: { x: 260, y: 175 }, type: 'feature', opacity: 0.3 },
+                    { from: { x: 340, y: 150 }, to: { x: 360, y: 150 }, type: 'feature', opacity: 0.3 }
+                ]
+            },
+            'octopus': {
+                title: 'מיזוג תמנון (Octopus Merge)',
+                description: 'מאפשר למזג יותר משני ענפים במכה אחת. שימושי בעיקר לאינטגרציה של כמה פיצ\'רים שונים שאינם מתנגשים.',
+                benefits: [
+                    'מיזוג מרובה בפעולה אחת',
+                    'מקטין את כמות ה-Merge Commits בהיסטוריה',
+                ],
+                commands: [
+                    'git merge feature1 feature2 feature3'
+                ],
+                commits: [
+                    { id: 'A', x: 50, y: 200, type: 'main', label: 'A' },
+                    { id: 'B', x: 200, y: 100, type: 'feature', label: 'B' },
+                    { id: 'C', x: 200, y: 200, type: 'feature', label: 'C' },
+                    { id: 'D', x: 200, y: 300, type: 'feature', label: 'D' },
+                    { id: 'M', x: 350, y: 200, type: 'merge', label: 'M' }
+                ],
+                lines: [
+                    { from: { x: 90, y: 200 }, to: { x: 310, y: 180 }, type: 'main' }, // A to M roughly
+                    { from: { x: 90, y: 200 }, to: { x: 160, y: 120 }, type: 'feature' }, // A to B
+                    { from: { x: 90, y: 200 }, to: { x: 160, y: 200 }, type: 'feature' }, // A to C
+                    { from: { x: 90, y: 200 }, to: { x: 160, y: 280 }, type: 'feature' }, // A to D
+                    { from: { x: 240, y: 100 }, to: { x: 310, y: 170 }, type: 'feature' }, // B to M
+                    { from: { x: 240, y: 200 }, to: { x: 300, y: 200 }, type: 'feature' }, // C to M
+                    { from: { x: 240, y: 300 }, to: { x: 310, y: 230 }, type: 'feature' }  // D to M
+                ]
+            }
+        };
+
+        function showMergeType(type) {
+            // Update buttons UI
+            document.querySelectorAll('.merge-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Find the button that triggered this (works even if passed string manually)
+            const activeBtn = Array.from(document.querySelectorAll('.merge-btn')).find(b => b.getAttribute('onclick').includes(type));
+            if(activeBtn) activeBtn.classList.add('active');
+
+            const merge = mergeVisualizationTypes[type];
+            const graph = document.getElementById('git-graph');
+            const description = document.getElementById('merge-description');
+
+            // Clear graph
+            graph.innerHTML = '';
+
+            // Draw Lines
+            merge.lines.forEach(line => {
+                const lineEl = document.createElement('div');
+                const deltaX = line.to.x - line.from.x;
+                const deltaY = line.to.y - line.from.y;
+                const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+
+                lineEl.style.cssText = `
+                    position: absolute; height: 4px; border-radius: 2px;
+                    left: ${line.from.x}px; top: ${line.from.y + 18}px;
+                    width: ${length}px; transform: rotate(${angle}deg);
+                    transform-origin: 0 50%;
+                    background: ${line.type === 'main' ? '#3498db' : (line.type === 'merge' ? '#f39c12' : '#e74c3c')};
+                    opacity: ${line.opacity || 1};
+                `;
+                graph.appendChild(lineEl);
+            });
+
+            // Draw Commits (Dots)
+            merge.commits.forEach(commit => {
+                const commitEl = document.createElement('div');
+                let bg = '#3498db'; // main
+                if (commit.type === 'feature') bg = '#e74c3c';
+                if (commit.type === 'merge') bg = '#f39c12';
+
+                commitEl.style.cssText = `
+                    width: 40px; height: 40px; border-radius: 50%; position: absolute;
+                    display: flex; align-items: center; justify-content: center;
+                    font-weight: bold; font-size: 14px; color: white;
+                    left: ${commit.x}px; top: ${commit.y}px;
+                    background: ${bg};
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                    opacity: ${commit.opacity || 1};
+                    z-index: 10;
+                `;
+                commitEl.textContent = commit.label;
+                graph.appendChild(commitEl);
+            });
+
+            // Update Description
+            let benefitsHtml = '';
+            if(merge.benefits) {
+                benefitsHtml = `<div style="margin: 15px 0;"><h4 style="color: #27ae60;">יתרונות:</h4><ul>${merge.benefits.map(b => `<li>${b}</li>`).join('')}</ul></div>`;
+            }
+
+            let commandsHtml = '';
+            if(merge.commands) {
+                 commandsHtml = `<div style="background: #2d3748; color: #fff; padding: 15px; border-radius: 8px; direction: ltr; text-align: left; font-family: monospace;">${merge.commands.join('<br>')}</div>`;
+            }
+
+            description.innerHTML = `
+                <h3 style="color: #2c3e50; margin-bottom: 10px;">${merge.title}</h3>
+                <p style="line-height: 1.6;">${merge.description}</p>
+                ${benefitsHtml}
+                ${commandsHtml}
+            `;
+        }
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize progress
+            document.getElementById('progressBar').style.width = '14%';
+            
+            // Load default visualization
+            showMergeType('fast-forward');
+
+            // Add hover effects
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Click to copy functionality
+            document.querySelectorAll('.command-box').forEach(box => {
+                box.addEventListener('click', function() {
+                    navigator.clipboard.writeText(this.innerText).then(() => {
+                        const original = this.style.borderColor;
+                        this.style.border = '2px solid #68d391';
+                        setTimeout(() => {
+                            this.style.border = original || 'none';
+                        }, 500);
+                    });
+                });
+                box.title = "לחץ להעתקה";
+                box.style.cursor = "pointer";
+            });
+        });
+    </script>
+</body>
+</html>
