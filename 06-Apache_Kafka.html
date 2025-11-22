@@ -532,7 +532,7 @@
         </div>
     </section>
 
-    <section id="cli">
+   <section id="cli">
         <h2>8. CLI & Technical Implementation</h2>
 
         <h3 id="cli-help">8.1 Getting Help</h3>
@@ -585,7 +585,7 @@
             <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Required Options:</h4>
             <ul class="check-list">
                 <li><span class="inline-code">--bootstrap-server</span>: Specifies the server to use (e.g., <code>localhost:9092</code>).</li>
-                <li><span class="inline-code">--topic</span>: Specifies the target topic name (e.g., <code>phishing-sites</code>).</li>
+                <li><span class="inline-code">--topic</span>: Specifies the target topic name.</li>
             </ul>
 
             <div class="alert alert-info" style="margin-top: 15px;">
@@ -594,7 +594,33 @@
             </div>
         </div>
 
-        <h3 id="cli-demo">8.5 Real-Time Demo</h3>
+        <h3 id="cli-consumer-details">8.5 The Console Consumer</h3>
+        <div class="card">
+            <div style="display:flex; align-items:center; margin-bottom:15px;">
+                <span style="font-size:1.5rem; margin-right:10px;">📥</span>
+                <strong>bin/kafka-console-consumer.sh</strong>
+            </div>
+            <p>Located in the <span class="inline-code">bin/</span> folder. This tool allows you to read messages from a topic in real-time.</p>
+
+            <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Required Options:</h4>
+            <ul class="check-list">
+                <li><span class="inline-code">--bootstrap-server</span>: Specifies the server (e.g., <code>localhost:9092</code>).</li>
+                <li><span class="inline-code">--topic</span>: Specifies the topic to read from.</li>
+            </ul>
+
+            <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Useful Optional Arguments:</h4>
+            <ul class="check-list">
+                <li><span class="inline-code">--from-beginning</span>: Tells Kafka to send <strong>all</strong> messages in the topic, even those already read/old.</li>
+                <li><span class="inline-code">--max-messages &lt;number&gt;</span>: Read up to a specific number of messages and then exit automatically.</li>
+            </ul>
+
+            <div class="alert alert-info" style="margin-top: 15px;">
+                <span class="alert-icon">ℹ️</span>
+                <div>By default, it waits for <strong>new</strong> messages (real-time). Press <strong>Ctrl-C</strong> to exit.</div>
+            </div>
+        </div>
+
+        <h3 id="cli-demo">8.6 Real-Time Demo</h3>
         <p>Open two separate terminal windows to see real-time streaming in action.</p>
 
         <div class="grid-2">
@@ -629,7 +655,6 @@
             </div>
         </div>
     </section>
-
 </main>
 
 </body>
