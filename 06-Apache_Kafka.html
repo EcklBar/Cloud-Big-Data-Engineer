@@ -553,7 +553,7 @@
                 <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
             </div>
             <div class="terminal-body">
-                <span class="cmd">$</span> kafka-topics <span class="flag">--create</span> \<br>
+                <span class="cmd">$</span> kafka-topics.sh <span class="flag">--create</span> \<br>
                 &nbsp;&nbsp;<span class="flag">--zookeeper</span> localhost:2181 \<br>
                 &nbsp;&nbsp;<span class="flag">--replication-factor</span> 1 \<br>
                 &nbsp;&nbsp;<span class="flag">--partitions</span> 1 \<br>
@@ -574,7 +574,27 @@
             </div>
         </div>
 
-        <h3 id="cli-demo">8.4 Real-Time Demo: Producer & Consumer</h3>
+        <h3 id="cli-producer-details">8.4 The Console Producer</h3>
+        <div class="card">
+            <div style="display:flex; align-items:center; margin-bottom:15px;">
+                <span style="font-size:1.5rem; margin-right:10px;">⌨️</span>
+                <strong>bin/kafka-console-producer.sh</strong>
+            </div>
+            <p>Located in the <span class="inline-code">bin/</span> folder. This tool allows you to open a connection and manually type messages into a topic.</p>
+            
+            <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Required Options:</h4>
+            <ul class="check-list">
+                <li><span class="inline-code">--bootstrap-server</span>: Specifies the server to use (e.g., <code>localhost:9092</code>).</li>
+                <li><span class="inline-code">--topic</span>: Specifies the target topic name (e.g., <code>phishing-sites</code>).</li>
+            </ul>
+
+            <div class="alert alert-info" style="margin-top: 15px;">
+                <span class="alert-icon">ℹ️</span>
+                <div>To exit the producer mode, press <strong>Ctrl-C</strong>.</div>
+            </div>
+        </div>
+
+        <h3 id="cli-demo">8.5 Real-Time Demo</h3>
         <p>Open two separate terminal windows to see real-time streaming in action.</p>
 
         <div class="grid-2">
@@ -583,8 +603,8 @@
                 <p>Type messages here.</p>
                 <div class="terminal-window">
                     <div class="terminal-body">
-                        <span class="cmd">$</span> kafka-console-producer \<br>
-                        <span class="flag">--broker-list</span> localhost:9092 \<br>
+                        <span class="cmd">$</span> bin/kafka-console-producer.sh \<br>
+                        <span class="flag">--bootstrap-server</span> localhost:9092 \<br>
                         <span class="flag">--topic</span> kafka-test-01<br>
                         <br>
                         > Hello World<br>
@@ -598,7 +618,7 @@
                 <p>Messages appear here instantly.</p>
                 <div class="terminal-window">
                     <div class="terminal-body">
-                        <span class="cmd">$</span> kafka-console-consumer \<br>
+                        <span class="cmd">$</span> bin/kafka-console-consumer.sh \<br>
                         <span class="flag">--bootstrap-server</span> localhost:9092 \<br>
                         <span class="flag">--topic</span> kafka-test-01<br>
                         <br>
