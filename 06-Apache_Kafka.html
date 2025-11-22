@@ -535,9 +535,19 @@
     <section id="cli">
         <h2>8. CLI & Technical Implementation</h2>
 
-        <h3 id="cli-topic">8.1 Creating a Topic</h3>
+        <h3 id="cli-help">8.1 Getting Help</h3>
+        <p>Check available options for any Kafka tool using the help flag.</p>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+            </div>
+            <div class="terminal-body">
+                <span class="cmd">$</span> bin/kafka-topics.sh <span class="flag">--help</span>
+            </div>
+        </div>
+
+        <h3 id="cli-create">8.2 Creating a Topic</h3>
         <p>Use <span class="inline-code">kafka-topics</span> to create a channel for your data.</p>
-        
         <div class="terminal-window">
             <div class="terminal-header">
                 <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
@@ -551,7 +561,20 @@
             </div>
         </div>
 
-        <h3 id="cli-demo">8.2 Real-Time Demo: Producer & Consumer</h3>
+        <h3 id="cli-list">8.3 Listing Topics</h3>
+        <p>Verify your topic was created by listing all available topics on the server.</p>
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+            </div>
+            <div class="terminal-body">
+                <span class="cmd">$</span> kafka-topics.sh <span class="flag">--bootstrap-server</span> localhost:9092 <span class="flag">--list</span><br><br>
+                <span class="comment"># Output Example:</span><br>
+                <span style="color: #e6db74;">kafka-test-01</span>
+            </div>
+        </div>
+
+        <h3 id="cli-demo">8.4 Real-Time Demo: Producer & Consumer</h3>
         <p>Open two separate terminal windows to see real-time streaming in action.</p>
 
         <div class="grid-2">
