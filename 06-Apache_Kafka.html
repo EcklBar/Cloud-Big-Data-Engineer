@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache Kafka: The Complete Notebook</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <title>Apache Kafka: The Masterclass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -15,12 +15,11 @@
             --light-bg: #F4F6F9;
             --white: #FFFFFF;
             --border: #E1E4E8;
-            --sidebar-width: 280px;
+            --sidebar-width: 260px;
+            --shadow-card: 0 4px 20px rgba(0,0,0,0.05);
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -31,10 +30,10 @@
             min-height: 100vh;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
+        /* --- SIDEBAR --- */
         nav {
             width: var(--sidebar-width);
-            background: var(--kafka-dark-grey);
+            background: linear-gradient(180deg, #232F3E 0%, #1a2530 100%);
             color: #ecf0f1;
             height: 100vh;
             position: fixed;
@@ -49,87 +48,73 @@
         nav h3 {
             padding: 0 25px;
             margin-bottom: 5px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--white);
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 0.5px;
         }
         
         nav .sub-header {
             padding: 0 25px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #8fa3b9;
-            margin-bottom: 20px;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        nav li {
-            position: relative;
-        }
-
-        nav a {
-            display: block;
-            padding: 12px 25px;
-            color: #bdc3c7;
-            text-decoration: none;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-
-        nav a:hover {
-            background-color: rgba(255,255,255,0.05);
-            color: var(--white);
-            border-left-color: var(--kafka-orange);
-            padding-left: 30px;
-        }
-
-        nav a.active {
-            color: var(--white);
+            letter-spacing: 1.5px;
+            color: var(--kafka-orange);
+            margin-bottom: 25px;
             font-weight: 600;
         }
 
-        nav .sub-item {
-            padding-left: 40px;
+        nav ul { list-style: none; padding: 0; margin: 0; }
+        
+        nav a {
+            display: block;
+            padding: 10px 25px;
+            color: #aeb6bf;
+            text-decoration: none;
             font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
         }
 
-        /* --- MAIN CONTENT AREA --- */
+        nav a:hover, nav a.active {
+            background-color: rgba(255,255,255,0.05);
+            color: var(--white);
+            border-left-color: var(--kafka-orange);
+        }
+
+        nav .sub-item { padding-left: 40px; font-size: 0.85rem; opacity: 0.8; }
+
+        /* --- MAIN --- */
         main {
             margin-left: var(--sidebar-width);
             width: calc(100% - var(--sidebar-width));
-            padding: 50px 80px;
-            max-width: 1200px;
+            padding: 50px 60px;
+            max-width: 1100px;
         }
 
-        /* --- TYPOGRAPHY & HEADERS --- */
+        /* --- TYPOGRAPHY --- */
         h1 {
             font-size: 3rem;
             color: var(--kafka-black);
             margin-bottom: 10px;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
         }
 
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #666;
             margin-bottom: 50px;
             font-weight: 300;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
         }
 
         h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--kafka-dark-grey);
             margin-top: 60px;
-            padding-bottom: 15px;
+            padding-bottom: 10px;
             border-bottom: 2px solid var(--border);
             display: flex;
             align-items: center;
@@ -138,181 +123,86 @@
         h2::before {
             content: '';
             display: inline-block;
-            width: 8px;
-            height: 30px;
+            width: 6px;
+            height: 24px;
             background-color: var(--kafka-orange);
             margin-right: 15px;
             border-radius: 4px;
         }
 
-        h3 {
-            font-size: 1.4rem;
-            color: var(--kafka-blue);
-            margin-top: 35px;
-            margin-bottom: 15px;
-        }
-
-        h4 {
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1.2px;
-            color: #7f8c8d;
-            margin-bottom: 10px;
-        }
-
-        p, li {
-            line-height: 1.7;
-            color: #444;
-            font-size: 1.05rem;
-        }
-
-        /* --- CARDS & BLOCKS --- */
+        h3 { font-size: 1.3rem; color: var(--kafka-blue); margin-top: 35px; }
+        
+        /* --- CARDS --- */
         .card {
             background: var(--white);
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-card);
             border: 1px solid rgba(0,0,0,0.03);
             margin-bottom: 25px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        }
+        /* --- GRIDS --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
 
-        /* Specific Comparison Styling */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .card.old-world {
-            border-top: 4px solid #95a5a6;
-            background: #fdfdfd;
-        }
-
-        .card.new-world {
-            border-top: 4px solid var(--kafka-orange);
-            background: #fff;
-        }
-
-        /* --- ALERTS --- */
+        /* --- ALERTS & DETAILS --- */
         .alert {
-            padding: 20px 25px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin: 25px 0;
+            margin: 20px 0;
             display: flex;
             gap: 15px;
-            align-items: start;
+            align-items: center;
+            font-size: 0.95rem;
         }
+        .alert-info { background-color: #E3F2FD; border-left: 4px solid #2196F3; color: #0D47A1; }
+        .alert-warning { background-color: #FFF3E0; border-left: 4px solid #FF9800; color: #E65100; }
 
-        .alert-info {
-            background-color: #E3F2FD;
-            border-left: 5px solid #2196F3;
-            color: #0D47A1;
+        details {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-top: 15px;
+            cursor: pointer;
         }
+        summary { font-weight: bold; color: var(--kafka-blue); outline: none; }
+        details p { margin-top: 10px; color: #555; font-size: 0.9rem; }
 
-        .alert-warning {
-            background-color: #FFF3E0;
-            border-left: 5px solid #FF9800;
-            color: #E65100;
-        }
-
-        .alert-icon {
-            font-size: 1.4rem;
-        }
-
-        /* --- TERMINAL / CODE --- */
+        /* --- TERMINAL --- */
         .terminal-window {
             background-color: #1e1e1e;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25);
             margin: 20px 0;
-            overflow: hidden;
             font-family: 'JetBrains Mono', monospace;
+            border: 1px solid #333;
         }
-
         .terminal-header {
             background-color: #2d2d2d;
             padding: 10px 15px;
             display: flex;
-            gap: 8px;
-            align-items: center;
+            gap: 6px;
         }
-
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .red { background-color: #ff5f56; }
-        .yellow { background-color: #ffbd2e; }
-        .green { background-color: #27c93f; }
-
-        .terminal-body {
-            padding: 20px;
-            color: #f1f1f1;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            overflow-x: auto;
-        }
-
-        .cmd { color: #a6e22e; }
-        .arg { color: #66d9ef; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
+        
+        .terminal-body { padding: 20px; color: #f1f1f1; font-size: 0.85rem; line-height: 1.6; overflow-x: auto; }
+        .cmd { color: #a6e22e; font-weight: bold; }
         .flag { color: #fd971f; }
         .comment { color: #75715e; font-style: italic; }
-
-        .inline-code {
-            font-family: 'JetBrains Mono', monospace;
-            background: #eee;
-            color: #c7254e;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-
-        /* --- LISTS --- */
-        ul.check-list {
-            list-style: none;
-            padding: 0;
-        }
-        ul.check-list li {
-            margin-bottom: 12px;
-            padding-left: 30px;
-            position: relative;
-        }
-        ul.check-list li::before {
-            content: '✓';
-            color: var(--kafka-orange);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-        }
+        .inline-code { font-family: 'JetBrains Mono'; background: #eee; color: #c7254e; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
 
         /* --- STEPS --- */
-        .step {
-            display: flex;
-            margin-bottom: 25px;
-        }
+        .step { display: flex; margin-bottom: 25px; }
         .step-number {
-            min-width: 40px;
-            height: 40px;
+            min-width: 35px; height: 35px;
             background: var(--kafka-dark-grey);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 20px;
-            margin-top: 5px;
+            color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; margin-right: 15px; margin-top: 2px;
         }
-        .step-content h4 { margin-top: 0; color: var(--kafka-black); }
 
     </style>
 </head>
@@ -325,60 +215,48 @@
         <li><a href="#intro">1. Introduction</a></li>
         <li><a href="#etl-vs-streaming">2. ETL vs. Streaming</a></li>
         <li><a href="#architecture">3. High-Level Architecture</a></li>
-        <li><a href="#fundamentals">4. Fundamental Concepts</a>
+        <li><a href="#fundamentals">4. Core Concepts</a>
             <a href="#brokers" class="sub-item">4.1 Brokers & Cluster</a>
             <a href="#topics" class="sub-item">4.2 Topics & Partitions</a>
             <a href="#replication" class="sub-item">4.3 Replication</a>
         </li>
-        <li><a href="#apis">5. Core APIs</a></li>
-        <li><a href="#distributions">6. Main Distributions</a></li>
-        <li><a href="#installation">7. Installation Guide</a></li>
-        <li><a href="#cli">8. CLI & Implementation</a>
-             <a href="#cli-topic" class="sub-item">8.1 Topic Management</a>
-             <a href="#cli-demo" class="sub-item">8.2 Producer/Consumer</a>
-        </li>
+        <li><a href="#advanced">5. Advanced Config</a></li>
+        <li><a href="#apis">6. Ecosystem APIs</a></li>
+        <li><a href="#installation">7. Installation Lab</a></li>
+        <li><a href="#cli">8. CLI & Implementation</a></li>
     </ul>
 </nav>
 
 <main>
-    <h1>Apache Kafka Notebook</h1>
-    <div class="subtitle">A comprehensive guide synthesized from the Naya College Data Engineering curriculum.</div>
+    <h1>Apache Kafka Masterclass</h1>
+    <div class="subtitle">From "Old World" ETL to Real-Time Event Streaming.</div>
 
     <section id="intro">
-        <h2>1. What is Apache Kafka?</h2>
+        <h2>1. The Problem & The Solution</h2>
         <div class="card">
-            <p style="font-size: 1.2rem; margin-top:0;">Apache Kafka is a distributed streaming platform based on the <strong>Pub-Sub (Publish-Subscribe)</strong> model.</p>
-            <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-            <p>Think of it as the <strong>Central Nervous System</strong> for an organization's data. It decouples data providers (Producers) from data consumers, allowing massive amounts of data to move in real-time.</p>
+            <p style="font-size: 1.1rem; margin-top:0;"><strong>Apache Kafka</strong> is a distributed streaming platform that acts as the Central Nervous System for data.</p>
+            
+            <p>It powers real-time usage for giants like <strong>Netflix</strong> (Recommendations), <strong>Uber</strong> (Matching), and <strong>PayPal</strong> (Fraud Detection).</p>
         </div>
-        
-        <div class="alert alert-info">
-            <span class="alert-icon">💡</span>
-            <div>
-                <strong>Event-Centric Thinking:</strong> Instead of processing data in batches at night, Kafka allows us to process events <em>as they occur</em>.
-            </div>
-        </div>
-            </section>
+    </section>
 
     <section id="etl-vs-streaming">
         <h2>2. Evolution: ETL vs. Streaming</h2>
         <div class="grid-2">
-            <div class="card old-world">
-                <h4>Old World (Traditional ETL)</h4>
-                <ul style="list-style-type: circle;">
-                    <li><strong>Timing:</strong> Batch processing (Nightly/Hourly).</li>
-                    <li><strong>Architecture:</strong> Monolithic, Point-to-Point.</li>
-                    <li><strong>Scalability:</strong> Hard and complex.</li>
-                    <li><strong>Latency:</strong> High (Not Real-Time).</li>
+            <div class="card" style="border-top: 4px solid #95a5a6;">
+                <h4>⏳ Old World (ETL)</h4>
+                <ul>
+                    <li><strong>Batch:</strong> Data processed nightly/hourly.</li>
+                    <li><strong>Rigid:</strong> Point-to-point "spaghetti" connections.</li>
+                    <li><strong>High Latency:</strong> Decisions are made on old data.</li>
                 </ul>
             </div>
-            <div class="card new-world">
-                <h4>New World (Kafka Streaming)</h4>
-                <ul class="check-list">
-                    <li><strong>Timing:</strong> Real-Time Event Capturing.</li>
-                    <li><strong>Architecture:</strong> Decoupled, Distributed.</li>
-                    <li><strong>Scalability:</strong> Fault Tolerant & Parallel Processing.</li>
-                    <li><strong>Role:</strong> Serves as the "Source of Truth" pipeline.</li>
+            <div class="card" style="border-top: 4px solid #E67E22;">
+                <h4>⚡ New World (Streaming)</h4>
+                <ul>
+                    <li><strong>Real-Time:</strong> Events processed <em>as they occur</em>.</li>
+                    <li><strong>Decoupled:</strong> Producers don't know Consumers.</li>
+                    <li><strong>Scalable:</strong> Handles massive throughput.</li>
                 </ul>
             </div>
         </div>
@@ -386,145 +264,123 @@
 
     <section id="architecture">
         <h2>3. High-Level Architecture</h2>
-        <p>The architecture is designed to handle high volume and high diversity of data with low latency.</p>
+        <p>The flow is simple: Producers push data in, the Cluster holds it, and Consumers pull it out.</p>
         
         
         <div class="grid-3" style="margin-top: 30px;">
             <div class="card">
-                <div style="font-size: 2rem; margin-bottom: 10px;">🏭</div>
-                <strong>Producers</strong>
-                <p>Apps, IoT sensors, or DBs that push data to the cluster.</p>
+                <h3>1. Producers</h3>
+                <p><strong>Source Systems</strong> (Web Apps, IoT, DBs) that create and push events.</p>
             </div>
             <div class="card">
-                <div style="font-size: 2rem; margin-bottom: 10px;">⚙️</div>
-                <strong>Streaming Platform</strong>
-                <p>Ingests, stores, and processes streams in real-time.</p>
+                <h3>2. Kafka Cluster</h3>
+                <p>A set of <strong>Brokers</strong> that store streams of records in categories called Topics.</p>
             </div>
             <div class="card">
-                <div style="font-size: 2rem; margin-bottom: 10px;">🛒</div>
-                <strong>Consumers</strong>
-                <p>Analytics, Monitoring, or Archiving systems that read data.</p>
+                <h3>3. Consumers</h3>
+                <p><strong>Target Systems</strong> (DWH, Analytics) that subscribe and process events.</p>
             </div>
         </div>
     </section>
 
     <section id="fundamentals">
-        <h2>4. Fundamental Concepts</h2>
+        <h2>4. Core Concepts (The Engine)</h2>
         
-        <h3 id="brokers">4.1 Brokers & Cluster</h3>
-        <p>A <strong>Broker</strong> is a single Kafka server. A <strong>Cluster</strong> is a group of brokers working together.</p>
+        <h3 id="brokers">4.1 Zookeeper & Brokers</h3>
+        <p>Kafka is a distributed system consisting of:</p>
         <ul>
-            <li>Connected to one broker? You are connected to the entire cluster.</li>
-            <li><strong>Resiliency:</strong> If one broker fails, data is safe on others (due to replication).</li>
+            <li><strong>Zookeeper:</strong> The "Brain". Manages cluster state, leader election, and config.</li>
+            <li><strong>Brokers:</strong> The "Body". Servers that store data. Connect to one, and you connect to all.</li>
         </ul>
+        
 
-        <h3 id="topics">4.2 Topics & Partitions</h3>
+        <h3 id="topics">4.2 Topics, Partitions & Offsets</h3>
         <div class="card">
-            <h4>The Topic</h4>
-            <p>A logical category (e.g., "Logs", "Transactions"). Topics are split into <strong>Partitions</strong>.</p>
+            <p><strong>Topic:</strong> A logical stream (e.g., "Transactions"). Topics are split into <strong>Partitions</strong>.</p>
             
-            <h4>The Partition (Crucial!)</h4>
-            <p>Partitions allow parallel processing. Each message gets an incremental ID called an <strong>Offset</strong>.</p>
             <div class="alert alert-warning">
-                <span class="alert-icon">⚠️</span>
+                <span style="font-size:1.5rem">⚠️</span>
                 <div>
-                    <strong>Ordering Guarantee:</strong> Data order is guaranteed <strong>ONLY within a single partition</strong>, not across the entire topic.
+                    <strong>Master's Note on Ordering:</strong><br>
+                    Order is guaranteed <em>only within a partition</em>. If you need total ordering, you must use 1 partition (which limits scale).
                 </div>
             </div>
         </div>
-        
+
         <h3 id="replication">4.3 Replication</h3>
-        <p>To ensure High Availability (HA), partitions are copied across brokers.</p>
-        <ul class="check-list">
-            <li><strong>Leader:</strong> Handles all Reads and Writes for a partition.</li>
-            <li><strong>Follower:</strong> Passively replicates data. Takes over if Leader fails.</li>
+        <p>Partitions are replicated for fault tolerance. Each partition has:</p>
+        <ul>
+            <li><strong>Leader:</strong> Handles all Reads/Writes.</li>
+            <li><strong>Follower:</strong> Passive backup. Takes over if the Leader dies.</li>
         </ul>
     </section>
 
-    <section id="apis">
-        <h2>5. Core APIs</h2>
-        <table style="width:100%; border-collapse: collapse; margin-top:20px;">
-            <tr style="background: var(--kafka-dark-grey); color: white;">
-                <th style="padding:15px;">API Name</th>
-                <th style="padding:15px;">Functionality</th>
-            </tr>
-            <tr style="border-bottom: 1px solid #ddd;">
-                <td style="padding:15px; font-weight:bold;">Producer API</td>
-                <td style="padding:15px;">Allows apps to send streams of data to topics.</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #ddd; background: #f9f9f9;">
-                <td style="padding:15px; font-weight:bold;">Consumer API</td>
-                <td style="padding:15px;">Allows apps to read streams of data.</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #ddd;">
-                <td style="padding:15px; font-weight:bold;">Streams API</td>
-                <td style="padding:15px;">Complex transformations (filter, map, aggregate) inside Kafka.</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #ddd; background: #f9f9f9;">
-                <td style="padding:15px; font-weight:bold;">Connect API</td>
-                <td style="padding:15px;">Reusable connectors for existing systems (e.g., SQL DB to Kafka).</td>
-            </tr>
-        </table>
-    </section>
+    <section id="advanced">
+        <h2>5. Advanced Configurations</h2>
+        <div class="card">
+            <h3>Producer Acks (Reliability)</h3>
+            <p>How safe do you want your data to be?</p>
+            <ul>
+                <li><code>acks=0</code>: Fire & Forget. (Fastest, risky).</li>
+                <li><code>acks=1</code>: Leader received it. (Default).</li>
+                <li><code>acks=all</code>: Leader AND all Replicas received it. (Slowest, safest).</li>
+            </ul>
+        </div>
 
-    <section id="distributions">
-        <h2>6. Main Distributions</h2>
-        <div class="grid-3">
-            <div class="card">
-                <h4>Apache Kafka</h4>
-                <p>The native, open-source version. Requires manual config.</p>
-            </div>
-            <div class="card" style="border-top: 4px solid #006699;">
-                <h4>Confluent</h4>
-                <p>Enterprise ready. Created by Kafka founders. Includes UI & Connectors.</p>
-            </div>
-            <div class="card" style="border-top: 4px solid #F68D2E;">
-                <h4>AWS Kinesis / MSK</h4>
-                <p>Cloud managed services for Kafka on Amazon Web Services.</p>
+        <div class="card">
+            <h3>Consumer Groups (Scaling)</h3>
+            <p>A group of consumers working together to read a topic.</p>
+            
+            <div class="alert alert-info">
+                <strong>Rule:</strong> One partition can be consumed by only one consumer in a group at a time.
             </div>
         </div>
     </section>
 
+    <section id="apis">
+        <h2>6. Ecosystem APIs</h2>
+        <table style="width:100%; border-collapse: collapse; margin-top:20px;">
+            <tr style="background: var(--kafka-dark-grey); color: white; text-align: left;">
+                <th style="padding:15px;">API</th>
+                <th style="padding:15px;">Use Case</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;"><td style="padding:15px;"><strong>Producer/Consumer</strong></td><td style="padding:15px;">Standard Java/Python coding for apps.</td></tr>
+            <tr style="border-bottom: 1px solid #ddd;"><td style="padding:15px;"><strong>Kafka Connect</strong></td><td style="padding:15px;"><strong>No-Code:</strong> Move data between DBs and Kafka.</td></tr>
+            <tr style="border-bottom: 1px solid #ddd;"><td style="padding:15px;"><strong>Kafka Streams</strong></td><td style="padding:15px;">In-app data transformation (Filter, Map, Aggregate).</td></tr>
+        </table>
+    </section>
+
     <section id="installation">
-        <h2>7. Installation Guide (Linux/Mac)</h2>
+        <h2>7. Installation (Linux/Mac)</h2>
         
         <div class="step">
             <div class="step-number">1</div>
-            <div class="step-content">
-                <h4>Install Java (JDK)</h4>
-                <p>Kafka runs on the JVM. Ensure Java 8+ is installed.</p>
+            <div>
+                <h4>Download & Unpack</h4>
+                <div class="terminal-window">
+                    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div></div>
+                    <div class="terminal-body">
+                        <span class="cmd">$</span> tar -xzf kafka_2.13-3.0.0.tgz<br>
+                        <span class="cmd">$</span> cd kafka_2.13-3.0.0
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="step">
             <div class="step-number">2</div>
-            <div class="step-content">
-                <h4>Download & Unpack</h4>
+            <div>
+                <h4>Start the Engines</h4>
+                <p>Run in two separate terminals.</p>
                 <div class="terminal-window">
-                    <div class="terminal-header">
-                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
-                    </div>
+                    <div class="terminal-header"><span style="color:#aaa; font-size:0.8em">Terminal 1 (Zookeeper)</span></div>
                     <div class="terminal-body">
-                        <span class="cmd">$</span> tar -xzf kafka_2.12-2.3.0.tgz<br>
-                        <span class="cmd">$</span> cd kafka_2.12-2.3.0
+                        <span class="cmd">$</span> bin/zookeeper-server-start.sh config/zookeeper.properties
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <h4>Start Zookeeper & Kafka</h4>
-                <p>Run these in separate terminals.</p>
                 <div class="terminal-window">
-                    <div class="terminal-header">
-                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
-                    </div>
+                    <div class="terminal-header"><span style="color:#aaa; font-size:0.8em">Terminal 2 (Kafka)</span></div>
                     <div class="terminal-body">
-                        <span class="comment"># Terminal 1: Zookeeper</span><br>
-                        <span class="cmd">$</span> bin/zookeeper-server-start.sh config/zookeeper.properties<br><br>
-                        <span class="comment"># Terminal 2: Kafka Server</span><br>
                         <span class="cmd">$</span> bin/kafka-server-start.sh config/server.properties
                     </div>
                 </div>
@@ -532,126 +388,37 @@
         </div>
     </section>
 
-   <section id="cli">
-        <h2>8. CLI & Technical Implementation</h2>
+    <section id="cli">
+        <h2>8. CLI Implementation</h2>
 
-        <h3 id="cli-help">8.1 Getting Help</h3>
-        <p>Check available options for any Kafka tool using the help flag.</p>
+        <h3>Creating a Topic</h3>
+        <p>We create a topic named <code>kafka-test-01</code> with 1 partition.</p>
         <div class="terminal-window">
-            <div class="terminal-header">
-                <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
-            </div>
             <div class="terminal-body">
-                <span class="cmd">$</span> bin/kafka-topics.sh <span class="flag">--help</span>
-            </div>
-        </div>
-
-        <h3 id="cli-create">8.2 Creating a Topic</h3>
-        <p>Use <span class="inline-code">kafka-topics</span> to create a channel for your data.</p>
-        <div class="terminal-window">
-            <div class="terminal-header">
-                <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
-            </div>
-            <div class="terminal-body">
-                <span class="cmd">$</span> kafka-topics.sh <span class="flag">--create</span> \<br>
-                &nbsp;&nbsp;<span class="flag">--zookeeper</span> localhost:2181 \<br>
+                <span class="cmd">$</span> bin/kafka-topics.sh <span class="flag">--create</span> \<br>
+                &nbsp;&nbsp;<span class="flag">--bootstrap-server</span> localhost:9092 \<br>
                 &nbsp;&nbsp;<span class="flag">--replication-factor</span> 1 \<br>
                 &nbsp;&nbsp;<span class="flag">--partitions</span> 1 \<br>
                 &nbsp;&nbsp;<span class="flag">--topic</span> kafka-test-01
             </div>
         </div>
 
-        <h3 id="cli-list">8.3 Listing Topics</h3>
-        <p>Verify your topic was created by listing all available topics on the server.</p>
+        <h3>Real-Time Demo</h3>
+        <p><strong>Producer (Write):</strong></p>
         <div class="terminal-window">
-            <div class="terminal-header">
-                <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
-            </div>
             <div class="terminal-body">
-                <span class="cmd">$</span> kafka-topics.sh <span class="flag">--bootstrap-server</span> localhost:9092 <span class="flag">--list</span><br><br>
-                <span class="comment"># Output Example:</span><br>
-                <span style="color: #e6db74;">kafka-test-01</span>
+                <span class="cmd">$</span> bin/kafka-console-producer.sh <span class="flag">--bootstrap-server</span> localhost:9092 <span class="flag">--topic</span> kafka-test-01<br>
+                > Hello Kafka<br>
+                > This is a stream
             </div>
         </div>
 
-        <h3 id="cli-producer-details">8.4 The Console Producer</h3>
-        <div class="card">
-            <div style="display:flex; align-items:center; margin-bottom:15px;">
-                <span style="font-size:1.5rem; margin-right:10px;">⌨️</span>
-                <strong>bin/kafka-console-producer.sh</strong>
-            </div>
-            <p>Located in the <span class="inline-code">bin/</span> folder. This tool allows you to open a connection and manually type messages into a topic.</p>
-            
-            <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Required Options:</h4>
-            <ul class="check-list">
-                <li><span class="inline-code">--bootstrap-server</span>: Specifies the server to use (e.g., <code>localhost:9092</code>).</li>
-                <li><span class="inline-code">--topic</span>: Specifies the target topic name.</li>
-            </ul>
-
-            <div class="alert alert-info" style="margin-top: 15px;">
-                <span class="alert-icon">ℹ️</span>
-                <div>To exit the producer mode, press <strong>Ctrl-C</strong>.</div>
-            </div>
-        </div>
-
-        <h3 id="cli-consumer-details">8.5 The Console Consumer</h3>
-        <div class="card">
-            <div style="display:flex; align-items:center; margin-bottom:15px;">
-                <span style="font-size:1.5rem; margin-right:10px;">📥</span>
-                <strong>bin/kafka-console-consumer.sh</strong>
-            </div>
-            <p>Located in the <span class="inline-code">bin/</span> folder. This tool allows you to read messages from a topic in real-time.</p>
-
-            <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Required Options:</h4>
-            <ul class="check-list">
-                <li><span class="inline-code">--bootstrap-server</span>: Specifies the server (e.g., <code>localhost:9092</code>).</li>
-                <li><span class="inline-code">--topic</span>: Specifies the topic to read from.</li>
-            </ul>
-
-            <h4 style="margin-top:15px; margin-bottom:5px; color:#555;">Useful Optional Arguments:</h4>
-            <ul class="check-list">
-                <li><span class="inline-code">--from-beginning</span>: Tells Kafka to send <strong>all</strong> messages in the topic, even those already read/old.</li>
-                <li><span class="inline-code">--max-messages &lt;number&gt;</span>: Read up to a specific number of messages and then exit automatically.</li>
-            </ul>
-
-            <div class="alert alert-info" style="margin-top: 15px;">
-                <span class="alert-icon">ℹ️</span>
-                <div>By default, it waits for <strong>new</strong> messages (real-time). Press <strong>Ctrl-C</strong> to exit.</div>
-            </div>
-        </div>
-
-        <h3 id="cli-demo">8.6 Real-Time Demo</h3>
-        <p>Open two separate terminal windows to see real-time streaming in action.</p>
-
-        <div class="grid-2">
-            <div class="card">
-                <h4>Source (Producer)</h4>
-                <p>Type messages here.</p>
-                <div class="terminal-window">
-                    <div class="terminal-body">
-                        <span class="cmd">$</span> bin/kafka-console-producer.sh \<br>
-                        <span class="flag">--bootstrap-server</span> localhost:9092 \<br>
-                        <span class="flag">--topic</span> kafka-test-01<br>
-                        <br>
-                        > Hello World<br>
-                        > This is Kafka
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h4>Target (Consumer)</h4>
-                <p>Messages appear here instantly.</p>
-                <div class="terminal-window">
-                    <div class="terminal-body">
-                        <span class="cmd">$</span> bin/kafka-console-consumer.sh \<br>
-                        <span class="flag">--bootstrap-server</span> localhost:9092 \<br>
-                        <span class="flag">--topic</span> kafka-test-01<br>
-                        <br>
-                        Hello World<br>
-                        This is Kafka
-                    </div>
-                </div>
+        <p><strong>Consumer (Read):</strong></p>
+        <div class="terminal-window">
+            <div class="terminal-body">
+                <span class="cmd">$</span> bin/kafka-console-consumer.sh <span class="flag">--bootstrap-server</span> localhost:9092 <span class="flag">--topic</span> kafka-test-01 <span class="flag">--from-beginning</span><br>
+                Hello Kafka<br>
+                This is a stream
             </div>
         </div>
     </section>
