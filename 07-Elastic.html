@@ -1,589 +1,462 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elastic Stack: The Professional's Field Guide</title>
-    <style>
-        :root {
-            --primary: #005571;       /* Elastic Blue */
-            --primary-dark: #004258;
-            --secondary: #00bfb3;     /* Elastic Teal */
-            --accent: #f04e98;        /* Elastic Pink */
-            --warning: #f5a623;       /* Elastic Yellow */
-            --bg-color: #f6f7fa;
-            --sidebar-bg: #1a1b20;
-            --sidebar-text: #e6eaed;
-            --text-main: #343741;
-            --text-light: #69707d;
-            --card-bg: #ffffff;
-            --code-bg: #2b2c34;
-        }
+">
+<div class="code-header">
+    <span class="code-lang">logstash.conf</span>
+    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+</div>
+<pre><code>input {
+  beats {
+    port => 5044
+  }
+}
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            color: var(--text-main);
-            background-color: var(--bg-color);
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+filter {
+  grok {
+    match => { "message" => "%{COMBINEDAPACHELOG}" }
+  }
+}
 
-        /* --- Sidebar Navigation --- */
-        aside {
-            width: 280px;
-            background: var(--sidebar-bg);
-            color: var(--sidebar-text);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-
-        .brand-area {
-            padding: 30px;
-            background: rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .brand-area h2 {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 0.5px;
-        }
-        
-        .brand-subtitle {
-            font-size: 0.8rem;
-            color: var(--secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-
-        .nav-scroll {
-            overflow-y: auto;
-            flex: 1;
-            padding: 20px 0;
-        }
-
-        .nav-group { margin-bottom: 25px; }
-        
-        .nav-header {
-            padding: 0 25px 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #6c7983;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .nav-item {
-            padding: 12px 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            border-left: 3px solid transparent;
-            color: #aeb4c0;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
-
-        .nav-item.active {
-            background: rgba(0, 191, 179, 0.1);
-            border-left-color: var(--secondary);
-            color: var(--secondary);
-            font-weight: 600;
-        }
-
-        /* --- Main Content Area --- */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 60px 80px;
-            scroll-behavior: smooth;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section {
-            display: none;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        .section.active { display: block; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Typography & Elements --- */
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
-        }
-
-        h2 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-top: 50px;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 15px;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--secondary);
-            border-radius: 2px;
-        }
-
-        h3 {
-            font-size: 1.25rem;
-            color: var(--primary-dark);
-            margin-top: 30px;
-            font-weight: 600;
-        }
-
-        p, li {
-            line-height: 1.7;
-            color: #4a4f5a;
-        }
-
-        /* --- Cards --- */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 20px rgba(0,0,0,0.04);
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.05), 0 20px 30px rgba(0,0,0,0.08);
-        }
-
-        .card h3 { margin-top: 0; }
-
-        /* --- Diagrams & Visuals --- */
-        .visual-block {
-            background: #fff;
-            border: 1px dashed #cbd0d8;
-            border-radius: 12px;
-            padding: 30px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .image-placeholder {
-            background: #f0f4f8;
-            color: #535966;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: inline-block;
-            margin-bottom: 10px;
-            border: 1px solid #dce2e8;
-        }
-
-        .flow-diagram {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .node {
-            background: #fff;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 700;
-            box-shadow: 0 4px 10px rgba(0,85,113,0.15);
-        }
-        
-        .arrow-right { font-size: 1.5rem; color: #cbd0d8; }
-
-        /* --- Code Blocks --- */
-        pre {
-            background: var(--code-bg);
-            color: #a9b7c6;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
-            border: 1px solid #1e1f23;
-        }
-
-        code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9rem; }
-
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .copy-btn:hover { background: rgba(255,255,255,0.2); }
-
-        /* --- Tables --- */
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 30px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid #eee; background: #fff; }
-        th { background-color: var(--primary); color: #fff; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background-color: #fafbfc; }
-
-        /* --- Callouts --- */
-        .callout {
-            background: rgba(0, 191, 179, 0.08);
-            border-left: 5px solid var(--secondary);
-            padding: 20px;
-            border-radius: 0 8px 8px 0;
-            margin: 30px 0;
-        }
-        
-        .callout strong { color: var(--primary-dark); }
-
-    </style>
-</head>
-<body>
-
-<aside>
-    <div class="brand-area">
-        <h2>ELASTIC STACK</h2>
-        <div class="brand-subtitle">Field Guide</div>
-    </div>
-    
-    <div class="nav-scroll">
-        <div class="nav-group">
-            <div class="nav-header">Overview</div>
-            <div class="nav-item active" onclick="show('intro')">1. The Big Picture</div>
-            <div class="nav-item" onclick="show('real-world')">2. Real World Use Cases</div>
-        </div>
-
-        <div class="nav-group">
-            <div class="nav-header">Engineering</div>
-            <div class="nav-item" onclick="show('ilm')">3. ILM Strategy</div>
-            <div class="nav-item" onclick="show('analysis')">4. Analyzer Pipeline</div>
-            <div class="nav-item" onclick="show('architecture')">5. Cluster Arch</div>
-        </div>
-
-        <div class="nav-group">
-            <div class="nav-header">Tools</div>
-            <div class="nav-item" onclick="show('queries')">6. Query Cookbook</div>
-            <div class="nav-item" onclick="show('troubleshoot')">7. Troubleshooting</div>
-        </div>
-    </div>
-</aside>
-
-<main>
-    <div class="container">
-        <div id="intro" class="section active">
-            <h1>The Big Picture</h1>
-            <p>You have accessed the professional field guide for the <strong>Elastic Stack (ELK)</strong>. This isn't just a search engine; it's a distributed pipeline for data ingestion, enrichment, and analysis.</p>
-            
-            <div class="visual-block">
-                
-                <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">The flow of data from edge (Beats) to visualization (Kibana)</p>
+output {
+  elasticsearch {
+    hosts => ["localhost:9200"]
+    index => "apache-logs-%{+YYYY.MM.dd}"
+  }
+}</code></pre>
+                        </div>
+                        [cite_start]<p>The pipeline consists of three stages: <strong>Inputs</strong> (Collection), <strong>Filters</strong> (Processing/Enrichment), and <strong>Outputs</strong> (Storage)[cite: 1120].</p>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="card-grid">
-                <div class="card">
-                    <h3>The Components</h3>
+        <div id="architecture" class="tab-content">
+            <div class="section">
+                <h2><span class="icon">🏗️</span> Cluster Architecture</h2>
+                [cite_start]<p>Elasticsearch operates in a distributed environment where nodes form a cluster[cite: 61]. Understanding the topology is crucial for performance and reliability.</p>
+                
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Description</th>
+                                <th>RDBMS Equivalent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Index</strong></td>
+                                [cite_start]<td>A collection of documents sharing similar characteristics[cite: 189].</td>
+                                <td>Database</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Document</strong></td>
+                                [cite_start]<td>A basic unit of information expressed in JSON[cite: 184].</td>
+                                <td>Row</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Field</strong></td>
+                                [cite_start]<td>The smallest unit of data[cite: 186].</td>
+                                <td>Column</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Shard</strong></td>
+                                [cite_start]<td>A logical subdivision of an index (actually a Lucene index)[cite: 494].</td>
+                                <td>Partition</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="info-box">
+                    [cite_start]<h3>🧩 Node Types [cite: 352]</h3>
                     <ul>
-                        [cite_start]<li><strong style="color:var(--secondary)">Beats:</strong> Lightweight shippers sitting on the edge[cite: 98].</li>
-                        [cite_start]<li><strong style="color:var(--warning)">Logstash:</strong> The server-side ETL pipeline[cite: 85].</li>
-                        [cite_start]<li><strong style="color:var(--primary)">Elasticsearch:</strong> The distributed engine[cite: 59].</li>
-                        [cite_start]<li><strong style="color:var(--accent)">Kibana:</strong> The window into your data[cite: 74].</li>
+                        [cite_start]<li><span class="badge badge-primary">Master Node</span> Controls the cluster (creating/deleting indices, tracking nodes)[cite: 356].</li>
+                        [cite_start]<li><span class="badge badge-secondary">Data Node</span> Holds data and performs CRUD/Search operations (CPU/IO intensive)[cite: 358].</li>
+                        [cite_start]<li><span class="badge badge-warning">Ingest Node</span> Pre-processes documents before indexing (like a mini-Logstash)[cite: 359].</li>
                     </ul>
                 </div>
-                <div class="card">
-                    <h3>The Secret Sauce: Inverted Index</h3>
-                    <p>Why is it faster than SQL? It doesn't scan rows. It flips the data structure.</p>
-                    <div class="visual-block" style="margin: 10px 0;">
-                        
+
+                <div class="warning-box">
+                    <h3>⚠️ Sharding & Replication</h3>
+                    [cite_start]<p><strong>Primary Shards:</strong> defined at index creation and cannot be changed easily[cite: 476, 815].</p>
+                    <p><strong>Replica Shards:</strong> Copies of primary shards. [cite_start]They provide high availability and improve search performance (read scaling)[cite: 510].</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="querying" class="tab-content">
+            <div class="section">
+                <h2><span class="icon">🔎</span> RESTful API & Querying</h2>
+                [cite_start]<p>Elasticsearch uses standard HTTP methods (GET, POST, PUT, DELETE) to manipulate data[cite: 663].</p>
+
+                <div class="interactive-demo">
+                    <h3>💻 Interactive Console Simulator</h3>
+                    <p>Select a command to see the cURL request and the JSON response.</p>
+                    
+                    <select id="commandSelect" class="demo-input" onchange="runSimulation()">
+                        <option value="">-- Select an Operation --</option>
+                        <option value="health">Check Cluster Health</option>
+                        <option value="create">Create New Index</option>
+                        <option value="insert">Index a Document</option>
+                        <option value="search">Search Documents</option>
+                    </select>
+
+                    <div id="simulatedOutput" class="demo-output">// Output will appear here...</div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">cURL Examples</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     </div>
-                    [cite_start]<p>Instead of searching for "Error" in every row, it looks up "Error" in the index to instantly find the Document IDs[cite: 223].</p>
+[cite_start]<pre><code><span class="comment"># Check Health [cite: 701]</span>
+<span class="function">curl</span> -X GET "localhost:9200/_cluster/health?pretty"
+
+[cite_start]<span class="comment"># Create Index [cite: 727]</span>
+<span class="function">curl</span> -X PUT "localhost:9200/my-index?pretty"
+
+[cite_start]<span class="comment"># Index a Document [cite: 741]</span>
+<span class="function">curl</span> -X POST "localhost:9200/my-index/_doc" -H 'Content-Type: application/json' -d'
+{
+  "user": "kimchy",
+  "message": "trying out Elasticsearch"
+}'
+</code></pre>
                 </div>
             </div>
         </div>
 
-        <div id="real-world" class="section">
-            <h1>Real World Architecture</h1>
-            [cite_start]<p>How do we assemble these Lego blocks into enterprise solutions? [cite: 17-26]</p>
-
-            <h2>Use Case 1: Observability (Logging)</h2>
-            <p><strong>Scenario:</strong> Aggregating logs from 50+ microservice servers.</p>
-            
-            <div class="visual-block">
+        <div id="kibana" class="tab-content">
+            <div class="section">
+                <h2><span class="icon">📊</span> Kibana - Visualize & Manage</h2>
+                <p>Kibana is the window into your Elastic Stack. [cite_start]It runs on port <strong>5601</strong> by default[cite: 1045].</p>
                 
-                <div class="flow-diagram" style="margin-top: 20px;">
-                    <div class="node">Filebeat</div>
-                    <div class="arrow-right">➔</div>
-                    <div class="node">Logstash</div>
-                    <div class="arrow-right">➔</div>
-                    <div class="node">Elasticsearch</div>
-                    <div class="arrow-right">➔</div>
-                    <div class="node">Kibana</div>
+                <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div class="info-box">
+                        <h4>Discover</h4>
+                        <p>Interactively explore your data. [cite_start]Filter, search, and inspect individual documents[cite: 1095].</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>Visualize</h4>
+                        [cite_start]<p>Create bar charts, pie charts, maps, and line graphs based on your queries[cite: 77].</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>Dashboard</h4>
+                        [cite_start]<p>Combine multiple visualizations into a single view for real-time monitoring[cite: 74].</p>
+                    </div>
+                    <div class="info-box">
+                        <h4>Dev Tools</h4>
+                        <p>A console to interact directly with the Elasticsearch API (syntax highlighting & autocomplete).</p>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <h3>💡 Pro Tip: Management</h3>
+                    [cite_start]<p>Kibana is also used for managing the stack: creating Index Patterns, managing users/roles (Security), and configuring Index Lifecycle Management (ILM) policies[cite: 417].</p>
                 </div>
             </div>
-
-            <ul>
-                <li><strong>Ingest:</strong> Filebeat watches <code>/var/log/*.log</code> on every server.</li>
-                [cite_start]<li><strong>Parse:</strong> Logstash uses <strong>Grok</strong> patterns to structure the text[cite: 1114].</li>
-                <li><strong>Store:</strong> Elasticsearch indexes the JSON.</li>
-                <li><strong>View:</strong> Developers search via Kibana Dashboards.</li>
-            </ul>
-
-            <h2>Use Case 2: SIEM (Security)</h2>
-            <p><strong>Scenario:</strong> Detecting anomalies in network traffic.</p>
-            <ul>
-                [cite_start]<li><strong>Packetbeat</strong> captures network packets[cite: 110].</li>
-                [cite_start]<li>Logstash enriches IPs with <strong>GeoIP</strong> data to plot attacks on a map[cite: 123].</li>
-            </ul>
         </div>
 
-        <div id="ilm" class="section">
-            <h1>Index Lifecycle Management (ILM)</h1>
-            <p>Data has gravity. You cannot store petabytes on expensive NVMe drives forever. [cite_start]We use a Tiered Architecture [cite: 416-433].</p>
+        <div id="logstash" class="tab-content">
+            <div class="section">
+                <h2><span class="icon">⚙️</span> Logstash Architecture</h2>
+                [cite_start]<p>Logstash is an open-source, server-side data processing pipeline[cite: 85].</p>
 
-            <div class="visual-block">
-                
-            </div>
+                <div class="diagram">
+                    <div class="node" style="background: #e91e63">Input</div>
+                    <span class="arrow">→</span>
+                    <div class="node" style="background: #9c27b0">Filter</div>
+                    <span class="arrow">→</span>
+                    <div class="node" style="background: #2196f3">Output</div>
+                </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tier</th>
-                        <th>Function</th>
-                        <th>Hardware Spec</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="border-left: 4px solid var(--accent);"><strong>🔥 HOT</strong></td>
-                        <td>Ingest & Recent Search</td>
-                        <td>High CPU, NVMe SSD</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 4px solid var(--warning);"><strong>🍵 WARM</strong></td>
-                        <td>Read-Only, 7-30 Days Old</td>
-                        <td>Standard SSD, Med CPU</td>
-                    </tr>
-                    <tr>
-                        <td style="border-left: 4px solid var(--primary);"><strong>❄️ COLD</strong></td>
-                        <td>Compliance, >30 Days</td>
-                        <td>Cheap HDD / Object Store</td>
-                    </tr>
-                </tbody>
-            </table>
+                <div class="collapsible open">
+                    <div class="collapsible-header">
+                        <span>1. [cite_start]Inputs [cite: 1133]</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <p>Ingests data from various sources. Common plugins include:</p>
+                        <ul>
+                            <li><code>beats</code> (from Filebeat/Metricbeat)</li>
+                            <li><code>file</code> (read from local disk)</li>
+                            <li><code>http</code>, <code>syslog</code>, <code>kafka</code>, <code>jdbc</code></li>
+                        </ul>
+                    </div>
+                </div>
 
-            <div class="callout">
-                <strong>Strategy:</strong> Use Kibana to automate this. "If index > 50GB or > 7 days old, move to Warm."
+                <div class="collapsible open">
+                    <div class="collapsible-header">
+                        <span>2. [cite_start]Filters [cite: 1147]</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <p>Intermediary processing. The most famous is <strong>Grok</strong>.</p>
+                        [cite_start]<p><em>Grok derives structure from unstructured text (like logs) using regex patterns[cite: 1114].</em></p>
+                        <div class="code-block">
+                            MATCH: %{IP:client} %{WORD:method} %{URIPATHPARAM:request}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsible open">
+                    <div class="collapsible-header">
+                        <span>3. [cite_start]Outputs [cite: 1160]</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <p>Where to send the data. An event can be sent to multiple outputs.</p>
+                        <ul>
+                            <li><code>elasticsearch</code> (most common)</li>
+                            <li><code>file</code>, <code>email</code>, <code>slack</code>, <code>s3</code></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="analysis" class="section">
-            <h1>The Analyzer Pipeline</h1>
-            <p>Before text is searchable, it must be analyzed. [cite_start]This pipeline transforms raw text into tokens [cite: 941-951].</p>
-
-            <div class="visual-block">
+        <div id="advanced" class="tab-content">
+            <div class="section">
+                <h2><span class="icon">🎓</span> Advanced Concepts</h2>
                 
-                <br>
-                <em>Raw Text ➔ Char Filter ➔ Tokenizer ➔ Token Filter ➔ Inverted Index</em>
-            </div>
-
-            <div class="card">
-                <h3>Example: "I'm in the mood for drinking!"</h3>
-                <ol>
-                    <li><strong>Char Filter:</strong> Strips HTML tags.</li>
-                    <li><strong>Tokenizer:</strong> Splits on spaces. <code>[I'm, in, the, mood, for, drinking]</code></li>
-                    <li><strong>Token Filter:</strong> Lowercase & Stemming. <code>[i'm, mood, drink]</code></li>
+                [cite_start]<h3>🔍 Text Analysis [cite: 930]</h3>
+                <p>When you index a document, text fields undergo <strong>Analysis</strong> to make them searchable. This involves:</p>
+                                <ol>
+                    [cite_start]<li><strong>Character Filters:</strong> Clean text (e.g., strip HTML)[cite: 956].</li>
+                    [cite_start]<li><strong>Tokenizer:</strong> Split text into tokens (words)[cite: 959].</li>
+                    [cite_start]<li><strong>Token Filters:</strong> Modify tokens (lowercase, stop words, synonyms)[cite: 962].</li>
                 </ol>
+
+                <div class="diagram">
+                    "I'm in the mood!" <br>
+                    ↓ <br>
+                    <strong>Tokenizer</strong> → [I'm, in, the, mood] <br>
+                    ↓ <br>
+                    <strong>Filter (Lowercase)</strong> → [i'm, in, the, mood] <br>
+                    ↓ <br>
+                    <strong>Filter (Stopwords)</strong> → [i'm, mood]
+                </div>
+
+                [cite_start]<h3>🔄 Index Lifecycle Management (ILM) [cite: 418]</h3>
+                <p>Automate index management as data ages.</p>
+                <div class="comparison-table">
+                    <table>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Hot</strong></td>
+                            <td>Actively updated and queried. [cite_start]High performance hardware[cite: 419].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Warm</strong></td>
+                            <td>No longer updated, but still queried. [cite_start]Medium performance[cite: 420].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cold</strong></td>
+                            <td>Rarely queried. [cite_start]Archived on cheaper storage[cite: 420].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Delete</strong></td>
+                            [cite_start]<td>Index is removed when no longer needed[cite: 421].</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-
-            [cite_start]<h3>Test it in Console [cite: 981]</h3>
-            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST _analyze
-{
-  "tokenizer": "standard",
-  "text": "I'm in the mood for drinking semi-dry red wine!"
-}</pre>
         </div>
 
-        <div id="architecture" class="section">
-            <h1>Cluster Architecture</h1>
-            <p>Elasticsearch is distributed by default. Understanding Shards is key to scaling.</p>
+        <div id="practice" class="tab-content">
+            <div class="section">
+                <h2><span class="icon">💻</span> Knowledge Check</h2>
+                <p>Test your understanding based on the course material.</p>
 
-            <div class="visual-block">
-                
+                <div class="quiz-container">
+                    <div class="quiz-question">1. Which component is responsible for shipping logs from the edge servers?</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">Logstash</div>
+                    [cite_start]<div class="quiz-option" onclick="checkAnswer(this, true)">Filebeat [cite: 99]</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">Kibana</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">Elasticsearch</div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="quiz-question">2. What is the default port for Kibana?</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">9200</div>
+                    [cite_start]<div class="quiz-option" onclick="checkAnswer(this, true)">5601 [cite: 1045]</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">5044</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">8080</div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="quiz-question">3. Which node type handles the "Reduce" phase of a search?</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">Master Node</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">Data Node</div>
+                    [cite_start]<div class="quiz-option" onclick="checkAnswer(this, true)">Coordinating Node [cite: 361]</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">Ingest Node</div>
+                </div>
+
+                <div class="notes-section">
+                    <h3>📝 Your Study Notes</h3>
+                    <textarea class="notes-input" id="studyNotes" placeholder="Write your key takeaways here..."></textarea>
+                    <button class="save-note-btn" onclick="saveNotes()">Save Notes</button>
+                </div>
             </div>
-
-            [cite_start]<h3>The Life of a Write Operation [cite: 567-569]</h3>
-            <ol>
-                <li>Client hits a <strong>Coordinating Node</strong>.</li>
-                <li>Node hashes the ID to find the <strong>Primary Shard</strong>.</li>
-                <li>Data is written to Primary.</li>
-                <li>Primary forwards data to <strong>Replica Shards</strong> in parallel.</li>
-                <li>Once Replicas ack, the client gets a <code>200 OK</code>.</li>
-            </ol>
-
-            <div class="callout" style="border-left-color: var(--warning); background: rgba(245, 166, 35, 0.1);">
-                [cite_start]<strong>Split Brain Warning:</strong> Always configure an odd number of Master-eligible nodes (e.g., 3) to prevent the cluster from splitting into two isolated islands[cite: 836].
-            </div>
         </div>
 
-        <div id="queries" class="section">
-            <h1>Query Cookbook</h1>
-            <p>Essential cURL commands for your daily operations.</p>
-
-            [cite_start]<h3>Cluster Health [cite: 701]</h3>
-            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>GET _cluster/health?pretty</pre>
-
-            [cite_start]<h3>Create Index [cite: 727]</h3>
-            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>PUT /logs-2023
-{
-  "settings": { 
-    "number_of_shards": 1, 
-    "number_of_replicas": 1 
-  }
-}</pre>
-
-            [cite_start]<h3>Bulk Insert (High Performance) [cite: 906]</h3>
-            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /_bulk
-{ "index": { "_index": "test", "_id": "1" } }
-{ "field1": "value1" }
-{ "create": { "_index": "test", "_id": "2" } }
-{ "field1": "value2" }</pre>
-
-            [cite_start]<h3>Update by Query [cite: 880]</h3>
-            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /logs-2023/_update_by_query
-{
-  "script": {
-    "source": "ctx._source.status = 'processed'",
-    "lang": "painless"
-  },
-  "query": { "term": { "status": "pending" } }
-}</pre>
-        </div>
-
-        <div id="troubleshoot" class="section">
-            <h1>Troubleshooting</h1>
-            <p>Deciphering the traffic lights of Elastic.</p>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th width="100">Status</th>
-                        <th>Meaning</th>
-                        <th>Action Required</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="color:#27c93f; font-weight:bold;">● GREEN</td>
-                        <td>Healthy</td>
-                        <td>None. All primary & replica shards are active.</td>
-                    </tr>
-                    <tr>
-                        <td style="color:#ffbd2e; font-weight:bold;">● YELLOW</td>
-                        <td>Risk</td>
-                        <td>All Primary shards active, but Replicas are missing. Common in single-node dev setups.</td>
-                    </tr>
-                    <tr>
-                        <td style="color:#ff5f56; font-weight:bold;">● RED</td>
-                        <td>Critical</td>
-                        <td>Primary shards are missing. Data is unavailable. Check disk space or node connectivity immediately.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
-</main>
 
-<script>
-    function show(id) {
-        // Hide all sections
-        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        // Show target section
-        document.getElementById(id).classList.add('active');
-        
-        // Update Nav State
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-    }
+    <footer class="footer">
+        <p>Interactive Elastic Stack Notebook</p>
+        [cite_start]<p><small>Based on course material from Naya College [cite: 1]</small></p>
+    </footer>
 
-    function copyToClipboard(btn) {
-        const pre = btn.parentElement;
-        const code = pre.childNodes[1].nodeValue || pre.innerText.replace('Copy', '');
-        navigator.clipboard.writeText(code.trim());
-        
-        const originalText = btn.innerText;
-        btn.innerText = "Copied!";
-        setTimeout(() => btn.innerText = originalText, 1500);
-    }
-</script>
+    <script>
+        // Tab Switching Logic
+        function showTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Activate selected
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Update progress bar based on tab index
+            const tabs = ['basics', 'architecture', 'querying', 'kibana', 'logstash', 'advanced', 'practice'];
+            const index = tabs.indexOf(tabId);
+            const progress = ((index + 1) / tabs.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
+        // Collapsible Logic
+        function toggleCollapsible(element) {
+            element.classList.toggle('open');
+        }
+
+        // Copy Code Logic
+        function copyCode(btn) {
+            const codeBlock = btn.parentElement.nextElementSibling;
+            const text = codeBlock.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Simulation Logic for Query Tab
+        function runSimulation() {
+            const selector = document.getElementById('commandSelect');
+            const output = document.getElementById('simulatedOutput');
+            const val = selector.value;
+            
+            let response = "";
+            
+            switch(val) {
+                case "health":
+                    response = `{
+  "cluster_name" : "elasticsearch",
+  "status" : "green",
+  "number_of_nodes" : 3,
+  "active_primary_shards" : 5,
+  "active_shards" : 10
+}`; [cite_start]// [cite: 701]
+                    break;
+                case "create":
+                    response = `{
+  "acknowledged": true,
+  "shards_acknowledged": true,
+  "index": "my-index"
+}`; [cite_start]// [cite: 728]
+                    break;
+                case "insert":
+                    response = `{
+  "_index": "my-index",
+  "_id": "1",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  }
+}`; [cite_start]// [cite: 744]
+                    break;
+                case "search":
+                    response = `{
+  "hits": {
+    "total": { "value": 1, "relation": "eq" },
+    "hits": [
+      {
+        "_source": {
+          "user": "kimchy",
+          "message": "trying out Elasticsearch"
+        }
+      }
+    ]
+  }
+}`; [cite_start]// [cite: 747]
+                    break;
+                default:
+                    response = "// Select a command to see the output...";
+            }
+            
+            output.innerText = response;
+            output.style.animation = "none";
+            output.offsetHeight; /* trigger reflow */
+            output.style.animation = "fadeIn 0.5s ease";
+        }
+
+        // Quiz Logic
+        function checkAnswer(element, isCorrect) {
+            const siblings = element.parentElement.children;
+            for (let i = 0; i < siblings.length; i++) {
+                if (siblings[i].classList.contains('quiz-option')) {
+                    siblings[i].style.pointerEvents = 'none'; // Disable further clicks
+                }
+            }
+
+            if (isCorrect) {
+                element.classList.add('correct');
+                element.innerHTML += ' ✅';
+            } else {
+                element.classList.add('incorrect');
+                element.innerHTML += ' ❌';
+            }
+        }
+
+        // LocalStorage for Notes
+        function saveNotes() {
+            const notes = document.getElementById('studyNotes').value;
+            localStorage.setItem('elasticNotes', notes);
+            const btn = document.querySelector('.save-note-btn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Saved!';
+            setTimeout(() => {
+                btn.innerText = originalText;
+            }, 2000);
+        }
+
+        // Load notes on startup
+        window.onload = function() {
+            const savedNotes = localStorage.getItem('elasticNotes');
+            if (savedNotes) {
+                document.getElementById('studyNotes').value = savedNotes;
+            }
+            // Initialize progress bar
+            document.getElementById('progressBar').style.width = '14%'; // 1/7 tabs
+        }
+    </script>
 </body>
 </html>
