@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Stack: Interactive Learning Notebook</title>
+    <style>
+        :root {
+            --primary: #005571;
+            --secondary: #00bfb3;
+            --accent: #f04e98;
+            --bg: #f5f7fa;
+            --text: #343741;
+            --code-bg: #1a1b20;
+            --code-text: #e6eaed;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Navigation */
+        aside {
+            width: 250px;
+            background: #fff;
+            border-right: 1px solid #d3dae6;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+
+        aside h2 {
+            padding: 0 20px;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.2s, border-left 0.2s;
+            border-left: 4px solid transparent;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: #e6f0f5;
+        }
+
+        .nav-item.active {
+            background: #e6f0f5;
+            border-left-color: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Main Content Area */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        h2 { font-size: 1.8rem; color: var(--text); border-bottom: 2px solid var(--secondary); padding-bottom: 10px; margin-top: 40px; }
+        h3 { color: var(--primary); margin-top: 25px; }
+
+        /* Components Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .note {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        /* Comparison Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th { background-color: var(--primary); color: #fff; }
+
+        /* Terminal Simulator */
+        .terminal {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin-top: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+
+        .terminal-controls button {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .terminal-controls button:hover { background: #555; }
+
+        .output-area {
+            min-height: 200px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .command-link {
+            color: var(--secondary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Citations */
+        .cite {
+            font-size: 0.8em;
+            color: #666;
+            vertical-align: super;
+            text-decoration: none;
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+            color: #777;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<aside>
+    <h2>Elastic Stack</h2>
+    <div class="nav-item active" onclick="showSection('intro')">1. Introduction</div>
+    <div class="nav-item" onclick="showSection('architecture')">2. Core Architecture</div>
+    <div class="nav-item" onclick="showSection('data-concepts')">3. Data & Indexing</div>
+    <div class="nav-item" onclick="showSection('pipeline')">4. Logstash & Beats</div>
+    <div class="nav-item" onclick="showSection('lab')">5. Interactive Lab</div>
+</aside>
+
+<main>
+    <div id="intro" class="section active">
+        <h1>The Elastic Stack</h1>
+        <p>Welcome to your interactive guide. The Elastic Stack (formerly ELK) is a set of free and open tools for data ingestion, enrichment, storage, analysis, and visualization[cite: 60].</p>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Elasticsearch</h3>
+                <p>The heart of the stack. A distributed, RESTful search and analytics engine based on Apache Lucene. It handles textual, numerical, geospatial, structured, and unstructured data[cite: 59].</p>
+            </div>
+            <div class="card">
+                <h3>Logstash</h3>
+                <p>The processing pipeline. It ingests data from various sources, transforms it (ETL), and sends it to a "stash" like Elasticsearch[cite: 85].</p>
+            </div>
+            <div class="card">
+                <h3>Kibana</h3>
+                <p>The window into your data. A visualization dashboard that lets you visualize data stored in Elasticsearch (charts, maps, logs)[cite: 74].</p>
+            </div>
+            <div class="card">
+                <h3>Beats</h3>
+                <p>Lightweight data shippers. They sit on your servers and ship data (like logs or metrics) to Logstash or directly to Elasticsearch[cite: 98].</p>
+            </div>
+        </div>
+
+        <h2>Why use it?</h2>
+        <p>The core challenge is searching for a single phrase in billions of text files or logs[cite: 147]. Traditional relational databases (RDBMS) aren't optimized for full-text search. Elasticsearch uses an <strong>Inverted Index</strong> to solve this[cite: 218].</p>
+    </div>
+
+    <div id="architecture" class="section">
+        <h1>Elasticsearch Architecture</h1>
+        <p>Elasticsearch operates in a distributed clustered environment. Understanding the topology is key to performance and reliability.</p>
+
+        <h3>The Cluster & Nodes</h3>
+        <ul>
+            <li><strong>Cluster:</strong> A collection of nodes that communicate to hold your data[cite: 337].</li>
+            <li><strong>Node:</strong> A single server instance[cite: 338]. Nodes have different roles:</li>
+        </ul>
+
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>Node Type</th>
+                    <th>Responsibility</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Master</strong></td>
+                    <td>Controls the cluster state. Requires a minimum of 3 for high availability[cite: 356].</td>
+                </tr>
+                <tr>
+                    <td><strong>Data</strong></td>
+                    <td>Holds indexed data and performs CRUD operations. Can be tiered into Hot (new data) and Warm (older data)[cite: 358].</td>
+                </tr>
+                <tr>
+                    <td><strong>Ingest</strong></td>
+                    <td>Runs pipelines to transform data <em>before</em> indexing[cite: 360].</td>
+                </tr>
+                <tr>
+                    <td><strong>Coordinating</strong></td>
+                    <td>Routes requests and handles the "reduce" phase of search. All nodes act as coordinating nodes by default[cite: 361].</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Shards & Replicas</h3>
+        <p>To handle large datasets (e.g., 1TB), indices are split into pieces called <strong>Shards</strong>[cite: 474].</p>
+        <div class="note">
+            <strong>Key Formula:</strong> A shard is a self-contained Lucene index. <br>
+            <em>Recommendation:</em> If > 5M documents, use: <code>int(expected_docs / 5M + 1)</code>[cite: 821].
+        </div>
+        <ul>
+            <li><strong>Primary Shard:</strong> The original horizontal partition of the index[cite: 476].</li>
+            <li><strong>Replica Shard:</strong> A copy of the primary shard. Increases read performance and provides failover[cite: 508].</li>
+        </ul>
+    </div>
+
+    <div id="data-concepts" class="section">
+        <h1>Data & Indexing Concepts</h1>
+        
+        <h2>RDBMS vs. Elasticsearch</h2>
+        <p>If you are coming from a SQL background, here is how the terminology maps [cite: 196-209]:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Relational DB (SQL)</th>
+                    <th>Elasticsearch</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Database</td>
+                    <td>Index</td>
+                </tr>
+                <tr>
+                    <td>Table</td>
+                    <td><em>(Types are deprecated)</em> -> Index</td>
+                </tr>
+                <tr>
+                    <td>Row</td>
+                    <td>Document (JSON)</td>
+                </tr>
+                <tr>
+                    <td>Column</td>
+                    <td>Field</td>
+                </tr>
+                <tr>
+                    <td>Schema</td>
+                    <td>Mapping</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The Inverted Index</h2>
+        <p>This is the "magic" behind the speed. Instead of storing text directly, Elastic stores a mapping of <strong>Terms → Documents</strong>.</p>
+        <div style="background: #fff; border: 2px dashed var(--primary); padding: 20px; border-radius: 8px;">
+            <p><strong>Example:</strong></p>
+            <p><em>Doc 1:</em> "The bright blue butterfly"</p>
+            <p><em>Doc 2:</em> "Under blue sky"</p>
+            <br>
+            <strong>Inverted Index Structure:</strong>
+            <ul>
+                <li><code>blue</code> → found in [Doc 1, Doc 2]</li>
+                <li><code>butterfly</code> → found in [Doc 1]</li>
+                <li><code>sky</code> → found in [Doc 2]</li>
+            </ul>
+            <p>This allows the engine to find documents containing "blue" instantly without scanning every row[cite: 313].</p>
+        </div>
+
+        <h2>Analysis</h2>
+        <p>Text fields are analyzed when indexed. An analyzer has three parts[cite: 941]:</p>
+        <ol>
+            <li><strong>Character Filter:</strong> Cleans raw text (e.g., removes HTML tags).</li>
+            <li><strong>Tokenizer:</strong> Splits text into tokens (e.g., splitting on whitespace).</li>
+            <li><strong>Token Filter:</strong> Modifies tokens (e.g., Lowercase filter, Stop word filter)[cite: 962].</li>
+        </ol>
+    </div>
+
+    <div id="pipeline" class="section">
+        <h1>Ingestion: Logstash & Beats</h1>
+
+        <h2>Beats vs. Logstash</h2>
+        <p>The "L" and "B" in the stack.</p>
+        <ul>
+            <li><strong>Beats:</strong> Lightweight agents written in Go. Focused on shipping specific data (e.g., Filebeat for logs). Best for "Extract"[cite: 98, 101].</li>
+            <li><strong>Logstash:</strong> Server-side processing pipeline. Can aggregate data from multiple sources, transform complex data (Grok), and output to multiple destinations. Best for "Transform & Load"[cite: 101].</li>
+        </ul>
+
+        <h2>The Logstash Pipeline</h2>
+        <div style="display: flex; align-items: center; justify-content: space-around; background: #e0e0e0; padding: 20px; border-radius: 10px; margin-top: 20px;">
+            <div style="background:var(--secondary); color:white; padding:10px 20px; border-radius:5px;">Input</div>
+            <div>➔</div>
+            <div style="background:var(--accent); color:white; padding:10px 20px; border-radius:5px;">Filter (Grok)</div>
+            <div>➔</div>
+            <div style="background:var(--primary); color:white; padding:10px 20px; border-radius:5px;">Output</div>
+        </div>
+        <p style="text-align: center; font-size: 0.9em; margin-top: 10px;">[cite: 1118]</p>
+
+        <p><strong>Grok:</strong> The most popular filter. It parses arbitrary text (like unstructured logs) and structures it into JSON fields[cite: 1148].</p>
+    </div>
+
+    <div id="lab" class="section">
+        <h1>Interactive Lab Simulator</h1>
+        <p>Experience the REST APIs used to manage Elasticsearch. Click the commands on the left to execute them against the simulated cluster.</p>
+
+        <div class="terminal">
+            <div class="terminal-header">
+                <span style="color: #ff5f56;">●</span>
+                <span style="color: #ffbd2e;">●</span>
+                <span style="color: #27c93f;">●</span>
+                <span style="margin-left: 10px; opacity: 0.7;">user@elastic-node:~$</span>
+            </div>
+            
+            <div style="display: flex; gap: 20px;">
+                <div style="width: 30%; border-right: 1px solid #444; padding-right: 15px;">
+                    <h4 style="margin-top:0; color:var(--secondary);">Available Commands:</h4>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <small>1. Check Health</small><br>
+                        <span class="command-link" onclick="runCommand('health')">GET /_cluster/health</span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <small>2. Create Index</small><br>
+                        <span class="command-link" onclick="runCommand('createIndex')">PUT /tst-index-01</span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <small>3. List Indices</small><br>
+                        <span class="command-link" onclick="runCommand('catIndices')">GET /_cat/indices</span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <small>4. Add Document</small><br>
+                        <span class="command-link" onclick="runCommand('postDoc')">POST /tst-index-1/doc</span>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <small>5. Get Document</small><br>
+                        <span class="command-link" onclick="runCommand('getDoc')">GET /tst-index-1/.../id</span>
+                    </div>
+                </div>
+
+                <div class="output-area" id="terminalOutput">
+                    // Click a command on the left to see the result...
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>Pro Tip:</strong> In a real environment, you can use <code>curl</code> from the command line or the "Dev Tools" console inside Kibana[cite: 660, 1067].
+        </div>
+    </div>
+    
+    <div class="footer">
+        Based on Naya College "Elastic Stack" Course V4.0. <br>
+        AI Thought Partner: Gemini.
+    </div>
+
+</main>
+
+<script>
+    function showSection(id) {
+        // Hide all sections
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        // Show selected
+        document.getElementById(id).classList.add('active');
+        
+        // Update Nav
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    function runCommand(cmd) {
+        const output = document.getElementById('terminalOutput');
+        output.innerHTML = "<span style='color: yellow;'>Processing...</span>";
+        
+        let response = "";
+
+        // Simulated responses based on the PDF content
+        switch(cmd) {
+            case 'health':
+                // [cite: 701-721]
+                response = `HTTP/1.1 200 OK
+{
+  "cluster_name" : "elasticsearch",
+  "status": "green",
+  "timed_out": false,
+  "number_of_nodes": 1,
+  "number_of_data_nodes": 1,
+  "active_primary_shards": 0,
+  "active_shards": 0,
+  "initializing_shards": 0,
+  "unassigned_shards": 0
+}`;
+                break;
+            case 'createIndex':
+                // [cite: 727-732]
+                response = `HTTP/1.1 200 OK
+{
+  "acknowledged": true,
+  "shards_acknowledged": true,
+  "index": "tst-index-01"
+}`;
+                break;
+            case 'catIndices':
+                // [cite: 734-735]
+                response = `health status index       uuid                   pri rep docs.count store.size
+yellow open   tst-index-1 0XjTeIzxSauCqibv5av05g   1   1          0       208b`;
+                break;
+            case 'postDoc':
+                // [cite: 741]
+                response = `> POST /tst-index-1/tst_type 
+> Body: {"user": "Test", "message": "Hello World!"}
+
+HTTP/1.1 201 Created
+{
+  "_index": "tst-index-1",
+  "_type": "tst_type",
+  "_id": "4mp4fngBjmmSp_zbrNV",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  }
+}`;
+                break;
+            case 'getDoc':
+                // [cite: 753-767]
+                response = `HTTP/1.1 200 OK
+{
+  "_index": "tst-index-1",
+  "_type": "tst_type",
+  "_id": "4mp4fngBj-mmSp_zbrNV",
+  "_version": 1,
+  "found": true,
+  "_source": {
+    "user": "Test",
+    "message": "Hello World!"
+  }
+}`;
+                break;
+        }
+
+        // Typewriter effect simulation
+        setTimeout(() => {
+            output.innerHTML = `<span style="color: #4af626;">${response}</span>`;
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
