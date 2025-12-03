@@ -6,412 +6,570 @@
     <title>Elastic Stack: The Professional's Field Guide</title>
     <style>
         :root {
-            --primary: #005571;
-            --secondary: #00bfb3;
-            --accent: #f04e98;
-            --warning: #f5a623;
-            --bg: #f5f7fa;
-            --text: #343741;
-            --sidebar-width: 280px;
+            --primary: #005571;       /* Elastic Blue */
+            --primary-dark: #004258;
+            --secondary: #00bfb3;     /* Elastic Teal */
+            --accent: #f04e98;        /* Elastic Pink */
+            --warning: #f5a623;       /* Elastic Yellow */
+            --bg-color: #f6f7fa;
+            --sidebar-bg: #1a1b20;
+            --sidebar-text: #e6eaed;
+            --text-main: #343741;
+            --text-light: #69707d;
+            --card-bg: #ffffff;
+            --code-bg: #2b2c34;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text);
-            background-color: var(--bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-color);
             margin: 0;
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* --- Navigation --- */
+        /* --- Sidebar Navigation --- */
         aside {
-            width: var(--sidebar-width);
-            background: #fff;
-            border-right: 1px solid #d3dae6;
+            width: 280px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
             flex-shrink: 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
-        aside h2 {
-            padding: 20px 20px 10px;
+        .brand-area {
+            padding: 30px;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .brand-area h2 {
             margin: 0;
-            font-size: 1.1rem;
-            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+        
+        .brand-subtitle {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        .nav-scroll {
+            overflow-y: auto;
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-group { margin-bottom: 25px; }
+        
+        .nav-header {
+            padding: 0 25px 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6c7983;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .nav-group { margin-bottom: 20px; }
-        .nav-header {
-            padding: 5px 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #98a2b3;
-            text-transform: uppercase;
-        }
-
         .nav-item {
-            padding: 10px 20px;
+            padding: 12px 25px;
             cursor: pointer;
-            border-left: 4px solid transparent;
-            font-size: 0.95rem;
-            transition: all 0.2s;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            color: #aeb4c0;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
         }
 
-        .nav-item:hover { background: #e6f0f5; }
+        .nav-item:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
         .nav-item.active {
-            background: #e6f0f5;
-            border-left-color: var(--accent);
-            color: var(--primary);
+            background: rgba(0, 191, 179, 0.1);
+            border-left-color: var(--secondary);
+            color: var(--secondary);
             font-weight: 600;
         }
 
-        /* --- Main Content --- */
+        /* --- Main Content Area --- */
         main {
             flex: 1;
             overflow-y: auto;
-            padding: 40px;
+            padding: 60px 80px;
             scroll-behavior: smooth;
         }
 
-        .section { display: none; max-width: 1000px; margin: 0 auto; animation: fadeIn 0.3s ease-in; }
-        .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        h1 { font-size: 2.2rem; color: var(--primary); border-bottom: 1px solid #ddd; padding-bottom: 15px; }
-        h2 { font-size: 1.5rem; color: var(--text); margin-top: 40px; margin-bottom: 15px; }
-        h3 { color: var(--primary); margin-top: 25px; font-weight: 600; }
-
-        /* --- Cards & Visuals --- */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card {
-            background: #fff; padding: 25px; border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 4px solid var(--secondary);
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
-        .diagram-box {
-            background: #fff; border: 1px solid #ddd; padding: 20px;
-            border-radius: 8px; margin: 20px 0; text-align: center;
+        .section {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         
-        .flow-container {
-            display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+        .section.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .flow-node {
-            padding: 10px 20px; border-radius: 6px; color: white; font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
+        /* --- Typography & Elements --- */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
         }
-        .arrow { font-size: 1.5rem; color: #999; }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            margin-top: 30px;
+            font-weight: 600;
+        }
+
+        p, li {
+            line-height: 1.7;
+            color: #4a4f5a;
+        }
+
+        /* --- Cards --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.05), 0 20px 30px rgba(0,0,0,0.08);
+        }
+
+        .card h3 { margin-top: 0; }
+
+        /* --- Diagrams & Visuals --- */
+        .visual-block {
+            background: #fff;
+            border: 1px dashed #cbd0d8;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .image-placeholder {
+            background: #f0f4f8;
+            color: #535966;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 10px;
+            border: 1px solid #dce2e8;
+        }
+
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .node {
+            background: #fff;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,85,113,0.15);
+        }
+        
+        .arrow-right { font-size: 1.5rem; color: #cbd0d8; }
 
         /* --- Code Blocks --- */
         pre {
-            background: #1a1b20; color: #e6eaed; padding: 15px;
-            border-radius: 6px; overflow-x: auto; border-left: 5px solid var(--warning);
+            background: var(--code-bg);
+            color: #a9b7c6;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+            border: 1px solid #1e1f23;
         }
-        code { font-family: 'Consolas', 'Monaco', monospace; }
 
-        .callout {
-            background-color: #e3f2fd; border-left: 5px solid #2196f3;
-            padding: 15px; margin: 20px 0; border-radius: 4px;
+        code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.9rem; }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
 
         /* --- Tables --- */
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; }
-        th, td { padding: 12px 15px; border: 1px solid #e0e0e0; text-align: left; }
-        th { background-color: #f8f9fa; color: var(--primary); }
-
-        /* --- Copy Button --- */
-        .copy-btn {
-            background: #eee; border: none; padding: 5px 10px;
-            cursor: pointer; font-size: 0.8rem; float: right;
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 30px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        .copy-btn:hover { background: #ddd; }
+        
+        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid #eee; background: #fff; }
+        th { background-color: var(--primary); color: #fff; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #fafbfc; }
+
+        /* --- Callouts --- */
+        .callout {
+            background: rgba(0, 191, 179, 0.08);
+            border-left: 5px solid var(--secondary);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+        }
+        
+        .callout strong { color: var(--primary-dark); }
 
     </style>
 </head>
 <body>
 
 <aside>
-    <h2>Elastic Field Guide</h2>
+    <div class="brand-area">
+        <h2>ELASTIC STACK</h2>
+        <div class="brand-subtitle">Field Guide</div>
+    </div>
     
-    <div class="nav-group">
-        <div class="nav-header">Start Here</div>
-        <div class="nav-item active" onclick="show('intro')">1. The Big Picture</div>
-        <div class="nav-item" onclick="show('real-world')">2. Real World Use Cases</div>
-    </div>
+    <div class="nav-scroll">
+        <div class="nav-group">
+            <div class="nav-header">Overview</div>
+            <div class="nav-item active" onclick="show('intro')">1. The Big Picture</div>
+            <div class="nav-item" onclick="show('real-world')">2. Real World Use Cases</div>
+        </div>
 
-    <div class="nav-group">
-        <div class="nav-header">Engineering Deep Dive</div>
-        <div class="nav-item" onclick="show('ilm')">3. ILM (Hot/Warm/Cold)</div>
-        <div class="nav-item" onclick="show('analysis')">4. The Analyzer Pipeline</div>
-        <div class="nav-item" onclick="show('architecture')">5. Cluster Architecture</div>
-    </div>
+        <div class="nav-group">
+            <div class="nav-header">Engineering</div>
+            <div class="nav-item" onclick="show('ilm')">3. ILM Strategy</div>
+            <div class="nav-item" onclick="show('analysis')">4. Analyzer Pipeline</div>
+            <div class="nav-item" onclick="show('architecture')">5. Cluster Arch</div>
+        </div>
 
-    <div class="nav-group">
-        <div class="nav-header">Developer Tools</div>
-        <div class="nav-item" onclick="show('queries')">6. Query Cookbook (cURL)</div>
-        <div class="nav-item" onclick="show('troubleshoot')">7. Troubleshooting</div>
+        <div class="nav-group">
+            <div class="nav-header">Tools</div>
+            <div class="nav-item" onclick="show('queries')">6. Query Cookbook</div>
+            <div class="nav-item" onclick="show('troubleshoot')">7. Troubleshooting</div>
+        </div>
     </div>
 </aside>
 
 <main>
-
-    <div id="intro" class="section active">
-        <h1>What did you just download?</h1>
-        <p>The PDF you provided is a comprehensive course on the <strong>Elastic Stack (ELK)</strong>. It moves beyond the basics of "what is search" into how to architect, scale, and manage a real cluster.</p>
-        
-        <div class="card-grid">
-            <div class="card">
-                <h3>The "Stack"</h3>
-                <p>It's not just one tool. It's a pipeline:</p>
-                <ul>
-                    <li><strong>Beats:</strong> The "Agents" (Shippers). [cite_start]Light, fast, edge-based[cite: 98].</li>
-                    <li><strong>Logstash:</strong> The "Server-side Processor". [cite_start]Parsing, filtering, enriching[cite: 85].</li>
-                    <li><strong>Elasticsearch:</strong> The "Engine". [cite_start]Storage, Indexing, Search[cite: 59].</li>
-                    <li><strong>Kibana:</strong> The "UI". [cite_start]Visualization, Management, Security[cite: 74].</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>The Core Value</h3>
-                <p>Why use this over a SQL DB? <strong>The Inverted Index.</strong></p>
-                <p>Instead of scanning every row for "Error", Elastic flips the data. It stores "Error" and a list of every document ID that contains it. [cite_start]Search becomes instant[cite: 223].</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="real-world" class="section">
-        <h1>How to use this in the Real World</h1>
-        [cite_start]<p>The PDF identifies several key "Solutions" where Elastic is the industry standard [cite: 17-26]. Here is how you apply it:</p>
-
-        <h2>Use Case 1: Centralized Logging (Observability)</h2>
-        <p><strong>The Problem:</strong> You have 50 servers. Server A crashes. You don't want to SSH into it to read <code>/var/log/syslog</code>.</p>
-        <div class="diagram-box">
-            <div class="flow-container">
-                <div class="flow-node" style="background:#005571">App Server (Filebeat)</div>
-                <div class="arrow">➔</div>
-                <div class="flow-node" style="background:#f5a623">Logstash (Grok Filter)</div>
-                <div class="arrow">➔</div>
-                <div class="flow-node" style="background:#00bfb3">Elasticsearch (Hot Node)</div>
-                <div class="arrow">➔</div>
-                <div class="flow-node" style="background:#f04e98">Kibana (Dashboard)</div>
-            </div>
-        </div>
-        <ul>
-            <li><strong>Action:</strong> Install <strong>Filebeat</strong> on your app servers. Point it to your log paths.</li>
-            <li><strong>Config:</strong> Configure Filebeat to output to Logstash.</li>
-            [cite_start]<li><strong>Grok:</strong> Use Logstash to parse "Unstructured" logs into "Structured" JSON[cite: 1114].</li>
-            <li><strong>Result:</strong> In Kibana, you type <code>service_name: "payment-api" AND log.level: "ERROR"</code> and see logs from all 50 servers instantly.</li>
-        </ul>
-
-        <h2>Use Case 2: Security Information & Event Management (SIEM)</h2>
-        <p><strong>The Problem:</strong> Detecting a brute-force attack across multiple firewalls and auth systems.</p>
-        <ul>
-            [cite_start]<li><strong>Action:</strong> Use <strong>Auditbeat</strong> (for audit data) and <strong>Packetbeat</strong> (for network traffic)[cite: 110].</li>
-            [cite_start]<li><strong>Enrichment:</strong> Use Logstash "GeoIP" filter to tag IP addresses with physical locations[cite: 123].</li>
-            <li><strong>Result:</strong> A Kibana map showing login attempts from unexpected countries.</li>
-        </ul>
-
-        <h2>Use Case 3: Enterprise Search</h2>
-        <p><strong>The Problem:</strong> An e-commerce site needs fast "autocomplete" and "did you mean..." features.</p>
-        <ul>
-            <li><strong>Action:</strong> Index your product catalog into Elasticsearch.</li>
-            <li><strong>Technique:</strong> Use <strong>Analyzers</strong> (N-grams) to break words into partials for autocomplete.</li>
-            <li><strong>Result:</strong> User types "iph", search returns "iPhone 13" in < 20ms.</li>
-        </ul>
-    </div>
-
-    <div id="ilm" class="section">
-        <h1>Index Lifecycle Management (ILM)</h1>
-        <p>In the real world, logging data is massive. You cannot keep 5 years of logs on your fastest, most expensive hardware. [cite_start]The PDF outlines a <strong>Hot-Warm-Cold</strong> architecture [cite: 416-433].</p>
-
-        <table style="margin-top:20px;">
-            <thead>
-                <tr>
-                    <th>Phase</th>
-                    <th>Role</th>
-                    <th>Hardware Profile</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>🔥 HOT</strong></td>
-                    <td>Ingesting new data. Heavy indexing and querying.</td>
-                    <td>High CPU, Fast SSD NVMe.</td>
-                </tr>
-                <tr>
-                    <td><strong>🍵 WARM</strong></td>
-                    <td>Data is read-only (7-30 days old). Still queried often.</td>
-                    <td>Medium CPU, Standard SSD/HDD.</td>
-                </tr>
-                <tr>
-                    <td><strong>❄️ COLD</strong></td>
-                    <td>Rarely queried (months/years old). For compliance.</td>
-                    <td>Low CPU, High-capacity HDD (Cheap storage).</td>
-                </tr>
-                <tr>
-                    <td><strong>🗑️ DELETE</strong></td>
-                    <td>Data is purged automatically.</td>
-                    <td>N/A</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="callout">
-            <strong>Real World Tip:</strong> Set up an ILM Policy in Kibana to automatically "Rollover" indexes. <br>
-            <em>Example:</em> When an index reaches 50GB or 30 days old, move it from Hot to Warm.
-        </div>
-    </div>
-
-    <div id="analysis" class="section">
-        <h1>The Analyzer Pipeline</h1>
-        <p>How does "I'm in the mood for drinking" become searchable? [cite_start]The PDF details the analysis chain [cite: 941-951].</p>
-
-        <div class="diagram-box">
-            <h3>Input Text</h3>
-            <code>"I'm in the mood for drinking!"</code>
-            <br><br>
-            <div class="arrow">⬇</div>
+    <div class="container">
+        <div id="intro" class="section active">
+            <h1>The Big Picture</h1>
+            <p>You have accessed the professional field guide for the <strong>Elastic Stack (ELK)</strong>. This isn't just a search engine; it's a distributed pipeline for data ingestion, enrichment, and analysis.</p>
             
-            <div style="background:#eef; padding:10px; margin:10px auto; width:80%;">
-                <strong>1. Character Filter</strong><br>
-                <small>Strips HTML, converts symbols.</small>
-            </div>
-            
-            <div class="arrow">⬇</div>
-
-            <div style="background:#ddf; padding:10px; margin:10px auto; width:80%;">
-                <strong>2. Tokenizer</strong><br>
-                <small>Splits string on whitespace.</small><br>
-                <code>[I'm] [in] [the] [mood] [for] [drinking]</code>
+            <div class="visual-block">
+                
+                <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">The flow of data from edge (Beats) to visualization (Kibana)</p>
             </div>
 
-            <div class="arrow">⬇</div>
-
-            <div style="background:#ccf; padding:10px; margin:10px auto; width:80%;">
-                <strong>3. Token Filters</strong><br>
-                <small>Lowercase, Stop Words (remove 'the', 'in'), Stemming (drinking -> drink).</small><br>
-                <code>[i'm] [mood] [drink]</code>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>The Components</h3>
+                    <ul>
+                        [cite_start]<li><strong style="color:var(--secondary)">Beats:</strong> Lightweight shippers sitting on the edge[cite: 98].</li>
+                        [cite_start]<li><strong style="color:var(--warning)">Logstash:</strong> The server-side ETL pipeline[cite: 85].</li>
+                        [cite_start]<li><strong style="color:var(--primary)">Elasticsearch:</strong> The distributed engine[cite: 59].</li>
+                        [cite_start]<li><strong style="color:var(--accent)">Kibana:</strong> The window into your data[cite: 74].</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>The Secret Sauce: Inverted Index</h3>
+                    <p>Why is it faster than SQL? It doesn't scan rows. It flips the data structure.</p>
+                    <div class="visual-block" style="margin: 10px 0;">
+                        
+                    </div>
+                    [cite_start]<p>Instead of searching for "Error" in every row, it looks up "Error" in the index to instantly find the Document IDs[cite: 223].</p>
+                </div>
             </div>
         </div>
 
-        [cite_start]<p><strong>Test it yourself:</strong> The PDF provides the <code>_analyze</code> API to debug this[cite: 981].</p>
-        <pre>
-POST _analyze
+        <div id="real-world" class="section">
+            <h1>Real World Architecture</h1>
+            [cite_start]<p>How do we assemble these Lego blocks into enterprise solutions? [cite: 17-26]</p>
+
+            <h2>Use Case 1: Observability (Logging)</h2>
+            <p><strong>Scenario:</strong> Aggregating logs from 50+ microservice servers.</p>
+            
+            <div class="visual-block">
+                
+                <div class="flow-diagram" style="margin-top: 20px;">
+                    <div class="node">Filebeat</div>
+                    <div class="arrow-right">➔</div>
+                    <div class="node">Logstash</div>
+                    <div class="arrow-right">➔</div>
+                    <div class="node">Elasticsearch</div>
+                    <div class="arrow-right">➔</div>
+                    <div class="node">Kibana</div>
+                </div>
+            </div>
+
+            <ul>
+                <li><strong>Ingest:</strong> Filebeat watches <code>/var/log/*.log</code> on every server.</li>
+                [cite_start]<li><strong>Parse:</strong> Logstash uses <strong>Grok</strong> patterns to structure the text[cite: 1114].</li>
+                <li><strong>Store:</strong> Elasticsearch indexes the JSON.</li>
+                <li><strong>View:</strong> Developers search via Kibana Dashboards.</li>
+            </ul>
+
+            <h2>Use Case 2: SIEM (Security)</h2>
+            <p><strong>Scenario:</strong> Detecting anomalies in network traffic.</p>
+            <ul>
+                [cite_start]<li><strong>Packetbeat</strong> captures network packets[cite: 110].</li>
+                [cite_start]<li>Logstash enriches IPs with <strong>GeoIP</strong> data to plot attacks on a map[cite: 123].</li>
+            </ul>
+        </div>
+
+        <div id="ilm" class="section">
+            <h1>Index Lifecycle Management (ILM)</h1>
+            <p>Data has gravity. You cannot store petabytes on expensive NVMe drives forever. [cite_start]We use a Tiered Architecture [cite: 416-433].</p>
+
+            <div class="visual-block">
+                
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Function</th>
+                        <th>Hardware Spec</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border-left: 4px solid var(--accent);"><strong>🔥 HOT</strong></td>
+                        <td>Ingest & Recent Search</td>
+                        <td>High CPU, NVMe SSD</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left: 4px solid var(--warning);"><strong>🍵 WARM</strong></td>
+                        <td>Read-Only, 7-30 Days Old</td>
+                        <td>Standard SSD, Med CPU</td>
+                    </tr>
+                    <tr>
+                        <td style="border-left: 4px solid var(--primary);"><strong>❄️ COLD</strong></td>
+                        <td>Compliance, >30 Days</td>
+                        <td>Cheap HDD / Object Store</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout">
+                <strong>Strategy:</strong> Use Kibana to automate this. "If index > 50GB or > 7 days old, move to Warm."
+            </div>
+        </div>
+
+        <div id="analysis" class="section">
+            <h1>The Analyzer Pipeline</h1>
+            <p>Before text is searchable, it must be analyzed. [cite_start]This pipeline transforms raw text into tokens [cite: 941-951].</p>
+
+            <div class="visual-block">
+                
+                <br>
+                <em>Raw Text ➔ Char Filter ➔ Tokenizer ➔ Token Filter ➔ Inverted Index</em>
+            </div>
+
+            <div class="card">
+                <h3>Example: "I'm in the mood for drinking!"</h3>
+                <ol>
+                    <li><strong>Char Filter:</strong> Strips HTML tags.</li>
+                    <li><strong>Tokenizer:</strong> Splits on spaces. <code>[I'm, in, the, mood, for, drinking]</code></li>
+                    <li><strong>Token Filter:</strong> Lowercase & Stemming. <code>[i'm, mood, drink]</code></li>
+                </ol>
+            </div>
+
+            [cite_start]<h3>Test it in Console [cite: 981]</h3>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST _analyze
 {
   "tokenizer": "standard",
   "text": "I'm in the mood for drinking semi-dry red wine!"
 }</pre>
-    </div>
+        </div>
 
-    <div id="queries" class="section">
-        <h1>Query Cookbook</h1>
-        <p>Real-world work involves using the API. [cite_start]Here are the essential commands extracted from the PDF[cite: 701, 845, 906].</p>
+        <div id="architecture" class="section">
+            <h1>Cluster Architecture</h1>
+            <p>Elasticsearch is distributed by default. Understanding Shards is key to scaling.</p>
 
-        <h3>1. Check Cluster Health</h3>
-        <p>Is the system green, yellow, or red?</p>
-        <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>GET _cluster/health?pretty</pre>
+            <div class="visual-block">
+                
+            </div>
 
-        <h3>2. Create an Index (Database)</h3>
-        <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>PUT /my-new-index
+            [cite_start]<h3>The Life of a Write Operation [cite: 567-569]</h3>
+            <ol>
+                <li>Client hits a <strong>Coordinating Node</strong>.</li>
+                <li>Node hashes the ID to find the <strong>Primary Shard</strong>.</li>
+                <li>Data is written to Primary.</li>
+                <li>Primary forwards data to <strong>Replica Shards</strong> in parallel.</li>
+                <li>Once Replicas ack, the client gets a <code>200 OK</code>.</li>
+            </ol>
+
+            <div class="callout" style="border-left-color: var(--warning); background: rgba(245, 166, 35, 0.1);">
+                [cite_start]<strong>Split Brain Warning:</strong> Always configure an odd number of Master-eligible nodes (e.g., 3) to prevent the cluster from splitting into two isolated islands[cite: 836].
+            </div>
+        </div>
+
+        <div id="queries" class="section">
+            <h1>Query Cookbook</h1>
+            <p>Essential cURL commands for your daily operations.</p>
+
+            [cite_start]<h3>Cluster Health [cite: 701]</h3>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>GET _cluster/health?pretty</pre>
+
+            [cite_start]<h3>Create Index [cite: 727]</h3>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>PUT /logs-2023
 {
-  "settings": { "number_of_shards": 1, "number_of_replicas": 1 }
+  "settings": { 
+    "number_of_shards": 1, 
+    "number_of_replicas": 1 
+  }
 }</pre>
 
-        <h3>3. Index a Document (Insert Data)</h3>
-        <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /my-new-index/_doc/1
-{
-  "user": "John Doe",
-  "message": "Elasticsearch is fast",
-  "timestamp": "2023-10-27T12:00:00"
-}</pre>
-
-        <h3>4. The Bulk API (High Performance Insert)</h3>
-        [cite_start]<p>Use this for importing thousands of logs at once[cite: 906].</p>
-        <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /_bulk
+            [cite_start]<h3>Bulk Insert (High Performance) [cite: 906]</h3>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /_bulk
 { "index": { "_index": "test", "_id": "1" } }
 { "field1": "value1" }
-{ "delete": { "_index": "test", "_id": "2" } }
-{ "create": { "_index": "test", "_id": "3" } }
-{ "field1": "value3" }</pre>
+{ "create": { "_index": "test", "_id": "2" } }
+{ "field1": "value2" }</pre>
 
-        <h3>5. Update By Query</h3>
-        [cite_start]<p>Update multiple documents that match a condition[cite: 880].</p>
-        <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /my-new-index/_update_by_query
+            [cite_start]<h3>Update by Query [cite: 880]</h3>
+            <pre><button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>POST /logs-2023/_update_by_query
 {
   "script": {
     "source": "ctx._source.status = 'processed'",
     "lang": "painless"
   },
-  "query": {
-    "term": { "status": "pending" }
-  }
+  "query": { "term": { "status": "pending" } }
 }</pre>
-    </div>
+        </div>
 
-    <div id="architecture" class="section">
-        <h1>Cluster Architecture</h1>
-        <p>Understanding how data is distributed is critical for preventing data loss.</p>
+        <div id="troubleshoot" class="section">
+            <h1>Troubleshooting</h1>
+            <p>Deciphering the traffic lights of Elastic.</p>
 
-        [cite_start]<h3>The Logic of Writes (Indexing) [cite: 567-569]</h3>
-        <ol>
-            <li>Client sends data to <strong>Node 1</strong> (Coordinating Node).</li>
-            <li>Node 1 hashes the document ID to find which <strong>Shard</strong> it belongs to (e.g., Shard 0).</li>
-            <li>Node 1 forwards data to the <strong>Primary Shard</strong> (on Node 3).</li>
-            <li>Primary Shard writes data, then forwards it to <strong>Replica Shards</strong> (on Node 1 and 2) in parallel.</li>
-            <li>Once Replicas confirm, Primary reports success.</li>
-        </ol>
-
-        <div class="callout">
-            [cite_start]<strong>Split Brain Warning:</strong> The PDF advises using an <strong>odd number of Master Nodes</strong> (e.g., 3) to avoid "Split Brain" scenarios where the cluster divides into two arguing halves[cite: 836].
+            <table>
+                <thead>
+                    <tr>
+                        <th width="100">Status</th>
+                        <th>Meaning</th>
+                        <th>Action Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color:#27c93f; font-weight:bold;">● GREEN</td>
+                        <td>Healthy</td>
+                        <td>None. All primary & replica shards are active.</td>
+                    </tr>
+                    <tr>
+                        <td style="color:#ffbd2e; font-weight:bold;">● YELLOW</td>
+                        <td>Risk</td>
+                        <td>All Primary shards active, but Replicas are missing. Common in single-node dev setups.</td>
+                    </tr>
+                    <tr>
+                        <td style="color:#ff5f56; font-weight:bold;">● RED</td>
+                        <td>Critical</td>
+                        <td>Primary shards are missing. Data is unavailable. Check disk space or node connectivity immediately.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-
-    <div id="troubleshoot" class="section">
-        <h1>Troubleshooting Guide</h1>
-        
-        <h3>Status Codes</h3>
-        <ul>
-            <li><strong style="color:green">GREEN:</strong> All primary and replica shards are active.</li>
-            <li><strong style="color:orange">YELLOW:</strong> All primary shards are active, but some replicas are missing. (Common in single-node dev setups).</li>
-            <li><strong style="color:red">RED:</strong> Some primary shards are missing. Data is missing. Panic.</li>
-        </ul>
-
-        <h3>Common Issues & Fixes</h3>
-        <table style="font-size: 0.9rem;">
-            <tr>
-                <th>Symptom</th>
-                <th>Probable Cause</th>
-                <th>Fix</th>
-            </tr>
-            <tr>
-                <td>Status is Yellow</td>
-                <td>Not enough nodes to hold replicas.</td>
-                <td>Add another node or set <code>number_of_replicas: 0</code> for dev.</td>
-            </tr>
-            <tr>
-                <td>"Split Brain"</td>
-                <td>Network partition between masters.</td>
-                <td>Ensure <code>cluster.initial_master_nodes</code> is set correctly and you have 3 masters.</td>
-            </tr>
-            <tr>
-                <td>Slow Search</td>
-                <td>Too many shards for the hardware.</td>
-                <td>Reindex into fewer shards (Shrink API).</td>
-            </tr>
-        </table>
-    </div>
-
 </main>
 
 <script>
     function show(id) {
+        // Hide all sections
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        // Show target section
         document.getElementById(id).classList.add('active');
         
+        // Update Nav State
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         event.currentTarget.classList.add('active');
     }
