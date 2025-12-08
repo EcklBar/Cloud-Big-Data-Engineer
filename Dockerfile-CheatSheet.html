@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dockerfile Cheat Sheet</title>
+    <title>Docker Pro Cheat Sheet</title>
     <style>
         :root {
-            --primary: #2496ed; /* Docker Blue */
-            --primary-dark: #0db7ed;
-            --bg: #f4f6f8;
-            --card-bg: #ffffff;
-            --text-main: #24292e;
-            --text-muted: #586069;
-            --code-bg: #2d333b;
-            --code-text: #adbac7;
-            --border-radius: 8px;
+            --primary: #0969da;
+            --primary-bg: #ddf4ff;
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --border: #30363d;
+            --code-bg: #0d1117;
+            --good: #238636;
+            --bad: #da3633;
+            --warn: #d29922;
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
         }
@@ -27,31 +29,45 @@
             color: var(--text-main);
             margin: 0;
             padding: 20px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         header {
             text-align: center;
             margin-bottom: 40px;
             padding-top: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            color: #1d1d1d;
+            color: #ffffff;
+        }
+
+        .tag-pro {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.5em;
+            vertical-align: middle;
+            margin-left: 10px;
         }
 
         p.subtitle {
             font-size: 1.1rem;
             color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         /* Grid Layout */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -59,16 +75,15 @@
         /* Cards */
         .card {
             background: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 20px;
-            border-top: 4px solid var(--primary);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
         .card:hover {
+            border-color: var(--text-muted);
             transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         .card h2 {
@@ -78,104 +93,81 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
         }
 
-        /* Full width cards for large sections */
         .card.full-width {
             grid-column: 1 / -1;
+            border-left: 4px solid var(--primary);
         }
 
         /* Code Blocks */
         .code-wrapper {
             position: relative;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
         }
 
         pre {
             background-color: var(--code-bg);
-            color: var(--code-text);
+            color: var(--text-main);
             padding: 15px;
-            border-radius: var(--border-radius);
+            border-radius: 6px;
             overflow-x: auto;
             font-family: var(--font-mono);
             font-size: 0.9rem;
             margin: 0;
+            white-space: pre;
         }
 
-        /* Syntax Highlighting Simulation */
-        .kwd { color: #f47067; font-weight: bold; } /* Keywords like FROM, RUN */
-        .str { color: #96d0ff; } /* Strings */
-        .comment { color: #768390; font-style: italic; }
+        /* Syntax Highlighting */
+        .kwd { color: #ff7b72; font-weight: bold; } /* FROM, RUN */
+        .str { color: #a5d6ff; } /* Strings */
+        .arg { color: #79c0ff; } /* Args */
+        .comment { color: #8b949e; font-style: italic; }
+        .flag { color: #d2a8ff; }
 
         /* Copy Button */
         .copy-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 8px;
+            right: 8px;
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border);
             color: #fff;
             border-radius: 4px;
-            padding: 4px 8px;
+            padding: 4px 10px;
             font-size: 0.75rem;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
         }
 
-        .code-wrapper:hover .copy-btn {
-            opacity: 1;
-        }
+        .code-wrapper:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { background: var(--primary); border-color: var(--primary); }
 
-        .copy-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Lists and formatting */
-        ul { padding-left: 20px; }
-        li { margin-bottom: 5px; }
-        
-        strong { color: #000; font-weight: 600; }
-        
-        .badge {
+        /* Status indicators */
+        .status-badge {
             display: inline-block;
-            background: #e1f0fa;
-            color: var(--primary);
             padding: 2px 6px;
             border-radius: 4px;
-            font-family: var(--font-mono);
-            font-size: 0.85em;
-            margin-top: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 8px;
         }
+        .bad-badge { background: rgba(218, 54, 51, 0.15); color: #ff7b72; border: 1px solid rgba(218, 54, 51, 0.4); }
+        .good-badge { background: rgba(35, 134, 54, 0.15); color: #7ee787; border: 1px solid rgba(35, 134, 54, 0.4); }
 
-        /* Comparison tables/divs */
-        .comparison {
-            display: flex;
-            gap: 15px;
-            flex-direction: column;
-        }
-        .comp-item {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 6px;
-            border-left: 3px solid #ccc;
-        }
-        .comp-item strong { display: block; margin-bottom: 5px; color: var(--primary); }
-
-        /* Memory Rules Section */
-        .memory-rules {
-            background: linear-gradient(135deg, #2496ed 0%, #0d47a1 100%);
-            color: white;
-            border-top: none;
-        }
-        .memory-rules h2, .memory-rules li, .memory-rules strong {
-            color: white;
-        }
-        .memory-rules .badge {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
+        ul { padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 8px; }
+        strong { color: #fff; }
+        
+        /* Highlight specific crucial text */
+        .highlight-warn { color: #ffa657; font-weight: bold; }
 
         @media (max-width: 600px) {
             .grid-container { grid-template-columns: 1fr; }
@@ -186,169 +178,141 @@
 <body>
 
     <header>
-        <h1>🧾 Dockerfile Cheat Sheet</h1>
-        <p class="subtitle">A single-page reference for building efficient container images.</p>
+        <h1>🧾 Dockerfile Cheat Sheet <span class="tag-pro">PRO EDITION</span></h1>
+        <p class="subtitle">Production-grade best practices, security hardening, and optimization techniques.</p>
     </header>
 
     <div class="grid-container">
 
         <div class="card full-width">
-            <h2>🚀 1. Basic Structure</h2>
-            <p>The fundamental skeleton of most Python-based Dockerfiles.</p>
+            <h2>🏆 1. The Production Template</h2>
+            <p style="color: var(--text-muted); margin-bottom: 10px;">
+                Secure, small, and fast. Includes non-root user and explicit versioning.
+            </p>
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code><span class="kwd">FROM</span> &lt;base-image&gt;
+<pre><code><span class="comment"># 1. Pin specific version (Avoid 'latest')</span>
+<span class="kwd">FROM</span> python:3.10.4-slim-bullseye
+
+<span class="comment"># 2. Set envs to prevent python buffering</span>
+<span class="kwd">ENV</span> PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 <span class="kwd">WORKDIR</span> /app
 
+<span class="comment"># 3. Create non-root user for security</span>
+<span class="kwd">RUN</span> useradd -m appuser
+
+<span class="comment"># 4. Install Dependencies</span>
 <span class="kwd">COPY</span> requirements.txt .
 <span class="kwd">RUN</span> pip install --no-cache-dir -r requirements.txt
 
+<span class="comment"># 5. Copy code & switch user</span>
 <span class="kwd">COPY</span> . .
+<span class="kwd">USER</span> appuser
 
+<span class="comment"># 6. Use Exec form (JSON array)</span>
 <span class="kwd">CMD</span> [<span class="str">"python"</span>, <span class="str">"main.py"</span>]</code></pre>
             </div>
         </div>
 
         <div class="card">
-            <h2>🧱 2. Base Image Rules</h2>
+            <h2>🧹 2. The "Apt-Get" Cleanup</h2>
+            <p class="subtitle">Reduce image size by ~30MB+</p>
             <ul>
-                <li><strong>Use official images</strong> when possible.</li>
-                <li>Examples: <span class="badge">python:3.10</span> <span class="badge">node:20</span> <span class="badge">apache/airflow:2.9.2</span></li>
-                <li>Avoid reinstalling software already included in the base image.</li>
+                <li>Combine update, install, and clean in <strong style="color:var(--primary-bg)">ONE layer</strong>.</li>
+                <li>If you split them, the cache remains in the history.</li>
             </ul>
-        </div>
-
-        <div class="card">
-            <h2>⚙️ 3. ARG vs ENV</h2>
-            <div class="comparison">
-                <div class="comp-item" style="border-left-color: #ff9800;">
-                    <strong>ARG (Build Time)</strong>
-                    Only exists during the <code>docker build</code> process.
-                    <div class="code-wrapper">
-<pre><code><span class="kwd">ARG</span> PY_VER=3.10
-<span class="kwd">FROM</span> python:${PY_VER}</code></pre>
-                    </div>
-                </div>
-                <div class="comp-item" style="border-left-color: #4caf50;">
-                    <strong>ENV (Runtime)</strong>
-                    Persists inside the running container.
-                    <div class="code-wrapper">
-<pre><code><span class="kwd">ENV</span> AIRFLOW_HOME=/opt/airflow</code></pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>📁 4. COPY Order (Caching)</h2>
-            <p>Order matters for Docker layer caching. Copy dependencies <em>before</em> code.</p>
             <div class="code-wrapper">
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code><span class="comment"># 1. Copy requirements first</span>
-<span class="kwd">COPY</span> requirements.txt .
-<span class="comment"># 2. Install dependencies (Cached unless reqs change)</span>
-<span class="kwd">RUN</span> pip install --no-cache-dir -r requirements.txt
-<span class="comment"># 3. Copy source code (Changes often)</span>
-<span class="kwd">COPY</span> . .</code></pre>
+<pre><code><span class="kwd">RUN</span> apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    <span class="comment"># Clean up in the same layer!</span>
+    && rm -rf /var/lib/apt/lists/*</code></pre>
             </div>
         </div>
 
         <div class="card">
-            <h2>💾 5. Always Use .dockerignore</h2>
-            <p>Create a <code>.dockerignore</code> file to avoid copying unnecessary files:</p>
-            <div class="code-wrapper">
-<pre><code>__pycache__/
-.env
-*.log
-.git</code></pre>
+            <h2>🛑 3. Signal Handling (PID 1)</h2>
+            <p class="subtitle">Ensure `Ctrl+C` or Kubernetes kills work.</p>
+            
+            <div style="margin-bottom: 15px;">
+                <span class="status-badge bad-badge">BAD (Shell Form)</span>
+                <div class="code-wrapper" style="margin-top:5px; opacity: 0.7;">
+<pre><code><span class="kwd">CMD</span> python main.py</code></pre>
+                </div>
+                <small style="color:var(--text-muted)">Starts as <code>/bin/sh -c</code>. Signals get swallowed.</small>
             </div>
-            <p><small>This keeps images small and builds fast.</small></p>
-        </div>
 
-        <div class="card">
-            <h2>🧩 6. Installing Dependencies</h2>
-            <p><strong>Python Packages:</strong></p>
-            <div class="code-wrapper">
-<pre><code><span class="kwd">RUN</span> pip install --no-cache-dir -r requirements.txt</code></pre>
-            </div>
-            <p><strong>OS Packages (e.g., Airflow):</strong></p>
-            <div class="code-wrapper">
-<pre><code><span class="kwd">USER</span> root
-<span class="kwd">RUN</span> apt-get update && apt-get install -y nano
-<span class="kwd">USER</span> airflow</code></pre>
-            </div>
-        </div>
-
-        <div class="card full-width">
-            <h2>🧩 7. Multi-Stage Builds</h2>
-            <p>Optional but powerful. Makes final images tiny by discarding build tools.</p>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code><span class="comment"># Stage 1: Builder</span>
-<span class="kwd">FROM</span> python:3.10 as builder
-<span class="kwd">RUN</span> pip install --prefix=/install -r requirements.txt
-
-<span class="comment"># Stage 2: Final Image</span>
-<span class="kwd">FROM</span> python:3.10
-<span class="kwd">COPY</span> --from=builder /install /usr/local</code></pre>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>💡 8. Keep Images Small</h2>
-            <ul>
-                <li>✅ Use <code>--no-cache-dir</code> in pip.</li>
-                <li>✅ Use <code>.dockerignore</code> religiously.</li>
-                <li>✅ Use <strong>slim</strong> base images (e.g., <code>python:3.10-slim</code>).</li>
-                <li>✅ Avoid installing unnecessary debugging tools (vim, curl) unless needed.</li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h2>🏃 9. CMD vs ENTRYPOINT</h2>
-            <div class="comparison">
-                <div class="comp-item">
-                    <strong>CMD (Default Command)</strong>
-                    Can be overridden by arguments passed to <code>docker run</code>.
-                    <div class="code-wrapper">
+            <div>
+                <span class="status-badge good-badge">GOOD (Exec Form)</span>
+                <div class="code-wrapper" style="margin-top:5px;">
 <pre><code><span class="kwd">CMD</span> [<span class="str">"python"</span>, <span class="str">"main.py"</span>]</code></pre>
-                    </div>
                 </div>
-                <div class="comp-item">
-                    <strong>ENTRYPOINT (Fixed Executable)</strong>
-                    Difficult to override. Often used for wrappers like <code>dumb-init</code>.
-                    <div class="code-wrapper">
-<pre><code><span class="kwd">ENTRYPOINT</span> [<span class="str">"/usr/bin/dumb-init"</span>, <span class="str">"--"</span>]
-<span class="kwd">CMD</span> [<span class="str">"airflow"</span>, <span class="str">"scheduler"</span>]</code></pre>
-                    </div>
-                </div>
+                <small style="color:var(--text-muted)">Runs directly. Signals pass through.</small>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔐 10. User Best Practices</h2>
-            <p>Don't run everything as root for security reasons.</p>
-            <p>If you switch to root to install OS packages, always switch back:</p>
+            <h2>📚 4. Intelligent Caching</h2>
+            
+            <p class="subtitle">Docker caches lines from top to bottom.</p>
+            <ul>
+                <li>❌ <strong>Copy All First:</strong> Any code change invalidates dependency install.</li>
+                <li>✅ <strong>Copy Reqs First:</strong> Dependencies are cached unless <code>requirements.txt</code> changes.</li>
+            </ul>
             <div class="code-wrapper">
-<pre><code><span class="kwd">USER</span> airflow</code></pre>
+<pre><code><span class="kwd">COPY</span> requirements.txt .
+<span class="kwd">RUN</span> pip install ... <span class="comment"># Cached!</span>
+<span class="kwd">COPY</span> . .            <span class="comment"># Changes often</span></code></pre>
             </div>
         </div>
 
-        <div class="card memory-rules full-width">
-            <h2>🎯 Quick Memory Rules (Super Easy)</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around;">
-                <ul>
-                    <li>1. Start with a <span class="badge">base image</span></li>
-                    <li>2. Set <span class="badge">WORKDIR</span></li>
-                    <li>3. Copy requirements → install → <strong>then</strong> copy code</li>
-                </ul>
-                <ul>
-                    <li>4. Use <span class="badge">.dockerignore</span></li>
-                    <li>5. Use <span class="badge">CMD</span> to run app</li>
-                    <li>6. <strong>NEVER</strong> reinstall Airflow inside the official image</li>
-                </ul>
+        <div class="card">
+            <h2>🔐 5. Secrets Management</h2>
+            <p><span class="highlight-warn">NEVER</span> use <code>ENV</code> for passwords/keys. They persist in <code>docker history</code>.</p>
+            
+            <div style="margin-top: 15px;">
+                <strong style="color: #fff">The Fix (BuildKit):</strong>
             </div>
+            <div class="code-wrapper">
+<pre><code><span class="comment"># Mount secret only for this command</span>
+<span class="kwd">RUN</span> --mount=type=secret,id=mykey \
+    cat /run/secrets/mykey | scripts/install.sh</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏗️ 6. The "Shrinker" (Multi-Stage)</h2>
+            <p class="subtitle">Build with tools (gcc, go), ship only the binary.</p>
+            <div class="code-wrapper">
+<pre><code><span class="kwd">FROM</span> golang:1.18 as builder
+<span class="kwd">RUN</span> go build -o app main.go
+
+<span class="comment"># Final image is tiny</span>
+<span class="kwd">FROM</span> alpine:3.14
+<span class="kwd">COPY</span> --from=builder /app /app
+<span class="kwd">CMD</span> [<span class="str">"/app"</span>]</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>❤️ 7. Add Healthchecks</h2>
+            <p class="subtitle">Let Docker restart your app if it freezes.</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code><span class="kwd">HEALTHCHECK</span> --interval=30s --timeout=3s \
+  <span class="kwd">CMD</span> curl -f http://localhost:8000/ || exit 1</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏷️ 8. Version Pinning</h2>
+            <ul>
+                <li><span class="status-badge bad-badge">node:latest</span> <br><small>Unpredictable. Might break tomorrow.</small></li>
+                <li><span class="status-badge good-badge">node:20.1-alpine</span> <br><small>Stable. Predictable size and behavior.</small></li>
+            </ul>
         </div>
 
     </div>
@@ -360,12 +324,14 @@
             
             navigator.clipboard.writeText(code).then(() => {
                 const originalText = button.innerText;
-                button.innerText = "Copied!";
-                button.style.background = "#28a745";
+                button.innerText = "✓";
+                button.style.background = "#238636";
+                button.style.borderColor = "#238636";
                 
                 setTimeout(() => {
                     button.innerText = originalText;
                     button.style.background = "";
+                    button.style.borderColor = "";
                 }, 2000);
             }).catch(err => {
                 console.error('Failed to copy: ', err);
