@@ -501,18 +501,29 @@
                 <div id="topic-elk" class="topic-detail" style="display:none;">
                     <h1>The ELK Stack</h1>
                     <p>"ELK" is the acronym for three open source projects: Elasticsearch, Logstash, and Kibana.</p>
+
+                    <h3 style="color:var(--beats-teal)">1. Beats (Collection)</h3>
+                    <div class="metaphor-box">Metaphor: Think of Beats as the "Delivery Trucks" picking up packages.</div>
+                    <p>Beats are lightweight data shippers that sit on your servers and ship data to Logstash or Elasticsearch (think of them as "Agents").</p>
+                    <p>They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs, Metricbeat for metrics).</p>
+
+
+                    <h3 style="color:var(--logstash-yellow)">2. Logstash (Ingest)</h3>
+                    <div class="metaphor-box">Metaphor: Think of Logstash as the "Sorting & Packaging Center".</div>
+                    <p>Logstash is a server-side data processing pipeline that ingests data from a multitude of sources, transforms it, and then sends it to your "stash" (Elasticsearch).</p>
+                    <p>It can derive structure from unstructured data using <strong>grok</strong> filters, anonymize sensitive fields, and aggregate data.</p>    
+
+                    <div id="topic-es" class="topic-detail" style="display:none;">
+                    <h3 style="color:var(--es-blue)">3. Elasticsearch (Store)</h3>
+                    <div class="metaphor-box">Metaphor: Think of Elasticsearch as the "Warehouse" with an ultra-fast filing system.</div>
+                    <p>The heart of the stack. It is a distributed, RESTful search and analytics engine. It stores data as JSON documents and uses an inverted index to allow for near real-time search.</p>
+                    <p>Data is split into <strong>shards</strong> (horizontal partitions) which are distributed across nodes for scalability and high availability.</p>
                     
-                    <h3>1. Logstash (Ingest)</h3>
-                    <p>Server-side data processing pipeline that ingests data from multiple sources simultaneously, transforms it (using filters like <code>Grok</code>), and sends it to a "stash" like Elasticsearch.</p>
+                    <h3 style="color:var(--kibana-pink)">4. Kibana (Visualize)</h3>
+                    <div class="metaphor-box">Metaphor: Think of Kibana as the "Dashboard" in the control room.</div>
+                    <p>Kibana is the visualization layer. It works on top of Elasticsearch to let users visualize data through charts, graphs, maps, and dashboards.</p>
+                    <p>It is the window into the Elastic Stack, allowing you to search, view, and interact with your data stored in Elasticsearch indices.</p>
                     
-                    <h3>2. Elasticsearch (Store)</h3>
-                    <p>The heart of the stack. It stores the data and provides the search and analytic capabilities.</p>
-                    
-                    <h3>3. Kibana (Visualize)</h3>
-                    <p>The UI layer. Lets you visualize your Elasticsearch data and navigate the Elastic Stack.</p>
-                    
-                    <h3>+ Beats (Collection)</h3>
-                    <p>Later added to the stack. Lightweight data shippers that sit on your servers and ship data to Logstash or Elasticsearch.</p>
                 </div>
 
                 <div id="topic-concepts" class="topic-detail" style="display:none;">
