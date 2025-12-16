@@ -10,6 +10,630 @@
     <style>
         /* --- 1. DESIGN SYSTEM --- */
         :root {
+            /* Brand Colors (Original) */
+            --es-blue: #0077cc;
+            --es-accent: #36a2eb;
+            --beats-teal: #00bfb3;
+            --logstash-yellow: #fec514;
+            --kibana-pink: #e03e7e;
+            
+            /* UI Colors */
+            --bg-body: #f4f6f8;
+            --bg-surface: #ffffff;
+            --bg-sidebar: #fafafa;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-tertiary: #718096;
+            --border-color: #e2e8f0;
+            --border-hover: #cbd5e0;
+            
+            /* Code */
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+
+            /* Spacing & Radius */
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; outline: none; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- LAYOUT --- */
+        header {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 30px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 50;
+        }
+
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { width: 32px; height: 32px; background: var(--es-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 14px; }
+        .brand-text h1 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+        .brand-text p { font-size: 0.75rem; margin: 0; color: var(--text-tertiary); }
+
+        .nav-tabs { display: flex; gap: 8px; background: #f1f5f9; padding: 4px; border-radius: 8px; }
+        .nav-item { padding: 8px 24px; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .nav-item:hover { color: var(--text-primary); }
+        .nav-item.active { background: white; color: var(--es-blue); box-shadow: var(--shadow-sm); font-weight: 600; }
+
+        .main-wrapper { flex: 1; overflow: hidden; position: relative; }
+        .view-section { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto; padding: 40px; display: none; opacity: 0; transition: opacity 0.3s; }
+        .view-section.active { display: block; opacity: 1; }
+
+        /* --- SIMULATOR --- */
+        .grid-layout { display: grid; grid-template-columns: 280px 1fr; gap: 30px; max-width: 1400px; margin: 0 auto; height: 100%; }
+        .content-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 30px; }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #ffffff, #fafafa); }
+        .card-header h2 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+        .card-body { padding: 24px; }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; font-size: 0.9rem; font-weight: 500; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: var(--es-blue); color: white; }
+        .btn-secondary { background: white; border-color: var(--border-color); color: var(--text-primary); }
+
+        .pipeline-track { position: relative; display: flex; justify-content: space-between; margin: 40px 0; padding: 0 50px; }
+        .pipeline-line { position: absolute; top: 50%; left: 60px; right: 60px; height: 2px; background: var(--border-color); z-index: 0; }
+        .pipeline-stage { position: relative; z-index: 2; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 20px; border-radius: 12px; width: 180px; text-align: center; box-shadow: var(--shadow-md); transition: transform 0.3s; }
+        .pipeline-stage:hover { transform: translateY(-5px); }
+        .stage-icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+        .packet { width: 16px; height: 16px; background: var(--text-primary); border: 3px solid white; border-radius: 50%; position: absolute; top: 50%; left: 0; transform: translate(-50%, -50%); z-index: 10; display: none; box-shadow: 0 0 0 1px var(--text-primary); }
+
+        .cluster-visual { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .node-box { background: #f8fafc; border: 2px dashed var(--border-color); border-radius: 12px; padding: 16px; min-height: 120px; }
+        .node-header { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; display: flex; justify-content: space-between; }
+        .shard { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; margin: 4px; animation: popIn 0.4s; }
+        .shard.primary { background: var(--es-blue); color: white; }
+        .shard.replica { background: white; border: 2px solid var(--es-blue); color: var(--es-blue); }
+        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+
+        /* --- THEORY SECTION --- */
+        .theory-layout { display: grid; grid-template-columns: 250px 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .topic-list { list-style: none; padding: 0; margin: 0; position: sticky; top: 20px; }
+        .topic-item { padding: 12px 16px; border-left: 2px solid transparent; cursor: pointer; color: var(--text-secondary); font-size: 0.95rem; transition: all 0.2s; }
+        .topic-item:hover { color: var(--es-blue); background: #f8fafc; }
+        .topic-item.active { border-left-color: var(--es-blue); color: var(--es-blue); font-weight: 600; background: #f0f9ff; }
+
+        .theory-content h1 { font-size: 2rem; margin-bottom: 15px; letter-spacing: -0.03em; }
+        .theory-content h3 { font-size: 1.3rem; margin-top: 40px; margin-bottom: 15px; font-weight: 600; }
+        .theory-content p { line-height: 1.7; color: var(--text-secondary); margin-bottom: 15px; }
+        .metaphor-box { background: #f8faff; border: 1px solid #dbeafe; padding: 15px; border-radius: 8px; color: var(--text-secondary); font-style: italic; font-size: 0.95rem; margin-bottom: 20px; border-left: 4px solid var(--es-blue); }
+        .citation { font-size: 0.75rem; color: #999; display: block; margin-top: 10px; }
+
+        /* --- API GUIDE --- */
+        .api-grid { display: grid; gap: 24px; max-width: 1000px; margin: 0 auto; }
+        .api-item { background: white; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+        .api-item-header { padding: 16px 24px; background: #fcfcfc; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
+        .method-badge { font-family: 'JetBrains Mono', monospace; font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; }
+        .badge-get { background: #eff6ff; color: #3b82f6; border: 1px solid #dbeafe; }
+        .badge-post { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
+        .badge-put { background: #fff7ed; color: #f97316; border: 1px solid #ffedd5; }
+        .badge-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
+        .code-snippet { background: var(--code-bg); color: var(--code-text); padding: 15px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; margin-top: 15px; white-space: pre-wrap; }
+
+        /* --- PRACTICE LAB STYLES --- */
+        .exercise-list { display: grid; gap: 20px; max-width: 1000px; margin: 0 auto; }
+        .exercise-card { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; }
+        .ex-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .ex-number { background: #f1f5f9; color: var(--text-secondary); padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; margin-right: 10px; }
+        .ex-title { font-weight: 600; font-size: 1.05rem; color: var(--text-primary); }
+        .solution-box {
+            display: none;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            border-left: 4px solid var(--es-accent);
+        }
+        .reveal-btn {
+            background: transparent; border: 1px solid var(--es-blue); color: var(--es-blue);
+            padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 500;
+        }
+        .reveal-btn:hover { background: #f0f9ff; }
+        
+        /* Syntax Colors for Solution */
+        .kibana-console { color: #f87171; } /* GET/DELETE */
+        .kibana-console-mod { color: #4ade80; } /* PUT/POST */
+        .kibana-key { color: #60a5fa; } 
+        .kibana-str { color: #fcd34d; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">
+        <div class="brand-logo">ES</div>
+        <div class="brand-text">
+            <h1>Elastic Master</h1>
+            <p>Interactive Architecture Simulator</p>
+        </div>
+    </div>
+    <div class="nav-tabs">
+        <div class="nav-item active" onclick="switchView('simulator', this)">Simulator</div>
+        <div class="nav-item" onclick="switchView('theory', this)">Theory & Concepts</div>
+        <div class="nav-item" onclick="switchView('api', this)">API Reference</div>
+        <div class="nav-item" onclick="switchView('lab', this)">Practice Lab</div>
+    </div>
+    <div style="width: 120px;"></div>
+</header>
+
+<div class="main-wrapper">
+
+    <div id="view-simulator" class="view-section active">
+        <div class="grid-layout" style="display:block; max-width:1000px;">
+            <div class="content-card">
+                <div class="card-header"><h2><span style="color:var(--beats-teal)">●</span> 1. Ingestion Pipeline</h2></div>
+                <div class="card-body">
+                    <div style="display:flex; gap:10px; margin-bottom:30px;">
+                        <input type="text" id="rawLogInput" value="2024-03-15 INFO User login successful ip=192.168.1.1" style="flex:1; padding:10px; border:1px solid var(--border-color); border-radius:6px; font-family:'JetBrains Mono', monospace;">
+                        <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">Ship Log</button>
+                    </div>
+                    <div class="pipeline-track" id="pipelineTrack">
+                        <div class="pipeline-line"></div>
+                        <div class="pipeline-stage" id="stage-beats"><span class="stage-icon" style="color:var(--beats-teal);">📦</span><span class="stage-title">Beats</span><span class="stage-desc">Collection</span></div>
+                        <div class="pipeline-stage" id="stage-logstash"><span class="stage-icon" style="color:var(--logstash-yellow);">⚙️</span><span class="stage-title">Logstash</span><span class="stage-desc">Processing</span></div>
+                        <div class="pipeline-stage" id="stage-es"><span class="stage-icon" style="color:var(--es-blue);">🗄️</span><span class="stage-title">Elasticsearch</span><span class="stage-desc">Storage</span></div>
+                        <div id="packet" class="packet"></div>
+                    </div>
+                    <div style="background:#f8fafc; border:1px solid var(--border-color); padding:15px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:var(--text-secondary);">
+                        <div id="logstash-out">// Waiting for data...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--es-blue)">●</span> 2. Cluster Topology</h2>
+                    <div><button class="btn btn-secondary" onclick="addNode()">+ Add Node</button> <button class="btn btn-secondary" onclick="resetCluster()">Reset</button></div>
+                </div>
+                <div class="card-body">
+                    <div class="cluster-visual" id="clusterGrid">
+                        <div class="node-box" id="node-0"><div class="node-header">Node-0 <span>MASTER</span></div><div class="shards-container" id="shards-0"></div></div>
+                        <div class="node-box" id="node-1"><div class="node-header">Node-1 <span>DATA</span></div><div class="shards-container" id="shards-1"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-card" style="border-top:4px solid var(--kibana-pink);">
+                <div class="card-header"><h2><span style="color:var(--kibana-pink)">●</span> 3. Kibana Analytics</h2></div>
+                <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                    <div id="kibana-list" style="height:150px; overflow-y:auto; border:1px solid var(--border-color); border-radius:6px; padding:10px; font-family:'JetBrains Mono', monospace; font-size:0.8rem;"><div style="color:#ccc; text-align:center; padding-top:40px;">No logs indexed</div></div>
+                    <div>
+                        <div style="height:150px; display:flex; align-items:flex-end; justify-content:space-around; border-bottom:2px solid var(--border-color);">
+                            <div style="width:40px; background:var(--es-blue); height:0%;" id="bar-info"></div>
+                            <div style="width:40px; background:var(--kibana-pink); height:0%;" id="bar-warn"></div>
+                            <div style="width:40px; background:#ef4444; height:0%;" id="bar-error"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-around; font-size:0.75rem; margin-top:5px;"><span>INFO</span><span>WARN</span><span>ERROR</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-theory" class="view-section">
+        <div class="theory-layout">
+            <aside>
+                <ul class="topic-list">
+                    <li class="topic-item active" onclick="showTopic('beats')">1. Beats (Collection)</li>
+                    <li class="topic-item" onclick="showTopic('logstash')">2. Logstash (Process)</li>
+                    <li class="topic-item" onclick="showTopic('es')">3. Elasticsearch (Store)</li>
+                    <li class="topic-item" onclick="showTopic('kibana')">4. Kibana (Visualize)</li>
+                    <li class="topic-item" onclick="showTopic('concepts')">5. Key Concepts</li>
+                </ul>
+            </aside>
+            <main class="theory-content">
+                <div id="topic-beats" class="topic-detail"><h1 style="color:var(--beats-teal)">1. Beats</h1><div class="metaphor-box">Metaphor: Think of Beats as the "Delivery Trucks" picking up packages.</div><p>Lightweight data shippers...</p></div>
+                <div id="topic-logstash" class="topic-detail" style="display:none;"><h1 style="color:var(--logstash-yellow)">2. Logstash</h1><div class="metaphor-box">Metaphor: Think of Logstash as the "Sorting & Packaging Center".</div><p>Server-side data processing...</p></div>
+                <div id="topic-es" class="topic-detail" style="display:none;"><h1 style="color:var(--es-blue)">3. Elasticsearch</h1><div class="metaphor-box">Metaphor: Think of Elasticsearch as the "Warehouse" with an ultra-fast filing system.</div><p>Distributed search engine...</p></div>
+                <div id="topic-kibana" class="topic-detail" style="display:none;"><h1 style="color:var(--kibana-pink)">4. Kibana</h1><div class="metaphor-box">Metaphor: Think of Kibana as the "Dashboard" in the control room.</div><p>Visualization layer...</p></div>
+                <div id="topic-concepts" class="topic-detail" style="display:none;"><h1>Key Concepts</h1><h3>Sharding</h3><p>Splitting index...</p><h3>Inverted Index</h3><p>Magic behind the speed...</p></div>
+            </main>
+        </div>
+    </div>
+
+    <div id="view-api" class="view-section">
+        <div style="max-width:800px; margin:0 auto;">
+            <div style="text-align:center; margin-bottom:40px;"><h1 style="font-size:2rem;">Elasticsearch REST API</h1></div>
+            <div class="api-grid">
+                <div class="api-item"><div class="api-item-header"><span class="method-badge badge-get">GET</span><span class="endpoint">/{index}/_doc/{id}</span></div><div class="api-item-body"><div class="code-snippet">GET /customer/_doc/1</div></div></div>
+                <div class="api-item"><div class="api-item-header"><span class="method-badge badge-put">PUT</span><span class="endpoint">/{index}/_doc/{id}</span></div><div class="api-item-body"><div class="code-snippet">PUT /customer/_doc/1 { "name": "John" }</div></div></div>
+                <div class="api-item"><div class="api-item-header"><span class="method-badge badge-post">POST</span><span class="endpoint">/{index}/_search</span></div><div class="api-item-body"><div class="code-snippet">POST /customer/_search { "query": { "match_all": {} } }</div></div></div>
+                <div class="api-item"><div class="api-item-header"><span class="method-badge badge-delete">DELETE</span><span class="endpoint">/{index}</span></div><div class="api-item-body"><div class="code-snippet">DELETE /customer</div></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-lab" class="view-section">
+        <div style="max-width:1000px; margin:0 auto;">
+            <div style="text-align:center; margin-bottom:40px;">
+                <h1 style="font-size:2rem; margin-bottom:10px;">Hands-on Practice Lab</h1>
+                <p style="color:var(--text-secondary);">Test your knowledge with these scenarios. Try to solve them before looking at the solution.</p>
+            </div>
+
+            <div class="exercise-list">
+                
+                <div class="exercise-card" style="border-left: 5px solid var(--es-accent);">
+                    <div class="ex-header">
+                        <div><span class="ex-number">SETUP</span> <span class="ex-title">Create Index & Bulk Index Data</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-1')">Show Solution</button>
+                    </div>
+                    <p>Create an index named <code>bookdb_index</code> with 1 shard, and index 4 book documents using the <code>_bulk</code> API.</p>
+                    <div id="sol-1" class="solution-box">
+<span class="kibana-console-mod">PUT</span> /bookdb_index { "settings": { "number_of_shards": 1 }}
+
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_bulk
+{ "index": { "_id": 1 }}
+{ "title": "Elasticsearch: The Definitive Guide", "authors": ["clinton gormley", "zachary tong"], "summary" : "A distibuted real-time search and analytics engine", "publish_date" : "2015-02-07", "num_reviews": 20, "publisher": "oreilly" }
+{ "index": { "_id": 2 }}
+{ "title": "Taming Text: How to Find, Organize, and Manipulate It", "authors": ["grant ingersoll", "thomas morton", "drew farris"], "summary" : "organize text using approaches such as full-text search, proper name recognition, clustering, tagging, information extraction, and summarization", "publish_date" : "2013-01-24", "num_reviews": 12, "publisher": "manning" }
+{ "index": { "_id": 3 }}
+{ "title": "Elasticsearch in Action", "authors": ["radu gheorge", "matthew lee hinman", "roy russo"], "summary" : "build scalable search applications using Elasticsearch without having to do complex low-level programming or understand advanced data science algorithms", "publish_date" : "2015-12-03", "num_reviews": 18, "publisher": "manning" }
+{ "index": { "_id": 4 }}
+{ "title": "Solr in Action", "authors": ["trey grainger", "timothy potter"], "summary" : "Comprehensive guide to implementing a scalable search engine using Apache Solr", "publish_date" : "2014-04-05", "num_reviews": 23, "publisher": "manning" }</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">02</span> <span class="ex-title">Return all documents</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-2')">Show Solution</button>
+                    </div>
+                    <div id="sol-2" class="solution-box"><span class="kibana-console">GET</span> /bookdb_index/book/_search</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">03</span> <span class="ex-title">Multi-match Search</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-3')">Show Solution</button>
+                    </div>
+                    <p>Search for documents holding the word "guide" examining all fields.</p>
+                    <div id="sol-3" class="solution-box">
+<span class="kibana-console">GET</span> /bookdb_index/book/_search
+{
+    "query": {
+        "multi_match" : {
+            "query" : <span class="kibana-str">"guide"</span>
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">04</span> <span class="ex-title">Specific Field Search</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-4')">Show Solution</button>
+                    </div>
+                    <p>Search the phrase "action" in the <strong>title</strong> field.</p>
+                    <div id="sol-4" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+    "query": {
+        "match" : {
+            "title" : <span class="kibana-str">"in action"</span>
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">05</span> <span class="ex-title">Boosting Relevance</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-5')">Show Solution</button>
+                    </div>
+                    <p>Add a boost of 3 when searching the phrase "search analytics" in all documents.</p>
+                    <div id="sol-5" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+    "query": {
+        "multi_match" : {
+            "query" : <span class="kibana-str">"search analytics"</span>,
+            "boost" : <span class="kibana-key">3</span>
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">06</span> <span class="ex-title">Boolean Logic</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-6')">Show Solution</button>
+                    </div>
+                    <p>Find books with "Elasticsearch" OR "Solr" in the title, AND authored by "Clinton Gormley", but NOT "Radu Gheorge".</p>
+                    <div id="sol-6" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+  "query": {
+    "bool": {
+      "must": {
+        "bool" : {
+          "should": [
+            { "match": { "title": "Elasticsearch" }},
+            { "match": { "title": "Solr" }}
+          ],
+          "must": { "match": { "authors": "clinton gormely" }}
+        }
+      },
+      "must_not": { "match": {"authors": "radu gheorge" }}
+    }
+  }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">07</span> <span class="ex-title">Wildcard & Highlight</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-7')">Show Solution</button>
+                    </div>
+                    <p>Find records where author name starts with 't' and highlight the author field.</p>
+                    <div id="sol-7" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+    "query": {
+        "wildcard" : {
+            "authors" : <span class="kibana-str">"t*"</span>
+        }
+    },
+    "highlight": {
+        "fields" : {
+            "authors" : {}
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">08</span> <span class="ex-title">Regexp Search</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-8')">Show Solution</button>
+                    </div>
+                    <p>Find authors starting with 't' and ending with 'y'.</p>
+                    <div id="sol-8" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+    "query": {
+        "regexp" : {
+            "authors" : <span class="kibana-str">"t[a-z]*y"</span>
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">09</span> <span class="ex-title">Phrase Prefix</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-9')">Show Solution</button>
+                    </div>
+                    <p>Find documents with the phrase "search en" in the summary field.</p>
+                    <div id="sol-9" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+    "query": {
+        "match_phrase_prefix" : {
+            "summary": {
+                "query": <span class="kibana-str">"search en"</span>
+            }
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">10</span> <span class="ex-title">Range Query</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-10')">Show Solution</button>
+                    </div>
+                    <p>Search for books published in 2015 only.</p>
+                    <div id="sol-10" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+    "query": {
+        "range" : {
+            "publish_date": {
+                "gte": <span class="kibana-str">"2015-01-01"</span>,
+                "lte": <span class="kibana-str">"2015-12-31"</span>
+            }
+        }
+    }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div><span class="ex-number">11</span> <span class="ex-title">Filtering Results</span></div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-11')">Show Solution</button>
+                    </div>
+                    <p>Books with "Elasticsearch" in title/summary AND 20 or more reviews (Filter context).</p>
+                    <div id="sol-11" class="solution-box">
+<span class="kibana-console-mod">POST</span> /bookdb_index/book/_search
+{
+  "query": {
+    "bool": {
+      "must" : {
+        "multi_match" : {
+          "query": <span class="kibana-str">"elasticsearch"</span>,
+          "fields": [ "title", "summary" ]
+        }
+      },
+      "filter": {
+        "range" : {
+          "num_reviews": {"gte": 20}
+        }
+      }
+    }
+  }
+}</div>
+                </div>
+
+                <div class="exercise-card" style="border-left: 5px solid var(--kibana-pink);">
+                    <div class="ex-header">
+                        <div><span class="ex-number">12</span> <span class="ex-title">Kibana Challenge</span></div>
+                    </div>
+                    <p>Using Kibana, create a dashboard of your choice based on the index you just created. (e.g., Pie chart of Publishers, or Reviews over time).</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function switchView(viewId, btn) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('view-' + viewId).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function showTopic(topicId) {
+        document.querySelectorAll('.topic-item').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+        document.querySelectorAll('.topic-detail').forEach(el => el.style.display = 'none');
+        document.getElementById('topic-' + topicId).style.display = 'block';
+    }
+
+    function toggleSolution(id) {
+        const el = document.getElementById(id);
+        const btn = el.parentElement.querySelector('.reveal-btn');
+        if(el.style.display === 'block') {
+            el.style.display = 'none';
+            btn.innerText = 'Show Solution';
+        } else {
+            el.style.display = 'block';
+            btn.innerText = 'Hide Solution';
+        }
+    }
+
+    /* SIMULATOR LOGIC */
+    let isProcessing = false, nodes = [0, 1], docId = 1, stats = { info: 0, warn: 0, error: 0 };
+
+    function runPipeline() {
+        if(isProcessing) return;
+        isProcessing = true;
+        const btn = document.getElementById('runBtn');
+        btn.innerText = "Processing..."; btn.disabled = true;
+        const packet = document.getElementById('packet');
+        const track = document.getElementById('pipelineTrack').getBoundingClientRect();
+        
+        packet.style.display = 'block';
+        packet.style.left = '60px'; 
+
+        packet.animate([
+            { left: '60px' }, { left: (track.width / 2) + 'px' }
+        ], { duration: 800, fill: 'forwards' }).onfinish = () => {
+            const rawLog = document.getElementById('rawLogInput').value;
+            const parsed = parseLog(rawLog);
+            document.getElementById('logstash-out').innerHTML = `<span style="color:#10b981;">✓ Parsed:</span> ${JSON.stringify(parsed)}`;
+            
+            setTimeout(() => {
+                packet.animate([
+                    { left: (track.width / 2) + 'px' }, { left: (track.width - 60) + 'px' }
+                ], { duration: 800, fill: 'forwards' }).onfinish = () => {
+                    packet.style.display = 'none';
+                    indexData(parsed);
+                    isProcessing = false;
+                    btn.innerText = "Ship Log"; btn.disabled = false;
+                };
+            }, 500);
+        };
+    }
+
+    function parseLog(log) {
+        const parts = log.split(" ");
+        let level = "INFO";
+        if(log.toLowerCase().includes("warn")) level = "WARN";
+        if(log.toLowerCase().includes("error")) level = "ERROR";
+        return { "@timestamp": new Date().toISOString(), "level": level, "message": parts.slice(2).join(" ") };
+    }
+
+    function indexData(data) {
+        docId++;
+        const primaryNode = nodes[Math.floor(Math.random() * nodes.length)];
+        let replicaNode = nodes.find(n => n !== primaryNode) || primaryNode;
+        addShardUI(primaryNode, 'P'+docId, 'primary');
+        if(nodes.length > 1) setTimeout(() => addShardUI(replicaNode, 'R'+docId, 'replica'), 200);
+        updateKibana(data);
+    }
+
+    function addShardUI(nodeId, text, type) {
+        const container = document.getElementById('shards-' + nodeId);
+        if(!container) return;
+        const el = document.createElement('div');
+        el.className = `shard ${type}`; el.innerText = text;
+        container.appendChild(el);
+    }
+
+    function updateKibana(data) {
+        const list = document.getElementById('kibana-list');
+        if(list.innerText.includes("No logs")) list.innerHTML = "";
+        const row = document.createElement('div');
+        row.style.borderBottom = "1px solid #eee"; row.style.padding = "4px 0";
+        row.innerHTML = `<span style="color:#0077cc">${data['@timestamp']}</span> [${data.level}] ${data.message}`;
+        list.prepend(row);
+
+        if(data.level === 'INFO') stats.info++;
+        if(data.level === 'WARN') stats.warn++;
+        if(data.level === 'ERROR') stats.error++;
+        const total = Math.max(stats.info, stats.warn, stats.error, 1);
+        document.getElementById('bar-info').style.height = (stats.info / total * 100) + '%';
+        document.getElementById('bar-warn').style.height = (stats.warn / total * 100) + '%';
+        document.getElementById('bar-error').style.height = (stats.error / total * 100) + '%';
+    }
+
+    function addNode() {
+        const id = nodes.length; nodes.push(id);
+        const container = document.getElementById('clusterGrid');
+        const node = document.createElement('div');
+        node.className = 'node-box'; node.id = 'node-' + id;
+        node.innerHTML = `<div class="node-header">Node-${id} <span>DATA</span></div><div class="shards-container" id="shards-${id}"></div>`;
+        container.appendChild(node);
+    }
+
+    function resetCluster() {
+        nodes = [0, 1]; docId = 0; stats = { info: 0, warn: 0, error: 0 };
+        document.getElementById('clusterGrid').innerHTML = `
+            <div class="node-box" id="node-0"><div class="node-header">Node-0 <span>MASTER</span></div><div class="shards-container" id="shards-0"></div></div>
+            <div class="node-box" id="node-1"><div class="node-header">Node-1 <span>DATA</span></div><div class="shards-container" id="shards-1"></div></div>
+        `;
+        document.getElementById('kibana-list').innerHTML = '<div style="color:#ccc; text-align:center; padding-top:40px;">No logs indexed</div>';
+        ['info','warn','error'].forEach(k => document.getElementById('bar-'+k).style.height = '0%');
+        document.getElementById('logstash-out').innerText = '// Waiting for data...';
+    }
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Stack: The Ultimate Interactive Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. DESIGN SYSTEM --- */
+        :root {
             --es-blue: #0077cc;
             --es-accent: #36a2eb;
             --beats-teal: #00bfb3;
