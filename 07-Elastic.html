@@ -528,8 +528,8 @@
                 <div id="topic-concepts" class="topic-detail" style="display:none;">
                     <h1>Key Concepts</h1>
                     <h3>Sharding & Replication</h3>
-                    <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. [cite_start]A shard is a self-contained Lucene index[cite: 532].</p>
-                    <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. [cite_start]If a node fails, a replica is promoted to primary[cite: 552].</p>
+                    <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. A shard is a self-contained Lucene index.</p>
+                    <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. If a node fails, a replica is promoted to primary.</p>
                     
                     <h3>Inverted Index</h3>
                     <p>This is the magic behind the speed. Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in.</p>
