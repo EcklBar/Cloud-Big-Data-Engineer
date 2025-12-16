@@ -243,7 +243,7 @@
                     <div class="metaphor-box" style="border-left-color: var(--es-blue);">
                         <strong>Why is it so fast?</strong> It is built on top of <strong>Apache Lucene</strong> and uses a structure called an Inverted Index, which is designed for very fast full-text searches.
                     </div>
-                    [cite_start]<h3>Key Features [cite: 59, 170]</h3>
+                       <h3>Key Features</h3>
                     <ul>
                         <li><strong>Distributed:</strong> Scales horizontally to handle petabytes of data.</li>
                         <li><strong>RESTful API:</strong> Accessed via JSON over HTTP.</li>
@@ -253,43 +253,43 @@
 
                 <div id="topic-elk" class="topic-detail" style="display:none;">
                     <h1>The ELK Stack</h1>
-                    [cite_start]<p>"ELK" is the acronym for three open source projects: Elasticsearch, Logstash, and Kibana[cite: 67].</p>
+                    <p>"ELK" is the acronym for three open source projects: Elasticsearch, Logstash, and Kibana.</p>
 
                     <h3 style="color:var(--beats-teal)">1. Beats (Collection)</h3>
                     <div class="metaphor-box">Metaphor: Think of Beats as the "Delivery Trucks" picking up packages.</div>
-                    [cite_start]<p>Beats are lightweight data shippers that you install as agents on your servers to capture all sorts of operational data (think of them as "Agents")[cite: 98].</p>
-                    [cite_start]<p>They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs, Metricbeat for metrics)[cite: 98].</p>
+                    <p>Beats are lightweight data shippers that you install as agents on your servers to capture all sorts of operational data (think of them as "Agents").</p>
+                    <p>They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs, Metricbeat for metrics).</p>
 
                     <h3 style="color:var(--logstash-yellow)">2. Logstash (Ingest)</h3>
                     <div class="metaphor-box">Metaphor: Think of Logstash as the "Sorting & Packaging Center".</div>
-                    [cite_start]<p>Logstash is a server-side data processing pipeline that ingests data from a multitude of sources, transforms it, and then sends it to your "stash" (Elasticsearch)[cite: 85].</p>
-                    [cite_start]<p>It can derive structure from unstructured data using <strong>grok</strong> filters, anonymize sensitive fields, and aggregate data[cite: 87].</p>
+                    <p>Logstash is a server-side data processing pipeline that ingests data from a multitude of sources, transforms it, and then sends it to your "stash" (Elasticsearch).</p>
+                    <p>It can derive structure from unstructured data using <strong>grok</strong> filters, anonymize sensitive fields, and aggregate data.</p>
 
                     <h3 style="color:var(--es-blue)">3. Elasticsearch (Store)</h3>
                     <div class="metaphor-box">Metaphor: Think of Elasticsearch as the "Warehouse" with an ultra-fast filing system.</div>
-                    <p>The heart of the stack. It is a distributed, RESTful search and analytics engine. [cite_start]It stores data as JSON documents and uses an inverted index to allow for near real-time search[cite: 59].</p>
-                    [cite_start]<p>Data is split into <strong>shards</strong> (horizontal partitions) which are distributed across nodes for scalability and high availability[cite: 474].</p>
+                    <p>The heart of the stack. It is a distributed, RESTful search and analytics engine. It stores data as JSON documents and uses an inverted index to allow for near real-time search.</p>
+                    <p>Data is split into <strong>shards</strong> (horizontal partitions) which are distributed across nodes for scalability and high availability.</p>
 
                     <h3 style="color:var(--kibana-pink)">4. Kibana (Visualize)</h3>
                     <div class="metaphor-box">Metaphor: Think of Kibana as the "Dashboard" in the control room.</div>
-                    <p>Kibana is the visualization layer. [cite_start]It works on top of Elasticsearch to let users visualize data through charts, graphs, maps, and dashboards[cite: 74].</p>
-                    [cite_start]<p>It is the window into the Elastic Stack, allowing you to search, view, and interact with your data stored in Elasticsearch indices[cite: 76].</p>
+                    <p>Kibana is the visualization layer. It works on top of Elasticsearch to let users visualize data through charts, graphs, maps, and dashboards.</p>
+                    <p>It is the window into the Elastic Stack, allowing you to search, view, and interact with your data stored in Elasticsearch indices.</p>
                 </div>
 
                 <div id="topic-concepts" class="topic-detail" style="display:none;">
                     <h1>Core Terminology</h1>
                     
                     <h3>Cluster & Node</h3>
-                    <p>A <strong>Cluster</strong> is a collection of one or more servers (nodes) that together hold your entire data. [cite_start]A <strong>Node</strong> is a single server that is part of your cluster[cite: 337].</p>
+                    <p>A <strong>Cluster</strong> is a collection of one or more servers (nodes) that together hold your entire data. A <strong>Node</strong> is a single server that is part of your cluster.</p>
                     
                     <h3>Index</h3>
-                    <p>An index is a collection of documents that have somewhat similar characteristics. [cite_start]It is identified by a name (all lowercase) and is similar to a <strong>Database</strong> in RDBMS[cite: 189].</p>
+                    <p>An index is a collection of documents that have somewhat similar characteristics. It is identified by a name (all lowercase) and is similar to a <strong>Database</strong> in RDBMS.</p>
                     
                     <h3>Document</h3>
-                    <p>A document is a basic unit of information that can be indexed. It is expressed in <code>JSON</code> format. [cite_start]Similar to a <strong>Row</strong> in a table[cite: 183].</p>
+                    <p>A document is a basic unit of information that can be indexed. It is expressed in <code>JSON</code> format. Similar to a <strong>Row</strong> in a table.</p>
                     
                     <div class="metaphor-box">
-                        [cite_start]<strong>Analogy[cite: 204]:</strong><br>
+                        <strong>Analogy:</strong><br>
                         Relational DB ⇒ Databases ⇒ Tables ⇒ Rows ⇒ Columns<br>
                         Elasticsearch ⇒ Indices ⇒ Types (Deprecated) ⇒ Documents ⇒ Fields
                     </div>
@@ -297,27 +297,27 @@
 
                 <div id="topic-arch" class="topic-detail" style="display:none;">
                     <h1>Architecture: Sharding & Replication</h1>
-                    <p>An index can store a large amount of data that can exceed the hardware limits of a single node. [cite_start]To solve this, Elasticsearch allows you to subdivide your index into multiple pieces called <strong>shards</strong>[cite: 474].</p>
+                    <p>An index can store a large amount of data that can exceed the hardware limits of a single node. To solve this, Elasticsearch allows you to subdivide your index into multiple pieces called <strong>shards</strong>.</p>
                     
                     <h3>Shards</h3>
                     <ul>
-                        [cite_start]<li>Allows you to horizontally split/scale your content volume[cite: 475].</li>
-                        [cite_start]<li>Allows you to distribute and parallelize operations across shards (performance)[cite: 475].</li>
+                        <li>Allows you to horizontally split/scale your content volume.</li>
+                        <li>Allows you to distribute and parallelize operations across shards (performance).</li>
                     </ul>
 
                     <h3>Replicas</h3>
-                    [cite_start]<p>To ensure high availability, Elasticsearch allows you to make one or more copies of your index’s shards into <strong>replica shards</strong>[cite: 508].</p>
+                    <p>To ensure high availability, Elasticsearch allows you to make one or more copies of your index’s shards into <strong>replica shards</strong>.</p>
                     <ul>
-                        [cite_start]<li>Provides high availability in case a node/shard fails[cite: 509].</li>
-                        [cite_start]<li>Allows you to scale out your search volume/throughput (searches can be executed on replicas in parallel)[cite: 510].</li>
+                        <li>Provides high availability in case a node/shard fails.</li>
+                        <li>Allows you to scale out your search volume/throughput (searches can be executed on replicas in parallel).</li>
                     </ul>
                 </div>
 
                 <div id="topic-inverted" class="topic-detail" style="display:none;">
                     <h1>The Inverted Index</h1>
-                    <p>This is the magic behind the speed. [cite_start]Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in[cite: 229].</p>
+                    <p>This is the magic behind the speed. Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in.</p>
                     
-                    [cite_start]<h3>Example [cite: 235]</h3>
+                    <h3>Example</h3>
                     <p><strong>Doc 1:</strong> "The quick brown fox"<br>
                     <strong>Doc 2:</strong> "The quick blue rabbit"</p>
                     
