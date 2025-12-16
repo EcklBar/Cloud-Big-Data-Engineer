@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elastic Stack Master Simulator</title>
+    <title>Elastic Stack Master Simulator & Guide</title>
     <style>
         /* --- 1. VARIABLES & RESET --- */
         :root {
@@ -17,11 +17,11 @@
             --border-color: #e2e8f0;
             --code-bg: #f7fafc;
             
-            /* API Method Colors */
-            --method-get: #61affe;
-            --method-post: #49cc90;
-            --method-put: #fca130;
-            --method-delete: #f93e3e;
+            /* API Colors */
+            --method-get: #007bff;
+            --method-post: #28a745;
+            --method-put: #fd7e14;
+            --method-delete: #dc3545;
         }
 
         * { box-sizing: border-box; }
@@ -38,11 +38,11 @@
             line-height: 1.6;
         }
 
-        /* --- 2. HEADER --- */
+        /* --- 2. HEADER & NAV --- */
         header {
             background-color: var(--es-blue);
             color: white;
-            padding: 20px 0;
+            padding-top: 20px;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             position: sticky;
@@ -50,37 +50,58 @@
             z-index: 1000;
         }
         header h1 { margin: 0; font-size: 1.6rem; font-weight: 700; }
-        header p { margin: 5px 0 0; opacity: 0.9; font-size: 0.95rem; }
+        header p { margin: 5px 0 15px; opacity: 0.9; font-size: 0.95rem; }
+
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            background: rgba(0,0,0,0.1);
+        }
+        .nav-item {
+            padding: 12px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            border-bottom: 4px solid transparent;
+            transition: all 0.2s;
+        }
+        .nav-item:hover { color: white; background: rgba(255,255,255,0.1); }
+        .nav-item.active {
+            color: white;
+            border-bottom-color: var(--beats-teal); /* Highlight color */
+            background: rgba(0,0,0,0.2);
+        }
 
         /* --- 3. LAYOUT --- */
         .container {
             max-width: 900px;
             margin: 30px auto;
             padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 40px; 
-            position: relative;
         }
+
+        .view-section {
+            display: none;
+            flex-direction: column;
+            gap: 40px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .view-section.active { display: flex; }
+        
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
         .section-connector {
-            position: absolute;
-            left: 50%;
-            width: 4px;
-            background: #cbd5e0;
-            transform: translateX(-50%);
-            z-index: -1;
+            position: absolute; left: 50%; width: 4px; background: #cbd5e0; 
+            transform: translateX(-50%); z-index: -1; height: 100%; top: 0;
         }
 
-        /* --- 4. PANELS (SECTIONS) --- */
+        /* --- 4. PANELS --- */
         .panel {
             background: var(--bg-panel);
             border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border-color);
             overflow: hidden;
             position: relative;
-            transition: transform 0.2s;
         }
         
         .panel-header {
@@ -93,315 +114,265 @@
         .panel-header h2 { margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
         .panel-body { padding: 25px; }
 
+        /* Themes */
         .theme-beats .panel-header { background-color: var(--beats-teal); }
         .theme-logstash .panel-header { background-color: var(--logstash-yellow); }
         .theme-logstash .panel-header h2 { color: #333; }
         .theme-es .panel-header { background-color: var(--es-blue); }
         .theme-kibana .panel-header { background-color: var(--kibana-pink); }
 
-        /* --- 5. INTERACTIVE ELEMENTS --- */
-        .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .btn-primary { background-color: var(--es-blue); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-primary:hover { background-color: #003d52; transform: translateY(-1px); }
-        .btn-outline { background: white; border: 1px solid var(--es-blue); color: var(--es-blue); }
-        .btn-outline:hover { background: #f0f9ff; }
-        .btn-info { background: rgba(255,255,255,0.2); color: white; font-size: 0.8rem; padding: 4px 10px; border-radius: 15px; }
-        .btn-info:hover { background: rgba(255,255,255,0.3); }
-        .theme-logstash .btn-info { color: #333; background: rgba(0,0,0,0.1); }
-
-        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-family: monospace;
-        }
-
-        .code-block {
-            background-color: var(--code-bg);
-            border-left: 4px solid #cbd5e0;
-            padding: 15px;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
-            color: #4a5568;
-            min-height: 60px;
-        }
-
-        .info-drawer {
-            display: none;
-            background: #f8fafc;
-            padding: 15px 25px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.9rem;
-            color: #4a5568;
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
-
-        /* --- 6. API METHOD GRID (NEW) --- */
-        .api-grid {
+        /* --- 5. API GUIDE STYLES (NEW) --- */
+        .api-guide-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 20px;
         }
-        .api-card {
+        .api-row {
             background: white;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            transition: transform 0.2s;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-left: 5px solid #ccc;
         }
-        .api-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
-        
-        .method-tag {
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
+        .api-row.get { border-left-color: var(--method-get); }
+        .api-row.post { border-left-color: var(--method-post); }
+        .api-row.put { border-left-color: var(--method-put); }
+        .api-row.delete { border-left-color: var(--method-delete); }
+
+        .method-badge {
             display: inline-block;
-            margin-bottom: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            width: 80px;
+            text-align: center;
         }
-        .bg-get { background-color: var(--method-get); }
-        .bg-post { background-color: var(--method-post); }
-        .bg-put { background-color: var(--method-put); }
-        .bg-delete { background-color: var(--method-delete); }
+        .badge-get { background: var(--method-get); }
+        .badge-post { background: var(--method-post); }
+        .badge-put { background: var(--method-put); }
+        .badge-delete { background: var(--method-delete); }
 
-        .api-desc { font-size: 0.8rem; color: #4a5568; margin-bottom: 8px; line-height: 1.4; }
-        .api-example { font-family: monospace; font-size: 0.75rem; background: #f1f5f9; padding: 4px; border-radius: 4px; display: block; color: #334155; }
-
-        /* --- 7. VISUALIZATIONS --- */
-        .data-packet {
-            width: 24px; height: 24px;
-            background-color: #2d3748;
-            border: 3px solid white;
-            border-radius: 50%;
-            position: fixed; 
-            z-index: 9999;
-            display: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: top 0.8s ease-in-out, left 0.8s ease-in-out;
-        }
-
-        .cluster-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .node-card {
-            background: white;
-            border: 2px dashed #cbd5e0;
-            border-radius: 8px;
+        .api-title { font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 5px; }
+        .api-desc { color: #555; font-size: 0.95rem; }
+        .api-code {
+            background: #2d2d2d;
+            color: #ccc;
             padding: 10px;
-            transition: all 0.2s;
+            border-radius: 6px;
+            font-family: monospace;
+            margin-top: 5px;
+            overflow-x: auto;
         }
-        .node-card:hover { border-color: var(--es-blue); transform: translateY(-2px); }
-        .node-header { font-size: 0.85rem; font-weight: 700; color: #718096; display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .api-code .cmd { color: #e6cd69; } /* Method color */
+        .api-code .url { color: #9cdcfe; }
+        .api-code .comment { color: #6a9955; font-style: italic; }
+
+        /* --- 6. SIMULATOR ELEMENTS --- */
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-primary { background-color: var(--es-blue); color: white; }
+        .btn-primary:hover { background-color: #003d52; }
+        .btn-outline { background: white; border: 1px solid var(--es-blue); color: var(--es-blue); }
+        .btn-outline:hover { background: #f0f9ff; }
+
+        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        input[type="text"] { flex-grow: 1; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-family: monospace; }
+
+        .cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .node-card { background: white; border: 2px dashed #cbd5e0; border-radius: 8px; padding: 10px; transition: all 0.2s; }
+        .node-header { font-size: 0.85rem; font-weight: 700; color: #718096; display: flex; justify-content: space-between; }
         .node-role { background: #edf2f7; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
         
-        .shard-container { display: flex; flex-wrap: wrap; gap: 6px; }
-        .shard {
-            width: 32px; height: 32px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: bold; border-radius: 4px;
-            cursor: default;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .shard.primary { background: var(--es-blue); color: white; border: 1px solid var(--es-blue); }
-        .shard.replica { background: white; color: var(--es-blue); border: 2px solid var(--es-blue); }
+        .shard-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .shard { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; border-radius: 4px; color: white; background: var(--es-blue); border: 1px solid var(--es-blue); animation: popIn 0.3s; }
+        .shard.replica { background: white; color: var(--es-blue); }
         @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
 
-        .index-table-wrapper { margin-top: 20px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
-        .index-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        .index-table th { background: #f7fafc; padding: 10px; text-align: left; color: #4a5568; font-weight: 600; }
-        .index-table td { padding: 8px 10px; border-top: 1px solid #e2e8f0; color: #2d3748; }
+        .data-packet { width: 24px; height: 24px; background-color: #2d3748; border: 3px solid white; border-radius: 50%; position: fixed; z-index: 9999; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: top 0.8s ease-in-out, left 0.8s ease-in-out; }
 
+        /* Kibana */
         .kibana-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .kibana-panel { border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; height: 220px; display: flex; flex-direction: column; }
-        .kibana-title { font-size: 0.9rem; font-weight: 700; color: #4a5568; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
+        .kibana-panel { border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; height: 220px; display: flex; flex-direction: column; background:white;}
         .discover-list { flex-grow: 1; overflow-y: auto; font-family: monospace; font-size: 0.8rem; }
-        .log-entry { padding: 6px 0; border-bottom: 1px solid #edf2f7; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-        
-        .viz-chart { flex-grow: 1; display: flex; align-items: flex-end; justify-content: space-around; padding-bottom: 5px; border-bottom: 2px solid #cbd5e0; }
-        .chart-col { display: flex; flex-direction: column; align-items: center; width: 30%; height: 100%; justify-content: flex-end; }
-        .chart-bar { width: 100%; background: var(--kibana-pink); min-height: 2px; border-radius: 4px 4px 0 0; transition: height 0.5s; opacity: 0.8; }
-        .chart-bar:hover { opacity: 1; }
-        .chart-label { margin-top: 5px; font-size: 0.75rem; font-weight: 600; color: #718096; }
+        .log-entry { padding: 6px 0; border-bottom: 1px solid #edf2f7; }
+        .viz-chart { flex-grow: 1; display: flex; align-items: flex-end; justify-content: space-around; border-bottom: 2px solid #cbd5e0; }
+        .chart-bar { width: 30%; background: var(--kibana-pink); min-height: 2px; transition: height 0.5s; }
 
-        @media (max-width: 700px) { .kibana-dashboard { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Elastic Stack Master Simulator</h1>
-    <p>Visualize the Data Lifecycle: Collection &rarr; Transformation &rarr; Storage &rarr; Visualization</p>
+    <p>Collection &rarr; Transformation &rarr; Storage &rarr; Visualization</p>
+    
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="switchView('simulator', this)">🚀 Simulator</div>
+        <div class="nav-item" onclick="switchView('api', this)">📚 REST API Guide</div>
+        <div class="nav-item" onclick="switchView('theory', this)">🎓 Theory</div>
+    </div>
 </header>
 
 <div class="container">
-    <div class="section-connector" style="height: 100%; top: 0;"></div>
 
-    <div class="panel theme-beats" id="sec-beats">
-        <div class="panel-header">
-            <h2><span>📦</span> 1. Data Collection (Beats)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-beats')">? Learn More</button>
-        </div>
-        <div id="info-beats" class="info-drawer">
-            <p><strong>Beats</strong> are lightweight data shippers that you install on your servers. They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs).</p>
-        </div>
-        <div class="panel-body">
-            <p style="margin-top:0;"><strong>Simulate a Log Event:</strong> Enter a raw log message below.</p>
-            <div class="input-group">
-                <input type="text" id="rawInput" value="2023-12-01 ERROR Database connection failed user=admin">
-                <button class="btn btn-primary" id="shipBtn" onclick="startPipeline()">Ship Data &rarr;</button>
-            </div>
-            <div id="dataPacket" class="data-packet"></div>
-        </div>
-    </div>
+    <div id="view-simulator" class="view-section active" style="position:relative;">
+        <div class="section-connector"></div>
 
-
-    <div class="panel theme-logstash" id="sec-logstash">
-        <div class="panel-header">
-            <h2><span>⚙️</span> 2. Data Transformation (Logstash)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-logstash')">? Learn More</button>
-        </div>
-        <div id="info-logstash" class="info-drawer">
-            <p><strong>Logstash</strong> is a server-side data processing pipeline that ingests data from multiple sources, transforms it, and sends it to Elasticsearch. It uses <strong>Grok</strong> to derive structure from unstructured data.</p>
-        </div>
-        <div class="panel-body">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <strong>Processing Pipeline:</strong>
-                <label style="font-size:0.9rem; cursor:pointer;">
-                    <input type="checkbox" id="grokToggle" checked> Enable Grok Filter
-                </label>
-            </div>
-            <div class="code-block" id="logstashOutput">// Waiting for data...</div>
-        </div>
-    </div>
-
-
-    <div class="panel theme-es" id="sec-es">
-        <div class="panel-header">
-            <h2><span>🗄️</span> 3. Storage & Indexing (Elasticsearch)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-es')">? Learn More</button>
-        </div>
-        <div id="info-es" class="info-drawer">
-            <p><strong>Elasticsearch</strong> is a distributed search engine. Data is stored in <strong>Shards</strong>. It exposes a REST API for all operations (CRUD).</p>
-        </div>
-        <div class="panel-body">
-            
-            <strong style="display:block; margin-bottom:10px;">REST API Quick Reference</strong>
-            <div class="api-grid">
-                <div class="api-card">
-                    <span class="method-tag bg-get">GET</span>
-                    <div class="api-desc">Retrieves data (documents) or checks cluster status.</div>
-                    <code class="api-example">GET /index/_doc/1</code>
+        <div class="panel theme-beats" id="sec-beats">
+            <div class="panel-header"><h2>1. Data Collection (Beats)</h2></div>
+            <div class="panel-body">
+                <p><strong>Input Log:</strong></p>
+                <div class="input-group">
+                    <input type="text" id="rawInput" value="2023-12-01 ERROR Database connection failed user=admin">
+                    <button class="btn btn-primary" id="shipBtn" onclick="startPipeline()">Ship Data &rarr;</button>
                 </div>
-                <div class="api-card">
-                    <span class="method-tag bg-post">POST</span>
-                    <div class="api-desc">Creates documents (auto-ID) or runs search queries.</div>
-                    <code class="api-example">POST /index/_doc</code>
-                </div>
-                <div class="api-card">
-                    <span class="method-tag bg-put">PUT</span>
-                    <div class="api-desc">Creates a document with a specific ID or updates.</div>
-                    <code class="api-example">PUT /index/_doc/1</code>
-                </div>
-                <div class="api-card">
-                    <span class="method-tag bg-delete">DELETE</span>
-                    <div class="api-desc">Removes a specific document or an entire index.</div>
-                    <code class="api-example">DELETE /index/_doc/1</code>
-                </div>
-            </div>
-
-            <hr style="border:0; border-top:1px solid #e2e8f0; margin: 20px 0;">
-
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <strong>Cluster Topology (Sharding & Replication)</strong>
-                <div>
-                    <button class="btn btn-outline" style="font-size:0.8rem;" onclick="addNode()">+ Add Node</button>
-                    <button class="btn btn-outline" style="font-size:0.8rem;" onclick="resetCluster()">Reset</button>
-                </div>
-            </div>
-
-            <div class="cluster-grid" id="clusterGrid">
-                <div class="node-card" id="node-0">
-                    <div class="node-header">Node-0 <span class="node-role">Master</span></div>
-                    <div class="shard-container" id="shards-0"></div>
-                </div>
-                <div class="node-card" id="node-1">
-                    <div class="node-header">Node-1 <span class="node-role">Data</span></div>
-                    <div class="shard-container" id="shards-1"></div>
-                </div>
-            </div>
-
-            <div style="margin-top: 25px;">
-                <strong>The Inverted Index (Search Optimization)</strong>
-                <div class="index-table-wrapper">
-                    <table class="index-table">
-                        <thead><tr><th>Term (Word)</th><th>Document IDs</th></tr></thead>
-                        <tbody id="invertedIndexBody">
-                            <tr><td colspan="2" style="text-align:center; color:#999; padding:15px;">Index is empty</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <div id="dataPacket" class="data-packet"></div>
             </div>
         </div>
-    </div>
 
+        <div class="panel theme-logstash" id="sec-logstash">
+            <div class="panel-header"><h2>2. Data Transformation (Logstash)</h2></div>
+            <div class="panel-body">
+                <label style="cursor:pointer;"><input type="checkbox" id="grokToggle" checked> <strong>Enable Grok Filter</strong> (Parse Text to JSON)</label>
+                <div style="background:#f7fafc; padding:10px; margin-top:10px; border-left:4px solid #cbd5e0; font-family:monospace;" id="logstashOutput">// Waiting for data...</div>
+            </div>
+        </div>
 
-    <div class="panel theme-kibana" id="sec-kibana">
-        <div class="panel-header">
-            <h2><span>📊</span> 4. Visualization (Kibana)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-kibana')">? Learn More</button>
-        </div>
-        <div id="info-kibana" class="info-drawer">
-            <p><strong>Kibana</strong> provides visualization capabilities on top of the content indexed on an Elasticsearch cluster. It includes dashboards, charts, and maps.</p>
-        </div>
-        <div class="panel-body">
-            <div class="kibana-dashboard">
-                <div class="kibana-panel">
-                    <div class="kibana-title">Discover (Logs)</div>
-                    <div class="discover-list" id="kibanaDiscover">
-                        <div style="color:#999; font-style:italic; padding-top:20px; text-align:center;">No data found</div>
+        <div class="panel theme-es" id="sec-es">
+            <div class="panel-header"><h2>3. Storage (Elasticsearch)</h2></div>
+            <div class="panel-body">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong>Cluster Topology</strong>
+                    <div>
+                        <button class="btn btn-outline" style="font-size:0.8rem;" onclick="addNode()">+ Add Node</button>
+                        <button class="btn btn-outline" style="font-size:0.8rem;" onclick="resetCluster()">Reset</button>
                     </div>
                 </div>
-                <div class="kibana-panel">
-                    <div class="kibana-title">Analytics (Log Level)</div>
-                    <div class="viz-chart">
-                        <div class="chart-col">
-                            <span style="font-size:0.8rem; font-weight:bold; color:var(--kibana-pink);" id="count-info">0</span>
-                            <div class="chart-bar" id="bar-info" style="height:0%;"></div>
-                            <span class="chart-label">INFO</span>
-                        </div>
-                        <div class="chart-col">
-                            <span style="font-size:0.8rem; font-weight:bold; color:var(--kibana-pink);" id="count-warn">0</span>
-                            <div class="chart-bar" id="bar-warn" style="height:0%;"></div>
-                            <span class="chart-label">WARN</span>
-                        </div>
-                        <div class="chart-col">
-                            <span style="font-size:0.8rem; font-weight:bold; color:var(--kibana-pink);" id="count-error">0</span>
-                            <div class="chart-bar" id="bar-error" style="height:0%;"></div>
-                            <span class="chart-label">ERROR</span>
+                <div class="cluster-grid" id="clusterGrid">
+                    <div class="node-card" id="node-0"><div class="node-header">Node-0 <span class="node-role">Master</span></div><div class="shard-container" id="shards-0"></div></div>
+                    <div class="node-card" id="node-1"><div class="node-header">Node-1 <span class="node-role">Data</span></div><div class="shard-container" id="shards-1"></div></div>
+                </div>
+                
+                <div style="margin-top:20px; padding:10px; background:#f0f7ff; border-radius:6px; border:1px solid #cce5ff;">
+                    <strong style="color:#004085;">💡 Quick Tip: REST API</strong>
+                    <div style="display:flex; gap:10px; margin-top:5px; font-size:0.8rem;">
+                        <span class="method-badge badge-get" style="width:auto;">GET</span>
+                        <span class="method-badge badge-post" style="width:auto;">POST</span>
+                        <span class="method-badge badge-put" style="width:auto;">PUT</span>
+                        <span class="method-badge badge-delete" style="width:auto;">DELETE</span>
+                    </div>
+                    <div style="font-size:0.8rem; margin-top:5px; color:#555;">(See the "REST API Guide" tab above for full documentation)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel theme-kibana" id="sec-kibana">
+            <div class="panel-header"><h2>4. Visualization (Kibana)</h2></div>
+            <div class="panel-body">
+                <div class="kibana-dashboard">
+                    <div class="kibana-panel">
+                        <strong>Discover</strong>
+                        <div class="discover-list" id="kibanaDiscover"><div style="color:#999; text-align:center; padding-top:20px;">No data</div></div>
+                    </div>
+                    <div class="kibana-panel">
+                        <strong>Analytics</strong>
+                        <div class="viz-chart">
+                            <div style="text-align:center; width:30%;"><div class="chart-bar" id="bar-info" style="height:0%;"></div><small>INFO</small></div>
+                            <div style="text-align:center; width:30%;"><div class="chart-bar" id="bar-warn" style="height:0%;"></div><small>WARN</small></div>
+                            <div style="text-align:center; width:30%;"><div class="chart-bar" id="bar-error" style="height:0%;"></div><small>ERROR</small></div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-api" class="view-section">
+        
+        <div class="panel">
+            <div class="panel-header" style="background:#333;"><h2>📚 Elasticsearch REST API Reference</h2></div>
+            <div class="panel-body">
+                <p>Elasticsearch uses standard HTTP verbs to interact with data. Below are the core commands you need to know.</p>
+                
+                <div class="api-guide-grid">
+                    
+                    <div class="api-row get">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="method-badge badge-get">GET</span>
+                            <span class="api-title">Retrieve Data</span>
+                        </div>
+                        <div class="api-desc">Used to retrieve information about a document, an index, or the cluster status. It does not modify data.</div>
+                        <div class="api-code">
+                            <span class="comment"># Get a specific document by ID</span><br>
+                            <span class="cmd">GET</span> <span class="url">/my-index/_doc/1</span><br><br>
+                            <span class="comment"># Search for all documents</span><br>
+                            <span class="cmd">GET</span> <span class="url">/my-index/_search</span>
+                        </div>
+                    </div>
+
+                    <div class="api-row post">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="method-badge badge-post">POST</span>
+                            <span class="api-title">Create / Complex Search</span>
+                        </div>
+                        <div class="api-desc">Used to create a new document (when you don't have an ID) or to send complex search queries (Request Body Search).</div>
+                        <div class="api-code">
+                            <span class="comment"># Create doc (Auto-generated ID)</span><br>
+                            <span class="cmd">POST</span> <span class="url">/my-index/_doc</span><br>
+                            { "user": "kimchy", "message": "trying out Elasticsearch" }<br><br>
+                            <span class="comment"># Complex Search Query</span><br>
+                            <span class="cmd">POST</span> <span class="url">/my-index/_search</span><br>
+                            { "query": { "match": { "message": "trying out" } } }
+                        </div>
+                    </div>
+
+                    <div class="api-row put">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="method-badge badge-put">PUT</span>
+                            <span class="api-title">Create (Specific ID) / Update</span>
+                        </div>
+                        <div class="api-desc">Used to create a document when you <strong>know the ID</strong>, or to create a new Index.</div>
+                        <div class="api-code">
+                            <span class="comment"># Create/Update specific doc ID 1</span><br>
+                            <span class="cmd">PUT</span> <span class="url">/my-index/_doc/1</span><br>
+                            { "user": "kimchy", "post_date": "2023-01-01" }<br><br>
+                            <span class="comment"># Create a new Index</span><br>
+                            <span class="cmd">PUT</span> <span class="url">/new-index-2023</span>
+                        </div>
+                    </div>
+
+                    <div class="api-row delete">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span class="method-badge badge-delete">DELETE</span>
+                            <span class="api-title">Remove Data</span>
+                        </div>
+                        <div class="api-desc">Used to remove a specific document or delete an entire index (be careful!).</div>
+                        <div class="api-code">
+                            <span class="comment"># Delete a document</span><br>
+                            <span class="cmd">DELETE</span> <span class="url">/my-index/_doc/1</span><br><br>
+                            <span class="comment"># Delete an entire index</span><br>
+                            <span class="cmd">DELETE</span> <span class="url">/my-index</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-theory" class="view-section">
+        <div class="panel">
+            <div class="panel-header" style="background:#555;"><h2>🎓 Core Concepts</h2></div>
+            <div class="panel-body">
+                <ul style="line-height:1.8;">
+                    <li><strong>Beats:</strong> Lightweight agents that sit on your servers and ship data (logs, metrics) to the stack.</li>
+                    <li><strong>Logstash:</strong> The processing pipeline. It takes raw data, parses it (Grok), filters it, and sends it to storage.</li>
+                    <li><strong>Elasticsearch:</strong> The search engine. It stores data in JSON format inside <strong>Indices</strong>. Indices are split into <strong>Shards</strong> for scalability.</li>
+                    <li><strong>Kibana:</strong> The UI. It lets you query Elasticsearch and build dashboards.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -409,199 +380,129 @@
 </div>
 
 <script>
-    /* --- STATE --- */
-    let docCounter = 1;
-    let nodes = [0, 1];
-    let invertedIndex = {};
-    let counts = { INFO: 0, WARN: 0, ERROR: 0 };
-    let isBusy = false;
-
-    /* --- HELPERS --- */
-    function toggleInfo(id) {
-        const el = document.getElementById(id);
-        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    /* --- VIEW SWITCHER --- */
+    function switchView(viewId, tab) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('view-' + viewId).classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        tab.classList.add('active');
     }
 
-    /* --- PIPELINE LOGIC --- */
+    /* --- SIMULATOR LOGIC --- */
+    let isBusy = false;
+    let docCounter = 1;
+    let nodes = [0, 1];
+    let counts = { INFO: 0, WARN: 0, ERROR: 0 };
+
     function startPipeline() {
         if(isBusy) return;
         isBusy = true;
         
         const btn = document.getElementById('shipBtn');
-        const originalText = btn.innerText;
-        btn.innerText = "Processing...";
-        btn.disabled = true;
-
         const rawLog = document.getElementById('rawInput').value;
         const packet = document.getElementById('dataPacket');
+        
+        btn.innerText = "Processing..."; btn.disabled = true;
 
-        // 1. Move Packet: Input -> Beats
+        // 1. Packet Start
         const startRect = document.getElementById('rawInput').getBoundingClientRect();
         packet.style.display = 'block';
         packet.style.top = startRect.top + 'px';
-        packet.style.left = startRect.left + (startRect.width/2) + 'px';
+        packet.style.left = (startRect.left + startRect.width/2) + 'px';
 
-        // Animate to Logstash
+        // 2. To Logstash
         setTimeout(() => {
             const lsRect = document.getElementById('sec-logstash').getBoundingClientRect();
-            packet.style.top = (lsRect.top + 80) + 'px'; // Move into Logstash body
+            packet.style.top = (lsRect.top + 100) + 'px';
             packet.style.left = (lsRect.left + lsRect.width/2) + 'px';
-        }, 100);
+            
+            // Logstash Logic
+            const isGrok = document.getElementById('grokToggle').checked;
+            const output = document.getElementById('logstashOutput');
+            if(isGrok) {
+                const parts = rawLog.split(" ");
+                const json = { timestamp: new Date().toISOString(), level: parts[1]||"UNK", msg: parts.slice(2).join(" ") };
+                output.innerText = JSON.stringify(json, null, 2);
+                output.style.borderLeftColor = "#48bb78"; // Green
+            } else {
+                output.innerText = JSON.stringify({ message: rawLog }, null, 2);
+                output.style.borderLeftColor = "#f56565"; // Red
+            }
+        }, 800);
 
-        // 2. Logstash Transform
-        setTimeout(() => {
-            runLogstash(rawLog);
-        }, 900);
-
-        // 3. Animate to Elasticsearch
+        // 3. To ES
         setTimeout(() => {
             const esRect = document.getElementById('sec-es').getBoundingClientRect();
-            packet.style.top = (esRect.top + 200) + 'px'; // Aim for Cluster Grid
-        }, 1600);
+            packet.style.top = (esRect.top + 100) + 'px';
+            packet.style.left = (esRect.left + esRect.width/2) + 'px';
+        }, 1800);
 
-        // 4. Indexing
+        // 4. Indexing & Kibana
         setTimeout(() => {
-            runIndexing(rawLog);
-            packet.style.display = 'none'; // Hide packet
+            packet.style.display = 'none';
+            // Indexing
+            const primNode = nodes[Math.floor(Math.random()*nodes.length)];
+            const replNode = nodes.find(n => n !== primNode) || primNode;
             
-            // 5. Update Kibana
-            runKibana(rawLog);
-
-            // Reset
+            addShard(primNode, 'P'+docCounter, false);
+            setTimeout(() => addShard(replNode, 'R'+docCounter, true), 300);
+            
+            // Kibana
+            updateKibana(rawLog);
+            
+            docCounter++;
             isBusy = false;
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }, 2400);
+            btn.innerText = "Ship Data ->"; btn.disabled = false;
+        }, 2600);
     }
 
-    function runLogstash(rawLog) {
-        const useGrok = document.getElementById('grokToggle').checked;
-        const out = document.getElementById('logstashOutput');
-        
-        if(useGrok) {
-            const parts = rawLog.split(" ");
-            const json = {
-                "@timestamp": new Date().toISOString(),
-                "log.level": parts[1] || "UNKNOWN",
-                "message": parts.slice(2).join(" "),
-                "tags": ["_grokparse_success"]
-            };
-            out.innerHTML = `<span style="color:#2f855a">// Grok Structured Data</span>\n` + JSON.stringify(json, null, 2);
-            out.style.borderLeftColor = "#48bb78";
-        } else {
-            const json = {
-                "message": rawLog,
-                "tags": ["_grokparsefailure"]
-            };
-            out.innerHTML = `<span style="color:#c53030">// Unstructured Data</span>\n` + JSON.stringify(json, null, 2);
-            out.style.borderLeftColor = "#f56565";
-        }
-    }
-
-    function runIndexing(rawLog) {
-        const docId = docCounter++;
-        
-        const primaryNodeId = nodes[Math.floor(Math.random() * nodes.length)];
-        let replicaNodeId = null;
-        if(nodes.length > 1) {
-            const others = nodes.filter(n => n !== primaryNodeId);
-            replicaNodeId = others[Math.floor(Math.random() * others.length)];
-        }
-
-        addShard(primaryNodeId, 'P'+docId, 'primary');
-        if(replicaNodeId !== null) {
-            setTimeout(() => addShard(replicaNodeId, 'R'+docId, 'replica'), 300);
-        }
-
-        const tokens = rawLog.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(/\s+/);
-        tokens.forEach(term => {
-            if(term.length < 3) return;
-            if(!invertedIndex[term]) invertedIndex[term] = [];
-            if(!invertedIndex[term].includes(docId)) invertedIndex[term].push(docId);
-        });
-
-        renderInvertedIndex();
-    }
-
-    function addShard(nodeId, label, type) {
-        const container = document.getElementById('shards-' + nodeId);
+    function addShard(nodeId, text, isReplica) {
+        const container = document.getElementById('shards-'+nodeId);
         if(!container) return;
-        const el = document.createElement('div');
-        el.className = `shard ${type}`;
-        el.innerText = label;
-        el.title = `Index: logs-2023 | Doc: ${label.substring(1)}`;
-        container.appendChild(el);
+        const s = document.createElement('div');
+        s.className = isReplica ? 'shard replica' : 'shard';
+        s.innerText = text;
+        container.appendChild(s);
     }
 
-    function renderInvertedIndex() {
-        const tbody = document.getElementById('invertedIndexBody');
-        const terms = Object.keys(invertedIndex).sort();
-        if(terms.length === 0) return;
-        
-        let html = "";
-        terms.forEach(t => {
-            html += `<tr><td>${t}</td><td>[ ${invertedIndex[t].join(", ")} ]</td></tr>`;
-        });
-        tbody.innerHTML = html;
-    }
-
-    function runKibana(rawLog) {
+    function updateKibana(log) {
+        // List
         const list = document.getElementById('kibanaDiscover');
-        if(list.innerHTML.includes("No data")) list.innerHTML = "";
+        if(list.innerText.includes("No data")) list.innerHTML = "";
+        const div = document.createElement('div');
+        div.className = 'log-entry';
+        div.innerHTML = `<span style="color:#007bff">@timestamp</span> ${new Date().toLocaleTimeString()} ${log}`;
+        list.prepend(div);
+
+        // Chart
+        if(log.includes("INFO")) counts.INFO++;
+        if(log.includes("WARN")) counts.WARN++;
+        if(log.includes("ERROR")) counts.ERROR++;
         
-        const row = document.createElement('div');
-        row.className = "log-entry";
-        row.innerHTML = `<span style="color:var(--es-blue)">@timestamp:</span> ${new Date().toLocaleTimeString()} | <span style="color:#4a5568">${rawLog}</span>`;
-        list.prepend(row);
-
-        let type = 'INFO';
-        if(rawLog.includes("WARN")) type = 'WARN';
-        if(rawLog.includes("ERROR")) type = 'ERROR';
-
-        counts[type]++;
-        
-        document.getElementById(`count-info`).innerText = counts.INFO;
-        document.getElementById(`count-warn`).innerText = counts.WARN;
-        document.getElementById(`count-error`).innerText = counts.ERROR;
-
         const max = Math.max(counts.INFO, counts.WARN, counts.ERROR);
-        document.getElementById(`bar-info`).style.height = (counts.INFO / max * 100) + "%";
-        document.getElementById(`bar-warn`).style.height = (counts.WARN / max * 100) + "%";
-        document.getElementById(`bar-error`).style.height = (counts.ERROR / max * 100) + "%";
+        if(max > 0) {
+            document.getElementById('bar-info').style.height = (counts.INFO/max*100)+'%';
+            document.getElementById('bar-warn').style.height = (counts.WARN/max*100)+'%';
+            document.getElementById('bar-error').style.height = (counts.ERROR/max*100)+'%';
+        }
     }
 
     function addNode() {
-        const newId = nodes.length;
-        nodes.push(newId);
+        const id = nodes.length;
+        nodes.push(id);
         const grid = document.getElementById('clusterGrid');
-        
-        const card = document.createElement('div');
-        card.className = "node-card";
-        card.id = "node-" + newId;
-        card.innerHTML = `
-            <div class="node-header">Node-${newId} <span class="node-role">Data</span></div>
-            <div class="shard-container" id="shards-${newId}"></div>
-        `;
-        grid.appendChild(card);
+        const d = document.createElement('div');
+        d.className = 'node-card'; d.id = 'node-'+id;
+        d.innerHTML = `<div class="node-header">Node-${id} <span class="node-role">Data</span></div><div class="shard-container" id="shards-${id}"></div>`;
+        grid.appendChild(d);
     }
 
     function resetCluster() {
-        nodes = [0, 1];
-        docCounter = 1;
-        invertedIndex = {};
-        counts = { INFO: 0, WARN: 0, ERROR: 0 };
-        
-        document.getElementById('clusterGrid').innerHTML = `
-            <div class="node-card" id="node-0"><div class="node-header">Node-0 <span class="node-role">Master</span></div><div class="shard-container" id="shards-0"></div></div>
-            <div class="node-card" id="node-1"><div class="node-header">Node-1 <span class="node-role">Data</span></div><div class="shard-container" id="shards-1"></div></div>
-        `;
-        document.getElementById('invertedIndexBody').innerHTML = '<tr><td colspan="2" style="text-align:center; color:#999; padding:15px;">Index is empty</td></tr>';
-        document.getElementById('kibanaDiscover').innerHTML = '<div style="color:#999; font-style:italic; padding-top:20px; text-align:center;">No data found</div>';
-        
-        ['info','warn','error'].forEach(t => {
-            document.getElementById('count-'+t).innerText = "0";
-            document.getElementById('bar-'+t).style.height = "0%";
-        });
+        nodes = [0, 1]; counts = {INFO:0, WARN:0, ERROR:0}; docCounter = 1;
+        document.getElementById('clusterGrid').innerHTML = `<div class="node-card" id="node-0"><div class="node-header">Node-0 <span class="node-role">Master</span></div><div class="shard-container" id="shards-0"></div></div><div class="node-card" id="node-1"><div class="node-header">Node-1 <span class="node-role">Data</span></div><div class="shard-container" id="shards-1"></div></div>`;
+        document.getElementById('kibanaDiscover').innerHTML = `<div style="color:#999; text-align:center; padding-top:20px;">No data</div>`;
+        ['info','warn','error'].forEach(k => document.getElementById('bar-'+k).style.height = '0%');
     }
 </script>
 
