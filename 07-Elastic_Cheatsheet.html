@@ -12,9 +12,7 @@
         :root {
             --primary: #0077cc;
             --bg-body: #f8f9fa;
-            --bg-card: #ffffff;
             --text-main: #2d3748;
-            --text-muted: #718096;
             --border-color: #e2e8f0;
             --nav-height: 70px;
             --code-bg: #1e1e1e;
@@ -29,7 +27,7 @@
             color: var(--text-main);
             line-height: 1.6;
             margin: 0;
-            padding-top: var(--nav-height); /* Space for sticky header */
+            padding-top: var(--nav-height);
         }
 
         a { color: var(--primary); text-decoration: none; }
@@ -198,7 +196,7 @@
         .toolbar-item button:hover { background: rgba(255,255,255,0.2); }
         .toolbar-item button:active { transform: translateY(1px); }
 
-        /* --- 6. ALERTS & GRIDS (Legacy Support) --- */
+        /* --- 6. GRIDS & SEGMENTS --- */
         .ui.segment {
             background: #fffaf0;
             border-left: 4px solid var(--accent-orange);
@@ -208,7 +206,6 @@
             font-size: 0.95rem;
         }
 
-        /* Grid System Emulation (Replacements for Semantic UI Grid) */
         .ui.grid {
             display: flex;
             flex-wrap: wrap;
@@ -226,55 +223,41 @@
             margin-bottom: 1rem;
         }
 
-        .divider-column {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            text-align: center;
-            margin: 1rem 0;
-            font-weight: bold;
-            color: #a0aec0;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        /* Mobile Adjustments */
+        /* Mobile */
         @media (max-width: 768px) {
-            .nav-links { display: none; /* Simplify for mobile for now */ }
+            .nav-links { display: none; }
             .ui.two.column.grid .column, 
             .ui.grid .eight.wide.column { width: 100%; margin-bottom: 2rem; }
         }
 
-        /* --- 7. VERSION VISIBILITY LOGIC --- */
+        /* --- 7. VERSION VISIBILITY LOGIC (FIXED) --- */
         
-        /* Default: Hide all version-specific blocks */
+        /* 1. Hide the content elements by default */
         .es1, .es2, .es5, .es6, .es7, .es8 {
             display: none !important;
         }
 
-        /* Show based on body class */
-        body.es1 .es1 { display: block !important; }
-        body.es2 .es2 { display: block !important; }
-        body.es5 .es5 { display: block !important; }
-        body.es6 .es6 { display: block !important; }
-        body.es7 .es7 { display: block !important; }
-        body.es8 .es8 { display: block !important; }
+        /* 2. Show content based on body class "show-esX" */
+        body.show-es1 .es1 { display: block !important; }
+        body.show-es2 .es2 { display: block !important; }
+        body.show-es5 .es5 { display: block !important; }
+        body.show-es6 .es6 { display: block !important; }
+        body.show-es7 .es7 { display: block !important; }
+        body.show-es8 .es8 { display: block !important; }
 
-        /* Inline specific overrides (for spans inside Headers/Selectors) */
-        body.es1 h1 .es1, body.es1 .js-version-selector .es1,
-        body.es2 h1 .es2, body.es2 .js-version-selector .es2,
-        body.es5 h1 .es5, body.es5 .js-version-selector .es5,
-        body.es6 h1 .es6, body.es6 .js-version-selector .es6,
-        body.es7 h1 .es7, body.es7 .js-version-selector .es7,
-        body.es8 h1 .es8, body.es8 .js-version-selector .es8 {
+        /* 3. Handle inline elements (like spans in h1) */
+        body.show-es1 h1 .es1, body.show-es1 .js-version-selector .es1,
+        body.show-es2 h1 .es2, body.show-es2 .js-version-selector .es2,
+        body.show-es5 h1 .es5, body.show-es5 .js-version-selector .es5,
+        body.show-es6 h1 .es6, body.show-es6 .js-version-selector .es6,
+        body.show-es7 h1 .es7, body.show-es7 .js-version-selector .es7,
+        body.show-es8 h1 .es8, body.show-es8 .js-version-selector .es8 {
             display: inline-block !important;
         }
-
-        /* Fix lists items that are flex/block */
-        body.es1 li.es1, body.es2 li.es2, body.es5 li.es5,
-        body.es6 li.es6, body.es7 li.es7, body.es8 li.es8 {
+        
+        /* 4. Handle List Items */
+        body.show-es1 li.es1, body.show-es2 li.es2, body.show-es5 li.es5,
+        body.show-es6 li.es6, body.show-es7 li.es7, body.show-es8 li.es8 {
             display: list-item !important;
         }
 
@@ -290,7 +273,7 @@
     </style>
 </head>
 
-<body class="es8">
+<body class="show-es8">
 
     <div class="ui main menu">
         <div class="ui text container">
@@ -784,28 +767,19 @@ PUT /_snapshot/my_backup/snapshot_a?wait_for_completion=true
             
             // --- 1. Version Switching Logic ---
             function setVersion(versionClass) {
-                // Remove existing es classes
-                body.classList.remove('es1', 'es2', 'es5', 'es6', 'es7', 'es8');
-                // Add new class
-                body.classList.add(versionClass);
+                // Remove existing show-es classes
+                body.classList.remove('show-es1', 'show-es2', 'show-es5', 'show-es6', 'show-es7', 'show-es8');
+                // Add new class prefix "show-"
+                body.classList.add('show-' + versionClass);
                 
-                // Update selector text
-                const versionNames = {
-                    'es1': 'Elasticsearch 1.X',
-                    'es2': 'Elasticsearch 2.X',
-                    'es5': 'Elasticsearch 5.X',
-                    'es6': 'Elasticsearch 6.X',
-                    'es7': 'Elasticsearch 7.X',
-                    'es8': 'Elasticsearch 8.X'
-                };
-                // Show text based on selection (complex span hiding handled by CSS)
-                // But we can persist the selection to storage
+                // Save to local storage
                 localStorage.setItem('es-cheatsheet-version', versionClass);
             }
 
             links.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
+                    // extract esX from #esX
                     const version = link.getAttribute('href').replace('#', '');
                     setVersion(version);
                     versionSelector.blur(); // Close dropdown
@@ -816,9 +790,8 @@ PUT /_snapshot/my_backup/snapshot_a?wait_for_completion=true
             const savedVersion = localStorage.getItem('es-cheatsheet-version');
             if (savedVersion) {
                 setVersion(savedVersion);
-            } else {
-                setVersion('es8');
             }
+            // else default is set in HTML to show-es8
 
             // --- 2. Copy to Clipboard Logic ---
             document.querySelectorAll('.code-toolbar button').forEach(btn => {
