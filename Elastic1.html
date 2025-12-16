@@ -3,376 +3,637 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elastic Stack Master Simulator & Guide</title>
+    <title>Elastic Stack: The Ultimate Interactive Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. VARIABLES & RESET --- */
+        /* --- 1. DESIGN SYSTEM (Premium SaaS Theme) --- */
         :root {
+            /* Brand Colors */
+            --es-blue: #0077cc;
+            --es-accent: #36a2eb;
             --beats-teal: #00bfb3;
             --logstash-yellow: #fec514;
-            --es-blue: #005571;
             --kibana-pink: #e03e7e;
-            --bg-page: #f0f2f5;
-            --bg-panel: #ffffff;
-            --text-main: #2d3748;
-            --border-color: #e2e8f0;
-            --code-bg: #f7fafc;
             
-            /* API Colors */
-            --method-get: #007bff;
-            --method-post: #28a745;
-            --method-put: #fd7e14;
-            --method-delete: #dc3545;
+            /* UI Colors */
+            --bg-body: #f4f6f8;
+            --bg-surface: #ffffff;
+            --bg-sidebar: #fafafa;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-tertiary: #718096;
+            --border-color: #e2e8f0;
+            --border-hover: #cbd5e0;
+            
+            /* Code */
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+
+            /* Spacing & Radius */
+            --radius-lg: 16px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; outline: none; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-page);
-            background-image: radial-gradient(#cbd5e0 1px, transparent 1px);
-            background-size: 24px 24px;
-            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             margin: 0;
             padding: 0;
-            padding-bottom: 80px;
-            line-height: 1.6;
-        }
-
-        /* --- 2. HEADER & NAV --- */
-        header {
-            background-color: var(--es-blue);
-            color: white;
-            padding-top: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        header h1 { margin: 0; font-size: 1.6rem; font-weight: 700; }
-        header p { margin: 5px 0 15px; opacity: 0.9; font-size: 0.95rem; }
-
-        .nav-bar {
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            background: rgba(0,0,0,0.1);
-        }
-        .nav-item {
-            padding: 12px 25px;
-            cursor: pointer;
-            font-weight: 600;
-            color: rgba(255,255,255,0.7);
-            border-bottom: 4px solid transparent;
-            transition: all 0.2s;
-        }
-        .nav-item:hover { color: white; background: rgba(255,255,255,0.1); }
-        .nav-item.active {
-            color: white;
-            border-bottom-color: var(--beats-teal); /* Highlight color */
-            background: rgba(0,0,0,0.2);
-        }
-
-        /* --- 3. LAYOUT --- */
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .view-section {
-            display: none;
             flex-direction: column;
-            gap: 40px;
-            animation: fadeIn 0.3s ease-out;
-        }
-        .view-section.active { display: flex; }
-        
-        @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
-
-        .section-connector {
-            position: absolute; left: 50%; width: 4px; background: #cbd5e0; 
-            transform: translateX(-50%); z-index: -1; height: 100%; top: 0;
+            overflow: hidden;
         }
 
-        /* --- 4. PANELS --- */
-        .panel {
-            background: var(--bg-panel);
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border-color);
+        /* --- 2. LAYOUT --- */
+        header {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 30px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 50;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--es-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 14px;
+        }
+        .brand-text h1 { font-size: 1.1rem; margin: 0; font-weight: 700; letter-spacing: -0.02em; }
+        .brand-text p { font-size: 0.75rem; margin: 0; color: var(--text-tertiary); }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-item {
+            padding: 8px 24px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover { color: var(--text-primary); }
+        .nav-item.active {
+            background: white;
+            color: var(--es-blue);
+            box-shadow: var(--shadow-sm);
+            font-weight: 600;
+        }
+
+        /* Main Content Area */
+        .main-wrapper {
+            flex: 1;
             overflow: hidden;
             position: relative;
         }
-        
-        .panel-header {
-            padding: 15px 25px;
+
+        .view-section {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            padding: 40px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .view-section.active { display: block; opacity: 1; }
+
+        /* --- 3. COMPONENT STYLES --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: 100%;
+        }
+
+        .sidebar-menu {
+            position: sticky;
+            top: 0;
+        }
+
+        .content-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: white;
+            background: linear-gradient(to right, #ffffff, #fafafa);
         }
-        .panel-header h2 { margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
-        .panel-body { padding: 25px; }
+        .card-header h2 { margin: 0; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .card-body { padding: 24px; }
 
-        /* Themes */
-        .theme-beats .panel-header { background-color: var(--beats-teal); }
-        .theme-logstash .panel-header { background-color: var(--logstash-yellow); }
-        .theme-logstash .panel-header h2 { color: #333; }
-        .theme-es .panel-header { background-color: var(--es-blue); }
-        .theme-kibana .panel-header { background-color: var(--kibana-pink); }
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--es-blue); color: white; box-shadow: 0 2px 4px rgba(0,119,204,0.3); }
+        .btn-primary:hover { background: #0062a8; transform: translateY(-1px); }
+        .btn-secondary { background: white; border-color: var(--border-color); color: var(--text-primary); }
+        .btn-secondary:hover { border-color: var(--text-tertiary); background: #f8fafc; }
 
-        /* --- 5. API GUIDE STYLES (NEW) --- */
-        .api-guide-grid {
+        /* --- 4. SIMULATOR SPECIFIC --- */
+        .pipeline-track {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            padding: 0 50px;
+        }
+        .pipeline-line {
+            position: absolute;
+            top: 50%; left: 60px; right: 60px;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+        .pipeline-stage {
+            position: relative;
+            z-index: 2;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            width: 180px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s;
+        }
+        .pipeline-stage:hover { transform: translateY(-5px); border-color: var(--es-blue); }
+        .stage-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+        .stage-title { font-weight: 700; color: var(--text-primary); display: block; }
+        .stage-desc { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; display: block; }
+
+        .packet {
+            width: 16px; height: 16px;
+            background: var(--text-primary);
+            border: 3px solid white;
+            box-shadow: 0 0 0 1px var(--text-primary);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%; left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            display: none;
+        }
+
+        /* Cluster Visuals */
+        .cluster-visual {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
+            margin-top: 20px;
         }
-        .api-row {
-            background: white;
+        .node-box {
+            background: #f8fafc;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 120px;
+            transition: all 0.3s;
+        }
+        .node-box.active { border-color: var(--es-blue); background: #f0f9ff; }
+        .node-header { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; display: flex; justify-content: space-between; }
+        
+        .shard {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px; height: 36px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin: 4px;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: help;
+        }
+        .shard.primary { background: var(--es-blue); color: white; box-shadow: 0 4px 6px rgba(0,119,204,0.2); }
+        .shard.replica { background: white; border: 2px solid var(--es-blue); color: var(--es-blue); }
+
+        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+
+        /* --- 5. THEORY SECTION (Deep Dive) --- */
+        .theory-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .topic-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            position: sticky;
+            top: 20px;
+        }
+        .topic-item {
+            padding: 12px 16px;
+            border-left: 2px solid transparent;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .topic-item:hover { color: var(--es-blue); background: #f8fafc; }
+        .topic-item.active { border-left-color: var(--es-blue); color: var(--es-blue); font-weight: 600; background: #f0f9ff; }
+
+        .theory-content h1 { font-size: 2rem; margin-bottom: 10px; letter-spacing: -0.03em; }
+        .theory-content h3 { font-size: 1.25rem; margin-top: 30px; color: var(--text-primary); }
+        .theory-content p { line-height: 1.7; color: var(--text-secondary); margin-bottom: 15px; }
+        .theory-content ul { line-height: 1.7; color: var(--text-secondary); padding-left: 20px; }
+        .theory-content code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #d63384; }
+        
+        .concept-box {
+            background: #fff;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--es-blue);
+        }
+
+        /* --- 6. API GUIDE (Documentation Style) --- */
+        .api-grid { display: grid; gap: 24px; max-width: 1000px; margin: 0 auto; }
+        .api-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            border-left: 5px solid #ccc;
         }
-        .api-row.get { border-left-color: var(--method-get); }
-        .api-row.post { border-left-color: var(--method-post); }
-        .api-row.put { border-left-color: var(--method-put); }
-        .api-row.delete { border-left-color: var(--method-delete); }
-
+        .api-item-header {
+            padding: 16px 24px;
+            background: #fcfcfc;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
         .method-badge {
-            display: inline-block;
-            padding: 4px 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            padding: 4px 10px;
             border-radius: 4px;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
-            width: 80px;
-            text-align: center;
+            font-size: 0.8rem;
+            text-transform: uppercase;
         }
-        .badge-get { background: var(--method-get); }
-        .badge-post { background: var(--method-post); }
-        .badge-put { background: var(--method-put); }
-        .badge-delete { background: var(--method-delete); }
-
-        .api-title { font-size: 1.1rem; font-weight: 700; color: #333; margin-bottom: 5px; }
-        .api-desc { color: #555; font-size: 0.95rem; }
-        .api-code {
-            background: #2d2d2d;
-            color: #ccc;
-            padding: 10px;
-            border-radius: 6px;
-            font-family: monospace;
-            margin-top: 5px;
-            overflow-x: auto;
-        }
-        .api-code .cmd { color: #e6cd69; } /* Method color */
-        .api-code .url { color: #9cdcfe; }
-        .api-code .comment { color: #6a9955; font-style: italic; }
-
-        /* --- 6. SIMULATOR ELEMENTS --- */
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
-        .btn-primary { background-color: var(--es-blue); color: white; }
-        .btn-primary:hover { background-color: #003d52; }
-        .btn-outline { background: white; border: 1px solid var(--es-blue); color: var(--es-blue); }
-        .btn-outline:hover { background: #f0f9ff; }
-
-        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
-        input[type="text"] { flex-grow: 1; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-family: monospace; }
-
-        .cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-        .node-card { background: white; border: 2px dashed #cbd5e0; border-radius: 8px; padding: 10px; transition: all 0.2s; }
-        .node-header { font-size: 0.85rem; font-weight: 700; color: #718096; display: flex; justify-content: space-between; }
-        .node-role { background: #edf2f7; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .badge-get { background: #eff6ff; color: #3b82f6; border: 1px solid #dbeafe; }
+        .badge-post { background: #f0fdf4; color: #22c55e; border: 1px solid #dcfce7; }
+        .badge-put { background: #fff7ed; color: #f97316; border: 1px solid #ffedd5; }
+        .badge-delete { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
         
-        .shard-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-        .shard { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; border-radius: 4px; color: white; background: var(--es-blue); border: 1px solid var(--es-blue); animation: popIn 0.3s; }
-        .shard.replica { background: white; color: var(--es-blue); }
-        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
-
-        .data-packet { width: 24px; height: 24px; background-color: #2d3748; border: 3px solid white; border-radius: 50%; position: fixed; z-index: 9999; display: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: top 0.8s ease-in-out, left 0.8s ease-in-out; }
-
-        /* Kibana */
-        .kibana-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .kibana-panel { border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; height: 220px; display: flex; flex-direction: column; background:white;}
-        .discover-list { flex-grow: 1; overflow-y: auto; font-family: monospace; font-size: 0.8rem; }
-        .log-entry { padding: 6px 0; border-bottom: 1px solid #edf2f7; }
-        .viz-chart { flex-grow: 1; display: flex; align-items: flex-end; justify-content: space-around; border-bottom: 2px solid #cbd5e0; }
-        .chart-bar { width: 30%; background: var(--kibana-pink); min-height: 2px; transition: height 0.5s; }
+        .endpoint { font-family: 'JetBrains Mono', monospace; color: var(--text-primary); font-size: 0.9rem; }
+        .api-item-body { padding: 24px; }
+        .code-snippet {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            white-space: pre-wrap;
+        }
 
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Elastic Stack Master Simulator</h1>
-    <p>Collection &rarr; Transformation &rarr; Storage &rarr; Visualization</p>
-    
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="switchView('simulator', this)">🚀 Simulator</div>
-        <div class="nav-item" onclick="switchView('api', this)">📚 REST API Guide</div>
-        <div class="nav-item" onclick="switchView('theory', this)">🎓 Theory</div>
+    <div class="brand">
+        <div class="brand-logo">ES</div>
+        <div class="brand-text">
+            <h1>Elastic Master</h1>
+            <p>Interactive Architecture Simulator</p>
+        </div>
     </div>
+    
+    <div class="nav-tabs">
+        <div class="nav-item active" onclick="switchView('simulator', this)">Simulator</div>
+        <div class="nav-item" onclick="switchView('theory', this)">Theory & Concepts</div>
+        <div class="nav-item" onclick="switchView('api', this)">API Reference</div>
+    </div>
+    
+    <div style="width: 120px;"> </div>
 </header>
 
-<div class="container">
+<div class="main-wrapper">
 
-    <div id="view-simulator" class="view-section active" style="position:relative;">
-        <div class="section-connector"></div>
-
-        <div class="panel theme-beats" id="sec-beats">
-            <div class="panel-header"><h2>1. Data Collection (Beats)</h2></div>
-            <div class="panel-body">
-                <p><strong>Input Log:</strong></p>
-                <div class="input-group">
-                    <input type="text" id="rawInput" value="2023-12-01 ERROR Database connection failed user=admin">
-                    <button class="btn btn-primary" id="shipBtn" onclick="startPipeline()">Ship Data &rarr;</button>
+    <div id="view-simulator" class="view-section active">
+        <div class="grid-layout" style="display:block; max-width:1000px;">
+            
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--beats-teal)">●</span> 1. Ingestion Pipeline</h2>
+                    <span style="font-size:0.8rem; color:var(--text-tertiary);">Data flows from source to storage</span>
                 </div>
-                <div id="dataPacket" class="data-packet"></div>
-            </div>
-        </div>
+                <div class="card-body">
+                    <div style="display:flex; gap:10px; margin-bottom:30px;">
+                        <input type="text" id="rawLogInput" value="2024-03-15 INFO User login successful ip=192.168.1.1" style="flex:1; padding:10px; border:1px solid var(--border-color); border-radius:6px; font-family:'JetBrains Mono', monospace;">
+                        <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">Ship Log</button>
+                    </div>
 
-        <div class="panel theme-logstash" id="sec-logstash">
-            <div class="panel-header"><h2>2. Data Transformation (Logstash)</h2></div>
-            <div class="panel-body">
-                <label style="cursor:pointer;"><input type="checkbox" id="grokToggle" checked> <strong>Enable Grok Filter</strong> (Parse Text to JSON)</label>
-                <div style="background:#f7fafc; padding:10px; margin-top:10px; border-left:4px solid #cbd5e0; font-family:monospace;" id="logstashOutput">// Waiting for data...</div>
-            </div>
-        </div>
+                    <div class="pipeline-track" id="pipelineTrack">
+                        <div class="pipeline-line"></div>
+                        
+                        <div class="pipeline-stage" id="stage-beats">
+                            <span class="stage-icon" style="color:var(--beats-teal);">📦</span>
+                            <span class="stage-title">Beats</span>
+                            <span class="stage-desc">Collection Agent</span>
+                        </div>
 
-        <div class="panel theme-es" id="sec-es">
-            <div class="panel-header"><h2>3. Storage (Elasticsearch)</h2></div>
-            <div class="panel-body">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong>Cluster Topology</strong>
+                        <div class="pipeline-stage" id="stage-logstash">
+                            <span class="stage-icon" style="color:var(--logstash-yellow);">⚙️</span>
+                            <span class="stage-title">Logstash</span>
+                            <span class="stage-desc">Processing & Grok</span>
+                        </div>
+
+                        <div class="pipeline-stage" id="stage-es">
+                            <span class="stage-icon" style="color:var(--es-blue);">🗄️</span>
+                            <span class="stage-title">Elasticsearch</span>
+                            <span class="stage-desc">Indexing & Sharding</span>
+                        </div>
+
+                        <div id="packet" class="packet"></div>
+                    </div>
+
+                    <div style="background:#f8fafc; border:1px solid var(--border-color); padding:15px; border-radius:8px; font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:var(--text-secondary);">
+                        <div style="margin-bottom:5px; font-weight:600; font-size:0.75rem; text-transform:uppercase; color:var(--text-tertiary);">Transformation Output</div>
+                        <div id="logstash-out">// Waiting for data...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--es-blue)">●</span> 2. Cluster Topology</h2>
                     <div>
-                        <button class="btn btn-outline" style="font-size:0.8rem;" onclick="addNode()">+ Add Node</button>
-                        <button class="btn btn-outline" style="font-size:0.8rem;" onclick="resetCluster()">Reset</button>
+                        <button class="btn btn-secondary" onclick="addNode()" style="font-size:0.8rem;">+ Add Node</button>
+                        <button class="btn btn-secondary" onclick="resetCluster()" style="font-size:0.8rem;">Reset</button>
                     </div>
                 </div>
-                <div class="cluster-grid" id="clusterGrid">
-                    <div class="node-card" id="node-0"><div class="node-header">Node-0 <span class="node-role">Master</span></div><div class="shard-container" id="shards-0"></div></div>
-                    <div class="node-card" id="node-1"><div class="node-header">Node-1 <span class="node-role">Data</span></div><div class="shard-container" id="shards-1"></div></div>
-                </div>
-                
-                <div style="margin-top:20px; padding:10px; background:#f0f7ff; border-radius:6px; border:1px solid #cce5ff;">
-                    <strong style="color:#004085;">💡 Quick Tip: REST API</strong>
-                    <div style="display:flex; gap:10px; margin-top:5px; font-size:0.8rem;">
-                        <span class="method-badge badge-get" style="width:auto;">GET</span>
-                        <span class="method-badge badge-post" style="width:auto;">POST</span>
-                        <span class="method-badge badge-put" style="width:auto;">PUT</span>
-                        <span class="method-badge badge-delete" style="width:auto;">DELETE</span>
-                    </div>
-                    <div style="font-size:0.8rem; margin-top:5px; color:#555;">(See the "REST API Guide" tab above for full documentation)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel theme-kibana" id="sec-kibana">
-            <div class="panel-header"><h2>4. Visualization (Kibana)</h2></div>
-            <div class="panel-body">
-                <div class="kibana-dashboard">
-                    <div class="kibana-panel">
-                        <strong>Discover</strong>
-                        <div class="discover-list" id="kibanaDiscover"><div style="color:#999; text-align:center; padding-top:20px;">No data</div></div>
-                    </div>
-                    <div class="kibana-panel">
-                        <strong>Analytics</strong>
-                        <div class="viz-chart">
-                            <div style="text-align:center; width:30%;"><div class="chart-bar" id="bar-info" style="height:0%;"></div><small>INFO</small></div>
-                            <div style="text-align:center; width:30%;"><div class="chart-bar" id="bar-warn" style="height:0%;"></div><small>WARN</small></div>
-                            <div style="text-align:center; width:30%;"><div class="chart-bar" id="bar-error" style="height:0%;"></div><small>ERROR</small></div>
+                <div class="card-body">
+                    <p style="font-size:0.9rem; color:var(--text-tertiary); margin-bottom:20px;">
+                        Visualizing how <strong>Primary (P)</strong> and <strong>Replica (R)</strong> shards are distributed across nodes for fault tolerance.
+                    </p>
+                    <div class="cluster-visual" id="clusterGrid">
+                        <div class="node-box" id="node-0">
+                            <div class="node-header">Node-0 <span>MASTER</span></div>
+                            <div class="shards-container" id="shards-0"></div>
+                        </div>
+                        <div class="node-box" id="node-1">
+                            <div class="node-header">Node-1 <span>DATA</span></div>
+                            <div class="shards-container" id="shards-1"></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="view-api" class="view-section">
-        
-        <div class="panel">
-            <div class="panel-header" style="background:#333;"><h2>📚 Elasticsearch REST API Reference</h2></div>
-            <div class="panel-body">
-                <p>Elasticsearch uses standard HTTP verbs to interact with data. Below are the core commands you need to know.</p>
-                
-                <div class="api-guide-grid">
-                    
-                    <div class="api-row get">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span class="method-badge badge-get">GET</span>
-                            <span class="api-title">Retrieve Data</span>
-                        </div>
-                        <div class="api-desc">Used to retrieve information about a document, an index, or the cluster status. It does not modify data.</div>
-                        <div class="api-code">
-                            <span class="comment"># Get a specific document by ID</span><br>
-                            <span class="cmd">GET</span> <span class="url">/my-index/_doc/1</span><br><br>
-                            <span class="comment"># Search for all documents</span><br>
-                            <span class="cmd">GET</span> <span class="url">/my-index/_search</span>
+            <div class="content-card" style="border-top:4px solid var(--kibana-pink);">
+                <div class="card-header">
+                    <h2><span style="color:var(--kibana-pink)">●</span> 3. Kibana Analytics</h2>
+                </div>
+                <div class="card-body" style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                    <div>
+                        <h4 style="margin:0 0 10px 0; font-size:0.9rem; color:var(--text-tertiary);">Discover</h4>
+                        <div id="kibana-list" style="height:150px; overflow-y:auto; border:1px solid var(--border-color); border-radius:6px; padding:10px; font-family:'JetBrains Mono', monospace; font-size:0.8rem;">
+                            <div style="color:#ccc; text-align:center; padding-top:40px;">No logs indexed</div>
                         </div>
                     </div>
-
-                    <div class="api-row post">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span class="method-badge badge-post">POST</span>
-                            <span class="api-title">Create / Complex Search</span>
+                    <div>
+                        <h4 style="margin:0 0 10px 0; font-size:0.9rem; color:var(--text-tertiary);">Dashboard</h4>
+                        <div style="height:150px; display:flex; align-items:flex-end; justify-content:space-around; border-bottom:2px solid var(--border-color);">
+                            <div style="width:40px; background:var(--es-blue); height:0%; transition:all 0.5s; border-radius:4px 4px 0 0;" id="bar-info"></div>
+                            <div style="width:40px; background:var(--kibana-pink); height:0%; transition:all 0.5s; border-radius:4px 4px 0 0;" id="bar-warn"></div>
+                            <div style="width:40px; background:#ef4444; height:0%; transition:all 0.5s; border-radius:4px 4px 0 0;" id="bar-error"></div>
                         </div>
-                        <div class="api-desc">Used to create a new document (when you don't have an ID) or to send complex search queries (Request Body Search).</div>
-                        <div class="api-code">
-                            <span class="comment"># Create doc (Auto-generated ID)</span><br>
-                            <span class="cmd">POST</span> <span class="url">/my-index/_doc</span><br>
-                            { "user": "kimchy", "message": "trying out Elasticsearch" }<br><br>
-                            <span class="comment"># Complex Search Query</span><br>
-                            <span class="cmd">POST</span> <span class="url">/my-index/_search</span><br>
-                            { "query": { "match": { "message": "trying out" } } }
+                        <div style="display:flex; justify-content:space-around; font-size:0.75rem; margin-top:5px; color:var(--text-tertiary);">
+                            <span>INFO</span><span>WARN</span><span>ERROR</span>
                         </div>
                     </div>
-
-                    <div class="api-row put">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span class="method-badge badge-put">PUT</span>
-                            <span class="api-title">Create (Specific ID) / Update</span>
-                        </div>
-                        <div class="api-desc">Used to create a document when you <strong>know the ID</strong>, or to create a new Index.</div>
-                        <div class="api-code">
-                            <span class="comment"># Create/Update specific doc ID 1</span><br>
-                            <span class="cmd">PUT</span> <span class="url">/my-index/_doc/1</span><br>
-                            { "user": "kimchy", "post_date": "2023-01-01" }<br><br>
-                            <span class="comment"># Create a new Index</span><br>
-                            <span class="cmd">PUT</span> <span class="url">/new-index-2023</span>
-                        </div>
-                    </div>
-
-                    <div class="api-row delete">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span class="method-badge badge-delete">DELETE</span>
-                            <span class="api-title">Remove Data</span>
-                        </div>
-                        <div class="api-desc">Used to remove a specific document or delete an entire index (be careful!).</div>
-                        <div class="api-code">
-                            <span class="comment"># Delete a document</span><br>
-                            <span class="cmd">DELETE</span> <span class="url">/my-index/_doc/1</span><br><br>
-                            <span class="comment"># Delete an entire index</span><br>
-                            <span class="cmd">DELETE</span> <span class="url">/my-index</span>
-                        </div>
-                    </div>
-
                 </div>
             </div>
+
         </div>
     </div>
 
     <div id="view-theory" class="view-section">
-        <div class="panel">
-            <div class="panel-header" style="background:#555;"><h2>🎓 Core Concepts</h2></div>
-            <div class="panel-body">
-                <ul style="line-height:1.8;">
-                    <li><strong>Beats:</strong> Lightweight agents that sit on your servers and ship data (logs, metrics) to the stack.</li>
-                    <li><strong>Logstash:</strong> The processing pipeline. It takes raw data, parses it (Grok), filters it, and sends it to storage.</li>
-                    <li><strong>Elasticsearch:</strong> The search engine. It stores data in JSON format inside <strong>Indices</strong>. Indices are split into <strong>Shards</strong> for scalability.</li>
-                    <li><strong>Kibana:</strong> The UI. It lets you query Elasticsearch and build dashboards.</li>
+        <div class="theory-layout">
+            <aside>
+                <ul class="topic-list">
+                    <li class="topic-item active" onclick="showTopic('intro')">1. Introduction</li>
+                    <li class="topic-item" onclick="showTopic('elk')">2. The ELK Stack</li>
+                    <li class="topic-item" onclick="showTopic('concepts')">3. Key Concepts</li>
+                    <li class="topic-item" onclick="showTopic('arch')">4. Architecture & Nodes</li>
+                    <li class="topic-item" onclick="showTopic('inverted')">5. Inverted Index</li>
                 </ul>
+            </aside>
+
+            <main class="theory-content">
+                
+                <div id="topic-intro" class="topic-detail">
+                    <h1>What is Elasticsearch?</h1>
+                    <p>Elasticsearch is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured.</p>
+                    <div class="concept-box">
+                        <strong>Why is it so fast?</strong><br>
+                        It is built on top of <strong>Apache Lucene</strong> and uses a structure called an <a href="#" onclick="showTopic('inverted')">Inverted Index</a>, which is designed for very fast full-text searches.
+                    </div>
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><strong>Distributed:</strong> Scales horizontally to handle petabytes of data.</li>
+                        <li><strong>RESTful API:</strong> Accessed via JSON over HTTP.</li>
+                        <li><strong>Near Real-Time (NRT):</strong> Slight latency (usually 1 second) from the time you index a document until it becomes searchable.</li>
+                    </ul>
+                </div>
+
+                <div id="topic-elk" class="topic-detail" style="display:none;">
+                    <h1>The ELK Stack</h1>
+                    <p>"ELK" is the acronym for three open source projects: Elasticsearch, Logstash, and Kibana.</p>
+                    
+                    <h3>1. Logstash (Ingest)</h3>
+                    <p>Server-side data processing pipeline that ingests data from multiple sources simultaneously, transforms it (using filters like <code>Grok</code>), and sends it to a "stash" like Elasticsearch.</p>
+                    
+                    <h3>2. Elasticsearch (Store)</h3>
+                    <p>The heart of the stack. It stores the data and provides the search and analytic capabilities.</p>
+                    
+                    <h3>3. Kibana (Visualize)</h3>
+                    <p>The UI layer. Lets you visualize your Elasticsearch data and navigate the Elastic Stack.</p>
+                    
+                    <h3>+ Beats (Collection)</h3>
+                    <p>Later added to the stack. Lightweight data shippers that sit on your servers and ship data to Logstash or Elasticsearch.</p>
+                </div>
+
+                <div id="topic-concepts" class="topic-detail" style="display:none;">
+                    <h1>Core Terminology</h1>
+                    
+                    <h3>Cluster & Node</h3>
+                    <p>A <strong>Cluster</strong> is a collection of one or more servers (nodes) that together hold your entire data. A <strong>Node</strong> is a single server that is part of your cluster.</p>
+                    
+                    <h3>Index</h3>
+                    <p>An index is a collection of documents that have somewhat similar characteristics. It is identified by a name (all lowercase) and is similar to a <strong>Database</strong> in RDBMS.</p>
+                    
+                    <h3>Document</h3>
+                    <p>A document is a basic unit of information that can be indexed. It is expressed in <code>JSON</code> format. Similar to a <strong>Row</strong> in a table.</p>
+                    
+                    <div class="concept-box">
+                        <strong>Analogy:</strong><br>
+                        Relational DB ⇒ Databases ⇒ Tables ⇒ Rows ⇒ Columns<br>
+                        Elasticsearch ⇒ Indices ⇒ Types (Deprecated) ⇒ Documents ⇒ Fields
+                    </div>
+                </div>
+
+                <div id="topic-arch" class="topic-detail" style="display:none;">
+                    <h1>Architecture: Sharding & Replication</h1>
+                    <p>An index can store a large amount of data that can exceed the hardware limits of a single node. To solve this, Elasticsearch allows you to subdivide your index into multiple pieces called <strong>shards</strong>.</p>
+                    
+                    <h3>Shards</h3>
+                    <ul>
+                        <li>Allows you to horizontally split/scale your content volume.</li>
+                        <li>Allows you to distribute and parallelize operations across shards (performance).</li>
+                    </ul>
+
+                    <h3>Replicas</h3>
+                    <p>To ensure high availability, Elasticsearch allows you to make one or more copies of your index’s shards into <strong>replica shards</strong>.</p>
+                    <ul>
+                        <li>Provides high availability in case a node/shard fails.</li>
+                        <li>Allows you to scale out your search volume/throughput (searches can be executed on replicas in parallel).</li>
+                    </ul>
+                </div>
+
+                <div id="topic-inverted" class="topic-detail" style="display:none;">
+                    <h1>The Inverted Index</h1>
+                    <p>This is the magic behind the speed. Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in.</p>
+                    
+                    <h3>Example</h3>
+                    <p><strong>Doc 1:</strong> "The quick brown fox"<br>
+                    <strong>Doc 2:</strong> "The quick blue rabbit"</p>
+                    
+                    <table style="width:100%; border-collapse:collapse; margin-top:15px; background:white; border:1px solid #e2e8f0;">
+                        <tr style="background:#f8fafc; text-align:left;"><th style="padding:10px;">Term</th><th style="padding:10px;">Doc IDs</th></tr>
+                        <tr><td style="padding:10px; border-top:1px solid #eee;">quick</td><td style="padding:10px; border-top:1px solid #eee;">[1, 2]</td></tr>
+                        <tr><td style="padding:10px; border-top:1px solid #eee;">brown</td><td style="padding:10px; border-top:1px solid #eee;">[1]</td></tr>
+                        <tr><td style="padding:10px; border-top:1px solid #eee;">blue</td><td style="padding:10px; border-top:1px solid #eee;">[2]</td></tr>
+                        <tr><td style="padding:10px; border-top:1px solid #eee;">fox</td><td style="padding:10px; border-top:1px solid #eee;">[1]</td></tr>
+                    </table>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="view-api" class="view-section">
+        <div style="max-width:800px; margin:0 auto;">
+            <div style="text-align:center; margin-bottom:40px;">
+                <h1 style="font-size:2rem; margin-bottom:10px;">Elasticsearch REST API</h1>
+                <p style="color:var(--text-secondary);">Interact with your cluster using simple JSON over HTTP.</p>
+            </div>
+
+            <div class="api-grid">
+                
+                <div class="api-item">
+                    <div class="api-item-header">
+                        <span class="method-badge badge-get">GET</span>
+                        <span class="endpoint">/{index}/_doc/{id}</span>
+                    </div>
+                    <div class="api-item-body">
+                        <p style="margin:0; color:var(--text-secondary);">Retrieve a JSON document from the index.</p>
+                        <div class="code-snippet">GET /customer/_doc/1</div>
+                    </div>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-item-header">
+                        <span class="method-badge badge-put">PUT</span>
+                        <span class="endpoint">/{index}/_doc/{id}</span>
+                    </div>
+                    <div class="api-item-body">
+                        <p style="margin:0; color:var(--text-secondary);">Index a new document (or update) with a specific ID.</p>
+                        <div class="code-snippet">PUT /customer/_doc/1
+{
+  "name": "John Doe"
+}</div>
+                    </div>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-item-header">
+                        <span class="method-badge badge-post">POST</span>
+                        <span class="endpoint">/{index}/_search</span>
+                    </div>
+                    <div class="api-item-body">
+                        <p style="margin:0; color:var(--text-secondary);">Run a complex search query using the Query DSL.</p>
+                        <div class="code-snippet">POST /customer/_search
+{
+  "query": {
+    "match": { "name": "John" }
+  }
+}</div>
+                    </div>
+                </div>
+
+                <div class="api-item">
+                    <div class="api-item-header">
+                        <span class="method-badge badge-delete">DELETE</span>
+                        <span class="endpoint">/{index}</span>
+                    </div>
+                    <div class="api-item-body">
+                        <p style="margin:0; color:var(--text-secondary);">Delete an entire index and all its documents.</p>
+                        <div class="code-snippet">DELETE /customer</div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -380,129 +641,161 @@
 </div>
 
 <script>
-    /* --- VIEW SWITCHER --- */
-    function switchView(viewId, tab) {
+    /* --- NAVIGATION --- */
+    function switchView(viewId, btn) {
+        // Hide all views
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        // Show selected
         document.getElementById('view-' + viewId).classList.add('active');
         
+        // Update tabs
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        tab.classList.add('active');
+        btn.classList.add('active');
+    }
+
+    function showTopic(topicId) {
+        // Sidebar active state
+        document.querySelectorAll('.topic-item').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // Content visibility
+        document.querySelectorAll('.topic-detail').forEach(el => el.style.display = 'none');
+        document.getElementById('topic-' + topicId).style.display = 'block';
     }
 
     /* --- SIMULATOR LOGIC --- */
-    let isBusy = false;
-    let docCounter = 1;
+    let isProcessing = false;
     let nodes = [0, 1];
-    let counts = { INFO: 0, WARN: 0, ERROR: 0 };
+    let docId = 1;
+    let stats = { info: 0, warn: 0, error: 0 };
 
-    function startPipeline() {
-        if(isBusy) return;
-        isBusy = true;
-        
-        const btn = document.getElementById('shipBtn');
-        const rawLog = document.getElementById('rawInput').value;
-        const packet = document.getElementById('dataPacket');
-        
-        btn.innerText = "Processing..."; btn.disabled = true;
+    function runPipeline() {
+        if(isProcessing) return;
+        isProcessing = true;
+        const btn = document.getElementById('runBtn');
+        btn.innerText = "Processing...";
+        btn.disabled = true;
 
-        // 1. Packet Start
-        const startRect = document.getElementById('rawInput').getBoundingClientRect();
+        const rawLog = document.getElementById('rawLogInput').value;
+        const packet = document.getElementById('packet');
+        const track = document.getElementById('pipelineTrack').getBoundingClientRect();
+        
+        // Start position (Beats)
         packet.style.display = 'block';
-        packet.style.top = startRect.top + 'px';
-        packet.style.left = (startRect.left + startRect.width/2) + 'px';
+        packet.style.left = '60px'; // Approx beats position
 
-        // 2. To Logstash
-        setTimeout(() => {
-            const lsRect = document.getElementById('sec-logstash').getBoundingClientRect();
-            packet.style.top = (lsRect.top + 100) + 'px';
-            packet.style.left = (lsRect.left + lsRect.width/2) + 'px';
+        // 1. Beats -> Logstash (Animation)
+        // Using simple css transition or JS loop. JS loop allows pauses.
+        const width = track.width;
+        
+        packet.animate([
+            { left: '60px' },
+            { left: (width / 2) + 'px' }
+        ], { duration: 800, fill: 'forwards' }).onfinish = () => {
             
-            // Logstash Logic
-            const isGrok = document.getElementById('grokToggle').checked;
-            const output = document.getElementById('logstashOutput');
-            if(isGrok) {
-                const parts = rawLog.split(" ");
-                const json = { timestamp: new Date().toISOString(), level: parts[1]||"UNK", msg: parts.slice(2).join(" ") };
-                output.innerText = JSON.stringify(json, null, 2);
-                output.style.borderLeftColor = "#48bb78"; // Green
-            } else {
-                output.innerText = JSON.stringify({ message: rawLog }, null, 2);
-                output.style.borderLeftColor = "#f56565"; // Red
-            }
-        }, 800);
-
-        // 3. To ES
-        setTimeout(() => {
-            const esRect = document.getElementById('sec-es').getBoundingClientRect();
-            packet.style.top = (esRect.top + 100) + 'px';
-            packet.style.left = (esRect.left + esRect.width/2) + 'px';
-        }, 1800);
-
-        // 4. Indexing & Kibana
-        setTimeout(() => {
-            packet.style.display = 'none';
-            // Indexing
-            const primNode = nodes[Math.floor(Math.random()*nodes.length)];
-            const replNode = nodes.find(n => n !== primNode) || primNode;
+            // Logstash processing simulation
+            const parsed = parseLog(rawLog);
+            document.getElementById('logstash-out').innerHTML = `<span style="color:#10b981;">✓ Parsed:</span> ${JSON.stringify(parsed)}`;
             
-            addShard(primNode, 'P'+docCounter, false);
-            setTimeout(() => addShard(replNode, 'R'+docCounter, true), 300);
-            
-            // Kibana
-            updateKibana(rawLog);
-            
-            docCounter++;
-            isBusy = false;
-            btn.innerText = "Ship Data ->"; btn.disabled = false;
-        }, 2600);
+            setTimeout(() => {
+                // Logstash -> ES
+                packet.animate([
+                    { left: (width / 2) + 'px' },
+                    { left: (width - 60) + 'px' }
+                ], { duration: 800, fill: 'forwards' }).onfinish = () => {
+                    packet.style.display = 'none';
+                    indexData(parsed);
+                    isProcessing = false;
+                    btn.innerText = "Ship Log";
+                    btn.disabled = false;
+                };
+            }, 500);
+        };
     }
 
-    function addShard(nodeId, text, isReplica) {
-        const container = document.getElementById('shards-'+nodeId);
+    function parseLog(log) {
+        // Simple mock Grok
+        const parts = log.split(" ");
+        let level = "INFO";
+        if(log.toLowerCase().includes("warn")) level = "WARN";
+        if(log.toLowerCase().includes("error")) level = "ERROR";
+        return {
+            "@timestamp": new Date().toISOString(),
+            "level": level,
+            "message": parts.slice(2).join(" "),
+            "source_ip": parts.find(p => p.includes("="))?.split("=")[1] || "unknown"
+        };
+    }
+
+    function indexData(data) {
+        // 1. Cluster Sharding
+        docId++;
+        const primaryNode = nodes[Math.floor(Math.random() * nodes.length)];
+        let replicaNode = nodes.find(n => n !== primaryNode);
+        if(replicaNode === undefined) replicaNode = primaryNode; // fallback
+
+        addShardUI(primaryNode, 'P'+docId, 'primary');
+        if(nodes.length > 1) {
+            setTimeout(() => addShardUI(replicaNode, 'R'+docId, 'replica'), 200);
+        }
+
+        // 2. Kibana Update
+        updateKibana(data);
+    }
+
+    function addShardUI(nodeId, text, type) {
+        const container = document.getElementById('shards-' + nodeId);
         if(!container) return;
-        const s = document.createElement('div');
-        s.className = isReplica ? 'shard replica' : 'shard';
-        s.innerText = text;
-        container.appendChild(s);
+        const el = document.createElement('div');
+        el.className = `shard ${type}`;
+        el.innerText = text;
+        el.title = "Index: logs-2024";
+        container.appendChild(el);
     }
 
-    function updateKibana(log) {
+    function updateKibana(data) {
         // List
-        const list = document.getElementById('kibanaDiscover');
-        if(list.innerText.includes("No data")) list.innerHTML = "";
-        const div = document.createElement('div');
-        div.className = 'log-entry';
-        div.innerHTML = `<span style="color:#007bff">@timestamp</span> ${new Date().toLocaleTimeString()} ${log}`;
-        list.prepend(div);
+        const list = document.getElementById('kibana-list');
+        if(list.innerText.includes("No logs")) list.innerHTML = "";
+        const row = document.createElement('div');
+        row.style.borderBottom = "1px solid #eee";
+        row.style.padding = "4px 0";
+        row.innerHTML = `<span style="color:#0077cc">${data['@timestamp']}</span> [${data.level}] ${data.message}`;
+        list.prepend(row);
 
         // Chart
-        if(log.includes("INFO")) counts.INFO++;
-        if(log.includes("WARN")) counts.WARN++;
-        if(log.includes("ERROR")) counts.ERROR++;
-        
-        const max = Math.max(counts.INFO, counts.WARN, counts.ERROR);
-        if(max > 0) {
-            document.getElementById('bar-info').style.height = (counts.INFO/max*100)+'%';
-            document.getElementById('bar-warn').style.height = (counts.WARN/max*100)+'%';
-            document.getElementById('bar-error').style.height = (counts.ERROR/max*100)+'%';
-        }
+        if(data.level === 'INFO') stats.info++;
+        if(data.level === 'WARN') stats.warn++;
+        if(data.level === 'ERROR') stats.error++;
+
+        const total = Math.max(stats.info, stats.warn, stats.error, 1); // Avoid div/0
+        document.getElementById('bar-info').style.height = (stats.info / total * 100) + '%';
+        document.getElementById('bar-warn').style.height = (stats.warn / total * 100) + '%';
+        document.getElementById('bar-error').style.height = (stats.error / total * 100) + '%';
     }
 
     function addNode() {
         const id = nodes.length;
         nodes.push(id);
-        const grid = document.getElementById('clusterGrid');
-        const d = document.createElement('div');
-        d.className = 'node-card'; d.id = 'node-'+id;
-        d.innerHTML = `<div class="node-header">Node-${id} <span class="node-role">Data</span></div><div class="shard-container" id="shards-${id}"></div>`;
-        grid.appendChild(d);
+        const container = document.getElementById('clusterGrid');
+        const node = document.createElement('div');
+        node.className = 'node-box';
+        node.id = 'node-' + id;
+        node.innerHTML = `<div class="node-header">Node-${id} <span>DATA</span></div><div class="shards-container" id="shards-${id}"></div>`;
+        container.appendChild(node);
     }
 
     function resetCluster() {
-        nodes = [0, 1]; counts = {INFO:0, WARN:0, ERROR:0}; docCounter = 1;
-        document.getElementById('clusterGrid').innerHTML = `<div class="node-card" id="node-0"><div class="node-header">Node-0 <span class="node-role">Master</span></div><div class="shard-container" id="shards-0"></div></div><div class="node-card" id="node-1"><div class="node-header">Node-1 <span class="node-role">Data</span></div><div class="shard-container" id="shards-1"></div></div>`;
-        document.getElementById('kibanaDiscover').innerHTML = `<div style="color:#999; text-align:center; padding-top:20px;">No data</div>`;
+        nodes = [0, 1];
+        docId = 0;
+        stats = { info: 0, warn: 0, error: 0 };
+        document.getElementById('clusterGrid').innerHTML = `
+            <div class="node-box" id="node-0"><div class="node-header">Node-0 <span>MASTER</span></div><div class="shards-container" id="shards-0"></div></div>
+            <div class="node-box" id="node-1"><div class="node-header">Node-1 <span>DATA</span></div><div class="shards-container" id="shards-1"></div></div>
+        `;
+        document.getElementById('kibana-list').innerHTML = '<div style="color:#ccc; text-align:center; padding-top:40px;">No logs indexed</div>';
         ['info','warn','error'].forEach(k => document.getElementById('bar-'+k).style.height = '0%');
+        document.getElementById('logstash-out').innerText = '// Waiting for data...';
     }
 </script>
 
