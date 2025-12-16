@@ -10,21 +10,26 @@
     <style>
         /* --- 1. DESIGN SYSTEM --- */
         :root {
-            --es-blue: #005571;
+            --es-blue: #0077cc;
+            --es-accent: #36a2eb;
             --beats-teal: #00bfb3;
             --logstash-yellow: #fec514;
             --kibana-pink: #e03e7e;
             
             --bg-body: #f4f6f8;
             --bg-surface: #ffffff;
+            --bg-sidebar: #fafafa;
             --text-primary: #1a202c;
             --text-secondary: #4a5568;
             --text-tertiary: #718096;
             --border-color: #e2e8f0;
+            --border-hover: #cbd5e0;
+            
             --code-bg: #1e293b;
             --code-text: #e2e8f0;
 
             --radius-lg: 16px;
+            --radius-md: 8px;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
@@ -74,7 +79,7 @@
         .grid-layout { display: grid; grid-template-columns: 280px 1fr; gap: 30px; max-width: 1400px; margin: 0 auto; height: 100%; }
         .content-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 30px; }
         .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to right, #ffffff, #fafafa); }
-        .card-header h2 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+        .card-header h2 { margin: 0; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
         .card-body { padding: 24px; }
 
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; font-size: 0.9rem; font-weight: 500; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s; }
@@ -265,12 +270,11 @@
                 <div id="topic-concepts" class="topic-detail" style="display:none;">
                     <h1>Key Concepts</h1>
                     <h3>Sharding & Replication</h3>
-                    <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. A shard is a self-contained Lucene index.</p>
-                    <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. If a node fails, a replica is promoted to primary.</p>
+                    <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. [cite_start]A shard is a self-contained Lucene index[cite: 532].</p>
+                    <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. [cite_start]If a node fails, a replica is promoted to primary[cite: 552].</p>
                     
                     <h3>Inverted Index</h3>
-                    <p>This is the magic behind the speed. Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in.</p>
-                    [cite_start]<span class="citation">Source: [cite: 494, 507, 313]</span>
+                    <p>This is the magic behind the speed. [cite_start]Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in[cite: 239].</p>
                 </div>
             </main>
         </div>
