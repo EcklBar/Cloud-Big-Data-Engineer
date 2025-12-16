@@ -79,29 +79,56 @@
             gap: 10px;
         }
 
-        .info-tooltip {
-            background: rgba(255,255,255,0.2);
-            padding: 5px 10px;
-            border-radius: 4px;
+        /* NEW: Learn More Button Styles */
+        .learn-more-btn {
+            background: rgba(255,255,255,0.25);
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 12px;
+            border-radius: 20px;
             font-size: 0.85rem;
             color: #fff;
-            cursor: help;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .learn-more-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-1px);
+        }
+
+        /* NEW: Learn More Content Panel */
+        .learn-more-panel {
+            display: none; /* Hidden by default */
+            background-color: #fff;
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.6;
+            animation: slideDown 0.3s ease-out;
+        }
+        .learn-more-panel strong { color: #333; }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-body { padding: 25px; position: relative; }
 
         /* Color Coding */
         .section-beats .section-header { background-color: var(--beats-teal); }
+        
         .section-logstash .section-header { background-color: var(--logstash-yellow); }
-        .section-logstash .section-header h2 { color: #333; } /* Dark text for yellow bg */
-        .section-logstash .info-tooltip { color: #333; background: rgba(0,0,0,0.1); }
+        .section-logstash .section-header h2 { color: #333; } 
+        .section-logstash .learn-more-btn { color: #333; border-color: rgba(0,0,0,0.2); background: rgba(0,0,0,0.1); }
+        .section-logstash .learn-more-btn:hover { background: rgba(0,0,0,0.2); }
+
         .section-es .section-header { background-color: var(--es-blue); }
         .section-kibana .section-header { background-color: var(--kibana-pink); }
 
         /* --- 3. INTERACTIVE ELEMENTS --- */
-        
-        /* Buttons & Inputs */
-        button {
+        button.action-btn {
             cursor: pointer;
             border: none;
             border-radius: 4px;
@@ -109,7 +136,7 @@
             font-weight: 600;
             transition: opacity 0.2s;
         }
-        button:hover { opacity: 0.9; }
+        button.action-btn:hover { opacity: 0.9; }
         
         input[type="text"] {
             width: 100%;
@@ -158,7 +185,6 @@
             transition: top 1s ease-in-out, left 1s ease-in-out;
         }
 
-        /* Logstash Toggle */
         .toggle-container {
             display: flex;
             align-items: center;
@@ -236,6 +262,11 @@
         .bar-label { margin-top: 5px; font-size: 0.8rem; font-weight: bold; }
         .bar-count { margin-bottom: 5px; font-weight: bold; color: var(--kibana-pink); }
 
+        /* Responsive Fix */
+        @media (max-width: 768px) {
+            .kibana-layout { grid-template-columns: 1fr; }
+        }
+
     </style>
 </head>
 <body>
@@ -250,12 +281,18 @@
     <section class="stack-section section-beats" id="sec-beats">
         <div class="section-header">
             <h2>1. Data Collection (Beats)</h2>
-            [cite_start]<span class="info-tooltip" title="Beats are lightweight data shippers that send data from thousands of machines to Logstash or Elasticsearch. [cite: 98]">? Learn More</span>
+            <button class="learn-more-btn" onclick="toggleInfo('info-beats')">? Learn More</button>
         </div>
+        <div id="info-beats" class="learn-more-panel">
+            <strong>Beats</strong> are lightweight data shippers that you install as agents on your servers. 
+            They collect data (like logs from Filebeat or metrics from Metricbeat) and send it to Logstash or directly to Elasticsearch.
+            <br><em>Metaphor: Think of Beats as the "Delivery Trucks" picking up packages.</em>
+        </div>
+
         <div class="section-body pipeline-container">
             <p><strong>Filebeat Simulation:</strong> Enter a raw log message to begin the pipeline.</p>
             <input type="text" id="rawLogInput" value="2023-10-27 INFO User login successful from IP 192.168.1.5">
-            <button class="btn-primary" id="shipBtn" onclick="shipData()">Ship Data &rarr;</button>
+            <button class="action-btn btn-primary" id="shipBtn" onclick="shipData()">Ship Data &rarr;</button>
             <div id="dataPacket" class="packet"></div>
         </div>
     </section>
@@ -264,14 +301,19 @@
     <section class="stack-section section-logstash" id="sec-logstash">
         <div class="section-header">
             <h2>2. Data Transformation (Logstash)</h2>
-            [cite_start]<span class="info-tooltip" title="Logstash is a server-side processing pipeline that ingests, transforms (e.g., Grok), and ships data. [cite: 85]">? Learn More</span>
+            <button class="learn-more-btn" onclick="toggleInfo('info-logstash')">? Learn More</button>
         </div>
+        <div id="info-logstash" class="learn-more-panel">
+            <strong>Logstash</strong> is a server-side data processing pipeline. It ingests data from multiple sources, 
+            transforms it (e.g., parsing unstructured text into JSON using <strong>Grok</strong> filters), and sends it to a "stash" like Elasticsearch.
+            <br><em>Metaphor: Think of Logstash as the "Sorting & Packaging Center".</em>
+        </div>
+
         <div class="section-body">
             <div class="toggle-container">
                 <label><strong>Pipeline Configuration:</strong></label>
                 <label><input type="checkbox" id="grokToggle" checked> Enable Grok Filter (Parse Structure)</label>
             </div>
-            
             <p><strong>Current Object State:</strong></p>
             <div class="code-block" id="logstashOutput">Waiting for data...</div>
         </div>
@@ -281,13 +323,19 @@
     <section class="stack-section section-es" id="sec-es">
         <div class="section-header">
             <h2>3. Storage & Processing (Elasticsearch)</h2>
-            <span class="info-tooltip" title="Elasticsearch is a distributed search engine. [cite_start]It stores data in Shards (Primary & Replica) across Nodes. [cite: 59, 474]">? Learn More</span>
+            <button class="learn-more-btn" onclick="toggleInfo('info-es')">? Learn More</button>
         </div>
+        <div id="info-es" class="learn-more-panel">
+            <strong>Elasticsearch</strong> is the heart of the stack. It is a distributed search and analytics engine. 
+            Data is stored in <strong>Shards</strong> (Primary and Replica) distributed across <strong>Nodes</strong> (Servers). 
+            It uses an <strong>Inverted Index</strong> to make searching incredibly fast.
+            <br><em>Metaphor: Think of Elasticsearch as the "Warehouse" with an ultra-fast filing system.</em>
+        </div>
+
         <div class="section-body">
-            
             <div class="cluster-controls">
-                <button class="btn-outline" onclick="addNode('Master/Data')">+ Add Data Node</button>
-                <button class="btn-outline" onclick="resetCluster()">Reset Cluster</button>
+                <button class="action-btn btn-outline" onclick="addNode('Master/Data')">+ Add Data Node</button>
+                <button class="action-btn btn-outline" onclick="resetCluster()">Reset Cluster</button>
             </div>
 
             <p><strong>Cluster Topology:</strong> <span style="font-size:0.8rem; color:#666;">(P = Primary Shard, R = Replica Shard)</span></p>
@@ -303,8 +351,8 @@
             </div>
 
             <div class="inverted-index-panel">
-                [cite_start]<h3>The Inverted Index [cite: 229]</h3>
-                <p style="font-size:0.9rem; color:#666;">Maps Terms to Document IDs for fast search.</p>
+                <h3>The Inverted Index Visualization</h3>
+                <p style="font-size:0.9rem; color:#666;">This table shows how Elasticsearch maps specific words (terms) to Document IDs.</p>
                 <table class="inv-table">
                     <thead><tr><th>Term</th><th>Doc IDs</th></tr></thead>
                     <tbody id="invertedIndexBody">
@@ -312,7 +360,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </section>
 
@@ -320,18 +367,22 @@
     <section class="stack-section section-kibana" id="sec-kibana">
         <div class="section-header">
             <h2>4. Visualization (Kibana)</h2>
-            [cite_start]<span class="info-tooltip" title="Kibana provides visualization capabilities (charts, dashboards) on top of Elasticsearch data. [cite: 74]">? Learn More</span>
+            <button class="learn-more-btn" onclick="toggleInfo('info-kibana')">? Learn More</button>
         </div>
+        <div id="info-kibana" class="learn-more-panel">
+            <strong>Kibana</strong> is the window into your data. It sits on top of Elasticsearch and lets you visualize your data 
+            with charts, graphs, maps, and dashboards. It is used for analytics and application monitoring.
+            <br><em>Metaphor: Think of Kibana as the "Dashboard" in the control room.</em>
+        </div>
+
         <div class="section-body">
             <div class="kibana-layout">
-                
                 <div>
-                    [cite_start]<h3>Discover [cite: 134]</h3>
+                    <h3>Discover</h3>
                     <div class="kibana-discover" id="kibanaDiscover">
                         <div style="color:#999; font-style:italic;">No logs found.</div>
                     </div>
                 </div>
-
                 <div>
                     <h3>Dashboard</h3>
                     <div class="kibana-viz">
@@ -352,7 +403,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -360,6 +410,16 @@
 </div>
 
 <script>
+    /* --- TOGGLE INFO FUNCTIONALITY --- */
+    function toggleInfo(id) {
+        const el = document.getElementById(id);
+        if (el.style.display === 'block') {
+            el.style.display = 'none';
+        } else {
+            el.style.display = 'block';
+        }
+    }
+
     /* --- STATE MANAGEMENT --- */
     let docIdCounter = 1;
     let nodes = [0, 1]; // Initial node IDs
@@ -367,7 +427,7 @@
     let logCounts = { INFO: 0, WARN: 0, ERROR: 0 };
     let isProcessing = false;
 
-    /* --- 1. PIPELINE ANIMATION & LOGIC --- */
+    /* --- PIPELINE ANIMATION & LOGIC --- */
     function shipData() {
         if (isProcessing) return;
         isProcessing = true;
@@ -378,18 +438,6 @@
         const rawLog = document.getElementById('rawLogInput').value;
         const packet = document.getElementById('dataPacket');
         
-        // Coordinates for Animation
-        const beatsBox = document.getElementById('sec-beats').getBoundingClientRect();
-        const logstashBox = document.getElementById('sec-logstash').getBoundingClientRect();
-        const esBox = document.getElementById('sec-es').getBoundingClientRect();
-
-        // 1. Initial Position (Beats Input)
-        const inputRect = document.getElementById('rawLogInput').getBoundingClientRect();
-        const containerRect = document.querySelector('.container').getBoundingClientRect(); // relative parent
-        
-        // Calculate relative Top/Left within the flow
-        // Note: Using fixed animation delays for simplicity in this demo
-        
         // Start Animation: Reveal Packet at Beats
         packet.style.display = 'block';
         packet.style.top = '120px'; // Approx under input
@@ -398,7 +446,6 @@
 
         // Step 1: Move to Logstash
         setTimeout(() => {
-            // Approx distance to logstash code block
             packet.style.top = '350px'; 
         }, 100);
 
@@ -419,20 +466,16 @@
             isProcessing = false;
             btn.disabled = false;
             btn.innerText = "Ship Data →";
-            // Reset position for next time
-            packet.style.top = '120px';
+            packet.style.top = '120px'; // Reset
         }, 3100);
     }
 
-    /* --- 2. LOGSTASH LOGIC --- */
     function processLogstash(rawLog) {
         const useGrok = document.getElementById('grokToggle').checked;
         const outputDiv = document.getElementById('logstashOutput');
         let structLog = {};
 
-        [cite_start]// Simulate Grok Parsing [cite: 1114]
         if (useGrok) {
-            // Simple regex for demo "DATE LEVEL MSG"
             const parts = rawLog.split(' ');
             structLog = {
                 "@timestamp": parts[0] || new Date().toISOString(),
@@ -441,9 +484,8 @@
                 "tags": ["beats_input_codec_plain_applied"]
             };
             outputDiv.innerHTML = `<span style="color:#22863a;">// Grok Parsed JSON</span>\n` + JSON.stringify(structLog, null, 2);
-            outputDiv.style.borderLeftColor = "#22863a"; // Green border for success
+            outputDiv.style.borderLeftColor = "#22863a";
         } else {
-            // Unstructured
             structLog = {
                 "message": rawLog,
                 "tags": ["_grokparsefailure"]
@@ -453,9 +495,9 @@
         }
     }
 
-    /* --- 3. ELASTICSEARCH LOGIC --- */
+    /* --- ELASTICSEARCH LOGIC --- */
     function addNode(role) {
-        const id = nodes.length; // Simple ID increment
+        const id = nodes.length; 
         nodes.push(id);
         const grid = document.getElementById('clusterGrid');
         
@@ -476,7 +518,12 @@
         invertedIndex = {};
         logCounts = { INFO: 0, WARN: 0, ERROR: 0 };
         updateInvertedIndexUI();
-        // Re-add default nodes
+        // Kibana Reset
+        document.getElementById('kibanaDiscover').innerHTML = '<div style="color:#999; font-style:italic;">No logs found.</div>';
+        document.getElementById('count-info').innerText = '0'; document.getElementById('bar-info').style.height = '0%';
+        document.getElementById('count-warn').innerText = '0'; document.getElementById('bar-warn').style.height = '0%';
+        document.getElementById('count-error').innerText = '0'; document.getElementById('bar-error').style.height = '0%';
+
         addNode('Master/Data');
         addNode('Data');
     }
@@ -484,31 +531,25 @@
     function processElasticsearch(rawLog) {
         const currentDocId = docIdCounter++;
         
-        [cite_start]// A. Sharding & Replication Visualization [cite: 476, 507]
-        // 1. Determine Primary Node (Round robin or random)
+        // A. Sharding Visualization
         const primNodeIdx = Math.floor(Math.random() * nodes.length);
         const primNodeId = nodes[primNodeIdx];
         
-        // 2. Determine Replica Node (Different from Primary if possible)
         let replNodeId = null;
         if (nodes.length > 1) {
             const available = nodes.filter(n => n !== primNodeId);
             replNodeId = available[Math.floor(Math.random() * available.length)];
         }
 
-        // 3. Add Shards to DOM
         addShardToNode(primNodeId, `P${currentDocId}`, 'primary');
         if (replNodeId !== null) {
-            // Delay replica slightly to show replication flow
             setTimeout(() => addShardToNode(replNodeId, `R${currentDocId}`, 'replica'), 400);
         }
 
-        [cite_start]// B. Update Inverted Index [cite: 229, 239]
-        // Simple Tokenizer: Split by space, lowercase
+        // B. Inverted Index
         const tokens = rawLog.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/);
-        
         tokens.forEach(term => {
-            if (term.length < 3) return; // Skip small words
+            if (term.length < 3) return; 
             if (!invertedIndex[term]) invertedIndex[term] = [];
             if (!invertedIndex[term].includes(currentDocId)) {
                 invertedIndex[term].push(currentDocId);
@@ -516,13 +557,13 @@
         });
         updateInvertedIndexUI();
 
-        [cite_start]// C. Update Kibana [cite: 74]
+        // C. Update Kibana
         updateKibana(rawLog, currentDocId);
     }
 
     function addShardToNode(nodeId, label, type) {
         const container = document.getElementById(`shards-${nodeId}`);
-        if(!container) return; // Node might be deleted
+        if(!container) return; 
         const shard = document.createElement('div');
         shard.className = `shard ${type}`;
         shard.innerText = label;
@@ -536,41 +577,32 @@
             tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; color:#999;">Index is empty</td></tr>`;
             return;
         }
-        
         let html = '';
-        // Sort terms alphabetically
         Object.keys(invertedIndex).sort().forEach(term => {
             html += `<tr><td>${term}</td><td>[ ${invertedIndex[term].join(', ')} ]</td></tr>`;
         });
         tbody.innerHTML = html;
     }
 
-    /* --- 4. KIBANA LOGIC --- */
+    /* --- KIBANA LOGIC --- */
     function updateKibana(rawLog, docId) {
-        // 1. Update Discover List
         const discoverList = document.getElementById('kibanaDiscover');
-        
-        // Remove "No logs" msg
         if (discoverList.innerText.includes("No logs")) discoverList.innerHTML = '';
 
         const entry = document.createElement('div');
         entry.className = 'log-entry';
         const timestamp = new Date().toISOString();
         entry.innerHTML = `<span style="color:var(--es-blue)">${timestamp}</span> | <strong>_id:${docId}</strong> | ${rawLog}`;
-        discoverList.prepend(entry); // Add to top
+        discoverList.prepend(entry); 
 
-        // 2. Update Visualization (Counts)
-        // Detect Level
+        // Counts
         let type = 'INFO';
         if (rawLog.includes('WARN')) type = 'WARN';
         if (rawLog.includes('ERROR')) type = 'ERROR';
 
         logCounts[type]++;
-
-        // Update DOM
         document.getElementById(`count-${type.toLowerCase()}`).innerText = logCounts[type];
         
-        // Scale Bars (Simple relative scaling)
         const max = Math.max(logCounts.INFO, logCounts.WARN, logCounts.ERROR);
         if (max > 0) {
             document.getElementById('bar-info').style.height = `${(logCounts.INFO / max) * 100}%`;
@@ -578,7 +610,6 @@
             document.getElementById('bar-error').style.height = `${(logCounts.ERROR / max) * 100}%`;
         }
     }
-
 </script>
 
 </body>
