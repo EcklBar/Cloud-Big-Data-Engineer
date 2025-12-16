@@ -3,581 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elastic Stack Master Simulator</title>
+    <title>Docker Pro Cheat Sheet</title>
     <style>
-        /* --- 1. VARIABLES & RESET --- */
         :root {
-            --beats-teal: #00bfb3;
-            --logstash-yellow: #fec514;
-            --es-blue: #005571;
-            --kibana-pink: #e03e7e;
-            --bg-page: #f0f2f5;
-            --bg-panel: #ffffff;
-            --text-main: #2d3748;
-            --border-color: #e2e8f0;
-            --code-bg: #f7fafc;
+            --primary: #0969da;
+            --primary-bg: #ddf4ff;
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --border: #30363d;
+            --code-bg: #0d1117;
+            --good: #238636;
+            --bad: #da3633;
+            --warn: #d29922;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-page);
-            /* Technical Grid Background */
-            background-image: radial-gradient(#cbd5e0 1px, transparent 1px);
-            background-size: 24px 24px;
+            font-family: var(--font-main);
+            background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
-            padding: 0;
-            padding-bottom: 80px;
+            padding: 20px;
             line-height: 1.6;
         }
 
-        /* --- 2. HEADER --- */
-        header {
-            background-color: var(--es-blue);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        /* Generic Image Styling for Diagrams */
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 15px;
+            border: 1px solid var(--border);
         }
-        header h1 { margin: 0; font-size: 1.6rem; font-weight: 700; }
-        header p { margin: 5px 0 0; opacity: 0.9; font-size: 0.95rem; }
 
-        /* --- 3. LAYOUT --- */
-        .container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 0 20px;
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .tag-pro {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.5em;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
             display: flex;
             flex-direction: column;
-            gap: 40px; /* Space between sections for the 'pipeline' feel */
-            position: relative;
         }
 
-        /* Connecting Lines between Sections */
-        .section-connector {
-            position: absolute;
-            left: 50%;
-            width: 4px;
-            background: #cbd5e0;
-            transform: translateX(-50%);
-            z-index: -1;
+        .card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
         }
 
-        /* --- 4. PANELS (SECTIONS) --- */
-        .panel {
-            background: var(--bg-panel);
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.2s;
-        }
-        
-        .panel-header {
-            padding: 15px 25px;
+        .card h2 {
+            font-size: 1.25rem;
+            margin-top: 0;
+            margin-bottom: 15px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            color: white;
+            gap: 10px;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
         }
-        .panel-header h2 { margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 10px; }
-        .panel-body { padding: 25px; }
 
-        /* Color Themes */
-        .theme-beats .panel-header { background-color: var(--beats-teal); }
-        .theme-logstash .panel-header { background-color: var(--logstash-yellow); }
-        .theme-logstash .panel-header h2 { color: #333; }
-        .theme-es .panel-header { background-color: var(--es-blue); }
-        .theme-kibana .panel-header { background-color: var(--kibana-pink); }
-
-        /* --- 5. INTERACTIVE ELEMENTS --- */
-        
-        /* Buttons */
-        .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .btn-primary { background-color: var(--es-blue); color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn-primary:hover { background-color: #003d52; transform: translateY(-1px); }
-        .btn-outline { background: white; border: 1px solid var(--es-blue); color: var(--es-blue); }
-        .btn-outline:hover { background: #f0f9ff; }
-        .btn-info { background: rgba(255,255,255,0.2); color: white; font-size: 0.8rem; padding: 4px 10px; border-radius: 15px; }
-        .btn-info:hover { background: rgba(255,255,255,0.3); }
-        .theme-logstash .btn-info { color: #333; background: rgba(0,0,0,0.1); }
-
-        /* Inputs */
-        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            font-family: monospace;
+        .card.full-width {
+            grid-column: 1 / -1;
+            border-left: 4px solid var(--primary);
         }
 
         /* Code Blocks */
-        .code-block {
+        .code-wrapper {
+            position: relative;
+            margin-top: auto; /* Pushes code to bottom of card if content varies */
+            margin-bottom: 0;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        pre {
             background-color: var(--code-bg);
-            border-left: 4px solid #cbd5e0;
+            color: var(--text-main);
             padding: 15px;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.85rem;
-            white-space: pre-wrap;
-            color: #4a5568;
-            min-height: 60px;
-        }
-
-        /* Learn More Drawer */
-        .info-drawer {
-            display: none;
-            background: #f8fafc;
-            padding: 15px 25px;
-            border-bottom: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: var(--font-mono);
             font-size: 0.9rem;
-            color: #4a5568;
-            animation: slideDown 0.3s ease;
-        }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
-
-        /* --- 6. VISUALIZATIONS --- */
-
-        /* Animation Packet */
-        .data-packet {
-            width: 24px; height: 24px;
-            background-color: #2d3748;
-            border: 3px solid white;
-            border-radius: 50%;
-            position: fixed; /* Fixed to move smoothly across sections */
-            z-index: 9999;
-            display: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: top 0.8s ease-in-out, left 0.8s ease-in-out;
+            margin: 0;
+            white-space: pre;
         }
 
-        /* Elasticsearch Cluster */
-        .cluster-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .node-card {
-            background: white;
-            border: 2px dashed #cbd5e0;
-            border-radius: 8px;
-            padding: 10px;
+        /* Syntax Highlighting */
+        .kwd { color: #ff7b72; font-weight: bold; } /* FROM, RUN */
+        .str { color: #a5d6ff; } /* Strings */
+        .arg { color: #79c0ff; } /* Args */
+        .comment { color: #8b949e; font-style: italic; }
+        .flag { color: #d2a8ff; }
+
+        /* Copy Button */
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            opacity: 0;
             transition: all 0.2s;
         }
-        .node-card:hover { border-color: var(--es-blue); transform: translateY(-2px); }
-        .node-header { font-size: 0.85rem; font-weight: 700; color: #718096; display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .node-role { background: #edf2f7; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
-        
-        .shard-container { display: flex; flex-wrap: wrap; gap: 6px; }
-        .shard {
-            width: 32px; height: 32px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: bold; border-radius: 4px;
-            cursor: default;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        .code-wrapper:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+        /* Status indicators */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 8px;
         }
-        .shard.primary { background: var(--es-blue); color: white; border: 1px solid var(--es-blue); }
-        .shard.replica { background: white; color: var(--es-blue); border: 2px solid var(--es-blue); }
-        @keyframes popIn { from{transform:scale(0);} to{transform:scale(1);} }
+        .bad-badge { background: rgba(218, 54, 51, 0.15); color: #ff7b72; border: 1px solid rgba(218, 54, 51, 0.4); }
+        .good-badge { background: rgba(35, 134, 54, 0.15); color: #7ee787; border: 1px solid rgba(35, 134, 54, 0.4); }
 
-        /* Inverted Index */
-        .index-table-wrapper { margin-top: 20px; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
-        .index-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        .index-table th { background: #f7fafc; padding: 10px; text-align: left; color: #4a5568; font-weight: 600; }
-        .index-table td { padding: 8px 10px; border-top: 1px solid #e2e8f0; color: #2d3748; }
-
-        /* Kibana */
-        .kibana-dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        .kibana-panel { border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; height: 220px; display: flex; flex-direction: column; }
-        .kibana-title { font-size: 0.9rem; font-weight: 700; color: #4a5568; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        ul { padding-left: 20px; color: var(--text-muted); }
+        li { margin-bottom: 8px; }
+        strong { color: #fff; }
         
-        .discover-list { flex-grow: 1; overflow-y: auto; font-family: monospace; font-size: 0.8rem; }
-        .log-entry { padding: 6px 0; border-bottom: 1px solid #edf2f7; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-        
-        .viz-chart { flex-grow: 1; display: flex; align-items: flex-end; justify-content: space-around; padding-bottom: 5px; border-bottom: 2px solid #cbd5e0; }
-        .chart-col { display: flex; flex-direction: column; align-items: center; width: 30%; height: 100%; justify-content: flex-end; }
-        .chart-bar { width: 100%; background: var(--kibana-pink); min-height: 2px; border-radius: 4px 4px 0 0; transition: height 0.5s; opacity: 0.8; }
-        .chart-bar:hover { opacity: 1; }
-        .chart-label { margin-top: 5px; font-size: 0.75rem; font-weight: 600; color: #718096; }
+        .highlight-warn { color: #ffa657; font-weight: bold; }
 
-        @media (max-width: 700px) { .kibana-dashboard { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) {
+            .grid-container { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Elastic Stack Master Simulator</h1>
-    <p>Visualize the Data Lifecycle: Collection &rarr; Transformation &rarr; Storage &rarr; Visualization</p>
-</header>
+    <header>
+        <h1>🧾 Dockerfile Cheat Sheet <span class="tag-pro">PRO EDITION</span></h1>
+        <p class="subtitle">Production-grade best practices, security hardening, and optimization techniques.</p>
+    </header>
 
-<div class="container">
-    <div class="section-connector" style="height: 100%; top: 0;"></div>
+    <div class="grid-container">
 
-    <div class="panel theme-beats" id="sec-beats">
-        <div class="panel-header">
-            <h2><span>📦</span> 1. Data Collection (Beats)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-beats')">? Learn More</button>
-        </div>
-        <div id="info-beats" class="info-drawer">
-            <p><strong>Beats</strong> are lightweight data shippers that you install on your servers. [cite_start]They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs)[cite: 98].</p>
-        </div>
-        <div class="panel-body">
-            <p style="margin-top:0;"><strong>Simulate a Log Event:</strong> Enter a raw log message below.</p>
-            <div class="input-group">
-                <input type="text" id="rawInput" value="2023-12-01 ERROR Database connection failed user=admin">
-                <button class="btn btn-primary" id="shipBtn" onclick="startPipeline()">Ship Data &rarr;</button>
+        <div class="card full-width">
+            <h2>🏆 1. The Production Template</h2>
+            <p style="color: var(--text-muted); margin-bottom: 10px;">
+                Secure, small, and fast. Includes non-root user and explicit versioning.
+            </p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code><span class="comment"># 1. Pin specific version (Avoid 'latest')</span>
+<span class="kwd">FROM</span> python:3.10.4-slim-bullseye
+
+<span class="comment"># 2. Set envs to prevent python buffering</span>
+<span class="kwd">ENV</span> PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+<span class="kwd">WORKDIR</span> /app
+
+<span class="comment"># 3. Create non-root user for security</span>
+<span class="kwd">RUN</span> useradd -m appuser
+
+<span class="comment"># 4. Install Dependencies</span>
+<span class="kwd">COPY</span> requirements.txt .
+<span class="kwd">RUN</span> pip install --no-cache-dir -r requirements.txt
+
+<span class="comment"># 5. Copy code & switch user</span>
+<span class="kwd">COPY</span> . .
+<span class="kwd">USER</span> appuser
+
+<span class="comment"># 6. Use Exec form (JSON array)</span>
+<span class="kwd">CMD</span> [<span class="str">"python"</span>, <span class="str">"main.py"</span>]</code></pre>
             </div>
-            <div id="dataPacket" class="data-packet"></div>
         </div>
-    </div>
 
-
-    <div class="panel theme-logstash" id="sec-logstash">
-        <div class="panel-header">
-            <h2><span>⚙️</span> 2. Data Transformation (Logstash)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-logstash')">? Learn More</button>
-        </div>
-        <div id="info-logstash" class="info-drawer">
-            [cite_start]<p><strong>Logstash</strong> is a server-side data processing pipeline that ingests data from multiple sources, transforms it, and sends it to Elasticsearch[cite: 85]. [cite_start]It uses <strong>Grok</strong> to derive structure from unstructured data[cite: 87].</p>
-        </div>
-        <div class="panel-body">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <strong>Processing Pipeline:</strong>
-                <label style="font-size:0.9rem; cursor:pointer;">
-                    <input type="checkbox" id="grokToggle" checked> Enable Grok Filter
-                </label>
-            </div>
-            <div class="code-block" id="logstashOutput">// Waiting for data...</div>
-        </div>
-    </div>
-
-
-    <div class="panel theme-es" id="sec-es">
-        <div class="panel-header">
-            <h2><span>🗄️</span> 3. Storage & Indexing (Elasticsearch)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-es')">? Learn More</button>
-        </div>
-        <div id="info-es" class="info-drawer">
-            <p><strong>Elasticsearch</strong> is a distributed search engine. [cite_start]Data is stored in <strong>Shards</strong> (logical divisions)[cite: 497]. [cite_start]To ensure safety, Primary shards have <strong>Replica</strong> shards on different nodes[cite: 552].</p>
-        </div>
-        <div class="panel-body">
+        <div class="card">
+            <h2>🧹 2. The "Apt-Get" Cleanup</h2>
+            <p class="subtitle">Reduce image size by ~30MB+</p>
+            <ul>
+                <li>Combine update, install, and clean in <strong style="color:var(--primary-bg)">ONE layer</strong>.</li>
+                <li>If you split them, the cache remains in the history.</li>
+            </ul>
             
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <strong>Cluster Topology</strong>
-                <div>
-                    <button class="btn btn-outline" style="font-size:0.8rem;" onclick="addNode()">+ Add Node</button>
-                    <button class="btn btn-outline" style="font-size:0.8rem;" onclick="resetCluster()">Reset</button>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code><span class="kwd">RUN</span> apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    <span class="comment"># Clean up in the same layer!</span>
+    && rm -rf /var/lib/apt/lists/*</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🛑 3. Signal Handling (PID 1)</h2>
+            <p class="subtitle">Ensure `Ctrl+C` or Kubernetes kills work.</p>
+            
+            
+            <div style="margin-bottom: 15px;">
+                <span class="status-badge bad-badge">BAD (Shell Form)</span>
+                <div class="code-wrapper" style="margin-top:5px; opacity: 0.7;">
+<pre><code><span class="kwd">CMD</span> python main.py</code></pre>
                 </div>
+                <small style="color:var(--text-muted)">Starts as <code>/bin/sh -c</code>. Signals get swallowed.</small>
             </div>
 
-            <div class="cluster-grid" id="clusterGrid">
-                <div class="node-card" id="node-0">
-                    <div class="node-header">Node-0 <span class="node-role">Master</span></div>
-                    <div class="shard-container" id="shards-0"></div>
+            <div>
+                <span class="status-badge good-badge">GOOD (Exec Form)</span>
+                <div class="code-wrapper" style="margin-top:5px;">
+<pre><code><span class="kwd">CMD</span> [<span class="str">"python"</span>, <span class="str">"main.py"</span>]</code></pre>
                 </div>
-                <div class="node-card" id="node-1">
-                    <div class="node-header">Node-1 <span class="node-role">Data</span></div>
-                    <div class="shard-container" id="shards-1"></div>
-                </div>
+                <small style="color:var(--text-muted)">Runs directly. Signals pass through.</small>
             </div>
+        </div>
 
-            <div style="margin-top: 25px;">
-                <strong>The Inverted Index (Search Optimization)</strong>
-                <div class="index-table-wrapper">
-                    <table class="index-table">
-                        <thead><tr><th>Term (Word)</th><th>Document IDs</th></tr></thead>
-                        <tbody id="invertedIndexBody">
-                            <tr><td colspan="2" style="text-align:center; color:#999; padding:15px;">Index is empty</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+        <div class="card">
+            <h2>📚 4. Intelligent Caching</h2>
+            <p class="subtitle">Docker caches lines from top to bottom.</p>
+            
+            <ul>
+                <li>❌ <strong>Copy All First:</strong> Any code change invalidates dependency install.</li>
+                <li>✅ <strong>Copy Reqs First:</strong> Dependencies are cached unless <code>requirements.txt</code> changes.</li>
+            </ul>
+            <div class="code-wrapper">
+<pre><code><span class="kwd">COPY</span> requirements.txt .
+<span class="kwd">RUN</span> pip install ... <span class="comment"># Cached!</span>
+<span class="kwd">COPY</span> . .            <span class="comment"># Changes often</span></code></pre>
             </div>
+        </div>
+
+        <div class="card">
+            <h2>🔐 5. Secrets Management</h2>
+            <p><span class="highlight-warn">NEVER</span> use <code>ENV</code> for passwords/keys. They persist in <code>docker history</code>.</p>
+            
+            <div style="margin-top: 15px;">
+                <strong style="color: #fff">The Fix (BuildKit):</strong>
+            </div>
+            <div class="code-wrapper">
+<pre><code><span class="comment"># Mount secret only for this command</span>
+<span class="kwd">RUN</span> --mount=type=secret,id=mykey \
+    cat /run/secrets/mykey | scripts/install.sh</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏗️ 6. The "Shrinker" (Multi-Stage)</h2>
+            <p class="subtitle">Build with tools (gcc, go), ship only the binary.</p>
+            
+            <div class="code-wrapper">
+<pre><code><span class="kwd">FROM</span> golang:1.18 as builder
+<span class="kwd">RUN</span> go build -o app main.go
+
+<span class="comment"># Final image is tiny</span>
+<span class="kwd">FROM</span> alpine:3.14
+<span class="kwd">COPY</span> --from=builder /app /app
+<span class="kwd">CMD</span> [<span class="str">"/app"</span>]</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>❤️ 7. Add Healthchecks</h2>
+            <p class="subtitle">Let Docker restart your app if it freezes.</p>
+            <div class="code-wrapper">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><code><span class="kwd">HEALTHCHECK</span> --interval=30s --timeout=3s \
+  <span class="kwd">CMD</span> curl -f http://localhost:8000/ || exit 1</code></pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🏷️ 8. Version Pinning</h2>
+            <ul>
+                <li><span class="status-badge bad-badge">node:latest</span> <br><small>Unpredictable. Might break tomorrow.</small></li>
+                <li><span class="status-badge good-badge">node:20.1-alpine</span> <br><small>Stable. Predictable size and behavior.</small></li>
+            </ul>
         </div>
     </div>
 
-
-    <div class="panel theme-kibana" id="sec-kibana">
-        <div class="panel-header">
-            <h2><span>📊</span> 4. Visualization (Kibana)</h2>
-            <button class="btn btn-info" onclick="toggleInfo('info-kibana')">? Learn More</button>
-        </div>
-        <div id="info-kibana" class="info-drawer">
-            [cite_start]<p><strong>Kibana</strong> provides visualization capabilities on top of the content indexed on an Elasticsearch cluster[cite: 75]. It includes dashboards, charts, and maps.</p>
-        </div>
-        <div class="panel-body">
-            <div class="kibana-dashboard">
+    <script>
+        function copyCode(button) {
+            const pre = button.nextElementSibling;
+            const code = pre.innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerText;
+                button.innerText = "✓";
+                button.style.background = "#238636";
+                button.style.borderColor = "#238636";
                 
-                <div class="kibana-panel">
-                    <div class="kibana-title">Discover (Logs)</div>
-                    <div class="discover-list" id="kibanaDiscover">
-                        <div style="color:#999; font-style:italic; padding-top:20px; text-align:center;">No data found</div>
-                    </div>
-                </div>
-
-                <div class="kibana-panel">
-                    <div class="kibana-title">Analytics (Log Level)</div>
-                    <div class="viz-chart">
-                        <div class="chart-col">
-                            <span style="font-size:0.8rem; font-weight:bold; color:var(--kibana-pink);" id="count-info">0</span>
-                            <div class="chart-bar" id="bar-info" style="height:0%;"></div>
-                            <span class="chart-label">INFO</span>
-                        </div>
-                        <div class="chart-col">
-                            <span style="font-size:0.8rem; font-weight:bold; color:var(--kibana-pink);" id="count-warn">0</span>
-                            <div class="chart-bar" id="bar-warn" style="height:0%;"></div>
-                            <span class="chart-label">WARN</span>
-                        </div>
-                        <div class="chart-col">
-                            <span style="font-size:0.8rem; font-weight:bold; color:var(--kibana-pink);" id="count-error">0</span>
-                            <div class="chart-bar" id="bar-error" style="height:0%;"></div>
-                            <span class="chart-label">ERROR</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<script>
-    /* --- STATE --- */
-    let docCounter = 1;
-    let nodes = [0, 1];
-    let invertedIndex = {};
-    let counts = { INFO: 0, WARN: 0, ERROR: 0 };
-    let isBusy = false;
-
-    /* --- HELPERS --- */
-    function toggleInfo(id) {
-        const el = document.getElementById(id);
-        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-    }
-
-    function getCenter(elementId) {
-        const rect = document.getElementById(elementId).getBoundingClientRect();
-        return {
-            top: rect.top + rect.height / 2,
-            left: rect.left + rect.width / 2
-        };
-    }
-
-    /* --- PIPELINE LOGIC --- */
-    function startPipeline() {
-        if(isBusy) return;
-        isBusy = true;
-        
-        const btn = document.getElementById('shipBtn');
-        const originalText = btn.innerText;
-        btn.innerText = "Processing...";
-        btn.disabled = true;
-
-        const rawLog = document.getElementById('rawInput').value;
-        const packet = document.getElementById('dataPacket');
-
-        // 1. Move Packet: Input -> Beats
-        // Since we are scrolling vertically, we use fixed positioning for the packet
-        // to fly over elements regardless of scrolling.
-        
-        const startRect = document.getElementById('rawInput').getBoundingClientRect();
-        packet.style.display = 'block';
-        packet.style.top = startRect.top + 'px';
-        packet.style.left = startRect.left + (startRect.width/2) + 'px';
-
-        // Animate to Logstash
-        setTimeout(() => {
-            const lsRect = document.getElementById('sec-logstash').getBoundingClientRect();
-            packet.style.top = (lsRect.top + 80) + 'px'; // Move into Logstash body
-            packet.style.left = (lsRect.left + lsRect.width/2) + 'px';
-        }, 100);
-
-        // 2. Logstash Transform
-        setTimeout(() => {
-            runLogstash(rawLog);
-        }, 900);
-
-        // 3. Animate to Elasticsearch
-        setTimeout(() => {
-            const esRect = document.getElementById('sec-es').getBoundingClientRect();
-            packet.style.top = (esRect.top + 80) + 'px';
-        }, 1600);
-
-        // 4. Indexing
-        setTimeout(() => {
-            runIndexing(rawLog);
-            packet.style.display = 'none'; // Hide packet
-            
-            // 5. Update Kibana
-            runKibana(rawLog);
-
-            // Reset
-            isBusy = false;
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }, 2400);
-    }
-
-    function runLogstash(rawLog) {
-        const useGrok = document.getElementById('grokToggle').checked;
-        const out = document.getElementById('logstashOutput');
-        
-        if(useGrok) {
-            // Simple space split simulation
-            const parts = rawLog.split(" ");
-            const json = {
-                "@timestamp": new Date().toISOString(),
-                "log.level": parts[1] || "UNKNOWN",
-                "message": parts.slice(2).join(" "),
-                "tags": ["_grokparse_success"]
-            };
-            out.innerHTML = `<span style="color:#2f855a">// Grok Structured Data</span>\n` + JSON.stringify(json, null, 2);
-            out.style.borderLeftColor = "#48bb78";
-        } else {
-            const json = {
-                "message": rawLog,
-                "tags": ["_grokparsefailure"]
-            };
-            out.innerHTML = `<span style="color:#c53030">// Unstructured Data</span>\n` + JSON.stringify(json, null, 2);
-            out.style.borderLeftColor = "#f56565";
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.background = "";
+                    button.style.borderColor = "";
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
         }
-    }
-
-    function runIndexing(rawLog) {
-        const docId = docCounter++;
-        
-        // A. Sharding (Round Robin Primary, Random Replica)
-        const primaryNodeId = nodes[Math.floor(Math.random() * nodes.length)];
-        let replicaNodeId = null;
-        if(nodes.length > 1) {
-            // Find a node that isn't the primary
-            const others = nodes.filter(n => n !== primaryNodeId);
-            replicaNodeId = others[Math.floor(Math.random() * others.length)];
-        }
-
-        addShard(primaryNodeId, 'P'+docId, 'primary');
-        if(replicaNodeId !== null) {
-            setTimeout(() => addShard(replicaNodeId, 'R'+docId, 'replica'), 300);
-        }
-
-        // B. Inverted Index
-        // Tokenize
-        const tokens = rawLog.toLowerCase().replace(/[^a-z0-9 ]/g, "").split(/\s+/);
-        tokens.forEach(term => {
-            if(term.length < 3) return; // Skip short words
-            if(!invertedIndex[term]) invertedIndex[term] = [];
-            if(!invertedIndex[term].includes(docId)) invertedIndex[term].push(docId);
-        });
-
-        renderInvertedIndex();
-    }
-
-    function addShard(nodeId, label, type) {
-        const container = document.getElementById('shards-' + nodeId);
-        if(!container) return;
-        const el = document.createElement('div');
-        el.className = `shard ${type}`;
-        el.innerText = label;
-        el.title = `Index: logs-2023 | Doc: ${label.substring(1)}`;
-        container.appendChild(el);
-    }
-
-    function renderInvertedIndex() {
-        const tbody = document.getElementById('invertedIndexBody');
-        const terms = Object.keys(invertedIndex).sort();
-        if(terms.length === 0) return;
-        
-        let html = "";
-        terms.forEach(t => {
-            html += `<tr><td>${t}</td><td>[ ${invertedIndex[t].join(", ")} ]</td></tr>`;
-        });
-        tbody.innerHTML = html;
-    }
-
-    function runKibana(rawLog) {
-        // 1. Discover
-        const list = document.getElementById('kibanaDiscover');
-        if(list.innerHTML.includes("No data")) list.innerHTML = "";
-        
-        const row = document.createElement('div');
-        row.className = "log-entry";
-        row.innerHTML = `<span style="color:var(--es-blue)">@timestamp:</span> ${new Date().toLocaleTimeString()} | <span style="color:#4a5568">${rawLog}</span>`;
-        list.prepend(row);
-
-        // 2. Analytics
-        let type = 'INFO';
-        if(rawLog.includes("WARN")) type = 'WARN';
-        if(rawLog.includes("ERROR")) type = 'ERROR';
-
-        counts[type]++;
-        
-        // Update text
-        document.getElementById(`count-info`).innerText = counts.INFO;
-        document.getElementById(`count-warn`).innerText = counts.WARN;
-        document.getElementById(`count-error`).innerText = counts.ERROR;
-
-        // Scale bars
-        const max = Math.max(counts.INFO, counts.WARN, counts.ERROR);
-        document.getElementById(`bar-info`).style.height = (counts.INFO / max * 100) + "%";
-        document.getElementById(`bar-warn`).style.height = (counts.WARN / max * 100) + "%";
-        document.getElementById(`bar-error`).style.height = (counts.ERROR / max * 100) + "%";
-    }
-
-    /* --- CLUSTER MANAGEMENT --- */
-    function addNode() {
-        const newId = nodes.length;
-        nodes.push(newId);
-        const grid = document.getElementById('clusterGrid');
-        
-        const card = document.createElement('div');
-        card.className = "node-card";
-        card.id = "node-" + newId;
-        card.innerHTML = `
-            <div class="node-header">Node-${newId} <span class="node-role">Data</span></div>
-            <div class="shard-container" id="shards-${newId}"></div>
-        `;
-        grid.appendChild(card);
-    }
-
-    function resetCluster() {
-        nodes = [0, 1];
-        docCounter = 1;
-        invertedIndex = {};
-        counts = { INFO: 0, WARN: 0, ERROR: 0 };
-        
-        // Clear UI
-        document.getElementById('clusterGrid').innerHTML = `
-            <div class="node-card" id="node-0"><div class="node-header">Node-0 <span class="node-role">Master</span></div><div class="shard-container" id="shards-0"></div></div>
-            <div class="node-card" id="node-1"><div class="node-header">Node-1 <span class="node-role">Data</span></div><div class="shard-container" id="shards-1"></div></div>
-        `;
-        document.getElementById('invertedIndexBody').innerHTML = '<tr><td colspan="2" style="text-align:center; color:#999; padding:15px;">Index is empty</td></tr>';
-        document.getElementById('kibanaDiscover').innerHTML = '<div style="color:#999; font-style:italic; padding-top:20px; text-align:center;">No data found</div>';
-        
-        // Reset Bars
-        ['info','warn','error'].forEach(t => {
-            document.getElementById('count-'+t).innerText = "0";
-            document.getElementById('bar-'+t).style.height = "0%";
-        });
-    }
-
-</script>
-
+    </script>
 </body>
 </html>
