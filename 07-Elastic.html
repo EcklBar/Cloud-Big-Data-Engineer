@@ -177,7 +177,7 @@
             transition: all 0.2s;
         }
         .btn-primary { background: var(--es-blue); color: white; box-shadow: 0 2px 4px rgba(0,119,204,0.3); }
-        .btn-primary:hover { background: #003d52; transform: translateY(-1px); }
+        .btn-primary:hover { background: #0062a8; transform: translateY(-1px); }
         .btn-secondary { background: white; border-color: var(--border-color); color: var(--text-primary); }
         .btn-secondary:hover { border-color: var(--text-tertiary); background: #f8fafc; }
 
@@ -497,39 +497,35 @@
                     <h1 style="color:var(--beats-teal)">1. Beats</h1>
                     <div class="metaphor-box">Metaphor: Think of Beats as the "Delivery Trucks" picking up packages.</div>
                     <p>Beats are lightweight data shippers that you install as agents on your servers to capture all sorts of operational data (think of them as "Agents").</p>
-                    <p>They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs, Metricbeat for metrics).</p>
-                    [cite_start]<span class="citation">Source: [cite: 98]</span>
+                    [cite_start]<p>They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs, Metricbeat for metrics)[cite: 98].</p>
                 </div>
 
                 <div id="topic-logstash" class="topic-detail" style="display:none;">
                     <h1 style="color:var(--logstash-yellow)">2. Logstash</h1>
                     <div class="metaphor-box">Metaphor: Think of Logstash as the "Sorting & Packaging Center".</div>
-                    <p>Logstash is a server-side data processing pipeline that ingests data from a multitude of sources, transforms it, and then sends it to your "stash" (Elasticsearch).</p>
-                    <p>It can derive structure from unstructured data using <strong>grok</strong> filters, anonymize sensitive fields, and aggregate data.</p>
-                    [cite_start]<span class="citation">Source: [cite: 85, 87]</span>
+                    [cite_start]<p>Logstash is a server-side data processing pipeline that ingests data from a multitude of sources, transforms it, and then sends it to your "stash" (Elasticsearch)[cite: 85].</p>
+                    [cite_start]<p>It can derive structure from unstructured data using <strong>grok</strong> filters, anonymize sensitive fields, and aggregate data[cite: 87].</p>
                 </div>
 
                 <div id="topic-es" class="topic-detail" style="display:none;">
                     <h1 style="color:var(--es-blue)">3. Elasticsearch</h1>
                     <div class="metaphor-box">Metaphor: Think of Elasticsearch as the "Warehouse" with an ultra-fast filing system.</div>
-                    <p>The heart of the stack. It is a distributed, RESTful search and analytics engine. It stores data as JSON documents and uses an inverted index to allow for near real-time search.</p>
-                    <p>Data is split into <strong>shards</strong> (horizontal partitions) which are distributed across nodes for scalability and high availability.</p>
-                    [cite_start]<span class="citation">Source: [cite: 59, 61, 474]</span>
+                    <p>The heart of the stack. [cite_start]It is a distributed, RESTful search and analytics engine[cite: 59]. [cite_start]It stores data as JSON documents and uses an inverted index to allow for near real-time search[cite: 61].</p>
+                    [cite_start]<p>Data is split into <strong>shards</strong> (horizontal partitions) which are distributed across nodes for scalability and high availability[cite: 474].</p>
                 </div>
 
                 <div id="topic-kibana" class="topic-detail" style="display:none;">
                     <h1 style="color:var(--kibana-pink)">4. Kibana</h1>
                     <div class="metaphor-box">Metaphor: Think of Kibana as the "Dashboard" in the control room.</div>
-                    <p>Kibana is the visualization layer. It works on top of Elasticsearch to let users visualize data through charts, graphs, maps, and dashboards.</p>
-                    <p>It is the window into the Elastic Stack, allowing you to search, view, and interact with your data stored in Elasticsearch indices.</p>
-                    [cite_start]<span class="citation">Source: [cite: 74, 76]</span>
+                    <p>Kibana is the visualization layer. [cite_start]It works on top of Elasticsearch to let users visualize data through charts, graphs, maps, and dashboards[cite: 74].</p>
+                    [cite_start]<p>It is the window into the Elastic Stack, allowing you to search, view, and interact with your data stored in Elasticsearch indices[cite: 76].</p>
                 </div>
 
                 <div id="topic-concepts" class="topic-detail" style="display:none;">
                     <h1>Key Concepts</h1>
                     <h3>Sharding & Replication</h3>
-                    <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. A shard is a self-contained Lucene index.</p>
-                    <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. If a node fails, a replica is promoted to primary.</p>
+                    <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. [cite_start]A shard is a self-contained Lucene index[cite: 532].</p>
+                    <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. [cite_start]If a node fails, a replica is promoted to primary[cite: 552].</p>
                     
                     <h3>Inverted Index</h3>
                     <p>This is the magic behind the speed. Instead of storing strings directly, Elasticsearch lists every unique word that appears in any document and identifies all of the documents each word occurs in.</p>
