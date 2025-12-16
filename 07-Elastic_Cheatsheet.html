@@ -1,1173 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elasticsearch Cheatsheet</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-vsc-dark-plus.min.css" rel="stylesheet" />
+
+    <style>
+        /* --- 1. RESET & VARIABLES --- */
+        :root {
+            --primary: #0077cc;
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --nav-height: 70px;
+            --code-bg: #1e1e1e;
+            --accent-orange: #ed8936;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding-top: var(--nav-height); /* Space for sticky header */
+        }
+
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* --- 2. LAYOUT & TYPOGRAPHY --- */
+        .ui.text.container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        h1.ui.header {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2.ui.header {
+            font-size: 1.75rem;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            color: #2d3748;
+        }
+
+        h3.ui.header {
+            font-size: 1.25rem;
+            margin-top: 2rem;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        p { margin-bottom: 1rem; color: #4a5568; }
+
+        /* --- 3. STICKY NAVIGATION --- */
+        .ui.main.menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .ui.main.menu .text.container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu a.item {
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 5px 0;
+        }
+
+        .menu a.item:hover { color: var(--primary); text-decoration: none; }
+
+        /* --- 4. VERSION SELECTOR --- */
+        .js-version-selector {
+            position: relative;
+            cursor: pointer;
+            background: #edf2f7;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            min-width: 160px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .js-version-selector:after {
+            content: '▼';
+            font-size: 0.7em;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .js-version-selector .menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            min-width: 180px;
+            margin-top: 8px;
+            overflow: hidden;
+            z-index: 2000;
+            text-align: left;
+        }
+
+        .js-version-selector:focus-within .menu,
+        .js-version-selector:hover .menu {
+            display: block;
+        }
+
+        .js-version-selector .menu .item a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--text-main);
+            transition: background 0.1s;
+        }
+
+        .js-version-selector .menu .item:hover { background-color: #f7fafc; }
+
+        /* --- 5. CODE BLOCKS --- */
+        .code-toolbar {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        pre {
+            background: var(--code-bg) !important;
+            padding: 1.5rem !important;
+            border-radius: 8px;
+            margin: 0 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        code {
+            font-family: 'Fira Code', 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            text-shadow: none !important;
+        }
+
+        /* Copy Button */
+        .toolbar-item button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #ddd;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0;
+        }
+
+        .code-toolbar:hover button { opacity: 1; }
+        .toolbar-item button:hover { background: rgba(255,255,255,0.2); }
+        .toolbar-item button:active { transform: translateY(1px); }
+
+        /* --- 6. ALERTS & GRIDS (Legacy Support) --- */
+        .ui.segment {
+            background: #fffaf0;
+            border-left: 4px solid var(--accent-orange);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* Grid System Emulation (Replacements for Semantic UI Grid) */
+        .ui.grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -1rem;
+        }
+        
+        .ui.two.column.grid .column {
+            width: 50%;
+            padding: 0 1rem;
+        }
+
+        .ui.grid .eight.wide.column {
+            width: 50%;
+            padding: 0 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .divider-column {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: bold;
+            color: #a0aec0;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .nav-links { display: none; /* Simplify for mobile for now */ }
+            .ui.two.column.grid .column, 
+            .ui.grid .eight.wide.column { width: 100%; margin-bottom: 2rem; }
+        }
+
+        /* --- 7. VERSION VISIBILITY LOGIC --- */
+        
+        /* Default: Hide all version-specific blocks */
+        .es1, .es2, .es5, .es6, .es7, .es8 {
+            display: none !important;
+        }
+
+        /* Show based on body class */
+        body.es1 .es1 { display: block !important; }
+        body.es2 .es2 { display: block !important; }
+        body.es5 .es5 { display: block !important; }
+        body.es6 .es6 { display: block !important; }
+        body.es7 .es7 { display: block !important; }
+        body.es8 .es8 { display: block !important; }
+
+        /* Inline specific overrides (for spans inside Headers/Selectors) */
+        body.es1 h1 .es1, body.es1 .js-version-selector .es1,
+        body.es2 h1 .es2, body.es2 .js-version-selector .es2,
+        body.es5 h1 .es5, body.es5 .js-version-selector .es5,
+        body.es6 h1 .es6, body.es6 .js-version-selector .es6,
+        body.es7 h1 .es7, body.es7 .js-version-selector .es7,
+        body.es8 h1 .es8, body.es8 .js-version-selector .es8 {
+            display: inline-block !important;
+        }
+
+        /* Fix lists items that are flex/block */
+        body.es1 li.es1, body.es2 li.es2, body.es5 li.es5,
+        body.es6 li.es6, body.es7 li.es7, body.es8 li.es8 {
+            display: list-item !important;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: #2d3748;
+            color: #cbd5e0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .footer a { color: white; text-decoration: underline; }
+    </style>
+</head>
+
 <body class="es8">
+
+    <div class="ui main menu">
+        <div class="ui text container">
+            <div style="font-weight:900; font-size:1.2rem; color: #0077cc;">ES Cheatsheet 🔎</div>
+            
+            <div class="nav-links">
+                <a href="#links" class="item">Links</a>
+                <a href="#queries" class="item">Queries</a>
+                <a href="#indexes" class="item">Indexes</a>
+                <a href="#debug" class="item">Debug</a>
+                <a href="#cluster" class="item">Cluster</a>
+            </div>
+
+            <div class="js-version-selector" tabindex="0">
+                <span class="es1">Elasticsearch 1.X</span>
+                <span class="es2">Elasticsearch 2.X</span>
+                <span class="es5">Elasticsearch 5.X</span>
+                <span class="es6">Elasticsearch 6.X</span>
+                <span class="es7">Elasticsearch 7.X</span>
+                <span class="es8">Elasticsearch 8.X</span>
+                
+                <div class="menu" tabindex="-1">
+                    <div class="item es2 es5 es6 es7 es8"><a href="#es1">Elasticsearch 1.X</a></div>
+                    <div class="item es1 es5 es6 es7 es8"><a href="#es2">Elasticsearch 2.X</a></div>
+                    <div class="item es1 es2 es6 es7 es8"><a href="#es5">Elasticsearch 5.X</a></div>
+                    <div class="item es1 es2 es5 es7 es8"><a href="#es6">Elasticsearch 6.X</a></div>
+                    <div class="item es1 es2 es5 es6 es8"><a href="#es7">Elasticsearch 7.X</a></div>
+                    <div class="item es1 es2 es5 es6 es7"><a href="#es8">Elasticsearch 8.X</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="ui main text container">
-      <img class="es2 es5 es6 es7 es8 ui tiny right floated image" src="./images/Elasticsearch-Logo-Color-V-sm.png">
-      <img class="es1 ui tiny right floated image" src="./images/Elasticsearch1-Logo-Color-V-sm.png">
-      <h1 class="ui header">🔎 Elasticsearch
-        <span class="es1">1.x</span>
-        <span class="es2">2.x</span>
-        <span class="es5">5.x</span>
-        <span class="es6">6.x</span>
-        <span class="es7">7.x</span>
-        <span class="es8">8.x</span>
-        Cheatsheet 🔍</h1>
-      <p>
-        All the API endpoints and pro-tips you always forgot about in one place!<br>
-        Built by developers for developers. Hosted on <a href="https://github.com/jolicode/elasticsearch-sheatsheet">GitHub</a>, contributions welcome.
-      </p>
-    </div>
+        
+        <h1 class="ui header">
+            🔎 Elasticsearch 
+            <span class="es1">1.x</span>
+            <span class="es2">2.x</span>
+            <span class="es5">5.x</span>
+            <span class="es6">6.x</span>
+            <span class="es7">7.x</span>
+            <span class="es8">8.x</span>
+        </h1>
+        
+        <p>
+            All the API endpoints and pro-tips you always forget about in one place!<br>
+            Built by developers for developers.
+        </p>
 
-    <div class="ui borderless main menu">
-      <div class="ui text container">
-        <a href="#links" class="item">Links</a>
-        <a href="#queries" class="item">Queries</a>
-        <a href="#indexes" class="item">Indexes</a>
-        <a href="#debug" class="item">Debug</a>
-        <a href="#cluster" class="item">Cluster &amp; Plugins</a>
-
-        <div class="ui right floated dropdown item js-version-selector" tabindex="0">
-          <span class="es1">Elasticsearch 1.X</span>
-          <span class="es2">Elasticsearch 2.X</span>
-          <span class="es5">Elasticsearch 5.X</span>
-          <span class="es6">Elasticsearch 6.X</span>
-          <span class="es7">Elasticsearch 7.X</span>
-          <span class="es8">Elasticsearch 8.X</span>
-          <i class="dropdown icon"></i>
-          <div class="menu" tabindex="-1">
-            <div class="item es2 es5 es6 es7 es8"><a href="#es1">Elasticsearch 1.X</a></div>
-            <div class="item es1 es5 es6 es7 es8"><a href="#es2">Elasticsearch 2.X</a></div>
-            <div class="item es1 es2 es6 es7 es8"><a href="#es5">Elasticsearch 5.X</a></div>
-            <div class="item es1 es2 es5 es7 es8"><a href="#es6">Elasticsearch 6.X</a></div>
-            <div class="item es1 es2 es5 es6 es8"><a href="#es7">Elasticsearch 7.X</a></div>
-            <div class="item es1 es2 es5 es6 es7"><a href="#es8">Elasticsearch 8.X</a></div>
-          </div>
+        <div class="es1 ui segment">
+            <strong>⚠️ EOL Warning:</strong> Elasticsearch 1.7 is End Of Life. Consider upgrading. <a href="https://www.elastic.co/support/eol">More info</a>.
         </div>
-      </div>
-    </div><div class="ui borderless main menu placeholder" style="display: none;">
-      <div class="ui text container">
-        <a href="#links" class="item">Links</a>
-        <a href="#queries" class="item">Queries</a>
-        <a href="#indexes" class="item">Indexes</a>
-        <a href="#debug" class="item">Debug</a>
-        <a href="#cluster" class="item">Cluster &amp; Plugins</a>
-
-        <div class="ui right floated dropdown item js-version-selector" tabindex="0">
-          <span class="es1">Elasticsearch 1.X</span>
-          <span class="es2">Elasticsearch 2.X</span>
-          <span class="es5">Elasticsearch 5.X</span>
-          <span class="es6">Elasticsearch 6.X</span>
-          <span class="es7">Elasticsearch 7.X</span>
-          <span class="es8">Elasticsearch 8.X</span>
-          <i class="dropdown icon"></i>
-          <div class="menu" tabindex="-1">
-            <div class="item es2 es5 es6 es7 es8"><a href="#es1">Elasticsearch 1.X</a></div>
-            <div class="item es1 es5 es6 es7 es8"><a href="#es2">Elasticsearch 2.X</a></div>
-            <div class="item es1 es2 es6 es7 es8"><a href="#es5">Elasticsearch 5.X</a></div>
-            <div class="item es1 es2 es5 es7 es8"><a href="#es6">Elasticsearch 6.X</a></div>
-            <div class="item es1 es2 es5 es6 es8"><a href="#es7">Elasticsearch 7.X</a></div>
-            <div class="item es1 es2 es5 es6 es7"><a href="#es8">Elasticsearch 8.X</a></div>
-          </div>
+        <div class="es2 ui segment">
+            <strong>⚠️ EOL Warning:</strong> Elasticsearch 2.4 is End Of Life. Consider upgrading.
         </div>
-      </div>
-    </div>
+        <div class="es5 ui segment">
+            <strong>⚠️ EOL Warning:</strong> Elasticsearch 5.6 is End Of Life. Consider upgrading.
+        </div>
+        <div class="es6 ui segment">
+            <strong>⚠️ EOL Warning:</strong> Elasticsearch 6.8 is End Of Life. Consider upgrading.
+        </div>
 
-    <div class="ui text container language-json">
-
-      <div class="es1 ui secondary orange segment">
-        <p>Elasticsearch 1.7 is End Of Life. Consider upgrading.
-        <a href="https://www.elastic.co/support/eol">More information about supported versions</a>.</p>
-      </div>
-
-      <div class="es2 ui secondary orange segment">
-        <p>Elasticsearch 2.4 is End Of Life. Consider upgrading.
-        <a href="https://www.elastic.co/support/eol">More information about supported versions</a>.</p>
-      </div>
-
-      <div class="es5 ui secondary orange segment">
-        <p>Elasticsearch 5.6 is End Of Life. Consider upgrading.
-        <a href="https://www.elastic.co/support/eol">More information about supported versions</a>.</p>
-      </div>
-
-      <div class="es6 ui secondary orange segment">
-        <p>Elasticsearch 6.8 is End Of Life. Consider upgrading.
-        <a href="https://www.elastic.co/support/eol">More information about supported versions</a>.</p>
-      </div>
-
-      <a name="links"></a>
-      <h2 class="ui dividing header">Links</h2>
+        <a name="links"></a>
+        <h2 class="ui dividing header">Links</h2>
+        
         <p class="es2">
-          First thing, forget about your <code class=" language-json">curl</code> calls and <strong>install <a href="https://www.elastic.co/guide/en/sense/current/installing.html">Sense</a> please!</strong>
+            First thing, forget about your <code class="language-json">curl</code> calls and <strong>install <a href="https://www.elastic.co/guide/en/sense/current/installing.html">Sense</a> please!</strong>
         </p>
         <p class="es5 es6 es7 es8">
-          First thing, forget about your <code class=" language-json">curl</code> calls and <strong>install <a href="https://www.elastic.co/products/kibana">Kibana</a> please!</strong>
+            First thing, forget about your <code class="language-json">curl</code> calls and <strong>install <a href="https://www.elastic.co/products/kibana">Kibana</a> please!</strong>
         </p>
 
         <ul>
-          <li class="es1"><a href="https://www.elastic.co/guide/en/elasticsearch/guide/1.x/index.html">Elasticsearch: The Definitive Guide</a>, official book;</li>
-          <li class="es2"><a href="https://www.elastic.co/guide/en/elasticsearch/guide/2.x/index.html">Elasticsearch: The Definitive Guide</a>, official book;</li>
-          <li class="es5 es6"><a href="https://www.elastic.co/guide/en/elasticsearch/guide/master/index.html">Elasticsearch: The Definitive Guide</a>, official book (not up to date);</li>
+            <li class="es1"><a href="https://www.elastic.co/guide/en/elasticsearch/guide/1.x/index.html">Elasticsearch: The Definitive Guide</a>, official book;</li>
+            <li class="es2"><a href="https://www.elastic.co/guide/en/elasticsearch/guide/2.x/index.html">Elasticsearch: The Definitive Guide</a>, official book;</li>
+            <li class="es5 es6"><a href="https://www.elastic.co/guide/en/elasticsearch/guide/master/index.html">Elasticsearch: The Definitive Guide</a>, official book (not up to date);</li>
 
-          <li class="es1 es2 es5 es6"><a href="https://www.elastic.co/downloads/past-releases/#elasticsearch">Download Elasticsearch</a>, official download page;</li>
-          <li class="es7 es8"><a href="https://www.elastic.co/downloads/elasticsearch">Download Elasticsearch</a>, official download page;</li>
+            <li class="es1 es2 es5 es6"><a href="https://www.elastic.co/downloads/past-releases/#elasticsearch">Download Elasticsearch</a>, official download page;</li>
+            <li class="es7 es8"><a href="https://www.elastic.co/downloads/elasticsearch">Download Elasticsearch</a>, official download page;</li>
 
-          <li class="es6 es7"><a href="https://www.elastic.co/downloads/past-releases#elasticsearch-oss">Download pure OSS Elasticsearch</a> (&lt;= 7.10.2 only), Apache licensed download page;</li>
+            <li class="es6 es7"><a href="https://www.elastic.co/downloads/past-releases#elasticsearch-oss">Download pure OSS Elasticsearch</a> (&lt;= 7.10.2 only), Apache licensed download page;</li>
 
-          <li class="es1"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/1.7/index.html">Elasticsearch Reference</a>, official documentation;</li>
-          <li class="es2"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/2.3/index.html">Elasticsearch Reference</a>, official documentation;</li>
-          <li class="es5"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/index.html">Elasticsearch Reference</a>, official documentation;</li>
-          <li class="es6"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.x/index.html">Elasticsearch Reference</a>, official documentation;</li>
-          <li class="es7"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.x/index.html">Elasticsearch Reference</a>, official documentation;</li>
-          <li class="es8"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.1/index.html">Elasticsearch Reference</a>, official documentation;</li>
-          <li class="es5 es6 es7 es8"><a href="https://www.docker.elastic.co/">Docker repository</a>, quick start any Elastic software;</li>
-          <li><a href="https://dev.to/t/elasticsearch">Dev.to Elasticsearch</a>, great source of content about Elastic;</li>
-          <li><a href="https://discuss.elastic.co/">Official forum</a> and <a href="http://stackoverflow.com/questions/tagged/elasticsearch">StackOverflow</a> for support;</li>
-          <li class="es5"><a href="https://www.elastic.co/products/upgrade_guide">Official online migration tool</a> to help upgrading the stack to 6.x;</li>
-          <li class="es5 es6 es7"><a href="https://github.com/moshe/elasticsearch-comrade">Comrade</a>: a Python based Elasticsearch web admin and monitoring panel;</li>
-          <li class="es2 es5 es6 es7"><a href="https://github.com/lmenezes/cerebro">Cerebro</a>: a Java based Elasticsearch web admin;</li>
+            <li class="es1"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/1.7/index.html">Elasticsearch Reference</a>, official documentation;</li>
+            <li class="es2"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/2.3/index.html">Elasticsearch Reference</a>, official documentation;</li>
+            <li class="es5"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/index.html">Elasticsearch Reference</a>, official documentation;</li>
+            <li class="es6"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.x/index.html">Elasticsearch Reference</a>, official documentation;</li>
+            <li class="es7"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.x/index.html">Elasticsearch Reference</a>, official documentation;</li>
+            <li class="es8"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.1/index.html">Elasticsearch Reference</a>, official documentation;</li>
+            <li class="es5 es6 es7 es8"><a href="https://www.docker.elastic.co/">Docker repository</a>, quick start any Elastic software;</li>
+            <li><a href="https://discuss.elastic.co/">Official forum</a> and <a href="http://stackoverflow.com/questions/tagged/elasticsearch">StackOverflow</a> for support;</li>
+            <li class="es5"><a href="https://www.elastic.co/products/upgrade_guide">Official online migration tool</a> to help upgrading the stack to 6.x;</li>
+            <li class="es5 es6 es7"><a href="https://github.com/moshe/elasticsearch-comrade">Comrade</a>: a Python based Elasticsearch web admin and monitoring panel;</li>
+            <li class="es2 es5 es6 es7"><a href="https://github.com/lmenezes/cerebro">Cerebro</a>: a Java based Elasticsearch web admin;</li>
         </ul>
 
-
-
-
-
-
-      <a name="queries"></a>
-      <h2 class="ui dividing header">Queries</h2>
-
-        <p>
-          There are two syntaxes for the basic queries: a simple one on the left, where you can't use any option,
-          and an extended one on the right. Most of the beginner headache with the DSL come from this:
-        </p>
-        <div class="ui two column very relaxed grid" style="position:relative;">
-          <div class="column">
-            <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET _search
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"FIELD"</span><span class="token operator">:</span> <span class="token string">"TEXT"</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-          </div>
-          <div class="divider-column">
-            <div class="ui vertical divider">
-              to
+        <a name="queries"></a>
+        <h2 class="ui dividing header">Queries</h2>
+        <p>There are two syntaxes for basic queries: simple on the left, extended on the right.</p>
+        
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="code-toolbar"><pre class="language-json"><code>GET _search
+{
+  "query": {
+    "match": {
+      "FIELD": "TEXT"
+    }
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
             </div>
-          </div>
-
-          <div class="column">
-            <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET _search
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"FIELD"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"query"</span><span class="token operator">:</span> <span class="token string">"TEXT"</span><span class="token punctuation">,</span>
-        <span class="token property">"OPTION"</span><span class="token operator">:</span> <span class="token string">"VALUE"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-          </div>
+            
+            <div class="column">
+                <div class="code-toolbar"><pre class="language-json"><code>GET _search
+{
+  "query": {
+    "match": {
+      "FIELD": {
+        "query": "TEXT",
+        "OPTION": "VALUE"
+      }
+    }
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            </div>
         </div>
 
+        <h3 class="ui header">Full search example</h3>
+        <p>With aggregation, highlight, filter...</p>
 
-        <h3 class="ui header">Full search example with aggregation, highlight, filter...</h3>
+        <div class="code-toolbar es1"><pre class="language-json"><code>GET /_search
+{
+  "query": {
+    "filtered": {
+      "query": {
+        "bool": {
+          "must": [
+            { "match": { "title": "smith" } }
+          ],
+          "must_not": [
+            { "match_phrase": { "title": "granny smith" } }
+          ]
+        }
+      },
+      "filter": {
+        "bool": {
+          "must_not": [
+            { "missing": { "field": "title" } }
+          ]
+        }
+      }
+    }
+  },
+  "aggs": {
+    "my_agg": {
+      "terms": { "field": "user", "size": 10 }
+    }
+  },
+  "highlight": {
+    "pre_tags" : ["<em>"],
+    "post_tags" : ["</em>"],
+    "fields": {
+      "body" : { "number_of_fragments": 1, "fragment_size": 20 },
+      "title": {}
+    }
+  },
+  "size": 20,
+  "from": 100,
+  "_source": ["title", "id"],
+  "sort": [
+    { "_id" : {"order" : "desc"}}
+  ]
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
-        <div class="code-toolbar"><pre class="es1 language-json"><code class=" language-json">GET /_search
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"filtered"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"bool"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"must"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-            <span class="token punctuation">{</span>
-              <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-                <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"smith"</span>
-              <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span>
-          <span class="token punctuation">]</span><span class="token punctuation">,</span>
-          <span class="token property">"must_not"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-            <span class="token punctuation">{</span>
-              <span class="token property">"match_phrase"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-                <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"granny smith"</span>
-              <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span>
-          <span class="token punctuation">]</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token property">"filter"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"bool"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"must_not"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-            <span class="token punctuation">{</span>
-              <span class="token property">"missing"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-                <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"title"</span>
-              <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span>
-          <span class="token punctuation">]</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"aggs"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"my_agg"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"terms"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"user"</span><span class="token punctuation">,</span>
-        <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">10</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"highlight"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"pre_tags"</span> <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"&lt;em&gt;"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"post_tags"</span> <span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"&lt;/em&gt;"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"fields"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"body"</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"number_of_fragments"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-        <span class="token property">"fragment_size"</span><span class="token operator">:</span> <span class="token number">20</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">20</span><span class="token punctuation">,</span>
-  <span class="token property">"from"</span><span class="token operator">:</span> <span class="token number">100</span><span class="token punctuation">,</span>
-  <span class="token property">"_source"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"id"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"sort"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">{</span> <span class="token property">"_id"</span> <span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"order"</span> <span class="token operator">:</span> <span class="token string">"desc"</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <div class="code-toolbar es2 es5 es6 es7 es8"><pre class="language-json"><code>GET /_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "title": "smith" } }
+      ],
+      "must_not": [
+        { "match_phrase": { "title": "granny smith" } }
+      ],
+      "filter": [
+        { "exists": { "field": "title" } }
+      ]
+    }
+  },
+  "aggs": {
+    "my_agg": {
+      "terms": { "field": "user", "size": 10 }
+    }
+  },
+  "highlight": {
+    "pre_tags": ["<em>"],
+    "post_tags": ["</em>"],
+    "fields": {
+      "body": { "number_of_fragments": 1, "fragment_size": 20 },
+      "title": {}
+    }
+  },
+  "size": 20,
+  "from": 100,
+  "_source": [ "title", "id" ],
+  "sort": [
+    { "_id": { "order": "desc" } }
+  ]
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
-        <div class="code-toolbar"><pre class="es2 es5 es6 es7 es8 language-json"><code class=" language-json">GET /_search
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"bool"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"must"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span>
-          <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-            <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"smith"</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token property">"must_not"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span>
-          <span class="token property">"match_phrase"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-            <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"granny smith"</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token property">"filter"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span>
-          <span class="token property">"exists"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-            <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"title"</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">]</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"aggs"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"my_agg"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"terms"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"user"</span><span class="token punctuation">,</span>
-        <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">10</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"highlight"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"pre_tags"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token string">"&lt;em&gt;"</span>
-    <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"post_tags"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-      <span class="token string">"&lt;/em&gt;"</span>
-    <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"fields"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"body"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"number_of_fragments"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-        <span class="token property">"fragment_size"</span><span class="token operator">:</span> <span class="token number">20</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">20</span><span class="token punctuation">,</span>
-  <span class="token property">"from"</span><span class="token operator">:</span> <span class="token number">100</span><span class="token punctuation">,</span>
-  <span class="token property">"_source"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"title"</span><span class="token punctuation">,</span>
-    <span class="token string">"id"</span>
-  <span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"sort"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">{</span>
-      <span class="token property">"_id"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"order"</span><span class="token operator">:</span> <span class="token string">"desc"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-      <h3 class="ui header es7 es8">Control total hit count</h3>
-      <p class="es7 es8">Accept true, false or a fixed number, default to 10000.</p>
-      <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">GET /_search
-<span class="token punctuation">{</span>
-  <span class="token property">"track_total_hits"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <h3 class="ui header es7 es8">Control total hit count</h3>
+        <p class="es7 es8">Accept true, false or a fixed number, default to 10000.</p>
+        <div class="code-toolbar es7 es8"><pre class="language-json"><code>GET /_search
+{
+  "track_total_hits": true,
+  "query": {}
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
         <h3 class="ui header">Common queries</h3>
 
         <div class="ui grid">
-          <div class="eight wide column"><div class="code-toolbar"><pre class=" language-json"><code class="json-only language-json"><span class="token property">"multi_match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token string">"Elastic"</span><span class="token punctuation">,</span>
-  <span class="token property">"fields"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"user.*"</span><span class="token punctuation">,</span> <span class="token string">"title^3"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"best_fields"</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div></div>
-          <div class="eight wide column es2 es5 es6 es7 es8"><div class="code-toolbar"><pre class=" language-json"><code class="json-only language-json"><span class="token property">"bool"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-  <span class="token property">"must"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"must_not"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"filter"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"should"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"minimum_should_match"</span> <span class="token operator">:</span> <span class="token number">1</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div></div>
-          <div class="eight wide column es1"><div class="code-toolbar"><pre class=" language-json"><code class="json-only language-json"><span class="token property">"bool"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-  <span class="token property">"must"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"must_not"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"should"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-  <span class="token property">"minimum_should_match"</span> <span class="token operator">:</span> <span class="token number">1</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div></div>
-          <div class="eight wide column es1"><div class="code-toolbar"><pre class=" language-json"><code class="json-only language-json"><span class="token property">"filtered"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match_all"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"filter"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"range"</span><span class="token operator">:</span> <span class="token punctuation">{</span>...<span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div></div>
-          <div class="eight wide column"><div class="code-toolbar"><pre class=" language-json"><code class="json-only language-json"><span class="token property">"range"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-  <span class="token property">"age"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"gte"</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
-    <span class="token property">"lte"</span><span class="token operator">:</span> <span class="token number">20</span><span class="token punctuation">,</span>
-    <span class="token property">"boost"</span><span class="token operator">:</span> <span class="token number">2</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div></div>
+            <div class="eight wide column">
+                <div class="code-toolbar"><pre class="language-json"><code>"multi_match": {
+  "query": "Elastic",
+  "fields": ["user.*", "title^3"],
+  "type": "best_fields"
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            </div>
 
+            <div class="eight wide column es2 es5 es6 es7 es8">
+                <div class="code-toolbar"><pre class="language-json"><code>"bool": {
+  "must": [],
+  "must_not": [],
+  "filter": [],
+  "should": [],
+  "minimum_should_match" : 1
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            </div>
+
+            <div class="eight wide column es1">
+                <div class="code-toolbar"><pre class="language-json"><code>"bool": {
+  "must": [],
+  "must_not": [],
+  "should": [],
+  "minimum_should_match" : 1
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            </div>
+
+             <div class="eight wide column es1">
+                <div class="code-toolbar"><pre class="language-json"><code>"filtered": {
+  "query": { "match_all": {} },
+  "filter": { "range": {...} }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            </div>
+
+            <div class="eight wide column">
+                <div class="code-toolbar"><pre class="language-json"><code>"range": {
+  "age": {
+    "gte": 10,
+    "lte": 20,
+    "boost": 2
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            </div>
         </div>
 
-
         <h3 class="ui header">QueryString syntax</h3>
+        <p>Search in the default <code class="language-json">_all</code> field:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /_search?q=pony</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        
+        <p>Complex search with operator and exact phrase search with boost:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /_search?q=title:(joli OR code) AND author:"Damien Alexandre"^2</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
-        <p>
-          Search in the default <code class=" language-json">_all</code> field:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_search?q=pony</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-        <p>
-          Complex search with operator and exact phrase search with boost:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_search?q=title<span class="token operator">:</span>(joli OR code) AND author<span class="token operator">:</span><span class="token string">"Damien Alexandre"</span>^<span class="token number">2</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-        <p>
-          Search with wildcard and special queries:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_search?q=_exists_<span class="token operator">:</span>title OR title<span class="token operator">:</span>singl? noneOrAnyChar*cter</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-        <p>
-          Search with fuzzyness and range:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_search?q=title<span class="token operator">:</span>elastichurch~<span class="token number">3</span> AND date<span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">2016</span><span class="token number">-01</span><span class="token number">-01</span> TO <span class="token number">2018</span><span class="token number">-12</span><span class="token number">-31</span><span class="token punctuation">]</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-        <p>
-          Use in Query DSL (not recommended for user search):
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_search
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"query_string"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"default_field"</span><span class="token operator">:</span> <span class="token string">"content"</span><span class="token punctuation">,</span>
-      <span class="token property">"query"</span><span class="token operator">:</span> <span class="token string">"elastic AND (title:lucene OR title:solr)"</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <p>Search with wildcard and special queries:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /_search?q=_exists_:title OR title:singl? noneOrAnyChar*cter</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
         <h3 class="ui header">Search After - Pagination cursor</h3>
-
-        <p>
-          Search with a custom sort:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET products/_search
-<span class="token punctuation">{</span>
-    <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
-    <span class="token property">"sort"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span><span class="token property">"date"</span><span class="token operator">:</span> <span class="token string">"asc"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token punctuation">{</span><span class="token property">"_id"</span><span class="token operator">:</span> <span class="token string">"desc"</span><span class="token punctuation">}</span>
-    <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-        <p>
-          On the next "page", pass the sort values from the last result:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET product/_search
-<span class="token punctuation">{</span>
-    <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span>
-    <span class="token property">"search_after"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token number">1463538857</span><span class="token punctuation">,</span> <span class="token string">"654323"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"sort"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-        <span class="token punctuation">{</span><span class="token property">"date"</span><span class="token operator">:</span> <span class="token string">"asc"</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token punctuation">{</span><span class="token property">"_id"</span><span class="token operator">:</span> <span class="token string">"desc"</span><span class="token punctuation">}</span>
-    <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <p>Search with a custom sort, then use the sort values from the result:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>GET products/_search
+{
+    "size": 10,
+    "search_after": [1463538857, "654323"],
+    "sort": [
+        {"date": "asc"},
+        {"_id": "desc"}
+    ]
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
 
+        <a name="indexes"></a>
+        <h2 class="ui dividing header">Indexes and mapping</h2>
+
+        <h3 class="ui header">Create an index with settings and mapping</h3>
+        
+        <div class="code-toolbar es1 es2"><pre class="language-json"><code>PUT /my_index_name
+{
+  "settings": {
+    "number_of_replicas": 1,
+    "number_of_shards": 3,
+    "analysis": {},
+    "refresh_interval": "1s"
+  },
+  "mappings": {
+    "my_type_name": {
+      "dynamic": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "analyzer": "english"
+        }
+      }
+    }
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <div class="code-toolbar es5 es6"><pre class="language-json"><code>PUT /my_index_name
+{
+  "settings": {
+    "number_of_replicas": 1,
+    "number_of_shards": 3,
+    "analysis": {},
+    "refresh_interval": "1s"
+  },
+  "mappings": {
+    "my_type_name": {
+      "dynamic": false,
+      "properties": {
+        "title": {
+          "type": "text",
+          "analyzer": "english"
+        }
+      }
+    }
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <div class="code-toolbar es7 es8"><pre class="language-json"><code>PUT /my_index_name
+{
+  "settings": {
+    "number_of_replicas": 1,
+    "number_of_shards": 3,
+    "analysis": {},
+    "refresh_interval": "1s"
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "title": {
+        "type": "text",
+        "analyzer": "english"
+      }
+    }
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <div class="es6 es7 ui segment">
+            <p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html">Types are deprecated</a>. You can only use one in Elasticsearch 6, and they are removed in 7+.</p>
+        </div>
+
+        <h3 class="ui header">Update index settings dynamically</h3>
+        <div class="code-toolbar"><pre class="language-json"><code>PUT /my_index_name/_settings
+{
+  "index": {
+    "refresh_interval": "-1",
+    "number_of_replicas": 0
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <h3 class="ui header">Get mapping and settings</h3>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /my_index_name
+GET /my_index_name/_mapping
+GET /my_index_name/_settings</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <h3 class="ui header">CRUD Operations</h3>
+        
+        <p><strong>Create Document (Auto ID):</strong></p>
+        <div class="code-toolbar es1 es2 es5 es6"><pre class="language-json"><code>POST /my_index_name/my_type_name
+{
+  "title": "Elastic is funny",
+  "tag": ["lucene"]
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <div class="code-toolbar es7 es8"><pre class="language-json"><code>POST /my_index_name/_doc
+{
+  "title": "Elastic is funny",
+  "tag": ["lucene"]
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <p><strong>Get Document:</strong></p>
+        <div class="code-toolbar es1 es2 es5 es6"><pre class="language-json"><code>GET /my_index_name/my_type_name/12abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <div class="code-toolbar es7 es8"><pre class="language-json"><code>GET /my_index_name/_doc/12abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+
+        <p><strong>Delete Document:</strong></p>
+        <div class="code-toolbar es1 es2 es5 es6"><pre class="language-json"><code>DELETE /my_index_name/my_type_name/12abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <div class="code-toolbar es7 es8"><pre class="language-json"><code>DELETE /my_index_name/_doc/12abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
 
-
-
-
-
-
-
-
-    <a name="indexes"></a>
-    <h2 class="ui dividing header">Indexes and mapping</h2>
-
-
-    <h3 class="ui header">Create an index with settings and mapping</h3>
-
-    <div class="code-toolbar"><pre class="es1 es2 language-json"><code class=" language-json">PUT /my_index_name
-<span class="token punctuation">{</span>
-  <span class="token property">"settings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"number_of_replicas"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-    <span class="token property">"number_of_shards"</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
-    <span class="token property">"analysis"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token property">"refresh_interval"</span><span class="token operator">:</span> <span class="token string">"1s"</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"mappings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"my_type_name"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"dynamic"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-      <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
-          <span class="token property">"analyzer"</span><span class="token operator">:</span> <span class="token string">"english"</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <div class="code-toolbar"><pre class="es5 es6 language-json"><code class=" language-json">PUT /my_index_name
-<span class="token punctuation">{</span>
-  <span class="token property">"settings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"number_of_replicas"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-    <span class="token property">"number_of_shards"</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
-    <span class="token property">"analysis"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token property">"refresh_interval"</span><span class="token operator">:</span> <span class="token string">"1s"</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"mappings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"my_type_name"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"dynamic"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-      <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"text"</span><span class="token punctuation">,</span>
-          <span class="token property">"analyzer"</span><span class="token operator">:</span> <span class="token string">"english"</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">PUT /my_index_name
-<span class="token punctuation">{</span>
-  <span class="token property">"settings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"number_of_replicas"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-    <span class="token property">"number_of_shards"</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span>
-    <span class="token property">"analysis"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token property">"refresh_interval"</span><span class="token operator">:</span> <span class="token string">"1s"</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"mappings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"dynamic"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-    <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"text"</span><span class="token punctuation">,</span>
-        <span class="token property">"analyzer"</span><span class="token operator">:</span> <span class="token string">"english"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-      <div class="es6 es7 ui secondary orange segment">
-        <p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/removal-of-types.html">Types are deprecated</a>, you can only use one in Elasticsearch 6.</p>
-      </div>
-
-    <h3 class="ui header">Update index settings dynamically</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /my_index_name/_settings
-<span class="token punctuation">{</span>
-  <span class="token property">"index"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"refresh_interval"</span><span class="token operator">:</span> <span class="token string">"-1"</span><span class="token punctuation">,</span>
-    <span class="token property">"number_of_replicas"</span><span class="token operator">:</span> <span class="token number">0</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-    <h3 class="ui header">Update an index by adding a field to a type</h3>
-
-    <div class="code-toolbar"><pre class="es1 es2 language-json"><code class=" language-json">PUT /my_index_name/_mapping/my_type_name
-<span class="token punctuation">{</span>
-  <span class="token property">"my_type_name"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"string"</span><span class="token punctuation">,</span>
-        <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"not_analyzed"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <div class="code-toolbar"><pre class="es5 es6 language-json"><code class=" language-json">PUT /my_index_name/_mapping/my_type_name
-<span class="token punctuation">{</span>
-  <span class="token property">"my_type_name"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"keyword"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">PUT /my_index_name/_mapping
-<span class="token punctuation">{</span>
-  <span class="token property">"properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"keyword"</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-    <h3 class="ui header">Get the mapping and the settings</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name/_mapping</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name/_settings</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-    <h3 class="ui header">Create a document (auto-generated ID)</h3>
-
-    <div class="code-toolbar"><pre class="es1 es2 es5 es6 language-json"><code class=" language-json">POST /my_index_name/my_type_name
-<span class="token punctuation">{</span>
-  <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Elastic is funny"</span><span class="token punctuation">,</span>
-  <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"lucene"</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">POST /my_index_name/_doc
-<span class="token punctuation">{</span>
-  <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Elastic is funny"</span><span class="token punctuation">,</span>
-  <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"lucene"</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Get a document</h3>
-
-    <div class="code-toolbar"><pre class="es1 es2 es5 es6 language-json"><code class=" language-json">GET /my_index_name/my_type_name/<span class="token number">12</span>abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">GET /my_index_name/_doc/<span class="token number">12</span>abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Create or update a document</h3>
-
-    <div class="code-toolbar"><pre class="es1 es2 es5 es6 language-json"><code class=" language-json">PUT /my_index_name/my_type_name/<span class="token number">12</span>abc
-<span class="token punctuation">{</span>
-  <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Elastic is funny"</span><span class="token punctuation">,</span>
-  <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"lucene"</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">PUT /my_index_name/_doc/<span class="token number">12</span>abc
-<span class="token punctuation">{</span>
-  <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Elastic is funny"</span><span class="token punctuation">,</span>
-  <span class="token property">"tag"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token string">"lucene"</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Delete a document</h3>
-
-    <div class="code-toolbar"><pre class="es1 es2 es5 es6 language-json"><code class=" language-json">DELETE /my_index_name/my_type_name/<span class="token number">12</span>abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">DELETE /my_index_name/_doc/<span class="token number">12</span>abc</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Open and close indexes to save memory and CPU</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /my_index_name/_close</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /my_index_name/_open</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Remove and create aliases</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /_aliases
-<span class="token punctuation">{</span>
-  <span class="token property">"actions"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">{</span>
-      <span class="token property">"remove"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"my_index_name"</span><span class="token punctuation">,</span>
-        <span class="token property">"alias"</span><span class="token operator">:</span> <span class="token string">"foo"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token punctuation">{</span>
-      <span class="token property">"add"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"my_index_name"</span><span class="token punctuation">,</span>
-        <span class="token property">"alias"</span><span class="token operator">:</span> <span class="token string">"bar"</span><span class="token punctuation">,</span>
-        <span class="token property">"filter"</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"term"</span> <span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"user"</span> <span class="token operator">:</span> <span class="token string">"damien"</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">List aliases</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_aliases</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name/_alias<span class="token comment">/*</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET <span class="token comment">/*/_alias/*</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET <span class="token comment">/*/_alias/foo</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-
-      <h3 class="ui header">Full custom analyzer declaration</h3>
-
-      <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /english_example
-<span class="token punctuation">{</span>
-  <span class="token property">"settings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"analysis"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"filter"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"english_stop"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"type"</span><span class="token operator">:</span>       <span class="token string">"stop"</span><span class="token punctuation">,</span>
-          <span class="token property">"stopwords"</span><span class="token operator">:</span>  <span class="token string">"_english_"</span>
-        <span class="token punctuation">}</span><span class="token punctuation">,</span>
-        <span class="token property">"english_stemmer"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"type"</span><span class="token operator">:</span>       <span class="token string">"stemmer"</span><span class="token punctuation">,</span>
-          <span class="token property">"language"</span><span class="token operator">:</span>   <span class="token string">"english"</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token property">"analyzer"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"my_english"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"char_filter"</span><span class="token operator">:</span>  <span class="token punctuation">[</span><span class="token string">"html_strip"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-          <span class="token property">"tokenizer"</span><span class="token operator">:</span>  <span class="token string">"standard"</span><span class="token punctuation">,</span>
-          <span class="token property">"filter"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-            <span class="token string">"lowercase"</span><span class="token punctuation">,</span>
-            <span class="token string">"english_stop"</span><span class="token punctuation">,</span>
-            <span class="token string">"english_stemmer"</span>
-          <span class="token punctuation">]</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header es1 es2">Create and list index warmer</h3>
-
-    <p class="es1 es2">
-      Create a query that will be played on every new document:
-    </p>
-    <div class="code-toolbar"><pre class="es1 es2 language-json"><code class=" language-json">PUT /my_index_name/_warmer/my_warmer
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match_all"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"aggs"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"costly_aggs"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"terms"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"title"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es1 es2 language-json"><code class=" language-json">GET /my_index_name/_warmer</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es1 es2 language-json"><code class=" language-json">GET /my_index_name/_warmer<span class="token comment">/*</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Indices monitoring and information</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name/_stats</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name/_segments</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /my_index_name/_recovery?pretty&amp;human</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es1 es2 language-json"><code class=" language-json">GET /my_index_name/_warmer<span class="token comment">/*</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Indices status and management</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /my_index_name/_cache/clear</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /my_index_name/_refresh</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /my_index_name/_flush</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es1 language-json"><code class=" language-json">POST /my_index_name/_optimize</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es2 es5 es6 es7 es8 language-json"><code class=" language-json">POST /my_index_name/_forcemerge</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-	<div class="es2 es5 es6 es7 es8">
-	    <h2 class="ui dividing header">Reindex API</h2>
-	    <h3 class="ui header">Simple Reindex Operation</h3>
-
-<div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /_reindex
-<span class="token punctuation">{</span>
-  <span class="token property">"source"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"test-index"</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"dest"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"test-index-new"</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Selective Reindex Operation</h3>
-
-<div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /_reindex
-<span class="token punctuation">{</span>
-  <span class="token property">"source"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"test-index"</span><span class="token punctuation">,</span>
-    <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"gender"</span><span class="token operator">:</span> <span class="token string">"female"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"dest"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"test-index-new"</span><span class="token punctuation">,</span>
-    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"female"</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-  </div>
-
+        <h3 class="ui header">Reindex API</h3>
+        <div class="es2 es5 es6 es7 es8">
+            <div class="code-toolbar"><pre class="language-json"><code>POST /_reindex
+{
+  "source": { "index": "test-index" },
+  "dest": { "index": "test-index-new" }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        </div>
+        <div class="es1">
+            <p>Reindex API is not available in 1.x. You must write a script.</p>
+        </div>
 
 
         <a name="debug"></a>
         <h2 class="ui dividing header">Debug and development</h2>
-        <h3 class="ui header">Queries</h3>
-        <p>Get a detailed view of what a query do:</p>
+        
+        <h3 class="ui header">Queries Explanation</h3>
+        <p>Get a detailed view of what a query does:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /blog/_validate/query?explain=true
+{
+  "query": {
+    "match": { "title": "Smith" }
+  }
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /blog/_validate/query?explain=<span class="token boolean">true</span>
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Smith"</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <h3 class="ui header">Analysis</h3>
+        <p>Test how content is tokenized:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /blog/_analyze
+{
+  "field": "title",
+  "text": "powerful"
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
-        <p>Get an explanation about a document matching or not:</p>
-
-        <div class="code-toolbar"><pre class="es1 es2 es5 es6 language-json"><code class=" language-json">GET /blog/post/<span class="token number">1</span>/_explain
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Smith"</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-        <div class="code-toolbar"><pre class="es7 es8 language-json"><code class=" language-json">GET /blog/_explain/<span class="token number">1</span>
-<span class="token punctuation">{</span>
-  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"match"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"title"</span><span class="token operator">:</span> <span class="token string">"Smith"</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-          <h3 class="ui header">Analysis</h3>
-
-          <p>Test how a content is tokenized in a field:</p>
-		  <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /blog/_analyze
-<span class="token punctuation">{</span>
-  <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"title"</span><span class="token punctuation">,</span>
-  <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"powerful"</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-          <p>Test analyzer token output by analyzer:</p>
-		  <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /blog/_analyze
-<span class="token punctuation">{</span>
-  <span class="token property">"analyzer"</span><span class="token operator">:</span> <span class="token string">"english"</span><span class="token punctuation">,</span>
-  <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"powerful"</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-          <h3 class="ui header">Slowlog</h3>
-
-          <p>Lower the slowlog threshold to see all the search queries in the logs:</p>
-		  <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /blog/_settings
-<span class="token punctuation">{</span>
-  <span class="token property">"index.search.slowlog.threshold.query.trace"</span><span class="token operator">:</span> <span class="token string">"0s"</span><span class="token punctuation">,</span>
-  <span class="token property">"index.search.slowlog.level"</span><span class="token operator">:</span> <span class="token string">"trace"</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-          <p>Go back to the default configuration:</p>
-		  <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /blog/_settings
-<span class="token punctuation">{</span>
-  <span class="token property">"index.search.slowlog.threshold.query.trace"</span><span class="token operator">:</span> <span class="token string">"500ms"</span><span class="token punctuation">,</span>
-  <span class="token property">"index.search.slowlog.level"</span><span class="token operator">:</span> <span class="token string">"info"</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        <h3 class="ui header">Slowlog</h3>
+        <p>Lower the slowlog threshold to trace queries:</p>
+        <div class="code-toolbar"><pre class="language-json"><code>PUT /blog/_settings
+{
+  "index.search.slowlog.threshold.query.trace": "0s",
+  "index.search.slowlog.level": "trace"
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
 
+        <a name="cluster"></a>
+        <h2 class="ui dividing header">Cluster management</h2>
 
+        <div class="es5 es6 es7 es8">
+            <h3 class="ui header">Running with Docker</h3>
+            <div class="code-toolbar es8"><pre class="language-bash"><code>docker network create elastic
+docker run --rm -it --name "es8" -e "discovery.type=single-node" --net elastic docker.elastic.co/elasticsearch/elasticsearch:8.1.2</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+            
+            <div class="code-toolbar es7"><pre class="language-bash"><code>docker run --rm -it --name "es7" -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.17.2</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        </div>
 
+        <h3 class="ui header">Cluster Health</h3>
+        <div class="code-toolbar"><pre class="language-json"><code>GET /_cluster/health?pretty
+GET /_cluster/state
+GET /_cluster/stats?human&pretty
+GET /_nodes/stats</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        
+        <div class="es1">
+            <h3 class="ui header">Shutdown</h3>
+            <div class="code-toolbar"><pre class="language-json"><code>GET /_shutdown 😱</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+        </div>
 
+        <h3 class="ui header">Snapshots</h3>
+        <div class="code-toolbar"><pre class="language-json"><code>PUT /_snapshot/my_backup
+{
+  "type": "fs",
+  "settings": { "location": "my_backup_location" }
+}
 
+PUT /_snapshot/my_backup/snapshot_a?wait_for_completion=true
+{
+  "indices": "index_1,index_2",
+  "ignore_unavailable": "true",
+  "include_global_state": false
+}</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <a name="cluster"></a>
-    <h2 class="ui dividing header">Cluster management and plugins</h2>
-
-    <div class="es5 es6 es7 es8">
-      <h3 class="ui header">Running with Docker</h3>
-        <p>Elasticsearch:</p>
-      <div class="code-toolbar"><pre class="es8 language-json"><code class=" language-json">docker network create elastic
-docker run --rm -it --name <span class="token string">"elastically_es"</span> -e <span class="token string">"discovery.type=single-node"</span> --net elastic docker.elastic.co/elasticsearch/elasticsearch<span class="token operator">:</span><span class="token number">8.1</span>.<span class="token number">2</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-      <p class="es8">Have a look at the output for password and enrollment token!</p>
-      <div class="code-toolbar"><pre class="es7 language-json"><code class=" language-json">docker run --rm -it --name <span class="token string">"elastically_es"</span> -p <span class="token number">9200</span><span class="token operator">:</span><span class="token number">9200</span> -e <span class="token string">"discovery.type=single-node"</span> docker.elastic.co/elasticsearch/elasticsearch<span class="token operator">:</span><span class="token number">7.17</span>.<span class="token number">2</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-      <div class="code-toolbar"><pre class="es6 language-json"><code class=" language-json">docker run -d --name <span class="token string">"elastically_es"</span> -p <span class="token number">9200</span><span class="token operator">:</span><span class="token number">9200</span> -e <span class="token string">"discovery.type=single-node"</span> docker.elastic.co/elasticsearch/elasticsearch<span class="token operator">:</span><span class="token number">6.8</span>.<span class="token number">6</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-      <div class="code-toolbar"><pre class="es5 language-json"><code class=" language-json">docker run -d --name <span class="token string">"elastically_es"</span> -p <span class="token number">9200</span><span class="token operator">:</span><span class="token number">9200</span> -e <span class="token string">"discovery.type=single-node"</span> docker.elastic.co/elasticsearch/elasticsearch<span class="token operator">:</span><span class="token number">5.6</span>.<span class="token number">16</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-        <p>Kibana:</p>
-      <div class="code-toolbar"><pre class="es8 language-json"><code class=" language-json">docker run --rm -it --name <span class="token string">"elastically_kibana"</span> --net elastic -p <span class="token number">5601</span><span class="token operator">:</span><span class="token number">5601</span> docker.elastic.co/kibana/kibana<span class="token operator">:</span><span class="token number">8.1</span>.<span class="token number">2</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-      <div class="code-toolbar"><pre class="es7 language-json"><code class=" language-json">docker run -e <span class="token string">"ELASTICSEARCH_HOSTS=http://127.0.0.1:9200/"</span> --network host docker.elastic.co/kibana/kibana<span class="token operator">:</span><span class="token number">7.17</span>.<span class="token number">2</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-      <div class="code-toolbar"><pre class="es6 language-json"><code class=" language-json">docker run -e <span class="token string">"ELASTICSEARCH_HOSTS=http://127.0.0.1:9200/"</span> --network host docker.elastic.co/kibana/kibana<span class="token operator">:</span><span class="token number">6.8</span>.<span class="token number">6</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-      <div class="code-toolbar"><pre class="es5 language-json"><code class=" language-json">docker run -e <span class="token string">"ELASTICSEARCH_HOSTS=http://127.0.0.1:9200/"</span> --network host docker.elastic.co/kibana/kibana<span class="token operator">:</span><span class="token number">5.6</span>.<span class="token number">16</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
     </div>
 
-    <h3 class="ui header">Cluster and node information</h3>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_cluster/health?pretty</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_cluster/health?wait_for_status=yellow&amp;timeout=<span class="token number">50</span>s</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_cluster/state</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_cluster/stats?human&amp;pretty</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_cluster/pending_tasks</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_nodes</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_nodes/stats</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_nodes/nodeId<span class="token number">1</span><span class="token punctuation">,</span>nodeId<span class="token number">2</span>/stats</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es1 language-json"><code class=" language-json">GET /_shutdown 😱</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-      <p>Get the full reference of <strong>all</strong> the settings:</p>
-      <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">GET /_cluster/settings?include_defaults=<span class="token boolean">true</span>&amp;flat_settings=<span class="token boolean">true</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Moving shards manually</h3>
-
-    <p>
-      Ask the index my_index_name shard 0 of node1 to go to node2:
-    </p>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /_cluster/reroute
-<span class="token punctuation">{</span>
-  <span class="token property">"commands"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">{</span>
-      <span class="token property">"move"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"my_index_name"</span><span class="token punctuation">,</span>
-        <span class="token property">"shard"</span><span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
-        <span class="token property">"from_node"</span><span class="token operator">:</span> <span class="token string">"node1"</span><span class="token punctuation">,</span>
-        <span class="token property">"to_node"</span><span class="token operator">:</span> <span class="token string">"node2"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token punctuation">{</span>
-      <span class="token property">"allocate"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"index"</span><span class="token operator">:</span> <span class="token string">"my_index_name"</span><span class="token punctuation">,</span>
-        <span class="token property">"shard"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
-        <span class="token property">"node"</span><span class="token operator">:</span> <span class="token string">"node3"</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Updating settings</h3>
-
-    <div class="es1 es2 es5 es6">
-        <p>
-          Change dynamically the minimum number of nodes to allow a master election, both persistent or not:
-        </p>
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /_cluster/settings
-<span class="token punctuation">{</span>
-  <span class="token property">"persistent"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"discovery.zen.minimum_master_nodes"</span><span class="token operator">:</span> <span class="token number">3</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-        <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /_cluster/settings
-<span class="token punctuation">{</span>
-  <span class="token property">"transient"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"discovery.zen.minimum_master_nodes"</span><span class="token operator">:</span> <span class="token number">2</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
+    <div class="footer">
+        <p>Original content from <a href="https://github.com/jolicode/elasticsearch-sheatsheet">JoliCode</a>. Redesigned with ❤️.</p>
     </div>
 
-    <p>
-      Disable shard allocation, useful before a rolling restart:
-    </p>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /_cluster/settings
-<span class="token punctuation">{</span>
-    <span class="token property">"transient"</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"cluster.routing.allocation.enable"</span> <span class="token operator">:</span> <span class="token string">"none"</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /_cluster/settings
-<span class="token punctuation">{</span>
-    <span class="token property">"transient"</span> <span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"cluster.routing.allocation.enable"</span> <span class="token operator">:</span> <span class="token string">"all"</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Snapshots and Restore</h3>
-
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /_snapshot/my_backup
-<span class="token punctuation">{</span>
-  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"fs"</span><span class="token punctuation">,</span>
-  <span class="token property">"settings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"location"</span><span class="token operator">:</span> <span class="token string">"my_backup_location"</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">PUT /_snapshot/my_backup/snapshot_a
-<span class="token punctuation">{</span>
-  <span class="token property">"indices"</span><span class="token operator">:</span> <span class="token string">"index_1,index_2"</span><span class="token punctuation">,</span>
-  <span class="token property">"ignore_unavailable"</span><span class="token operator">:</span> <span class="token string">"true"</span><span class="token punctuation">,</span>
-  <span class="token property">"include_global_state"</span><span class="token operator">:</span> <span class="token boolean">false</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class=" language-json"><code class=" language-json">POST /_snapshot/my_backup/snapshot_a/_restore
-<span class="token punctuation">{</span>
-  <span class="token property">"indices"</span><span class="token operator">:</span> <span class="token string">"index_1,index_2"</span><span class="token punctuation">,</span>
-  <span class="token property">"ignore_unavailable"</span><span class="token operator">:</span> <span class="token string">"true"</span><span class="token punctuation">,</span>
-  <span class="token property">"include_global_state"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-  <span class="token property">"rename_pattern"</span><span class="token operator">:</span> <span class="token string">"index_(.+)"</span><span class="token punctuation">,</span>
-  <span class="token property">"rename_replacement"</span><span class="token operator">:</span> <span class="token string">"restored_index_$1"</span>
-<span class="token punctuation">}</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-    <h3 class="ui header">Most useful plugins</h3>
-
-    <div class="es5 es6 es7 es8 ui secondary orange segment">
-      <p>Site plugins are no longer supported, look at Kibana applications or other standalone app like <a href="https://github.com/lmenezes/cerebro">Cerebro</a> for basic management.</p>
-    </div>
-
-    <div class="ui celled list">
-      <div class="item es1 es2">
-        <div class="content">
-          <div class="header">Kopf</div>
-          <div class="description"><p>Nice and easy user interface to manage Elasticsearch, with forms for a lots of API.</p></div>
-          <div class="extra">
-            <code class="es1 language-json">bin/plugin --install lmenezes/elasticsearch-kopf/<span class="token number">1.0</span></code>
-            <code class="es2 language-json">bin/plugin install lmenezes/elasticsearch-kopf/<span class="token number">2.0</span></code>
-          </div>
-        </div>
-      </div>
-      <div class="item es1">
-        <div class="content">
-          <div class="header">Marvel</div>
-          <div class="description"><p>Official monitoring solution.</p></div>
-          <div class="extra">
-            <code class=" language-json">bin/plugin --install elasticsearch/marvel/<span class="token number">1.3</span></code>
-          </div>
-        </div>
-      </div>
-      <div class="item es1 es2">
-        <div class="content">
-          <div class="header">Elasticsearch-HQ</div>
-          <div class="description"><p>Monitoring, Management, and statistics analysis.</p></div>
-          <div class="extra">
-            <code class="es1 language-json">bin/plugin --install royrusso/elasticsearch-HQ/v<span class="token number">1.0</span>.<span class="token number">0</span></code>
-            <code class="es2 language-json">bin/plugin install royrusso/elasticsearch-HQ</code>
-          </div>
-        </div>
-      </div>
-      <div class="item es1 es2">
-        <div class="content">
-          <div class="header">Mapper-Attachments</div>
-          <div class="description"><p>Index file attachments in over a thousand formats (such as PPT, XLS, PDF) using the Apache text extraction library Tika.</p></div>
-          <div class="extra">
-            <code class="es1 language-json">bin/plugin --install elasticsearch/elasticsearch-mapper-attachments/<span class="token number">2.7</span>.<span class="token number">1</span></code>
-            <code class="es2 language-json">bin/plugin install elasticsearch/elasticsearch-mapper-attachments</code>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="content">
-          <div class="header">Analysis ICU</div>
-          <div class="description"><p>Adding useful tokenizer and token filters from the Unicode ICU library.</p></div>
-          <div class="extra">
-            <code class="es1 language-json">bin/plugin --install elasticsearch/elasticsearch-analysis-icu/<span class="token number">2.7</span>.<span class="token number">0</span></code>
-            <code class="es2 language-json">bin/plugin install analysis-icu</code>
-            <code class="es5 es6 es7 es8 language-json">bin/elasticsearch-plugin install analysis-icu</code>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="content">
-          <div class="header">AWS Cloud</div>
-          <div class="description"><p>Allow discovery and storage in Amazon cloud (EC2 and S3).</p></div>
-          <div class="extra">
-            <code class="es1 language-json">bin/plugin --install elasticsearch/elasticsearch-cloud-aws/<span class="token number">2.7</span>.<span class="token number">1</span></code>
-            <code class="es2 language-json">bin/plugin install cloud-aws</code>
-            <code class="es5 es6 es7 es8 language-json">bin/elasticsearch-plugin install discovery-ec<span class="token number">2</span></code>
-            <code class="es5 es6 es7 es8 language-json">bin/elasticsearch-plugin install repository-s<span class="token number">3</span></code>
-          </div>
-        </div>
-      </div>
-      <div class="item">
-        <div class="content">
-          <div class="header">Azure Cloud</div>
-          <div class="description"><p>Allow discovery and storage in Microsoft Azure cloud.</p></div>
-          <div class="extra">
-            <code class="es1 language-json">bin/plugin --install elasticsearch/elasticsearch-cloud-azure/<span class="token number">2.8</span>.<span class="token number">3</span></code>
-            <code class="es2 language-json">bin/plugin install cloud-azure</code>
-            <code class="es5 es6 es7 es8 language-json">bin/elasticsearch-plugin install discovery-azure-classic</code>
-            <code class="es5 es6 es7 es8 language-json">bin/elasticsearch-plugin install repository-azure</code>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h3 class="ui header">Plugins management</h3>
-
-    <div class="code-toolbar"><pre class="es1 language-json"><code class=" language-json">bin/plugin --url file<span class="token operator">:</span><span class="token comment">///path/to/plugin --install plugin-name</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es1 language-json"><code class=" language-json">bin/plugin --remove <span class="token punctuation">[</span>pluginname<span class="token punctuation">]</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es2 language-json"><code class=" language-json">bin/plugin install file<span class="token operator">:</span><span class="token comment">///path/to/plugin</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es2 language-json"><code class=" language-json">bin/plugin list</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es2 language-json"><code class=" language-json">bin/plugin remove <span class="token punctuation">[</span>pluginname<span class="token punctuation">]</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es5 es6 es7 es8 language-json"><code class=" language-json">bin/elasticsearch-plugin install file<span class="token operator">:</span><span class="token comment">///path/to/plugin</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es5 es6 es7 es8 language-json"><code class=" language-json">bin/elasticsearch-plugin list</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    <div class="code-toolbar"><pre class="es5 es6 es7 es8 language-json"><code class=" language-json">bin/elasticsearch-plugin remove <span class="token punctuation">[</span>pluginname<span class="token punctuation">]</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-
-
-
-
-    <h2 class="ui dividing header">Other information</h2>
-
-        <h3 class="ui header">Where to find the plugin binary?</h3>
-
-        <p>RPM: <code class=" language-json">/usr/share/elasticsearch/bin</code></p>
-        <p>Debian: <code class=" language-json">/usr/share/elasticsearch/bin</code></p>
-
-        <h3 class="ui header">What are the default ports?</h3>
-
-        <p>Kibana: <a href="http://localhost:5601/">http://localhost:5601/</a>.</p>
-        <p>Elasticsearch: <a href="http://localhost:9200/">http://localhost:9200/</a>.</p>
-
-        <h3 class="ui header">How to set the correct HEAP SIZE value?</h3>
-
-        <p>The best value for a single purpose Elasticsearch server is <strong>about 50% of available RAM but under 32g</strong>.
-        <br>Assuming Ubuntu / Debian server, you can change those files:</p>
-
-        <h4>/etc/security/limits.conf</h4>
-
-        <div class="code-toolbar"><pre class=" language-none"><code class=" language-none">elasticsearch - nofile 65535
-elasticsearch - memlock unlimited</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-        <h4>/etc/default/elasticsearch (on CentOS/RH: /etc/sysconfig/elasticsearch)</h4>
-
-        <div class="code-toolbar"><pre class=" language-none"><code class=" language-none">ES_HEAP_SIZE=20g
-MAX_OPEN_FILES=65535
-MAX_LOCKED_MEMORY=unlimited</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-
-
-
-        <h3 class="ui header">Useful settings to change in elasticsearch.yml</h3>
-
-        <div class="code-toolbar"><pre class="es1  language-none"><code class=" language-none">cluster.name: jolicluster
-node.name: ${HOSTNAME}
-plugin.mandatory: marvel-agent,analysis-icu,license
-node.data: true
-node.master: true
-bootstrap.mlockall: true
-action.auto_create_index: +aaa*,-bbb*,+ccc*,-*</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-        <div class="code-toolbar"><pre class="es2  language-none"><code class=" language-none">cluster.name: jolicluster
-node.name: ${HOSTNAME}
-discovery.zen.ping.unicast.hosts: ["front01", "front02"]
-discovery.zen.minimum_master_nodes: 2
-network.host: _site_
-network.bind_host: [_site_, _local_]
-plugin.mandatory: analysis-icu, marvel-agent
-node.data: true
-node.master: true
-bootstrap.mlockall: true
-action.auto_create_index: +aaa*,-bbb*,+ccc*,-*</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-        <div class="code-toolbar"><pre class="es5 es6  language-none"><code class=" language-none">cluster.name: jolicluster
-node.name: ${HOSTNAME}
-discovery.zen.ping.unicast.hosts: ["front01", "front02"]
-discovery.zen.minimum_master_nodes: 2
-network.host: _site_
-network.bind_host: [_site_, _local_]
-plugin.mandatory: analysis-icu
-node.data: true
-node.master: true
-bootstrap.memory_lock: true
-action.auto_create_index: +aaa*,-bbb*,+ccc*,-*
-
-# Disable X-Pack features
-xpack.security.enabled: false
-xpack.monitoring.enabled: false
-xpack.ml.enabled: false
-xpack.watcher.enabled: false
-xpack.sql.enabled: false
-xpack.graph.enabled: false
-
-# Only for XPack plugin for ES &lt;= 6.2
-#xpack.reporting.enabled: false
-</code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-        <div class="code-toolbar"><pre class="es7 es8  language-yaml"><code class=" language-yaml"><span class="token key atrule">cluster.name</span><span class="token punctuation">:</span> jolicluster
-<span class="token key atrule">node.name</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span>HOSTNAME<span class="token punctuation">}</span> <span class="token comment"># by default</span>
-
-<span class="token key atrule">network.host</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>_local_<span class="token punctuation">,</span> _site_<span class="token punctuation">]</span>
-<span class="token key atrule">plugin.mandatory</span><span class="token punctuation">:</span> analysis<span class="token punctuation">-</span>icu
-<span class="token key atrule">node.data</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-<span class="token key atrule">node.master</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-<span class="token key atrule">node.ingest</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-<span class="token key atrule">bootstrap.memory_lock</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
-<span class="token key atrule">action.auto_create_index</span><span class="token punctuation">:</span> +aaa*<span class="token punctuation">,</span><span class="token punctuation">-</span>bbb*<span class="token punctuation">,</span>+ccc*<span class="token punctuation">,</span><span class="token punctuation">-</span>*
-
-<span class="token key atrule">discovery.seed_hosts</span><span class="token punctuation">:</span>
-  <span class="token punctuation">-</span> 192.168.1.10<span class="token punctuation">:</span><span class="token number">9300</span>
-  <span class="token punctuation">-</span> 192.168.1.11
-  <span class="token punctuation">-</span> seeds.mydomain.com
-
-<span class="token comment"># Needed for first cluster boot</span>
-<span class="token key atrule">cluster.initial_master_nodes</span><span class="token punctuation">:</span>
-  <span class="token punctuation">-</span> 10.0.10.101
-  <span class="token punctuation">-</span> 10.0.10.102<span class="token punctuation">:</span><span class="token number">9300</span>
-  <span class="token punctuation">-</span> 10.0.10.102<span class="token punctuation">:</span><span class="token number">9301</span>
-  <span class="token punctuation">-</span> master<span class="token punctuation">-</span>node<span class="token punctuation">-</span>name
-
-<span class="token comment"># Disable X-Pack features, choose wisely</span>
-<span class="token key atrule">xpack.ccr.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.data_frame.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.enrich.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.flattened.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.graph.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.ilm.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.logstash.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.ml.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.monitoring.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.rollup.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.security.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.slm.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.sql.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.transform.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.vectors.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span>
-<span class="token key atrule">xpack.watcher.enabled</span><span class="token punctuation">:</span> <span class="token boolean important">false</span></code></pre><div class="toolbar"><div class="toolbar-item"><button>Copy</button></div></div></div>
-    </div>
-
-    <div class="ui inverted vertical footer segment">
-      <div class="ui container">
-        <p>Hosted on <a href="http://pages.github.com">GitHub Pages</a>. Elasticsearch is a trademark of Elasticsearch BV, registered in the U.S. and in other countries.</p>
-        <p>This website is not endorsed of affiliated with Elasticsearch. Brought to you by <a href="https://jolicode.com/">JoliCode</a>.</p>
-      </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        document.addEventListener('DOMContentLoaded', () => {
+            const versionSelector = document.querySelector('.js-version-selector');
+            const links = versionSelector.querySelectorAll('.menu a');
+            const body = document.body;
+            
+            // --- 1. Version Switching Logic ---
+            function setVersion(versionClass) {
+                // Remove existing es classes
+                body.classList.remove('es1', 'es2', 'es5', 'es6', 'es7', 'es8');
+                // Add new class
+                body.classList.add(versionClass);
+                
+                // Update selector text
+                const versionNames = {
+                    'es1': 'Elasticsearch 1.X',
+                    'es2': 'Elasticsearch 2.X',
+                    'es5': 'Elasticsearch 5.X',
+                    'es6': 'Elasticsearch 6.X',
+                    'es7': 'Elasticsearch 7.X',
+                    'es8': 'Elasticsearch 8.X'
+                };
+                // Show text based on selection (complex span hiding handled by CSS)
+                // But we can persist the selection to storage
+                localStorage.setItem('es-cheatsheet-version', versionClass);
+            }
 
-      ga('create', 'UA-29696798-6', 'auto');
-      ga('send', 'pageview');
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const version = link.getAttribute('href').replace('#', '');
+                    setVersion(version);
+                    versionSelector.blur(); // Close dropdown
+                });
+            });
+
+            // Initialize from Storage or Default
+            const savedVersion = localStorage.getItem('es-cheatsheet-version');
+            if (savedVersion) {
+                setVersion(savedVersion);
+            } else {
+                setVersion('es8');
+            }
+
+            // --- 2. Copy to Clipboard Logic ---
+            document.querySelectorAll('.code-toolbar button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const pre = btn.closest('.code-toolbar').querySelector('pre');
+                    const code = pre.textContent;
+                    
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = btn.innerText;
+                        btn.innerText = 'Copied!';
+                        btn.style.background = '#48bb78';
+                        
+                        setTimeout(() => {
+                            btn.innerText = originalText;
+                            btn.style.background = '';
+                        }, 2000);
+                    });
+                });
+            });
+        });
     </script>
-
-    <script src="./javascripts/prism.js"></script>
-
-    <!-- From http://tholman.com/github-corners/ -->
-    <a href="https://github.com/jolicode/elasticsearch-sheatsheet" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-  
-
 </body>
+</html>
