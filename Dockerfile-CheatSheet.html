@@ -3,443 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docker Pro Cheat Sheet</title>
+    <title>Elastic Stack Architecture Explorer</title>
     <style>
+        /* --- RESET & VARIABLES --- */
         :root {
-            --primary: #0969da;
-            --primary-bg: #ddf4ff;
-            --bg: #0d1117;
-            --card-bg: #161b22;
-            --text-main: #c9d1d9;
-            --text-muted: #8b949e;
-            --border: #30363d;
-            --code-bg: #0d1117;
-            --good: #238636;
-            --bad: #da3633;
-            --warn: #d29922;
-            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            --es-blue: #005571;       /* Elasticsearch Blue */
+            --beats-teal: #00bfb3;    /* Beats Teal */
+            --logstash-yellow: #fec514; /* Logstash Yellow */
+            --kibana-pink: #e03e7e;   /* Kibana Pink */
+            --bg-page: #f0f2f5;
+            --bg-panel: #ffffff;
+            --text-main: #2d3748;
+            --border-light: #e2e8f0;
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: var(--font-main);
-            background-color: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            /* Subtle grid pattern for better visual background */
+            background-image: radial-gradient(#cbd5e0 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-
-
-
-
-
-
-
-
-
-
+            padding: 0;
+            padding-bottom: 50px;
         }
 
+        /* --- HEADER & NAV --- */
         header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-top: 20px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 30px;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: #ffffff;
-
-
-
-
-        }
-
-
-        .tag-pro {
-            background: var(--primary);
+            background-color: var(--es-blue);
             color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.5em;
-            vertical-align: middle;
-            margin-left: 10px;
-
-
-
-
-
+            padding: 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        p.subtitle {
-            font-size: 1.1rem;
-
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
+        .header-content {
+            padding: 1.5rem 1rem 1rem;
         }
 
-        /* Grid Layout */
-        .grid-container {
+        header h1 { margin: 0; font-size: 1.8rem; font-weight: 700; }
+        header p { margin: 5px 0 0; opacity: 0.9; font-size: 1rem; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 24px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .card:hover {
-            border-color: var(--text-muted);
-            transform: translateY(-2px);
-        }
-
-        .card h2 {
-            font-size: 1.25rem;
-            margin-top: 0;
-            margin-bottom: 15px;
+        /* Navigation Tabs */
+        .nav-tabs {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
-
-        }
-
-        .card.full-width {
-            grid-column: 1 / -1;
-            border-left: 4px solid var(--primary);
-        }
-
-        /* Code Blocks */
-        .code-wrapper {
-            position: relative;
+            justify-content: center;
+            background: rgba(0,0,0,0.1);
             margin-top: 15px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        pre {
-            background-color: var(--code-bg);
-            color: var(--text-main);
-            padding: 15px;
-            border-radius: 6px;
-            overflow-x: auto;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            margin: 0;
-            white-space: pre;
-        }
-
-        /* Syntax Highlighting */
-        .kwd { color: #ff7b72; font-weight: bold; } /* FROM, RUN */
-        .str { color: #a5d6ff; } /* Strings */
-        .arg { color: #79c0ff; } /* Args */
-        .comment { color: #8b949e; font-style: italic; }
-        .flag { color: #d2a8ff; }
-
-        /* Copy Button */
-        .copy-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--border);
-            color: #fff;
-            border-radius: 4px;
-            padding: 4px 10px;
-            font-size: 0.75rem;
+        .nav-tab {
+            padding: 12px 30px;
             cursor: pointer;
-            opacity: 0;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            border-bottom: 4px solid transparent;
             transition: all 0.2s;
         }
 
-
-
-
-
-        .code-wrapper:hover .copy-btn { opacity: 1; }
-        .copy-btn:hover { background: var(--primary); border-color: var(--primary); }
-
-        /* Status indicators */
-        .status-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-right: 8px;
-
-        }
-        .bad-badge { background: rgba(218, 54, 51, 0.15); color: #ff7b72; border: 1px solid rgba(218, 54, 51, 0.4); }
-        .good-badge { background: rgba(35, 134, 54, 0.15); color: #7ee787; border: 1px solid rgba(35, 134, 54, 0.4); }
-
-        ul { padding-left: 20px; color: var(--text-muted); }
-        li { margin-bottom: 8px; }
-        strong { color: #fff; }
+        .nav-tab:hover { color: white; background: rgba(0,0,0,0.05); }
         
-        /* Highlight specific crucial text */
-        .highlight-warn { color: #ffa657; font-weight: bold; }
-
-        @media (max-width: 600px) {
-            .grid-container { grid-template-columns: 1fr; }
-            h1 { font-size: 1.8rem; }
+        .nav-tab.active {
+            color: white;
+            border-bottom-color: var(--beats-teal);
+            background: rgba(0,0,0,0.1);
         }
+
+        /* --- LAYOUT CONTAINER --- */
+        .main-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Views (Simulator vs Background) */
+        .view-section {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .view-section.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- PANELS --- */
+        .panel {
+            background: var(--bg-panel);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background-color: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h2 { margin: 0; font-size: 1.2rem; color: #333; }
+        .panel-body { padding: 30px; }
+
+        /* --- BACKGROUND INFO CARDS (For View 2) --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            border-top: 5px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .info-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        .info-card h3 { margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .info-card p { line-height: 1.6; color: #4a5568; font-size: 0.95rem; }
+        
+        .card-beats { border-color: var(--beats-teal); }
+        .card-logstash { border-color: var(--logstash-yellow); }
+        .card-es { border-color: var(--es-blue); }
+        .card-kibana { border-color: var(--kibana-pink); }
+
+        .citation {
+            font-size: 0.75rem;
+            color: #718096;
+            margin-top: 10px;
+            display: block;
+            font-style: italic;
+        }
+
+        /* --- SIMULATOR STYLES --- */
+        /* 1. Pipeline */
+        .pipeline-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tech-box {
+            width: 140px;
+            height: 100px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .bg-beats { background: var(--beats-teal); }
+        .bg-logstash { background: var(--logstash-yellow); color: #333; }
+        .bg-es { background: var(--es-blue); }
+
+        .connector {
+            flex-grow: 1;
+            height: 3px;
+            background: #cbd5e0;
+            margin: 0 15px;
+            position: relative;
+        }
+        .connector::after {
+            content: '';
+            position: absolute;
+            right: -5px; top: -5px;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 10px solid #cbd5e0;
+        }
+
+        .data-dot {
+            width: 18px; height: 18px;
+            background-color: #2d3748;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%; left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-light);
+        }
+
+        button.action-btn {
+            background-color: var(--es-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        button.action-btn:hover { background-color: #003d52; }
+        button.action-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+
+        /* 2. Cluster */
+        .cluster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .node-card {
+            background-color: #f8fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 140px;
+        }
+        .node-title {
+            font-size: 0.9rem; font-weight: 700; color: #4a5568; margin-bottom: 10px;
+            display: flex; justify-content: space-between;
+        }
+        .node-badge {
+            background: #edf2f7; border: 1px solid #cbd5e0;
+            padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase;
+        }
+        .shard-wrapper { display: flex; flex-wrap: wrap; gap: 8px; }
+        .shard {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: bold; border-radius: 4px;
+            cursor: default; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .shard.primary { background-color: var(--es-blue); color: white; border: 1px solid var(--es-blue); }
+        .shard.replica { background-color: white; color: var(--es-blue); border: 2px solid var(--es-blue); }
+
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+        /* 3. Kibana */
+        .kibana-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 250px;
+            background: white;
+        }
+        .kibana-sidebar {
+            background-color: #f1f4f8;
+            padding: 15px;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+        .kibana-sidebar h4 { margin-top: 0; font-size: 0.85rem; text-transform: uppercase; color: #718096; }
+        .log-entry { font-size: 0.8rem; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid #e2e8f0; color: #4a5568; }
+        .kibana-main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+        }
+        .chart-grid {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 100%;
+            border-left: 2px solid #e2e8f0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            padding-left: 5px;
+        }
+        .chart-bar {
+            width: 100%;
+            background-color: var(--kibana-pink);
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            transition: height 0.4s ease;
+            min-height: 2px;
+        }
+        .chart-label {
+            position: absolute; top: 10px; right: 20px;
+            font-size: 2rem; font-weight: bold; color: var(--kibana-pink);
+        }
+        .chart-sublabel {
+            position: absolute; top: 45px; right: 20px;
+            font-size: 0.8rem; color: #718096;
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🧾 Dockerfile Cheat Sheet <span class="tag-pro">PRO EDITION</span></h1>
-        <p class="subtitle">Production-grade best practices, security hardening, and optimization techniques.</p>
+<header>
+    <div class="header-content">
+        <h1>Elastic Stack Architecture Explorer</h1>
+        <p>Interactive Data Pipeline Simulation & Core Concepts</p>
+    </div>
+    <div class="nav-tabs">
+        <div class="nav-tab active" onclick="switchView('simulator', this)">Simulator</div>
+        <div class="nav-tab" onclick="switchView('background', this)">Theory & Background</div>
+    </div>
+</header>
 
+<div class="main-container">
 
-
-
-
-
-
-
-
-
-    </header>
-
-    <div class="grid-container">
-
-        <div class="card full-width">
-            <h2>🏆 1. The Production Template</h2>
-            <p style="color: var(--text-muted); margin-bottom: 10px;">
-                Secure, small, and fast. Includes non-root user and explicit versioning.
-            </p>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code><span class="comment"># 1. Pin specific version (Avoid 'latest')</span>
-<span class="kwd">FROM</span> python:3.10.4-slim-bullseye
-
-<span class="comment"># 2. Set envs to prevent python buffering</span>
-<span class="kwd">ENV</span> PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
-
-<span class="kwd">WORKDIR</span> /app
-
-<span class="comment"># 3. Create non-root user for security</span>
-<span class="kwd">RUN</span> useradd -m appuser
-
-<span class="comment"># 4. Install Dependencies</span>
-<span class="kwd">COPY</span> requirements.txt .
-<span class="kwd">RUN</span> pip install --no-cache-dir -r requirements.txt
-
-<span class="comment"># 5. Copy code & switch user</span>
-<span class="kwd">COPY</span> . .
-<span class="kwd">USER</span> appuser
-
-
-<span class="comment"># 6. Use Exec form (JSON array)</span>
-<span class="kwd">CMD</span> [<span class="str">"python"</span>, <span class="str">"main.py"</span>]</code></pre>
-
-
-
-
-
-
-
-
-
-
-
+    <div id="view-simulator" class="view-section active">
+        
+        <section class="panel">
+            <div class="panel-header">
+                <h2><span style="color:var(--beats-teal)">1.</span> Ingestion Pipeline</h2>
             </div>
-        </div>
-
-        <div class="card">
-            <h2>🧹 2. The "Apt-Get" Cleanup</h2>
-            <p class="subtitle">Reduce image size by ~30MB+</p>
-            <ul>
-                <li>Combine update, install, and clean in <strong style="color:var(--primary-bg)">ONE layer</strong>.</li>
-                <li>If you split them, the cache remains in the history.</li>
-            </ul>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code><span class="kwd">RUN</span> apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    <span class="comment"># Clean up in the same layer!</span>
-    && rm -rf /var/lib/apt/lists/*</code></pre>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>🛑 3. Signal Handling (PID 1)</h2>
-            <p class="subtitle">Ensure `Ctrl+C` or Kubernetes kills work.</p>
-            
-            <div style="margin-bottom: 15px;">
-                <span class="status-badge bad-badge">BAD (Shell Form)</span>
-                <div class="code-wrapper" style="margin-top:5px; opacity: 0.7;">
-<pre><code><span class="kwd">CMD</span> python main.py</code></pre>
+            <div class="panel-body">
+                <div class="pipeline-wrapper">
+                    <div class="tech-box bg-beats" id="box-beats">Beats<span>Collection</span></div>
+                    <div class="connector"></div>
+                    <div class="tech-box bg-logstash" id="box-logstash">Logstash<span>Transform</span></div>
+                    <div class="connector"></div>
+                    <div class="tech-box bg-es" id="box-es">Elasticsearch<span>Store</span></div>
+                    <div class="data-dot" id="data-dot"></div>
                 </div>
-                <small style="color:var(--text-muted)">Starts as <code>/bin/sh -c</code>. Signals get swallowed.</small>
-            </div>
-
-
-            <div>
-                <span class="status-badge good-badge">GOOD (Exec Form)</span>
-                <div class="code-wrapper" style="margin-top:5px;">
-<pre><code><span class="kwd">CMD</span> [<span class="str">"python"</span>, <span class="str">"main.py"</span>]</code></pre>
+                <div class="controls">
+                    <button class="action-btn" id="generate-btn" onclick="runSimulation()">Generate & Ingest Log</button>
+                    <div style="margin-top:10px; font-size:0.9rem; color:#718096;">Click to simulate a log file moving from source to storage.</div>
                 </div>
-                <small style="color:var(--text-muted)">Runs directly. Signals pass through.</small>
             </div>
-        </div>
+        </section>
 
-        <div class="card">
-            <h2>📚 4. Intelligent Caching</h2>
-            
-            <p class="subtitle">Docker caches lines from top to bottom.</p>
-            <ul>
-                <li>❌ <strong>Copy All First:</strong> Any code change invalidates dependency install.</li>
-                <li>✅ <strong>Copy Reqs First:</strong> Dependencies are cached unless <code>requirements.txt</code> changes.</li>
-            </ul>
-            <div class="code-wrapper">
-<pre><code><span class="kwd">COPY</span> requirements.txt .
-<span class="kwd">RUN</span> pip install ... <span class="comment"># Cached!</span>
-<span class="kwd">COPY</span> . .            <span class="comment"># Changes often</span></code></pre>
+        <section class="panel">
+            <div class="panel-header">
+                <h2><span style="color:var(--es-blue)">2.</span> Elasticsearch Cluster (Sharding)</h2>
+                <div style="font-size:0.8rem; color:#718096;">
+                    <span style="display:inline-block; width:10px; height:10px; background:var(--es-blue);"></span> Primary
+                    <span style="display:inline-block; width:10px; height:10px; border:2px solid var(--es-blue); margin-left:10px;"></span> Replica
+                </div>
             </div>
-        </div>
-
-        <div class="card">
-            <h2>🔐 5. Secrets Management</h2>
-            <p><span class="highlight-warn">NEVER</span> use <code>ENV</code> for passwords/keys. They persist in <code>docker history</code>.</p>
-            
-            <div style="margin-top: 15px;">
-                <strong style="color: #fff">The Fix (BuildKit):</strong>
+            <div class="panel-body">
+                <div class="cluster-grid">
+                    <div class="node-card">
+                        <div class="node-title">Node 1 <span class="node-badge">Master</span></div>
+                        <div class="shard-wrapper" id="node-1-shards"></div>
+                    </div>
+                    <div class="node-card">
+                        <div class="node-title">Node 2 <span class="node-badge">Data</span></div>
+                        <div class="shard-wrapper" id="node-2-shards"></div>
+                    </div>
+                    <div class="node-card">
+                        <div class="node-title">Node 3 <span class="node-badge">Data</span></div>
+                        <div class="shard-wrapper" id="node-3-shards"></div>
+                    </div>
+                </div>
             </div>
-            <div class="code-wrapper">
-<pre><code><span class="comment"># Mount secret only for this command</span>
-<span class="kwd">RUN</span> --mount=type=secret,id=mykey \
-    cat /run/secrets/mykey | scripts/install.sh</code></pre>
+        </section>
 
-
+        <section class="panel" style="border-top: 4px solid var(--kibana-pink);">
+            <div class="panel-header">
+                <h2><span style="color:var(--kibana-pink)">3.</span> Kibana Analytics</h2>
             </div>
-        </div>
-
-        <div class="card">
-            <h2>🏗️ 6. The "Shrinker" (Multi-Stage)</h2>
-            <p class="subtitle">Build with tools (gcc, go), ship only the binary.</p>
-            <div class="code-wrapper">
-<pre><code><span class="kwd">FROM</span> golang:1.18 as builder
-<span class="kwd">RUN</span> go build -o app main.go
-
-<span class="comment"># Final image is tiny</span>
-<span class="kwd">FROM</span> alpine:3.14
-<span class="kwd">COPY</span> --from=builder /app /app
-<span class="kwd">CMD</span> [<span class="str">"/app"</span>]</code></pre>
+            <div class="panel-body">
+                <div class="kibana-container">
+                    <div class="kibana-sidebar">
+                        <h4>Incoming Logs</h4>
+                        <div id="log-feed">
+                            <div style="color:#a0aec0; font-style:italic; font-size:0.8rem; margin-top:10px;">Waiting for data...</div>
+                        </div>
+                    </div>
+                    <div class="kibana-main">
+                        <div class="chart-label" id="doc-counter">0</div>
+                        <div class="chart-sublabel">Total Documents Indexed</div>
+                        <div class="chart-grid" id="chart-grid"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="card">
-            <h2>❤️ 7. Add Healthchecks</h2>
-            <p class="subtitle">Let Docker restart your app if it freezes.</p>
-            <div class="code-wrapper">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre><code><span class="kwd">HEALTHCHECK</span> --interval=30s --timeout=3s \
-  <span class="kwd">CMD</span> curl -f http://localhost:8000/ || exit 1</code></pre>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>🏷️ 8. Version Pinning</h2>
-            <ul>
-                <li><span class="status-badge bad-badge">node:latest</span> <br><small>Unpredictable. Might break tomorrow.</small></li>
-                <li><span class="status-badge good-badge">node:20.1-alpine</span> <br><small>Stable. Predictable size and behavior.</small></li>
-            </ul>
-
-
-
-        </div>
-
+        </section>
     </div>
 
-    <script>
-        function copyCode(button) {
-            const pre = button.nextElementSibling;
-            const code = pre.innerText;
+    <div id="view-background" class="view-section">
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Core Components</h2>
+            </div>
+            <div class="panel-body">
+                <div class="info-grid">
+                    
+                    <div class="info-card card-beats">
+                        <h3 style="color:var(--beats-teal)">Beats</h3>
+                        <p>Beats are lightweight data shippers that you install on your servers to capture all sorts of operational data (think of them as "Agents").</p>
+                        <p>They are individual packages written in Go, focused on single types of data (e.g., Filebeat for logs, Metricbeat for metrics).</p>
+                        [cite_start]<span class="citation">Source: [cite: 98]</span>
+                    </div>
+
+                    <div class="info-card card-logstash">
+                        <h3 style="color:#d4a000">Logstash</h3>
+                        <p>Logstash is a server-side data processing pipeline that ingests data from a multitude of sources, transforms it, and then sends it to your "stash" (Elasticsearch).</p>
+                        <p>It can derive structure from unstructured data using <strong>grok</strong> filters, anonymize sensitive fields, and aggregate data.</p>
+                        [cite_start]<span class="citation">Source: [cite: 85, 87]</span>
+                    </div>
+
+                    <div class="info-card card-es">
+                        <h3 style="color:var(--es-blue)">Elasticsearch</h3>
+                        <p>The heart of the stack. It is a distributed, RESTful search and analytics engine. It stores data as JSON documents and uses an inverted index to allow for near real-time search.</p>
+                        <p>Data is split into <strong>shards</strong> (horizontal partitions) which are distributed across nodes for scalability and high availability.</p>
+                        [cite_start]<span class="citation">Source: [cite: 59, 61, 474]</span>
+                    </div>
+
+                    <div class="info-card card-kibana">
+                        <h3 style="color:var(--kibana-pink)">Kibana</h3>
+                        <p>Kibana is the visualization layer. It works on top of Elasticsearch to let users visualize data through charts, graphs, maps, and dashboards.</p>
+                        <p>It is the window into the Elastic Stack, allowing you to search, view, and interact with your data stored in Elasticsearch indices.</p>
+                        [cite_start]<span class="citation">Source: [cite: 74, 76]</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Architecture Concepts</h2>
+            </div>
+            <div class="panel-body">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><span style="font-size:1.5rem; margin-right:5px;">🧩</span> Sharding & Replication</h3>
+                        <p>An index can be massive, so Elasticsearch splits it into <strong>Shards</strong>. [cite_start]A shard is a self-contained Lucene index[cite: 532].</p>
+                        <p>To ensure safety, each Primary shard has <strong>Replica</strong> shards. [cite_start]If a node fails, a replica is promoted to primary[cite: 552].</p>
+                    </div>
+                    <div class="info-card">
+                        <h3><span style="font-size:1.5rem; margin-right:5px;">⚡</span> The Pipeline</h3>
+                        <p>The flow of data is often: <br><strong>Collection</strong> (Beats) &rarr; <br><strong>Processing</strong> (Logstash) &rarr; <br><strong>Storage</strong> (Elasticsearch) &rarr; <br><strong>Analysis</strong> (Kibana).</p>
+                        [cite_start]<p>This entire suite is formerly known as the "ELK Stack"[cite: 67].</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</div>
+
+<script>
+    /* --- VIEW SWITCHER --- */
+    function switchView(viewName, tabElement) {
+        // Update Tabs
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        tabElement.classList.add('active');
+
+        // Update Views
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        document.getElementById('view-' + viewName).classList.add('active');
+    }
+
+    /* --- SIMULATION LOGIC --- */
+    let isRunning = false;
+    let globalDocCount = 0;
+    const nodes = ['node-1-shards', 'node-2-shards', 'node-3-shards'];
+
+    function runSimulation() {
+        if(isRunning) return;
+        isRunning = true;
+        
+        const btn = document.getElementById('generate-btn');
+        btn.disabled = true;
+        btn.innerText = "Processing...";
+
+        // 1. ANIMATION COORDINATES
+        const beats = document.getElementById('box-beats').getBoundingClientRect();
+        const logstash = document.getElementById('box-logstash').getBoundingClientRect();
+        const es = document.getElementById('box-es').getBoundingClientRect();
+        const wrapper = document.querySelector('.pipeline-wrapper').getBoundingClientRect();
+        const dot = document.getElementById('data-dot');
+
+        const startX = beats.left - wrapper.left + (beats.width / 2);
+        const midX = logstash.left - wrapper.left + (logstash.width / 2);
+        const endX = es.left - wrapper.left + (es.width / 2);
+        const fixedY = beats.top - wrapper.top + (beats.height / 2);
+
+        // Reset Dot
+        dot.style.display = 'block';
+        dot.style.left = startX + 'px';
+        dot.style.top = fixedY + 'px';
+
+        // Animate Beats -> Logstash
+        dot.animate([
+            { left: startX + 'px' },
+            { left: midX + 'px' }
+        ], { duration: 800, fill: 'forwards', easing: 'ease-in-out' }).onfinish = () => {
             
-            navigator.clipboard.writeText(code).then(() => {
-                const originalText = button.innerText;
-                button.innerText = "✓";
-                button.style.background = "#238636";
-                button.style.borderColor = "#238636";
-                
-                setTimeout(() => {
-                    button.innerText = originalText;
-                    button.style.background = "";
-                    button.style.borderColor = "";
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
+            // Logstash Processing Pause
+            setTimeout(() => {
+                // Animate Logstash -> ES
+                dot.animate([
+                    { left: midX + 'px' },
+                    { left: endX + 'px' }
+                ], { duration: 800, fill: 'forwards', easing: 'ease-in-out' }).onfinish = () => {
+                    
+                    dot.style.display = 'none';
+                    updateClusterAndKibana();
+                    
+                    btn.disabled = false;
+                    btn.innerText = "Generate & Ingest Log";
+                    isRunning = false;
+
+                };
+            }, 400); 
+        };
+    }
+
+    function updateClusterAndKibana() {
+        globalDocCount++;
+        
+        // 1. Add Shards to Cluster (Random Primary, Next is Replica)
+        const primaryIdx = Math.floor(Math.random() * nodes.length);
+        const replicaIdx = (primaryIdx + 1) % nodes.length;
+
+        createShard(nodes[primaryIdx], 'P', 'primary');
+        setTimeout(() => {
+            createShard(nodes[replicaIdx], 'R', 'replica');
+        }, 200);
+
+        // 2. Update Kibana
+        updateKibanaUI();
+    }
+
+    function createShard(containerId, label, type) {
+        const container = document.getElementById(containerId);
+        const div = document.createElement('div');
+        div.className = `shard ${type}`;
+        div.innerText = label + globalDocCount;
+        div.title = `Index ID: ${globalDocCount}`;
+        container.appendChild(div);
+    }
+
+    function updateKibanaUI() {
+        // Counter
+        document.getElementById('doc-counter').innerText = globalDocCount;
+
+        // Log Feed
+        const feed = document.getElementById('log-feed');
+        if (feed.firstElementChild && feed.firstElementChild.style.fontStyle === 'italic') {
+            feed.innerHTML = '';
         }
-    </script>
+        
+        const timestamp = new Date().toLocaleTimeString();
+        const logLine = document.createElement('div');
+        logLine.className = 'log-entry';
+        logLine.innerHTML = `<span style="color:var(--beats-teal); font-weight:bold;">INFO</span> ${timestamp} - /var/log/syslog processed.`;
+        feed.prepend(logLine);
+        if (feed.children.length > 6) feed.lastElementChild.remove();
+
+        // Chart
+        const chart = document.getElementById('chart-grid');
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        const h = Math.floor(Math.random() * 60) + 20;
+        bar.style.height = '0%';
+        chart.appendChild(bar);
+        setTimeout(() => { bar.style.height = h + '%'; }, 50);
+        if (chart.children.length > 15) chart.firstElementChild.remove();
+    }
+</script>
+
 </body>
 </html>
