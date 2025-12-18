@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Linux Crash Course</title>
+    <style>
+        /* --- CSS STYLING --- */
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --accent-green: #10b981;
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        nav {
+            width: 250px;
+            background-color: white;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .nav-header {
+            padding: 20px;
+            background: var(--code-bg);
+            color: white;
+            text-align: center;
+        }
+
+        .nav-header h1 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-list {
+            list-style: none;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .nav-btn {
+            width: 100%;
+            text-align: left;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .nav-btn.active {
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        section {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #0f172a;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* --- CODE BLOCKS --- */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-green);
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .command {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        /* --- INTERACTIVE EXERCISE --- */
+        .exercise-box {
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .exercise-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .toggle-solution {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .toggle-solution:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .solution {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 4px;
+            display: none;
+            color: #166534;
+        }
+
+        /* --- NAVIGATION BUTTONS --- */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-control {
+            background: white;
+            border: 1px solid #cbd5e1;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+
+        .nav-control:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-control:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow: auto;
+            }
+            nav {
+                width: 100%;
+                height: auto;
+            }
+            .nav-list {
+                display: none; /* Hide nav list on mobile initially */
+            }
+            main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-header">
+        <h1>🐧 Linux Crash Course</h1>
+        <small>Beginner to Intermediate</small>
+    </div>
+    <ul class="nav-list" id="navList">
+        </ul>
+</nav>
+
+<main id="contentArea">
+    <section id="topic0" class="active">
+        <h2>1. Linux Overview & Philosophy</h2>
+        <p>Linux is an open-source operating system modeled on UNIX. It powers everything from supercomputers and web servers to Android phones and smart appliances.</p>
+        
+        <h3>The Philosophy</h3>
+        <ul>
+            <li><strong>Everything is a file:</strong> Hardware, processes, and data are all represented as files.</li>
+            <li><strong>Small, single-purpose tools:</strong> Programs should do one thing and do it well.</li>
+            <li><strong>Chaining:</strong> Programs are designed to work together via text streams.</li>
+        </ul>
+
+        <h3>The Kernel vs. Shell</h3>
+        <p>The <strong>Kernel</strong> is the core that talks to hardware. The <strong>Shell</strong> is the command-line interface (CLI) you use to talk to the kernel.</p>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Hello World</div>
+            <p>Open your terminal (or imagine one). Type a command to print "Hello Linux" to the screen.</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol0')">Show Solution</button>
+            <div id="sol0" class="solution">
+                <code>echo "Hello Linux"</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic1">
+        <h2>2. File System Structure</h2>
+        <p>The Linux file system is a single hierarchical tree, starting at the root directory <code>/</code>.</p>
+        
+        <h3>Key Directories</h3>
+        <pre>
+/       <span class="comment"># Root directory (start of everything)</span>
+/home   <span class="comment"># User personal files (e.g., /home/alice)</span>
+/bin    <span class="comment"># Essential user binaries (commands like ls, cp)</span>
+/etc    <span class="comment"># System configuration files</span>
+/var    <span class="comment"># Variable files (logs, spools)</span>
+/root   <span class="comment"># Home directory for the Superuser (root)</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Path Navigation</div>
+            <p>What is the absolute path to a file named "report.txt" inside user "bob"'s documents folder?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol1')">Show Solution</button>
+            <div id="sol1" class="solution">
+                <code>/home/bob/Documents/report.txt</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic2">
+        <h2>3. Basic Commands</h2>
+        <p>Mastering navigation and file manipulation is the first step.</p>
+
+        <h3>Navigation</h3>
+        <pre>
+<span class="command">pwd</span>             <span class="comment"># Print Working Directory (where am I?)</span>
+<span class="command">ls</span> -la          <span class="comment"># List files (long format, show hidden)</span>
+<span class="command">cd</span> /var/log     <span class="comment"># Change Directory</span>
+<span class="command">cd</span> ..           <span class="comment"># Go up one level</span>
+<span class="command">cd</span> ~            <span class="comment"># Go to your home directory</span>
+        </pre>
+
+        <h3>File Operations</h3>
+        <pre>
+<span class="command">touch</span> file.txt      <span class="comment"># Create an empty file</span>
+<span class="command">mkdir</span> myfolder      <span class="comment"># Make a directory</span>
+<span class="command">cp</span> file.txt copy.txt<span class="comment"># Copy a file</span>
+<span class="command">mv</span> file.txt new.txt <span class="comment"># Move (or rename) a file</span>
+<span class="command">rm</span> file.txt         <span class="comment"># Remove (delete) a file</span>
+<span class="command">cat</span> file.txt        <span class="comment"># Display file content</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Cleanup</div>
+            <p>How would you delete a folder named "temp_data" and everything inside it?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol2')">Show Solution</button>
+            <div id="sol2" class="solution">
+                <code>rm -r temp_data</code> (The -r flag stands for recursive)
+            </div>
+        </div>
+    </section>
+
+    <section id="topic3">
+        <h2>4. Advanced Commands</h2>
+        <p>The real power of Linux comes from filtering text and chaining commands.</p>
+
+        <h3>Grep and Find</h3>
+        <pre>
+<span class="command">grep</span> "error" log.txt    <span class="comment"># Find lines containing "error" in log.txt</span>
+<span class="command">find</span> . -name "*.jpg"    <span class="comment"># Find all .jpg files in current folder</span>
+        </pre>
+
+        <h3>Pipes (|) and Redirection (>)</h3>
+        <p><strong>Pipes</strong> take the output of one command and make it the input of another.</p>
+        <pre>
+<span class="command">ls</span> | <span class="command">grep</span> "data"        <span class="comment"># List files, but only show ones with "data" in name</span>
+<span class="command">cat</span> list.txt | <span class="command">sort</span>     <span class="comment"># Read file and sort the lines alphabetically</span>
+        </pre>
+
+        <p><strong>Redirection</strong> saves output to a file.</p>
+        <pre>
+<span class="command">echo</span> "Log entry" > log.txt  <span class="comment"># Overwrite file with text</span>
+<span class="command">echo</span> "Next entry" >> log.txt <span class="comment"># Append text to end of file</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Counting</div>
+            <p>How would you count how many files in the current directory contain the word "conf"?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol3')">Show Solution</button>
+            <div id="sol3" class="solution">
+                <code>ls | grep "conf" | wc -l</code> (ls lists files, grep filters them, wc -l counts lines)
+            </div>
+        </div>
+    </section>
+
+    <section id="topic4">
+        <h2>5. Permissions & Ownership</h2>
+        <p>Linux is multi-user. Every file has an Owner, a Group, and permissions for Everyone else.</p>
+
+        <h3>Understanding rwx</h3>
+        <p>Permissions appear as <code>drwxr-xr--</code>.</p>
+        <ul>
+            <li><strong>r</strong>: Read</li>
+            <li><strong>w</strong>: Write</li>
+            <li><strong>x</strong>: Execute (run as program or enter directory)</li>
+        </ul>
+
+        <h3>Changing Permissions</h3>
+        <pre>
+<span class="command">chmod</span> 755 script.sh     <span class="comment"># Owner:rwx, Group:rx, Others:rx</span>
+<span class="command">chmod</span> +x script.sh      <span class="comment"># Make file executable for everyone</span>
+<span class="command">chown</span> user:group file   <span class="comment"># Change ownership</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Privacy</div>
+            <p>How do you make a file "secret.txt" readable and writable ONLY by the owner, with no access for anyone else?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol4')">Show Solution</button>
+            <div id="sol4" class="solution">
+                <code>chmod 600 secret.txt</code> (6=rw-, 0=---, 0=---)
+            </div>
+        </div>
+    </section>
+
+    <section id="topic5">
+        <h2>6. Processes & Monitoring</h2>
+        <p>Every running program is a process with a Process ID (PID).</p>
+
+        <h3>Monitoring</h3>
+        <pre>
+<span class="command">top</span>       <span class="comment"># Real-time view of processes (CPU/RAM usage)</span>
+<span class="command">ps</span> aux    <span class="comment"># Snapshot of all running processes</span>
+<span class="command">df</span> -h     <span class="comment"># Disk usage (human readable)</span>
+<span class="command">free</span> -m   <span class="comment"># Memory usage</span>
+        </pre>
+
+        <h3>Managing</h3>
+        <pre>
+<span class="command">kill</span> 1234       <span class="comment"># Ask process ID 1234 to stop</span>
+<span class="command">kill</span> -9 1234    <span class="comment"># Force kill process ID 1234</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: The Zombie</div>
+            <p>You have a stuck program named "firefox". You don't know the PID. How can you kill it by name?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol5')">Show Solution</button>
+            <div id="sol5" class="solution">
+                <code>pkill firefox</code> or <code>killall firefox</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic6">
+        <h2>7. Networking Basics</h2>
+        <p>Linux is the backbone of the internet. Here are tools to check connectivity.</p>
+
+        <pre>
+<span class="command">ping</span> google.com       <span class="comment"># Check if you can reach a host</span>
+<span class="command">ip</span> addr show          <span class="comment"># Show IP addresses (replaces ifconfig)</span>
+<span class="command">curl</span> google.com       <span class="comment"># Download/View a webpage in terminal</span>
+<span class="command">ssh</span> user@host         <span class="comment"># Secure Shell: log into remote machine</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Download</div>
+            <p>How do you download a file from "http://example.com/image.png" and save it as "pic.png"?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol6')">Show Solution</button>
+            <div id="sol6" class="solution">
+                <code>curl -o pic.png http://example.com/image.png</code> or <code>wget -O pic.png ...</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic7">
+        <h2>8. Package Management</h2>
+        <p>Linux uses repositories to install software, not random .exe downloads.</p>
+
+        <h3>Debian/Ubuntu (apt)</h3>
+        <pre>
+<span class="command">sudo apt update</span>        <span class="comment"># Refresh software list</span>
+<span class="command">sudo apt install</span> git   <span class="comment"># Install Git</span>
+<span class="command">sudo apt remove</span> git    <span class="comment"># Uninstall Git</span>
+        </pre>
+
+        <h3>RedHat/CentOS (yum/dnf)</h3>
+        <pre>
+<span class="command">sudo yum install</span> git   <span class="comment"># Install Git</span>
+        </pre>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Upgrade</div>
+            <p>What command updates all currently installed packages to their latest versions on Ubuntu?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol7')">Show Solution</button>
+            <div id="sol7" class="solution">
+                <code>sudo apt upgrade</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic8">
+        <h2>9. Shell Scripting</h2>
+        <p>Automate boring tasks by putting commands in a file.</p>
+        <p>Create a file named <code>hello.sh</code>:</p>
+
+        <pre>
+#!/bin/bash
+<span class="comment"># This is a variable</span>
+NAME="User"
+
+<span class="comment"># Logic</span>
+if [ -d "/tmp" ]; then
+    echo "Hello $NAME, /tmp directory exists!"
+else
+    echo "Something is wrong."
+fi
+        </pre>
+
+        <p>Run it with <code>./hello.sh</code> (remember to <code>chmod +x</code> it first!).</p>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Loop</div>
+            <p>Write a one-liner loop to echo numbers 1 through 5.</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol8')">Show Solution</button>
+            <div id="sol8" class="solution">
+                <code>for i in {1..5}; do echo $i; done</code>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic9">
+        <h2>10. Troubleshooting</h2>
+        <p>When things break, Linux gives you clues.</p>
+
+        <ul>
+            <li><strong>Logs:</strong> Check <code>/var/log/syslog</code> or <code>/var/log/messages</code>.</li>
+            <li><strong>dmesg:</strong> Prints kernel ring buffer messages (hardware issues).</li>
+            <li><strong>man:</strong> The manual. Run <code>man [command]</code> to learn how to use it.</li>
+        </ul>
+
+        <div class="exercise-box">
+            <div class="exercise-header">📝 Challenge: Help</div>
+            <p>You forgot how the `tar` command works. How do you find the manual inside the terminal?</p>
+            <button class="toggle-solution" onclick="toggleSolution('sol9')">Show Solution</button>
+            <div id="sol9" class="solution">
+                <code>man tar</code>
+            </div>
+        </div>
+    </section>
+
+    <div class="page-nav">
+        <button id="prevBtn" class="nav-control" disabled>← Previous Topic</button>
+        <button id="nextBtn" class="nav-control">Next Topic →</button>
+    </div>
+</main>
+
+<script>
+    // --- JAVASCRIPT LOGIC ---
+
+    // Define all topic titles for sidebar generation
+    const topics = [
+        "Overview & Philosophy",
+        "File System Structure",
+        "Basic Commands",
+        "Advanced Commands",
+        "Permissions",
+        "Processes & Monitoring",
+        "Networking",
+        "Package Management",
+        "Shell Scripting",
+        "Troubleshooting"
+    ];
+
+    let currentTopicIndex = 0;
+    const totalTopics = topics.length;
+
+    // DOM Elements
+    const navList = document.getElementById('navList');
+    const sections = document.querySelectorAll('section');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Initialize
+    function init() {
+        generateSidebar();
+        updateView();
+        
+        // Event Listeners for Bottom Buttons
+        prevBtn.addEventListener('click', () => {
+            if(currentTopicIndex > 0) {
+                currentTopicIndex--;
+                updateView();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if(currentTopicIndex < totalTopics - 1) {
+                currentTopicIndex++;
+                updateView();
+            }
+        });
+    }
+
+    // Generate Sidebar Links Dynamically
+    function generateSidebar() {
+        topics.forEach((topic, index) => {
+            const li = document.createElement('li');
+            li.className = 'nav-item';
+            
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            btn.innerText = `${index + 1}. ${topic}`;
+            btn.onclick = () => {
+                currentTopicIndex = index;
+                updateView();
+            };
+            
+            li.appendChild(btn);
+            navList.appendChild(li);
+        });
+    }
+
+    // Update the UI based on currentTopicIndex
+    function updateView() {
+        // 1. Show correct section
+        sections.forEach((sec, idx) => {
+            sec.classList.remove('active');
+            if(idx === currentTopicIndex) {
+                sec.classList.add('active');
+            }
+        });
+
+        // 2. Update Sidebar Active State
+        const navButtons = document.querySelectorAll('.nav-btn');
+        navButtons.forEach((btn, idx) => {
+            btn.classList.remove('active');
+            if(idx === currentTopicIndex) {
+                btn.classList.add('active');
+            }
+        });
+
+        // 3. Update Bottom Buttons State
+        prevBtn.disabled = currentTopicIndex === 0;
+        nextBtn.disabled = currentTopicIndex === totalTopics - 1;
+
+        // 4. Scroll to top of main content
+        document.getElementById('contentArea').scrollTop = 0;
+    }
+
+    // Toggle Solution Visibility
+    window.toggleSolution = function(id) {
+        const el = document.getElementById(id);
+        if (el.style.display === "block") {
+            el.style.display = "none";
+        } else {
+            el.style.display = "block";
+        }
+    };
+
+    // Run initialization
+    init();
+
+</script>
+
+</body>
+</html>
