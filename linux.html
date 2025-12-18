@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מדריך Linux אינטראקטיבי למהנדסי נתונים</title>
+    <title>Linux for Data Engineers</title>
     <style>
-        /* --- CSS STYLING (Based on the First Format) --- */
+        /* --- CSS STYLING (Sidebar Layout) --- */
         :root {
-            --primary-color: #2563eb; /* כחול מודרני */
+            --primary-color: #2563eb; /* Modern Blue */
             --secondary-color: #1e40af;
-            --bg-color: #f3f4f6;
-            --text-color: #1f2937;
-            --code-bg: #1e293b; /* רקע כהה לקוד */
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --code-bg: #1e293b; /* Dark Slate */
             --code-text: #e2e8f0;
             --accent-green: #10b981;
-            --sidebar-width: 280px;
+            --sidebar-width: 260px;
             --border-radius: 8px;
         }
 
@@ -25,7 +25,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
@@ -34,11 +34,11 @@
             overflow: hidden;
         }
 
-        /* --- SIDEBAR NAVIGATION (RTL) --- */
+        /* --- SIDEBAR NAVIGATION --- */
         nav {
             width: var(--sidebar-width);
             background-color: white;
-            border-left: 1px solid #e5e7eb; /* קו הפרדה משמאל במקום מימין */
+            border-right: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
@@ -53,22 +53,28 @@
         }
 
         .nav-header h1 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 5px;
+            font-weight: 700;
         }
 
-        /* Search Box in Sidebar */
+        /* Search Box */
         .search-box {
             padding: 15px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         #searchInput {
             width: 100%;
             padding: 10px;
-            border: 1px solid #d1d5db;
+            border: 1px solid #cbd5e1;
             border-radius: 6px;
             font-size: 0.9rem;
+            outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-color);
         }
 
         .nav-list {
@@ -79,11 +85,11 @@
 
         .nav-btn {
             width: 100%;
-            text-align: right; /* RTL alignment */
+            text-align: left;
             padding: 15px 20px;
             background: none;
             border: none;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid #f1f5f9;
             cursor: pointer;
             font-size: 0.95rem;
             color: var(--text-color);
@@ -94,13 +100,13 @@
         }
 
         .nav-btn:hover {
-            background-color: #f9fafb;
+            background-color: #f1f5f9;
         }
 
         .nav-btn.active {
             background-color: #eff6ff;
             color: var(--primary-color);
-            border-right: 4px solid var(--primary-color); /* פס סימון מימין */
+            border-left: 4px solid var(--primary-color);
             font-weight: 600;
         }
 
@@ -131,31 +137,34 @@
         h2 {
             font-size: 2rem;
             margin-bottom: 20px;
-            color: var(--secondary-color);
-            border-bottom: 2px solid #e5e7eb;
+            color: #0f172a;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         h3 {
             font-size: 1.3rem;
             margin-top: 30px;
             margin-bottom: 15px;
-            color: #374151;
+            color: #334155;
+            font-weight: 600;
         }
 
-        /* --- CODE BLOCKS & CARDS --- */
+        p {
+            margin-bottom: 20px;
+            color: #475569;
+        }
+
+        /* --- COMMAND CARDS (The Grid) --- */
         .commands-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
         .command-card {
             background: white;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #e2e8f0;
             border-radius: var(--border-radius);
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -176,22 +185,31 @@
         }
 
         .cmd-title {
-            font-family: 'Consolas', monospace;
+            font-family: 'Consolas', 'Monaco', monospace;
             color: var(--primary-color);
             font-weight: bold;
             font-size: 1.1rem;
         }
 
+        .card-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        /* --- CODE EXAMPLES (Clickable) --- */
         .example-block {
             background-color: #f8fafc;
-            border-right: 3px solid var(--accent-green);
+            border-left: 3px solid var(--accent-green);
             padding: 10px;
             border-radius: 4px;
-            margin-top: 10px;
-            font-family: 'Consolas', monospace;
+            margin-top: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
             font-size: 0.9rem;
+            color: #334155;
             cursor: pointer;
             position: relative;
+            transition: background 0.2s;
         }
         
         .example-block:hover {
@@ -199,12 +217,17 @@
         }
 
         .example-block::after {
-            content: '📋';
+            content: '📋 Copy';
             position: absolute;
-            left: 10px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             opacity: 0;
+            font-size: 0.75rem;
+            background: #fff;
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
             transition: opacity 0.2s;
         }
 
@@ -213,11 +236,11 @@
         }
 
         .comment {
-            color: #64748b;
+            color: #94a3b8;
             font-style: italic;
             display: block;
-            margin-top: 4px;
-            font-size: 0.85rem;
+            margin-top: 2px;
+            font-size: 0.8rem;
         }
 
         /* --- TIPS & INFO BOXES --- */
@@ -226,29 +249,32 @@
             border: 1px solid #fcd34d;
             border-radius: var(--border-radius);
             padding: 20px;
-            margin-top: 30px;
+            margin-top: 20px;
+        }
+        
+        .info-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
         }
 
-        /* --- NAVIGATION BUTTONS (Bottom) --- */
+        /* --- NAVIGATION BUTTONS --- */
         .page-nav {
             display: flex;
             justify-content: space-between;
             margin-top: 50px;
             padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #e2e8f0;
         }
 
         .nav-control {
             background: white;
-            border: 1px solid #d1d5db;
+            border: 1px solid #cbd5e1;
             padding: 10px 20px;
             border-radius: var(--border-radius);
             cursor: pointer;
             color: var(--text-color);
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            font-weight: 500;
         }
 
         .nav-control:hover {
@@ -264,8 +290,8 @@
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             body { flex-direction: column; height: auto; overflow: auto; }
-            nav { width: 100%; height: auto; border-left: none; border-bottom: 1px solid #e5e7eb; }
-            .nav-list { display: none; } /* Hide menu on mobile initially, or use JS to toggle */
+            nav { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #e2e8f0; }
+            .nav-list { display: none; } /* Use JS to toggle menu if needed */
             main { padding: 20px; }
             .commands-grid { grid-template-columns: 1fr; }
         }
@@ -275,11 +301,11 @@
 
 <nav>
     <div class="nav-header">
-        <h1>🐧 Linux למהנדסי נתונים</h1>
-        <small>המדריך האינטראקטיבי המלא</small>
+        <h1>🐧 Linux for Data</h1>
+        <small>Interactive Guide</small>
     </div>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="חפש פקודה (לדוגמה: grep)...">
+        <input type="text" id="searchInput" placeholder="Search command (e.g., awk)...">
     </div>
     <ul class="nav-list" id="navList">
         </ul>
@@ -288,242 +314,253 @@
 <main id="contentArea">
     
     <section id="topic0" class="active">
-        <h2>📁 עבודה עם תיקיות</h2>
-        <p>הבסיס של מערכת הקבצים בלינוקס. תיקיות מסודרות במבנה עץ המתחיל ב-<code>/</code>.</p>
+        <h2>📁 Directories & Navigation</h2>
+        <p>Mastering movement within the file tree is the first step.</p>
         
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">pwd</span></div>
-                <p>הצגת הנתיב הנוכחי (איפה אני נמצא?)</p>
+                <div class="card-desc">Print Working Directory. Where am I?</div>
                 <div class="example-block" onclick="copyText(this)">pwd</div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">ls</span></div>
-                <p>הצגת תוכן התיקייה</p>
-                <div class="example-block" onclick="copyText(this)">ls -la <span class="comment"># רשימה מפורטת כולל נסתרים</span></div>
-                <div class="example-block" onclick="copyText(this)">ls -lh <span class="comment"># גדלים בפורמט קריא</span></div>
-                <div class="example-block" onclick="copyText(this)">ls -lt <span class="comment"># מיון לפי זמן שינוי</span></div>
+                <div class="card-desc">List files and directories.</div>
+                <div class="example-block" onclick="copyText(this)">ls -la <span class="comment"># Long list + hidden files</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lh <span class="comment"># Human readable sizes (KB, MB)</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lt <span class="comment"># Sort by modification time</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">cd</span></div>
-                <p>מעבר בין תיקיות</p>
-                <div class="example-block" onclick="copyText(this)">cd /var/log <span class="comment"># מעבר לנתיב מוחלט</span></div>
-                <div class="example-block" onclick="copyText(this)">cd .. <span class="comment"># עליה רמה אחת למעלה</span></div>
-                <div class="example-block" onclick="copyText(this)">cd ~ <span class="comment"># חזרה לתיקיית הבית</span></div>
+                <div class="card-desc">Change Directory.</div>
+                <div class="example-block" onclick="copyText(this)">cd /var/log <span class="comment"># Go to absolute path</span></div>
+                <div class="example-block" onclick="copyText(this)">cd .. <span class="comment"># Go up one level</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ~ <span class="comment"># Go home</span></div>
+                <div class="example-block" onclick="copyText(this)">cd - <span class="comment"># Go to previous directory</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">mkdir</span></div>
-                <p>יצירת תיקיות</p>
+                <div class="card-desc">Make Directory.</div>
                 <div class="example-block" onclick="copyText(this)">mkdir new_folder</div>
-                <div class="example-block" onclick="copyText(this)">mkdir -p data/2023/jan <span class="comment"># יצירת נתיב מלא</span></div>
+                <div class="example-block" onclick="copyText(this)">mkdir -p data/2024/01 <span class="comment"># Create full path</span></div>
             </div>
         </div>
     </section>
 
     <section id="topic1">
-        <h2>📄 עבודה עם קבצים</h2>
-        <p>יצירה, העתקה, העברה ומחיקה של קבצים.</p>
+        <h2>📄 File Operations</h2>
+        <p>Creating, moving, copying, and deleting files.</p>
 
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">touch</span></div>
-                <p>יצירת קובץ ריק או עדכון זמן גישה</p>
-                <div class="example-block" onclick="copyText(this)">touch file.txt</div>
-            </div>
-
-            <div class="command-card">
                 <div class="code-header"><span class="cmd-title">cp</span></div>
-                <p>העתקת קבצים</p>
-                <div class="example-block" onclick="copyText(this)">cp source.txt dest.txt</div>
-                <div class="example-block" onclick="copyText(this)">cp -r data_dir backup_dir <span class="comment"># העתקת תיקייה</span></div>
+                <div class="card-desc">Copy files or folders.</div>
+                <div class="example-block" onclick="copyText(this)">cp source.csv backup.csv</div>
+                <div class="example-block" onclick="copyText(this)">cp -r data_dir/ backup_dir/ <span class="comment"># Recursive copy</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">mv</span></div>
-                <p>העברה או שינוי שם</p>
-                <div class="example-block" onclick="copyText(this)">mv old_name.txt new_name.txt</div>
-                <div class="example-block" onclick="copyText(this)">mv file.txt /tmp/</div>
+                <div class="card-desc">Move or Rename.</div>
+                <div class="example-block" onclick="copyText(this)">mv old.txt new.txt <span class="comment"># Rename</span></div>
+                <div class="example-block" onclick="copyText(this)">mv file.csv /tmp/ <span class="comment"># Move</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">rm</span></div>
-                <p>מחיקת קבצים (בזהירות!)</p>
+                <div class="card-desc">Remove (Delete). Careful!</div>
                 <div class="example-block" onclick="copyText(this)">rm file.txt</div>
-                <div class="example-block" onclick="copyText(this)">rm -rf temp_folder <span class="comment"># מחיקה כפויה של תיקייה</span></div>
+                <div class="example-block" onclick="copyText(this)">rm -rf temp_folder <span class="comment"># Force recursive delete</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">find</span></div>
-                <p>חיפוש קבצים מתקדם</p>
-                <div class="example-block" onclick="copyText(this)">find . -name "*.csv" <span class="comment"># כל קבצי ה-CSV</span></div>
-                <div class="example-block" onclick="copyText(this)">find /var/log -mtime -7 <span class="comment"># שונו ב-7 ימים אחרונים</span></div>
-                <div class="example-block" onclick="copyText(this)">find . -size +100M <span class="comment"># קבצים מעל 100 מגה</span></div>
+                <div class="card-desc">Search for files in directory structure.</div>
+                <div class="example-block" onclick="copyText(this)">find . -name "*.csv" <span class="comment"># Find all CSVs</span></div>
+                <div class="example-block" onclick="copyText(this)">find /logs -mtime -7 <span class="comment"># Modified in last 7 days</span></div>
+                <div class="example-block" onclick="copyText(this)">find . -size +1G <span class="comment"># Files larger than 1GB</span></div>
             </div>
         </div>
     </section>
 
     <section id="topic2">
-        <h2>📝 תוכן קבצים</h2>
-        <p>צפייה וניתוח תוכן של קבצים טקסטואליים.</p>
+        <h2>📝 Content & Data Analysis</h2>
+        <p>Essential for quick data inspection without opening heavy files.</p>
 
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">cat / tac</span></div>
-                <p>הדפסת תוכן הקובץ</p>
-                <div class="example-block" onclick="copyText(this)">cat config.json</div>
-                <div class="example-block" onclick="copyText(this)">tac log.txt <span class="comment"># הדפסה מהסוף להתחלה</span></div>
+                <div class="code-header"><span class="cmd-title">head / tail</span></div>
+                <div class="card-desc">Inspect start or end of files.</div>
+                <div class="example-block" onclick="copyText(this)">head -n 5 data.csv <span class="comment"># Check headers</span></div>
+                <div class="example-block" onclick="copyText(this)">tail -f app.log <span class="comment"># Live log monitoring</span></div>
             </div>
 
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">head / tail</span></div>
-                <p>תצוגה חלקית</p>
-                <div class="example-block" onclick="copyText(this)">head -n 5 data.csv <span class="comment"># הצגת כותרות (5 שורות ראשונות)</span></div>
-                <div class="example-block" onclick="copyText(this)">tail -f app.log <span class="comment"># מעקב חי אחרי לוגים</span></div>
+                <div class="code-header"><span class="cmd-title">cat / tac</span></div>
+                <div class="card-desc">Output full content.</div>
+                <div class="example-block" onclick="copyText(this)">cat config.json</div>
+                <div class="example-block" onclick="copyText(this)">cat part_* > combined.csv <span class="comment"># Merge files</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">grep</span></div>
-                <p>חיפוש טקסט בתוך קבצים</p>
+                <div class="card-desc">Search text within files (Regex).</div>
                 <div class="example-block" onclick="copyText(this)">grep "ERROR" server.log</div>
-                <div class="example-block" onclick="copyText(this)">grep -r "db_host" . <span class="comment"># חיפוש בכל התיקייה</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -r "db_host" . <span class="comment"># Recursive search</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -v "200 OK" access.log <span class="comment"># Exclude pattern</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">wc</span></div>
-                <p>ספירת מילים ושורות</p>
-                <div class="example-block" onclick="copyText(this)">wc -l data.csv <span class="comment"># כמה רשומות יש בקובץ?</span></div>
+                <div class="card-desc">Word Count (Lines, Words, Bytes).</div>
+                <div class="example-block" onclick="copyText(this)">wc -l data.csv <span class="comment"># Count rows</span></div>
             </div>
         </div>
     </section>
 
     <section id="topic3">
-        <h2>🔄 הפניות וצינורות (Pipes)</h2>
-        <p>שרשור פקודות הוא הכוח האמיתי של לינוקס בעיבוד נתונים.</p>
+        <h2>⚙️ Advanced Processing (Pipes)</h2>
+        <p>The bread and butter of Data Engineering in the shell.</p>
 
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Redirection ></span></div>
-                <p>שמירת פלט לקובץ</p>
-                <div class="example-block" onclick="copyText(this)">echo "Log Start" > log.txt <span class="comment"># דריסת הקובץ</span></div>
-                <div class="example-block" onclick="copyText(this)">echo "New Entry" >> log.txt <span class="comment"># הוספה לסוף הקובץ</span></div>
-            </div>
-
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Pipe |</span></div>
-                <p>העברת פלט מפקודה לפקודה</p>
-                <div class="example-block" onclick="copyText(this)">cat data.csv | wc -l</div>
-                <div class="example-block" onclick="copyText(this)">ps aux | grep python</div>
-                <div class="example-block" onclick="copyText(this)">history | grep "aws"</div>
+                <div class="code-header"><span class="cmd-title">Redirection</span></div>
+                <div class="card-desc">Control inputs and outputs.</div>
+                <div class="example-block" onclick="copyText(this)">cmd > output.txt <span class="comment"># Overwrite</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd >> output.txt <span class="comment"># Append</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd 2> error.log <span class="comment"># Redirect errors</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">awk</span></div>
-                <p>עיבוד טקסט ושליפת עמודות (חובה ל-DE)</p>
-                <div class="example-block" onclick="copyText(this)">awk -F',' '{print $2}' file.csv <span class="comment"># הדפסת עמודה שניה</span></div>
-                <div class="example-block" onclick="copyText(this)">ls -l | awk '{print $5, $9}' <span class="comment"># גודל ושם קובץ</span></div>
+                <div class="card-desc">Powerful text processing language.</div>
+                <div class="example-block" onclick="copyText(this)">awk -F',' '{print $2}' file.csv <span class="comment"># Print 2nd column</span></div>
+                <div class="example-block" onclick="copyText(this)">awk '{s+=$1} END {print s}' nums.txt <span class="comment"># Sum column</span></div>
+            </div>
+
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sed</span></div>
+                <div class="card-desc">Stream Editor (Search & Replace).</div>
+                <div class="example-block" onclick="copyText(this)">sed 's/old/new/g' file.txt <span class="comment"># Replace text</span></div>
+                <div class="example-block" onclick="copyText(this)">sed -i 's/,/|/g' data.csv <span class="comment"># Replace in-place (CSV to Pipe)</span></div>
             </div>
 
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">sort & uniq</span></div>
-                <p>מיון וסינון כפילויות</p>
-                <div class="example-block" onclick="copyText(this)">sort names.txt | uniq</div>
-                <div class="example-block" onclick="copyText(this)">sort -nr numbers.txt <span class="comment"># מיון מספרי יורד</span></div>
+                <div class="card-desc">Sorting and deduplication.</div>
+                <div class="example-block" onclick="copyText(this)">sort names.txt | uniq <span class="comment"># Unique list</span></div>
+                <div class="example-block" onclick="copyText(this)">sort -nr counts.txt <span class="comment"># Numeric reverse sort</span></div>
             </div>
         </div>
     </section>
 
     <section id="topic4">
-        <h2>🔐 הרשאות (Permissions)</h2>
-        <p>ניהול גישה לקבצים: קריאה (r), כתיבה (w), והרצה (x).</p>
+        <h2>💻 System & Monitoring</h2>
+        <p>Keep your data pipeline server healthy.</p>
 
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">chmod</span></div>
-                <p>שינוי הרשאות</p>
-                <div class="example-block" onclick="copyText(this)">chmod +x script.sh <span class="comment"># הפיכת סקריפט לניתן להרצה</span></div>
-                <div class="example-block" onclick="copyText(this)">chmod 755 file <span class="comment"># בעלים: הכל, אחרים: קריאה/הרצה</span></div>
-                <div class="example-block" onclick="copyText(this)">chmod 400 key.pem <span class="comment"># הגנה על מפתח פרטי</span></div>
+                <div class="code-header"><span class="cmd-title">Disk Usage</span></div>
+                <div class="card-desc">Check storage space.</div>
+                <div class="example-block" onclick="copyText(this)">df -h <span class="comment"># Free disk space</span></div>
+                <div class="example-block" onclick="copyText(this)">du -sh folder/ <span class="comment"># Size of specific folder</span></div>
+                <div class="example-block" onclick="copyText(this)">du -h --max-depth=1 . <span class="comment"># Check sub-folders size</span></div>
             </div>
 
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">chown</span></div>
-                <p>שינוי בעלות</p>
-                <div class="example-block" onclick="copyText(this)">chown user:group file.txt</div>
-                <div class="example-block" onclick="copyText(this)">chown -R user /var/www <span class="comment"># שינוי רקורסיבי</span></div>
+                <div class="code-header"><span class="cmd-title">Processes</span></div>
+                <div class="card-desc">Monitor CPU and RAM.</div>
+                <div class="example-block" onclick="copyText(this)">top <span class="comment"># Real-time process monitor</span></div>
+                <div class="example-block" onclick="copyText(this)">htop <span class="comment"># Better UI monitor</span></div>
+                <div class="example-block" onclick="copyText(this)">free -h <span class="comment"># Check RAM usage</span></div>
+            </div>
+
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">kill</span></div>
+                <div class="card-desc">Stop stuck processes.</div>
+                <div class="example-block" onclick="copyText(this)">ps aux | grep python <span class="comment"># Find PID</span></div>
+                <div class="example-block" onclick="copyText(this)">kill 1234 <span class="comment"># Terminate PID</span></div>
+                <div class="example-block" onclick="copyText(this)">kill -9 1234 <span class="comment"># Force kill</span></div>
             </div>
         </div>
     </section>
 
     <section id="topic5">
-        <h2>💻 ניטור מערכת</h2>
-        <p>בדיקת משאבים, זיכרון ותהליכים רצים.</p>
+        <h2>🌐 Networking & SSH</h2>
+        <p>Connecting to remote servers and transferring data.</p>
 
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Disk & Memory</span></div>
-                <p>מקום בדיסק וזיכרון RAM</p>
-                <div class="example-block" onclick="copyText(this)">df -h <span class="comment"># מקום פנוי בדיסק</span></div>
-                <div class="example-block" onclick="copyText(this)">du -sh folder/ <span class="comment"># גודל של תיקייה ספציפית</span></div>
-                <div class="example-block" onclick="copyText(this)">free -h <span class="comment"># מצב הזיכרון</span></div>
+                <div class="code-header"><span class="cmd-title">ssh</span></div>
+                <div class="card-desc">Secure Shell connection.</div>
+                <div class="example-block" onclick="copyText(this)">ssh user@server_ip</div>
+                <div class="example-block" onclick="copyText(this)">ssh -i key.pem user@host</div>
             </div>
 
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">top / htop</span></div>
-                <p>מנהל המשימות</p>
-                <div class="example-block" onclick="copyText(this)">top <span class="comment"># צפייה בתהליכים בזמן אמת</span></div>
-                <div class="example-block" onclick="copyText(this)">htop <span class="comment"># גרסה צבעונית ונוחה יותר</span></div>
+                <div class="code-header"><span class="cmd-title">scp</span></div>
+                <div class="card-desc">Secure Copy (Transfer files).</div>
+                <div class="example-block" onclick="copyText(this)">scp local_file.csv user@host:/tmp</div>
+                <div class="example-block" onclick="copyText(this)">scp -r user@host:/var/log .</div>
             </div>
 
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">kill</span></div>
-                <p>סגירת תהליכים</p>
-                <div class="example-block" onclick="copyText(this)">kill 1234 <span class="comment"># סגירת תהליך לפי ID</span></div>
-                <div class="example-block" onclick="copyText(this)">kill -9 1234 <span class="comment"># סגירה כפויה (Force Kill)</span></div>
+                <div class="code-header"><span class="cmd-title">curl / wget</span></div>
+                <div class="card-desc">Download data from web.</div>
+                <div class="example-block" onclick="copyText(this)">wget http://example.com/data.zip</div>
+                <div class="example-block" onclick="copyText(this)">curl -O http://example.com/data.json</div>
             </div>
         </div>
     </section>
 
     <section id="topic6">
-        <h2>💡 טיפים למהנדסי נתונים</h2>
-        <p>פקודות קטנות שעושות הבדל גדול בעבודה עם Data.</p>
-
+        <h2>💡 Data Engineer Pro Tips</h2>
+        
         <div class="info-box">
-            <h3>בדיקת איכות נתונים מהירה</h3>
-            <p>במקום לפתוח קובץ ענק עם Excel ולהתקע, השתמשו בטרמינל:</p>
-            <div class="example-block" onclick="copyText(this)">head -n 5 large.csv <span class="comment"># בדיקת שמות העמודות</span></div>
-            <div class="example-block" onclick="copyText(this)">shuf -n 5 large.csv <span class="comment"># דגימה אקראית של 5 שורות (Random Sample)</span></div>
-            <div class="example-block" onclick="copyText(this)">wc -l large.csv <span class="comment"># ספירת סך כל הרשומות</span></div>
+            <h4>1. Quick Data Sampling (Random)</h4>
+            <p>Don't use <code>head</code> for data quality checks, as the top rows might be perfect. Use <code>shuf</code> for a random sample.</p>
+            <div class="example-block" onclick="copyText(this)">shuf -n 5 large_dataset.csv</div>
         </div>
 
         <div class="info-box">
-            <h3>SSH וחיבור מרחוק</h3>
-            <p>התחברות לשרתים בצורה מאובטחת:</p>
-            <div class="example-block" onclick="copyText(this)">ssh user@server_ip</div>
-            <div class="example-block" onclick="copyText(this)">scp file.txt user@server_ip:/tmp <span class="comment"># העתקת קובץ לשרת</span></div>
+            <h4>2. Inspecting Huge CSVs</h4>
+            <p>If you need to check columns but the file is 50GB, don't open it. Just peek.</p>
+            <div class="example-block" onclick="copyText(this)">head -n 5 file.csv <span class="comment"># See headers + 4 rows</span></div>
+        </div>
+
+        <div class="info-box">
+            <h4>3. Keyboard Shortcuts</h4>
+            <p>Save time typing commands:</p>
+            <ul>
+                <li><code>Ctrl + R</code> : Search command history.</li>
+                <li><code>Ctrl + A</code> : Go to start of line.</li>
+                <li><code>Ctrl + E</code> : Go to end of line.</li>
+                <li><code>Ctrl + C</code> : Stop running command.</li>
+                <li><code>Ctrl + L</code> : Clear screen.</li>
+            </ul>
         </div>
     </section>
 
     <div class="page-nav">
-        <button id="nextBtn" class="nav-control">הבא: נושא הבא ←</button>
-        <button id="prevBtn" class="nav-control" disabled>→ הקודם: חזור</button>
+        <button id="prevBtn" class="nav-control" disabled>← Previous</button>
+        <button id="nextBtn" class="nav-control">Next Topic →</button>
     </div>
 </main>
 
 <script>
     // --- JAVASCRIPT LOGIC ---
 
-    // Define all sections based on IDs in HTML
     const topics = [
-        "עבודה עם תיקיות",
-        "עבודה עם קבצים",
-        "תוכן קבצים",
-        "הפניות וצינורות",
-        "הרשאות",
-        "ניטור מערכת",
-        "טיפים ל-Data Engineers"
+        "Directories",
+        "Files",
+        "Content & Analysis",
+        "Adv. Processing",
+        "System & Monitor",
+        "Network & SSH",
+        "Pro Tips"
     ];
 
     let currentTopicIndex = 0;
@@ -561,22 +598,24 @@
             const term = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.command-card');
             
+            // Filter cards
             cards.forEach(card => {
                 const text = card.innerText.toLowerCase();
                 if(text.includes(term)) {
                     card.style.display = 'block';
-                    // Highlight logic could go here
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // If search is active, ensure all sections are visible to find results
+            // Ensure sections are visible during search
             if(term.length > 0) {
-                sections.forEach(sec => sec.style.display = 'block');
+                sections.forEach(sec => {
+                    sec.style.display = 'block';
+                    sec.classList.remove('active'); // Remove animation class to prevent flickering
+                });
             } else {
-                // Reset view if search is empty
-                updateView();
+                updateView(); // Reset to tab view
             }
         });
     }
@@ -590,10 +629,10 @@
             
             const btn = document.createElement('button');
             btn.className = 'nav-btn';
-            btn.innerHTML = `<span>${topic}</span> <span>${index + 1}</span>`;
+            btn.innerHTML = `<span>${index + 1}. ${topic}</span>`;
             btn.onclick = () => {
                 currentTopicIndex = index;
-                searchInput.value = ''; // Clear search on nav
+                searchInput.value = ''; // Clear search
                 updateView();
             };
             
@@ -604,21 +643,22 @@
 
     // Update the UI
     function updateView() {
-        // 1. Show correct section, hide others
+        // Reset Sections
         sections.forEach((sec, idx) => {
-            sec.style.display = 'none'; // Reset display from search
+            sec.style.display = 'none';
             sec.classList.remove('active');
             
-            // Re-show all cards in case search hid them
+            // Ensure cards inside are visible (reset from search)
             const cards = sec.querySelectorAll('.command-card');
             cards.forEach(c => c.style.display = 'block');
 
             if(idx === currentTopicIndex) {
+                sec.style.display = 'block';
                 sec.classList.add('active');
             }
         });
 
-        // 2. Update Sidebar Active State
+        // Sidebar Active State
         const navButtons = document.querySelectorAll('.nav-btn');
         navButtons.forEach((btn, idx) => {
             btn.classList.remove('active');
@@ -627,30 +667,31 @@
             }
         });
 
-        // 3. Update Bottom Buttons State
+        // Buttons State
         prevBtn.disabled = currentTopicIndex === 0;
         nextBtn.disabled = currentTopicIndex === totalTopics - 1;
 
-        // 4. Scroll to top
+        // Scroll Top
         document.getElementById('contentArea').scrollTop = 0;
     }
 
-    // Click to Copy Function
+    // Click to Copy
     window.copyText = function(element) {
-        // Get text without the comment part
         const fullText = element.innerText;
+        // Split by # to avoid copying comments
         const commandOnly = fullText.split('#')[0].trim();
         
         navigator.clipboard.writeText(commandOnly).then(() => {
             const originalBg = element.style.backgroundColor;
             element.style.backgroundColor = '#d1fae5'; // Green flash
+            
+            // Optional: change cursor/text momentarily
             setTimeout(() => {
                 element.style.backgroundColor = originalBg;
             }, 300);
         });
     };
 
-    // Run initialization
     init();
 
 </script>
