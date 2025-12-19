@@ -4,337 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apache Kafka Master Guide</title>
- <style>
-/* =========================================================
-   Dracula / PyCharm Dark – Improved Readability
-   ========================================================= */
+    <style>
+        /* --- CSS STYLING --- */
+        :root {
+            /* Kafka Brand Colors */
+            --primary-color: #231F20; /* Kafka Black */
+            --secondary-color: #E65100; /* Kafka Orange */
+            --accent-blue: #0077b6; /* Data Eng Blue */
+            --bg-color: #f4f6f8;
+            --text-color: #333333;
+            --sidebar-width: 280px;
+            --border-radius: 8px;
+            --code-bg: #2d2d2d; /* Terminal Black */
+            --code-text: #a5d6ff; /* Terminal Blue/White */
+        }
 
-:root {
-    --sidebar-width: 280px;
-    --border-radius: 8px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* Backgrounds */
-    --bg-color: #282a36;
-    --sidebar-bg: #21222c;
-    --panel-bg: #20222e;
-    --hover-bg: #343746;
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-    /* Text */
-    --text-color: #f8f8f2;
-    --text-muted: #c7c9d9;
+        /* --- SIDEBAR --- */
+        nav {
+            width: var(--sidebar-width);
+            background-color: #ffffff;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 10;
+        }
 
-    /* Accents */
-    --primary-color: #bd93f9;
-    --secondary-color: #ff79c6;
-    --accent-blue: #8be9fd;
-    --accent-green: #50fa7b;
-    --accent-orange: #ffb86c;
-    --accent-red: #ff5555;
+        .nav-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), #4a4a4a);
+            color: white;
+            text-align: center;
+            border-bottom: 4px solid var(--secondary-color);
+        }
 
-    /* Borders */
-    --border-color: #44475a;
+        .nav-header h1 { font-size: 1.4rem; margin-bottom: 5px; font-weight: 700; letter-spacing: 1px; }
+        .nav-header small { color: #ffd180; font-weight: 500; }
 
-    /* Code */
-    --code-bg: #1a1b26;
-    --code-text: #f8f8f2;
-}
+        .search-box { padding: 15px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
+        #searchInput {
+            width: 100%; padding: 10px;
+            border: 1px solid #ccc; border-radius: 6px;
+            font-size: 0.9rem; outline: none; transition: border 0.3s;
+        }
+        #searchInput:focus { border-color: var(--secondary-color); }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        .nav-list { list-style: none; overflow-y: auto; flex-grow: 1; }
+        .nav-btn {
+            width: 100%; text-align: left; padding: 14px 20px;
+            background: none; border: none; border-bottom: 1px solid #f0f0f0;
+            cursor: pointer; font-size: 0.95rem; color: var(--text-color);
+            transition: all 0.2s; font-weight: 500;
+        }
+        .nav-btn:hover { background-color: #fff3e0; color: var(--secondary-color); }
+        .nav-btn.active {
+            background-color: #ffe0b2; color: #bf360c;
+            border-left: 5px solid var(--secondary-color); font-weight: 700;
+        }
 
-/* ---------------- BODY ---------------- */
-body {
-    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-    line-height: 1.6;
-    color: var(--text-color);
-    background-color: var(--bg-color);
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-}
+        /* --- MAIN CONTENT --- */
+        main {
+            flex-grow: 1; padding: 40px; overflow-y: auto;
+            max-width: 1200px; margin: 0 auto;
+        }
 
-/* ---------------- SIDEBAR ---------------- */
-nav {
-    width: var(--sidebar-width);
-    background-color: var(--sidebar-bg);
-    border-right: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-}
+        section { display: none; padding-bottom: 60px; animation: fadeIn 0.3s; }
+        section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.nav-header {
-    padding: 20px;
-    background: linear-gradient(135deg, #1e1f29, #2b2d3a);
-    text-align: center;
-    border-bottom: 1px solid var(--border-color);
-}
+        h2 { 
+            font-size: 2.2rem; margin-bottom: 25px; color: var(--primary-color); 
+            border-bottom: 3px solid #e0e0e0; padding-bottom: 10px; 
+        }
+        h3 { font-size: 1.5rem; margin-top: 35px; margin-bottom: 15px; color: var(--secondary-color); border-left: 4px solid var(--secondary-color); padding-left: 10px; }
+        p { margin-bottom: 20px; color: #555; font-size: 1.05rem; }
 
-.nav-header h1 {
-    font-size: 1.4rem;
-    color: var(--primary-color);
-}
+        /* --- COMMAND CARDS --- */
+        .commands-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;
+        }
+        .command-card {
+            background: white; border: 1px solid #e0e0e0; border-radius: var(--border-radius);
+            padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column;
+        }
+        .command-card:hover {
+            transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-top: 3px solid var(--secondary-color);
+        }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .cmd-title { font-family: 'Consolas', monospace; color: var(--primary-color); font-weight: bold; font-size: 1.2rem; }
+        .card-desc { font-size: 0.95rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
 
-.nav-header small {
-    color: var(--accent-blue);
-}
+        /* --- CLI / CODE BLOCKS --- */
+        .example-block {
+            background-color: var(--code-bg); 
+            color: var(--code-text);
+            border-radius: 6px; 
+            padding: 15px; 
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 0.95rem; 
+            cursor: pointer; 
+            position: relative; 
+            transition: all 0.2s;
+            word-break: break-all; 
+            line-height: 1.5;
+            border-left: 4px solid #555;
+        }
+        .example-block:hover { 
+            border-left-color: var(--secondary-color);
+            background-color: #383838;
+        }
+        .example-block::after {
+            content: '📋 Copy'; position: absolute; right: 10px; top: 10px;
+            opacity: 0; font-size: 0.75rem;
+            background: rgba(255,255,255,0.2); color: white; padding: 4px 8px; 
+            border-radius: 4px; transition: opacity 0.2s;
+        }
+        .example-block:hover::after { opacity: 1; }
+        
+        .comment { color: #6a9955; font-style: italic; display: block; margin-top: 5px; font-size: 0.85rem; }
+        
+        /* --- DIAGRAM PLACEHOLDERS --- */
+        .diagram-box {
+            background: white; border: 2px dashed #ccc; border-radius: 8px;
+            padding: 30px; text-align: center; color: #888; margin: 20px 0;
+            font-weight: 500;
+        }
 
-.search-box {
-    padding: 14px;
-    border-bottom: 1px solid var(--border-color);
-}
+        /* --- INFO BOX --- */
+        .info-box {
+            background: #fff8e1; border-left: 5px solid #ff6f00; padding: 20px;
+            border-radius: 4px; margin-top: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-box h4 { color: #e65100; margin-bottom: 10px; font-size: 1.1rem; }
 
-#searchInput {
-    width: 100%;
-    padding: 10px;
-    background: var(--panel-bg);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    outline: none;
-}
+        /* --- NAV FOOTER --- */
+        .page-nav {
+            display: flex; justify-content: space-between; margin-top: 60px;
+            padding-top: 25px; border-top: 1px solid #e0e0e0;
+        }
+        .nav-control {
+            background: white; border: 1px solid #ccc; padding: 12px 25px;
+            border-radius: 30px; cursor: pointer; color: #555;
+            transition: all 0.2s; font-weight: 600; font-size: 0.95rem;
+        }
+        .nav-control:hover { 
+            border-color: var(--secondary-color); color: var(--secondary-color); 
+            background: #fff3e0;
+        }
+        .nav-control:disabled { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; border-color: #ccc; color: #999; }
 
-#searchInput:focus {
-    border-color: var(--primary-color);
-}
-
-.nav-list {
-    list-style: none;
-    overflow-y: auto;
-    flex-grow: 1;
-}
-
-.nav-btn {
-    width: 100%;
-    padding: 14px 20px;
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--border-color);
-    text-align: left;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.nav-btn:hover {
-    background-color: var(--hover-bg);
-    color: var(--accent-blue);
-}
-
-.nav-btn.active {
-    color: var(--primary-color);
-    border-left: 4px solid var(--primary-color);
-    background: linear-gradient(
-        90deg,
-        rgba(189,147,249,0.15),
-        transparent
-    );
-}
-
-/* ---------------- MAIN CONTENT ---------------- */
-main {
-    flex-grow: 1;
-    padding: 40px;
-    overflow-y: auto;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-section {
-    display: none;
-    padding-bottom: 60px;
-    animation: fadeIn 0.25s ease;
-}
-
-section.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-h2 {
-    font-size: 2.2rem;
-    color: var(--primary-color);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
-    margin-bottom: 25px;
-    letter-spacing: 0.5px;
-}
-
-h2::after {
-    content: "";
-    display: block;
-    margin-top: 10px;
-    width: 80px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary-color), transparent);
-}
-
-h3 {
-    font-size: 1.5rem;
-    margin-top: 35px;
-    margin-bottom: 15px;
-    color: var(--secondary-color);
-    border-left: 4px solid var(--secondary-color);
-    padding-left: 12px;
-}
-
-p {
-    color: var(--text-muted);
-    font-size: 1.05rem;
-    margin-bottom: 20px;
-}
-
-/* ---------------- COMMAND CARDS ---------------- */
-.commands-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 25px;
-}
-
-.command-card {
-    background: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    transition: border 0.2s;
-}
-
-.command-card:hover {
-    border-color: var(--primary-color);
-}
-
-.cmd-title {
-    color: var(--accent-green);
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    font-weight: bold;
-}
-
-.card-desc {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 15px;
-}
-
-/* ---------------- CODE BLOCKS ---------------- */
-.example-block {
-    background: var(--code-bg);
-    color: var(--code-text);
-    border-radius: 6px;
-    padding: 15px;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    position: relative;
-    border-left: 4px solid var(--primary-color);
-}
-
-.example-block:hover {
-    border-left-color: var(--secondary-color);
-}
-
-pre {
-    white-space: pre-wrap;
-}
-
-.example-block::after {
-    content: "📋 Copy";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    opacity: 0;
-    font-size: 0.75rem;
-    background: rgba(255,255,255,0.15);
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: opacity 0.2s;
-}
-
-.example-block:hover::after {
-    opacity: 1;
-}
-
-.comment {
-    color: #9aa0c3;
-    font-style: italic;
-    font-size: 0.85rem;
-}
-
-/* ---------------- INFO BOX ---------------- */
-.info-box {
-    background: var(--panel-bg);
-    border-left: 4px solid var(--accent-orange);
-    padding: 20px;
-    border-radius: 4px;
-    margin-top: 25px;
-}
-
-.info-box h4 {
-    color: var(--accent-orange);
-    margin-bottom: 10px;
-}
-
-/* ---------------- FOOTER NAV ---------------- */
-.page-nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 60px;
-    padding-top: 25px;
-    border-top: 1px solid var(--border-color);
-}
-
-.nav-control {
-    background: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    padding: 12px 25px;
-    border-radius: 30px;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.nav-control:hover {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.nav-control:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-/* ---------------- RESPONSIVE ---------------- */
-@media (max-width: 768px) {
-    body {
-        flex-direction: column;
-        height: auto;
-        overflow: auto;
-    }
-
-    nav {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .nav-list {
-        display: none;
-    }
-
-    main {
-        padding: 20px;
-    }
-
-    .commands-grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            nav { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ccc; }
+            .nav-list { display: none; }
+            main { padding: 20px; }
+            .commands-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
