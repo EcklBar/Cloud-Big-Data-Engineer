@@ -3,579 +3,477 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Git for Data Engineers</title>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Git for Data Engineers | Complete Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #f1502f; /* Git Orange */
-            --primary-dark: #c0392b;
             --secondary: #2c3e50; /* Dark Blue */
             --accent: #3498db; /* Blue */
             --success: #2ecc71;
             --warning: #f1c40f;
             --danger: #e74c3c;
-            --light-bg: #f8f9fa;
-            --text: #2c3e50;
-            --code-bg: #282c34;
-            --code-text: #abb2bf;
+            --light-bg: #f4f7f6;
+            --white: #ffffff;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            font-family: 'Heebo', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--light-bg);
-            color: var(--text);
+            color: #333;
             line-height: 1.6;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            background: linear-gradient(135deg, var(--secondary) 0%, #34495e 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDQwaDQwVjBIMHZNNDAgNDBWMHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjxwYXRoIGQ9Ik0wIDQwaDQwVjBIMHZNNDAgNDBWMHoiIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvZz48L3N2Zz4=');
-            animation: bgScroll 60s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes bgScroll { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
-        .hero h1 { font-size: 4em; font-weight: 900; margin-bottom: 10px; letter-spacing: -2px; }
-        .hero h1 span { color: var(--primary); }
-        .hero p { font-size: 1.5em; font-weight: 300; opacity: 0.9; margin-bottom: 30px; }
-
-        /* --- NAVIGATION --- */
-        .nav-container {
-            background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 10px 0;
-        }
-
-        .nav-scroller {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            overflow-x: auto;
-            padding: 5px 20px;
+            min-height: 100vh;
         }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #1a252f 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .git-logo { font-size: 2.5rem; font-weight: 800; color: var(--primary); display: block; }
+
+        .nav-links { list-style: none; padding: 20px 0; overflow-y: auto; flex-grow: 1; }
 
         .nav-btn {
-            background: transparent;
-            border: 2px solid transparent;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 700;
-            color: var(--secondary);
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
+            width: 100%; text-align: left; padding: 15px 25px;
+            background: transparent; border: none; cursor: pointer;
+            font-size: 1rem; color: #333; font-weight: 500;
+            transition: all 0.2s; border-left: 4px solid transparent;
         }
 
-        .nav-btn:hover, .nav-btn.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 10px rgba(241, 80, 47, 0.4);
-        }
+        .nav-btn:hover { background-color: #f0f0f0; color: var(--primary); }
+        .nav-btn.active { background-color: #fff0eb; color: #c0392b; border-left-color: var(--primary); font-weight: 700; }
 
         /* --- MAIN CONTENT --- */
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .main-content { margin-left: 280px; flex-grow: 1; padding: 40px 60px; }
 
-        .section {
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-            display: none;
-            animation: fadeIn 0.5s ease-out;
-        }
-
+        .section { display: none; animation: fadeIn 0.4s ease-out; max-width: 1000px; margin: 0 auto; }
         .section.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { font-size: 2.5em; color: var(--secondary); margin-bottom: 30px; border-bottom: 4px solid var(--primary); display: inline-block; padding-bottom: 5px; }
-        h3 { font-size: 1.8em; color: var(--primary); margin: 30px 0 15px; }
-        p, li { font-size: 1.1em; margin-bottom: 15px; }
+        h2 { font-size: 2rem; margin-bottom: 25px; color: var(--secondary); border-bottom: 3px solid var(--primary); padding-bottom: 10px; display: inline-block; }
+        h3 { font-size: 1.5rem; margin: 35px 0 15px; color: #2c3e50; border-left: 5px solid var(--accent); padding-left: 15px; }
 
-        /* --- CARDS & GRID --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        /* --- CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px; }
         
-        .info-card {
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 15px;
-            padding: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-top: 5px solid var(--secondary);
+        .card {
+            background: var(--white); border-radius: 12px; padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--secondary);
+        }
+        .card:hover { transform: translateY(-3px); border-color: var(--primary); transition: 0.3s; }
+
+        /* --- CODE BOX --- */
+        .code-box {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 20px; border-radius: 8px; font-family: 'Fira Code', monospace;
+            font-size: 0.9rem; margin: 15px 0; position: relative;
+        }
+        .cmd { color: #569cd6; font-weight: bold; }
+        .arg { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+
+        /* --- INTERACTIVE MERGE BUTTONS --- */
+        .merge-controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .merge-btn {
+            padding: 10px 20px; border: 1px solid #ccc; background: white;
+            border-radius: 20px; cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .merge-btn:hover { background: #f0f0f0; }
+        .merge-btn.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+
+        .visual-display {
+            background: white; padding: 30px; border-radius: 12px;
+            border: 2px dashed #ccc; min-height: 150px; display: flex;
+            align-items: center; justify-content: center; text-align: center;
         }
 
-        .info-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
-
-        .icon-box { font-size: 2.5em; margin-bottom: 15px; color: var(--primary); }
-
-        /* --- CODE BLOCKS --- */
-        .command-box {
-            background: var(--code-bg);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            position: relative;
-            direction: ltr;
-            text-align: left;
-            border-left: 5px solid var(--accent);
+        /* --- CONFLICTS --- */
+        .conflict-box {
+            background: #2d2d2d; color: #ccc; padding: 15px;
+            border-radius: 6px; border-left: 5px solid var(--danger); font-family: monospace;
         }
-
-        .command-box code { font-family: 'Fira Code', monospace; color: var(--code-text); display: block; margin-bottom: 8px;}
-        .cmd { color: var(--accent); font-weight: bold; }
-        .arg { color: var(--warning); }
-        .comment { color: #5c6370; font-style: italic; }
-
-        .copy-btn {
-            position: absolute; top: 10px; right: 10px;
-            background: rgba(255,255,255,0.1); border: none; color: white;
-            padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em;
-            transition: background 0.2s;
-        }
-        .copy-btn:hover { background: rgba(255,255,255,0.3); }
-
-        /* --- DIAGRAMS --- */
-        .diagram-container {
-            display: flex; justify-content: space-around; align-items: center;
-            background: #eef2f5; padding: 40px; border-radius: 15px; margin: 30px 0;
-            flex-wrap: wrap; gap: 20px;
-        }
-
-        .stage {
-            background: white; padding: 20px 40px; border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center;
-            font-weight: bold; position: relative; border: 2px solid transparent;
-        }
-        
-        .stage.working { border-color: var(--danger); color: var(--danger); }
-        .stage.staging { border-color: var(--warning); color: var(--warning); }
-        .stage.repo { border-color: var(--success); color: var(--success); }
-
-        .arrow { font-size: 2em; color: #cbd5e0; }
-
-        /* --- INTERACTIVE TABS --- */
-        .tab-container { margin-top: 30px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn {
-            background: #eee; border: none; padding: 10px 20px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; transition: 0.3s;
-        }
-        .tab-btn.active { background: var(--secondary); color: white; }
-        .tab-content { display: none; background: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #eee; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
 
         /* --- EXERCISES --- */
         .exercise {
-            background: #fff8e1; border: 2px dashed #ffe0b2;
-            padding: 30px; border-radius: 15px; margin-top: 40px;
+            background: #fff8e1; border: 1px solid #ffe0b2;
+            padding: 25px; margin-top: 20px; border-radius: 8px;
         }
-        .exercise h3 { color: #f57c00; margin-top: 0; display: flex; align-items: center; gap: 10px; }
-        
-        /* --- FOOTER --- */
-        footer {
-            text-align: center; padding: 40px; color: var(--text); opacity: 0.7; font-size: 0.9em;
-            border-top: 1px solid #eee; margin-top: 60px;
-        }
+        .exercise h4 { margin-top: 0; color: #e65100; }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5em; }
-            .section { padding: 25px; }
-            .arrow { transform: rotate(90deg); margin: 10px 0; }
+        @media (max-width: 900px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-left: 0; padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <header class="hero">
-        <div class="hero-content">
-            <h1><span>Git</span> Masterclass</h1>
-            <p>Git for Data Engineers | Interactive Guide</p>
-            <div style="font-size: 3em; margin-top: 20px;">🚀 💾 🌿</div>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="git-logo">Git</span>
+            <p>Data Engineer's Guide</p>
         </div>
-    </header>
+        <ul class="nav-links">
+            <li><button class="nav-btn active" onclick="switchSection('intro')">1. Intro & Concepts</button></li>
+            <li><button class="nav-btn" onclick="switchSection('basics')">2. Basic Commands</button></li>
+            <li><button class="nav-btn" onclick="switchSection('workflow')">3. Workflow</button></li>
+            <li><button class="nav-btn" onclick="switchSection('branching')">4. Branching & Merging</button></li>
+            <li><button class="nav-btn" onclick="switchSection('advanced')">5. Advanced Commands</button></li>
+            <li><button class="nav-btn" onclick="switchSection('conflicts')">6. Conflicts</button></li>
+            <li><button class="nav-btn" onclick="switchSection('labs')">7. Hands-on Labs</button></li>
+        </ul>
+    </nav>
 
-    <div class="nav-container">
-        <div class="nav-scroller">
-            <button class="nav-btn active" onclick="switchSection('intro')">Intro & Concepts</button>
-            <button class="nav-btn" onclick="switchSection('basics')">Basic Commands</button>
-            <button class="nav-btn" onclick="switchSection('workflow')">Workflow</button>
-            <button class="nav-btn" onclick="switchSection('branching')">Branching & Merging</button>
-            <button class="nav-btn" onclick="switchSection('conflicts')">Conflict Resolution</button>
-            <button class="nav-btn" onclick="switchSection('commands')">Full Command List</button>
-            <button class="nav-btn" onclick="switchSection('exercises')">Exercises (Labs)</button>
-        </div>
-    </div>
-
-    <div class="container">
+    <div class="main-content">
 
         <div id="intro" class="section active">
-            <h2>Introduction to Version Control (VCS)</h2>
-            <p><strong>Version Control System</strong> is an application that manages and stores every revision of your code and files.</p>
+            <h2>Introduction</h2>
+            <p><strong>Version Control System (VCS)</strong> manages and stores revisions of your code.</p>
             
             <div class="grid">
-                <div class="info-card">
-                    <div class="icon-box">🛡️</div>
-                    <h3>Why is it Critical?</h3>
+                <div class="card">
+                    <h4>Why is it Critical?</h4>
                     <ul>
-                        <li>Collaborate on the same source code within a team.</li>
-                        <li>Manage software releases.</li>
-                        <li><strong>Rollback:</strong> Revert to previous versions if bugs are discovered.</li>
+                        <li>Collaboration on source code.</li>
+                        <li>Release management.</li>
+                        <li><strong>Rollback:</strong> Revert to previous versions if bugs occur.</li>
                     </ul>
                 </div>
-                <div class="info-card">
-                    <div class="icon-box">🌐</div>
-                    <h3>Distributed Model</h3>
-                    <p>Unlike older tools (like SVN), in Git, every developer has a <strong>full copy</strong> of the repository and its entire history. This allows for fast, offline work.</p>
+                <div class="card">
+                    <h4>Distributed Model</h4>
+                    <p>Unlike SVN, in Git every developer has a <strong>full copy</strong> of the repository history. Allows offline work and speed.</p>
                 </div>
             </div>
 
-            <h3>Delta Storage Mechanism</h3>
-            <p>Git uses a smart mechanism to save space:</p>
-            <div class="diagram-container" style="justify-content: flex-start;">
-                <div style="flex: 1;">
-                    <p>📦 <strong>Original Files:</strong> Stored as a complete object the first time.</p>
-                    <p>📝 <strong>Changes:</strong> Stored as <strong>Deltas</strong> (differences) between versions.</p>
-                    <p>📸 <strong>Commit:</strong> A "snapshot" of the project state at a given moment.</p>
+            <h3>Core Concepts</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>📦 Delta Storage</h4>
+                    <p>Git stores <strong>changes (deltas)</strong> rather than full file copies for every version to save space.</p>
                 </div>
-                
-            </div>
-
-            <h3>Git Objects Types</h3>
-            <div class="tab-container">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="openTab(event, 'blob')">Blob</button>
-                    <button class="tab-btn" onclick="openTab(event, 'tree')">Tree</button>
-                    <button class="tab-btn" onclick="openTab(event, 'commit')">Commit</button>
-                </div>
-                <div id="blob" class="tab-content active">
-                    <strong>Binary Large Object:</strong> Contains the raw content of the file (binary). It has no metadata (no filename, no permissions). Just pure data.
-                </div>
-                <div id="tree" class="tab-content">
-                    Represents a <strong>Directory</strong>. It contains a list of filenames and pointers to their Blobs, or pointers to other Trees (sub-directories).
-                </div>
-                <div id="commit" class="tab-content">
-                    Represents a <strong>Version</strong>. Contains a pointer to the main Tree of the project at that moment, plus metadata: Author, Date, and a Message.
+                <div class="card">
+                    <h4>🧩 Git Objects</h4>
+                    <ul>
+                        <li><strong>Blob:</strong> Raw file content (binary).</li>
+                        <li><strong>Tree:</strong> Represents a directory structure.</li>
+                        <li><strong>Commit:</strong> Snapshot with metadata (Author, Date).</li>
+                        <li><strong>Tag:</strong> Label for a specific commit (v1.0).</li>
+                    </ul>
                 </div>
             </div>
         </div>
 
         <div id="basics" class="section">
             <h2>Basic Commands</h2>
-            <p>The essential toolkit every Data Engineer needs to know.</p>
-
-            <div class="command-box">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <span class="cmd">git init</span>
-                <span class="comment"># Initialize a new repository in the current directory</span>
-                <br><br>
-                <span class="cmd">git clone</span> <span class="arg">&lt;repo_url&gt;</span>
-                <span class="comment"># Download a full copy of an existing remote repository</span>
-                <br><br>
-                <span class="cmd">git status</span>
-                <span class="comment"># Check file status (what changed? what is staged?)</span>
-                <br><br>
-                <span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span>
-                <span class="comment"># Move file to Staging Area (prepare for commit)</span>
-                <br><br>
-                <span class="cmd">git commit</span> <span class="arg">-m "message"</span>
-                <span class="comment"># Save changes to the local repository history</span>
-            </div>
-
-            <div class="info-card" style="background-color: #e3f2fd; border-color: #2196f3;">
-                <h3>💡 Pro Tip</h3>
-                <p>Use <code>git diff</code> before adding files to see exactly what lines changed, and <code>git log</code> to view the full project history.</p>
+            <div class="grid">
+                <div class="card">
+                    <h4>Setup</h4>
+                    <div class="code-box">
+                        <span class="cmd">git init</span> <span class="comment"># Initialize new repo</span><br>
+                        <span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Download repo</span><br>
+                        <span class="cmd">git remote -v</span> <span class="comment"># View remotes</span><br>
+                        <span class="cmd">git remote add</span> <span class="arg">origin &lt;url&gt;</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Daily Work</h4>
+                    <div class="code-box">
+                        <span class="cmd">git status</span> <span class="comment"># Check file status</span><br>
+                        <span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Stage file</span><br>
+                        <span class="cmd">git commit</span> <span class="arg">-m "msg"</span> <span class="comment"># Save snapshot</span><br>
+                        <span class="cmd">git push</span> <span class="comment"># Upload to server</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="workflow" class="section">
-            <h2>The Workflow (The 3 Stages)</h2>
-            <p>Understanding Git's structure is key to preventing errors.</p>
-
-            <div class="diagram-container">
-                <div class="stage repo">
-                    <div>Repository</div>
-                    <small>Saved History</small>
-                </div>
-                <div class="arrow">➜</div>
-                <div class="stage staging">
-                    <div>Staging Area</div>
-                    <small>Index (Prep)</small>
-                </div>
-                <div class="arrow">➜</div>
-                <div class="stage working">
-                    <div>Working Directory</div>
-                    <small>Sandbox (Edit)</small>
+            <h2>The 3-Stage Workflow</h2>
+            <div class="visual-display" style="background: #eef2f5;">
+                <div style="display:flex; justify-content:space-between; width:100%; max-width:600px;">
+                    <div style="padding:10px; background:white; border:2px solid #e74c3c; border-radius:8px;">Working Directory</div>
+                    <div style="font-size:20px;">➜</div>
+                    <div style="padding:10px; background:white; border:2px solid #f1c40f; border-radius:8px;">Staging Area</div>
+                    <div style="font-size:20px;">➜</div>
+                    <div style="padding:10px; background:white; border:2px solid #2ecc71; border-radius:8px;">Repository</div>
                 </div>
             </div>
 
             <div class="grid">
-                <div class="info-card">
-                    <h3>1. Working Directory</h3>
-                    <p>Where you create, edit, and delete files. This is your immediate workspace.</p>
+                <div class="card">
+                    <h4>File States</h4>
+                    <ul>
+                        <li><strong>Untracked:</strong> New files.</li>
+                        <li><strong>Modified:</strong> Changed but not staged.</li>
+                        <li><strong>Staged:</strong> Ready for commit.</li>
+                        <li><strong>Committed:</strong> Saved in history.</li>
+                    </ul>
                 </div>
-                <div class="info-card">
-                    <h3>2. Staging Area</h3>
-                    <p>A middle ground. You "choose" which modified files go into the next version. <code>git add</code> moves files here.</p>
-                </div>
-                <div class="info-card">
-                    <h3>3. Repository</h3>
-                    <p>The database. <code>git commit</code> takes everything from Staging and saves it forever in history.</p>
+                <div class="card">
+                    <h4>Actions</h4>
+                    <ul>
+                        <li><strong>git add:</strong> Working -> Staging</li>
+                        <li><strong>git commit:</strong> Staging -> Repo</li>
+                        <li><strong>git checkout:</strong> Repo -> Working</li>
+                    </ul>
                 </div>
             </div>
-
-            <h3>File States</h3>
-            <ul>
-                <li><strong>Untracked:</strong> New file Git doesn't know yet.</li>
-                <li><strong>Unmodified:</strong> Existing file that hasn't changed.</li>
-                <li><strong>Modified:</strong> Existing file with changes.</li>
-                <li><strong>Staged:</strong> File marked ready for the next Commit.</li>
-            </ul>
         </div>
 
         <div id="branching" class="section">
-            <h2>Branching & Merging</h2>
-            <p>Git's superpower. Work on features in parallel without breaking the main code.</p>
-            
+            <h2>Branching Strategies</h2>
+            <p>Explore different merge types interactively.</p>
 
-[Image of git branching strategy diagram]
-
-
-            <div class="command-box">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <span class="comment"># Create and switch to a new branch</span><br>
-                <span class="cmd">git checkout</span> <span class="arg">-b feature_branch</span><br><br>
-                
-                <span class="comment"># List all branches</span><br>
-                <span class="cmd">git branch</span> <span class="arg">-a</span><br><br>
-                
-                <span class="comment"># Switch back to main branch</span><br>
-                <span class="cmd">git checkout</span> <span class="arg">main</span><br><br>
-                
-                <span class="comment"># Merge side branch into main</span><br>
-                <span class="cmd">git merge</span> <span class="arg">feature_branch</span>
+            <div class="merge-controls">
+                <button class="merge-btn active" onclick="showMerge('fast-forward')">Fast-Forward</button>
+                <button class="merge-btn" onclick="showMerge('recursive')">Recursive (Standard)</button>
+                <button class="merge-btn" onclick="showMerge('squash')">Squash</button>
+                <button class="merge-btn" onclick="showMerge('octopus')">Octopus</button>
             </div>
 
-            <h3>Merge Strategies</h3>
-            <div class="grid">
-                <div class="info-card">
-                    <h4>Fast-Forward Merge</h4>
-                    <p>Happens when the main branch <strong>has not changed</strong> since you created the side branch. Git simply "moves the pointer" forward. No divergent history.</p>
+            <div class="visual-display" id="merge-display">
                 </div>
-                <div class="info-card">
-                    <h4>Merge Commit</h4>
-                    <p>Happens when there is <strong>divergent history</strong> (both main and side branches advanced). Git creates a special Merge Commit joining both branches.</p>
+
+            <div class="code-box">
+                <span class="cmd">git checkout</span> <span class="arg">-b feature</span> <span class="comment"># Create & Switch</span><br>
+                <span class="cmd">git branch</span> <span class="comment"># List branches</span><br>
+                <span class="cmd">git checkout</span> <span class="arg">main</span> <span class="comment"># Switch back</span><br>
+                <span class="cmd">git merge</span> <span class="arg">feature</span> <span class="comment"># Merge feature into main</span>
+            </div>
+        </div>
+
+        <div id="advanced" class="section">
+            <h2>Advanced Command Toolkit</h2>
+            <p>Powerful tools for history rewriting and debugging.</p>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>Rebase (Interactive)</h4>
+                    <p>Rewrite commit history for a clean log.</p>
+                    <div class="code-box">
+                        <span class="cmd">git rebase -i</span> <span class="arg">master</span>
+                        <br><br>
+                        <span class="comment"># Options inside editor:</span><br>
+                        p, pick = use commit<br>
+                        r, reword = edit message<br>
+                        s, squash = melt into previous<br>
+                        d, drop = remove commit
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Bisect (Bug Hunting)</h4>
+                    <p>Binary search to find which commit introduced a bug.</p>
+                    <div class="code-box">
+                        <span class="cmd">git bisect start</span><br>
+                        <span class="cmd">git bisect bad</span> <span class="comment"># Current is broken</span><br>
+                        <span class="cmd">git bisect good</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Last known good</span><br>
+                        <span class="cmd">git bisect reset</span> <span class="comment"># Finish</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>Filter Repo</h4>
+                    <p>Remove sensitive data (passwords) from history.</p>
+                    <div class="code-box">
+                        <span class="cmd">git filter-repo</span> <span class="arg">--path secrets.txt --invert-paths</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Reflog</h4>
+                    <p>A safety net. Shows ALL head movements, even deleted commits.</p>
+                    <div class="code-box">
+                        <span class="cmd">git reflog</span><br>
+                        <span class="cmd">git reset --hard</span> <span class="arg">HEAD@{1}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h4>Worktree</h4>
+                    <p>Manage multiple working trees attached to the same repo.</p>
+                    <div class="code-box">
+                        <span class="cmd">git worktree add</span> <span class="arg">../new-folder branch</span><br>
+                        <span class="cmd">git worktree list</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Submodules</h4>
+                    <p>Repositories inside repositories.</p>
+                    <div class="code-box">
+                        <span class="cmd">git submodule add</span> <span class="arg">&lt;url&gt;</span><br>
+                        <span class="cmd">git submodule update --init --recursive</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="conflicts" class="section">
-            <h2>Managing Conflicts</h2>
-            <p>What happens when two people change the <strong>same line</strong> in the <strong>same file</strong>? Git stops and asks for help.</p>
+            <h2>Solving Conflicts</h2>
+            <p>When two people change the same line, Git stops. Here is how to fix it.</p>
 
-            <h3>Identifying a Conflict</h3>
-            <div class="command-box" style="border-left-color: var(--danger);">
-<<<<<<< HEAD
-<span class="comment"># Code currently in Main</span>
-print("Hello World")
-=======
-<span class="comment"># Code from side branch</span>
-print("Hello Git")
->>>>>>> side_branch
-            </div>
-
-            <div class="info-card" style="background: #fff3e0;">
-                <h3>How to Resolve?</h3>
-                <ol>
-                    <li>Open the file.</li>
-                    <li>Choose which version to keep (or combine manually).</li>
-                    <li>Delete Git markers (<<<<, ====, >>>>).</li>
-                    <li>Run <code>git add</code> on the fixed file.</li>
-                    <li>Run <code>git commit</code> to finish the merge.</li>
-                </ol>
+            <div class="grid">
+                <div class="card">
+                    <h4>Identifying Conflict</h4>
+                    <div class="conflict-box">
+<<<<<<< HEAD<br>
+print("Code in Main")<br>
+=======<br>
+print("Code in Feature")<br>
+>>>>>>> feature_branch
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Manual Resolution</h4>
+                    <ol>
+                        <li>Open the file.</li>
+                        <li>Delete markers (<code><<<<</code>, <code>====</code>, <code>>>>></code>).</li>
+                        <li>Keep the correct code.</li>
+                        <li><code>git add &lt;file&gt;</code></li>
+                        <li><code>git commit</code> to finish.</li>
+                    </ol>
+                </div>
             </div>
             
-            <p style="margin-top: 20px;"><strong>Recommendation:</strong> Use VSCode. It shows helpful buttons like <em>"Accept Incoming Change"</em> making the process easy.</p>
-        </div>
-
-        <div id="commands" class="section">
-            <h2>Comprehensive Command List</h2>
-            
-            <div class="grid">
-                <div class="info-card">
-                    <h3>Repository Setup</h3>
-                    <div class="command-box">
-                        <span class="cmd">git init</span> <span class="comment"># Create new repo</span><br>
-                        <span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Clone existing repo</span><br>
-                        <span class="cmd">git remote -v</span> <span class="comment"># View remotes</span><br>
-                        <span class="cmd">git remote add origin</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Add remote</span>
-                    </div>
-                </div>
-                <div class="info-card">
-                    <h3>Staging & Committing</h3>
-                    <div class="command-box">
-                        <span class="cmd">git status</span> <span class="comment"># Check status</span><br>
-                        <span class="cmd">git add .</span> <span class="comment"># Stage all changes</span><br>
-                        <span class="cmd">git restore --staged</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Unstage file</span><br>
-                        <span class="cmd">git commit -m</span> <span class="arg">"msg"</span> <span class="comment"># Commit changes</span><br>
-                        <span class="cmd">git reset --hard</span> <span class="comment"># Discard all changes</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid">
-                <div class="info-card">
-                    <h3>Branching & Merging</h3>
-                    <div class="command-box">
-                        <span class="cmd">git branch</span> <span class="comment"># List branches</span><br>
-                        <span class="cmd">git checkout -b</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Create & switch</span><br>
-                        <span class="cmd">git branch -D</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Force delete branch</span><br>
-                        <span class="cmd">git merge</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># Merge into current</span><br>
-                        <span class="cmd">git cherry-pick</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Apply specific commit</span>
-                    </div>
-                </div>
-                <div class="info-card">
-                    <h3>History & Inspection</h3>
-                    <div class="command-box">
-                        <span class="cmd">git log --oneline</span> <span class="comment"># Compact history</span><br>
-                        <span class="cmd">git log --graph</span> <span class="comment"># Visual history</span><br>
-                        <span class="cmd">git diff</span> <span class="comment"># View changes</span><br>
-                        <span class="cmd">git blame</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># See who changed lines</span><br>
-                        <span class="cmd">git tag</span> <span class="arg">v1.0</span> <span class="comment"># Tag a version</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid">
-                <div class="info-card">
-                    <h3>Advanced / Recovery</h3>
-                    <div class="command-box">
-                        <span class="cmd">git revert</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Undo commit (new commit)</span><br>
-                        <span class="cmd">git reflog</span> <span class="comment"># View reference logs (recovery)</span><br>
-                        <span class="cmd">git stash</span> <span class="comment"># Save changes temporarily</span><br>
-                        <span class="cmd">git rebase -i</span> <span class="comment"># Interactive rebase</span>
-                    </div>
-                </div>
+            <div class="card" style="margin-top: 20px; border-top-color: #3498db;">
+                <h4>✨ Pro Tip: Use VSCode</h4>
+                <p>VSCode provides clickable buttons: <strong>Accept Current</strong> | <strong>Accept Incoming</strong>. This is safer and faster than manual editing.</p>
             </div>
         </div>
 
-        <div id="exercises" class="section">
-            <h2>Hands-on Labs</h2>
-            <p>The best way to learn is by doing. Open your terminal.</p>
-
+        <div id="labs" class="section">
+            <h2>Hands-on Exercises</h2>
+            
             <div class="exercise">
-                <h3>📝 Lab 1: Local Repo</h3>
+                <h4>📝 Lab 1: Local Repo</h4>
                 <ol>
-                    <li>Create a new folder and open terminal.</li>
-                    <li>Initialize repo: <code>git init</code>.</li>
-                    <li>Create file <code>name.txt</code> with your name.</li>
-                    <li>Stage it: <code>git add name.txt</code>.</li>
-                    <li>Commit: <code>git commit -m "Initial commit"</code>.</li>
+                    <li>Initialize new repo: <code>git init</code></li>
+                    <li>Create <code>name.txt</code> with your name.</li>
+                    <li>Stage it: <code>git add name.txt</code></li>
+                    <li>Commit: <code>git commit -m "Add name"</code></li>
                 </ol>
             </div>
 
             <div class="exercise">
-                <h3>🌿 Lab 2: Branching</h3>
+                <h4>🌿 Lab 2: Branching</h4>
                 <ol>
-                    <li>Create new branch: <code>git checkout -b side_branch</code>.</li>
-                    <li>Change content of <code>name.txt</code> to a friend's name.</li>
-                    <li>Stage and Commit changes on the new branch.</li>
-                    <li>Check history: <code>git log</code> and <code>git status</code>.</li>
+                    <li>Create branch: <code>git checkout -b side_branch</code></li>
+                    <li>Change name in <code>name.txt</code>.</li>
+                    <li>Stage & Commit.</li>
+                    <li>Check history: <code>git log --graph</code></li>
                 </ol>
             </div>
 
             <div class="exercise">
-                <h3>🔀 Lab 3: Merging & Conflicts</h3>
+                <h4>🔀 Lab 3: Merging & Conflicts</h4>
                 <ol>
-                    <li>Switch back to main: <code>git checkout main</code>.</li>
-                    <li>Attempt merge: <code>git merge side_branch</code>.</li>
-                    <li><strong>Notice:</strong> If you changed the file in Main too, you get a conflict.</li>
-                    <li>Resolve conflict so both names appear.</li>
-                    <li>Finish merge with Commit.</li>
+                    <li>Switch to main: <code>git checkout main</code></li>
+                    <li>Merge: <code>git merge side_branch</code></li>
+                    <li><strong>Challenge:</strong> If you changed main too, resolve the conflict so both names appear.</li>
+                    <li>Finalize with <code>git add</code> and <code>git commit</code>.</li>
                 </ol>
             </div>
 
-            <div class="info-card" style="margin-top: 30px; text-align: center;">
-                <h3>Visual Practice</h3>
-                <p>Try the game mentioned in the slides: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a></p>
+            <div class="card" style="text-align: center; margin-top: 30px;">
+                <p>Visual Game Recommendation: <a href="https://learngitbranching.js.org/" target="_blank">Learn Git Branching</a></p>
             </div>
         </div>
 
     </div>
 
-    <footer>
-        <p>© Created based on Naya College materials | Git for Data Engineers</p>
-    </footer>
-
     <script>
-        // Navigation Logic
+        // Navigation
         function switchSection(id) {
             document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(id).classList.add('active');
-            event.currentTarget.classList.add('active');
             
-            window.scrollTo(0, 0);
+            // Highlight button
+            const buttons = document.querySelectorAll('.nav-btn');
+            for(let btn of buttons) {
+                if(btn.onclick.toString().includes(id)) {
+                    btn.classList.add('active');
+                }
+            }
+            window.scrollTo(0,0);
         }
 
-        // Tabs Logic
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-                tabcontent[i].classList.remove('active');
+        // Merge Strategy Content
+        const mergeInfo = {
+            'fast-forward': {
+                text: "<strong>Fast-Forward:</strong> Main hasn't changed. Git just moves the pointer forward. History is linear.",
+                color: "#27ae60"
+            },
+            'recursive': {
+                text: "<strong>Recursive (Merge Commit):</strong> Divergent history. Git creates a new 'Merge Commit' to join the two branches.",
+                color: "#2980b9"
+            },
+            'squash': {
+                text: "<strong>Squash:</strong> Combines all feature branch commits into ONE commit on Main. Keeps history clean.",
+                color: "#e67e22"
+            },
+            'octopus': {
+                text: "<strong>Octopus:</strong> Merging more than 2 branches at once. Useful for merging multiple features.",
+                color: "#8e44ad"
             }
-            tablinks = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.className += " active";
+        };
+
+        function showMerge(type) {
+            const display = document.getElementById('merge-display');
+            display.innerHTML = `<p style='font-size:1.2rem; color:${mergeInfo[type].color}'>${mergeInfo[type].text}</p>`;
+            
+            document.querySelectorAll('.merge-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.onclick.toString().includes(type)) btn.classList.add('active');
+            });
         }
+
+        // Initialize
+        showMerge('fast-forward');
 
         // Copy Logic
         function copyCode(btn) {
-            const codeBlock = btn.parentElement;
-            let textToCopy = "";
-            const cmdElements = codeBlock.querySelectorAll('.cmd, .arg');
-            cmdElements.forEach(el => {
-                textToCopy += el.innerText + " ";
-                if(el.nextSibling && el.nextSibling.nodeName === "BR") {
-                   textToCopy += "\n"; 
-                }
-            });
-            // Fallback
-            if (!textToCopy) textToCopy = codeBlock.innerText.replace("Copy", "").trim();
+            const codeBox = btn.parentElement;
+            let text = "";
             
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = "Copied!";
-                btn.style.background = "#2ecc71";
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.background = "rgba(255,255,255,0.1)";
-                }, 2000);
+            // Try to be smart about what to copy
+            const spans = codeBox.querySelectorAll('.cmd, .arg, .flag');
+            if(spans.length > 0) {
+                 // Simple extraction, in reality complex due to formatting, fallback to innerText
+                 text = codeBox.innerText.replace("Copy", "").trim();
+            } else {
+                 text = codeBox.innerText.replace("Copy", "").trim();
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerText = "✓";
+                setTimeout(() => btn.innerText = "Copy", 2000);
             });
         }
     </script>
