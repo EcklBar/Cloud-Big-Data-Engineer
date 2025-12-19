@@ -186,23 +186,35 @@
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">ls</span></div>
-                <div class="card-desc">List files.</div>
+                <div class="card-desc">List directory content.</div>
+                <div class="example-block" onclick="copyText(this)">ls <span class="comment"># Basic list</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -l <span class="comment"># Long format (permissions, etc.)</span></div>
+                <div class="example-block" onclick="copyText(this)">ll <span class="comment"># Common alias for ls -l</span></div>
                 <div class="example-block" onclick="copyText(this)">ls -la <span class="comment"># List all (hidden) + details</span></div>
                 <div class="example-block" onclick="copyText(this)">ls -lh <span class="comment"># Human readable sizes</span></div>
                 <div class="example-block" onclick="copyText(this)">ls -lt <span class="comment"># Sort by time</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lS <span class="comment"># Sort by size</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -r <span class="comment"># Reverse order</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lR <span class="comment"># Recursive list</span></div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">cd</span></div>
                 <div class="card-desc">Change Directory.</div>
-                <div class="example-block" onclick="copyText(this)">cd /var/log <span class="comment"># Absolute path</span></div>
+                <div class="example-block" onclick="copyText(this)">cd /path/to/dir <span class="comment"># Go to specific path</span></div>
                 <div class="example-block" onclick="copyText(this)">cd .. <span class="comment"># Go up one level</span></div>
-                <div class="example-block" onclick="copyText(this)">cd ~ <span class="comment"># Go home</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ../folder <span class="comment"># Go to sibling folder</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ~ <span class="comment"># Go to home directory</span></div>
+                <div class="example-block" onclick="copyText(this)">cd <span class="comment"># Go home (shortcut)</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ~/folder <span class="comment"># Path inside home</span></div>
+                <div class="example-block" onclick="copyText(this)">cd - <span class="comment"># Back to previous dir</span></div>
+                <div class="example-block" onclick="copyText(this)">cd . <span class="comment"># Current directory</span></div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">mkdir</span></div>
-                <div class="card-desc">Make Directory.</div>
-                <div class="example-block" onclick="copyText(this)">mkdir new_folder</div>
-                <div class="example-block" onclick="copyText(this)">mkdir -p data/2024/01 <span class="comment"># Create full path</span></div>
+                <div class="card-desc">Create new directories.</div>
+                <div class="example-block" onclick="copyText(this)">mkdir new_folder <span class="comment"># Create a new directory</span></div>
+                <div class="example-block" onclick="copyText(this)">mkdir -p dir1/sub1/sub2 <span class="comment"># Create full path (recursive)</span></div>
+                <div class="example-block" onclick="copyText(this)">mkdir dir1 dir2 dir3 <span class="comment"># Create multiple directories</span></div>
             </div>
         </div>
     </section>
