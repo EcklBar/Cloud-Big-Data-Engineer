@@ -237,15 +237,15 @@
                     <div class="icon-box">🛡️</div>
                     <h3>למה זה קריטי?</h3>
                     <ul>
-                        <li>שיתוף פעולה בצוות על אותו קוד מקור.</li>
+                        [cite_start]<li>שיתוף פעולה בצוות על אותו קוד מקור[cite: 1553].</li>
                         <li>ניהול שחרורי גרסאות (Releases).</li>
-                        <li>יכולת "חזרה בזמן" (Rollback) במקרה של באגים.</li>
+                        [cite_start]<li>יכולת "חזרה בזמן" (Rollback) במקרה של באגים[cite: 1554].</li>
                     </ul>
                 </div>
                 <div class="info-card">
                     <div class="icon-box">🌐</div>
                     <h3>המודל המבוזר (Distributed)</h3>
-                    <p>בניגוד לכלים ישנים, ב-Git לכל מפתח יש <strong>עותק מלא</strong> של המאגר ושל ההיסטוריה כולה. זה מאפשר עבודה מהירה, גם ללא חיבור לאינטרנט.</p>
+                    <p>בניגוד לכלים ישנים, ב-Git לכל מפתח יש <strong>עותק מלא</strong> של המאגר ושל ההיסטוריה כולה. [cite_start]זה מאפשר עבודה מהירה, גם ללא חיבור לאינטרנט[cite: 1578].</p>
                 </div>
             </div>
 
@@ -254,9 +254,10 @@
             <div class="diagram-container" style="justify-content: flex-start;">
                 <div style="flex: 1;">
                     <p>📦 <strong>קבצים מקוריים:</strong> נשמרים כ-Object שלם בפעם הראשונה.</p>
-                    <p>📝 <strong>שינויים:</strong> נשמרים כ-Deltas (הפרשים) בלבד בין הגרסאות.</p>
-                    <p>📸 <strong>Commit:</strong> הוא בעצם "תמונת מצב" (Snapshot) שמצביעה למצב הפרויקט ברגע נתון.</p>
+                    [cite_start]<p>📝 <strong>שינויים:</strong> נשמרים כ-Deltas (הפרשים) בלבד בין הגרסאות[cite: 1672].</p>
+                    [cite_start]<p>📸 <strong>Commit:</strong> הוא בעצם "תמונת מצב" (Snapshot) שמצביעה למצב הפרויקט ברגע נתון[cite: 1685].</p>
                 </div>
+                
             </div>
 
             [cite_start]<h3>סוגי אובייקטים ב-Git [cite: 1705-1714]</h3>
@@ -267,20 +268,20 @@
                     <button class="tab-btn" onclick="openTab(event, 'commit')">Commit</button>
                 </div>
                 <div id="blob" class="tab-content active">
-                    <strong>Binary Large Object:</strong> מכיל את התוכן הגולמי של הקובץ (ללא שם הקובץ או הרשאות). רק הדאטה נטו.
+                    <strong>Binary Large Object:</strong> מכיל את התוכן הגולמי של הקובץ (ללא שם הקובץ או הרשאות). [cite_start]רק הדאטה נטו[cite: 1706].
                 </div>
                 <div id="tree" class="tab-content">
-                    מייצג <strong>תיקייה</strong>. הוא מכיל רשימה של קבצים (שמות) והפניות ל-Blobs שלהם, או הפניות ל-Trees אחרים (תתי-תיקיות).
+                    מייצג <strong>תיקייה</strong>. [cite_start]הוא מכיל רשימה של קבצים (שמות) והפניות ל-Blobs שלהם, או הפניות ל-Trees אחרים (תתי-תיקיות)[cite: 1707].
                 </div>
                 <div id="commit" class="tab-content">
-                    מייצג <strong>גרסה</strong>. מכיל מצביע ל-Tree הראשי של הפרויקט ברגע השמירה, בתוספת מטא-דאטה: מי כתב (Author), מתי (Date), והודעת הסבר.
+                    מייצג <strong>גרסה</strong>. [cite_start]מכיל מצביע ל-Tree הראשי של הפרויקט ברגע השמירה, בתוספת מטא-דאטה: מי כתב (Author), מתי (Date), והודעת הסבר [cite: 1711-1713].
                 </div>
             </div>
         </div>
 
         <div id="basics" class="section">
             <h2>פקודות בסיס (Basic Commands)</h2>
-            <p>ארגז הכלים הבסיסי שכל מהנדס נתונים חייב להכיר.</p>
+            [cite_start]<p>ארגז הכלים הבסיסי שכל מהנדס נתונים חייב להכיר [cite: 1618-1623].</p>
 
             <div class="command-box">
                 <button class="copy-btn" onclick="copyCode(this)">Copy</button>
@@ -330,15 +331,15 @@
             <div class="grid">
                 <div class="info-card">
                     <h3>1. Working Directory</h3>
-                    <p>כאן אתם יוצרים, עורכים ומוחקים קבצים. זהו אזור העבודה המיידי שלכם.</p>
+                    <p>כאן אתם יוצרים, עורכים ומוחקים קבצים. [cite_start]זהו אזור העבודה המיידי שלכם [cite: 1633-1635].</p>
                 </div>
                 <div class="info-card">
                     <h3>2. Staging Area</h3>
-                    <p>אזור ביניים. אתם "בוחרים" אילו קבצים ששיניתם ייכנסו לגרסה הבאה. פקודת <code>git add</code> מעבירה קבצים לכאן.</p>
+                    <p>אזור ביניים. אתם "בוחרים" אילו קבצים ששיניתם ייכנסו לגרסה הבאה. [cite_start]פקודת <code>git add</code> מעבירה קבצים לכאן [cite: 1636-1639].</p>
                 </div>
                 <div class="info-card">
                     <h3>3. Repository</h3>
-                    <p>בסיס הנתונים של Git. פקודת <code>git commit</code> לוקחת את מה שב-Staging ושומרת אותו לנצח בהיסטוריה.</p>
+                    <p>בסיס הנתונים של Git. [cite_start]פקודת <code>git commit</code> לוקחת את מה שב-Staging ושומרת אותו לנצח בהיסטוריה [cite: 1640-1643].</p>
                 </div>
             </div>
 
@@ -404,8 +405,8 @@ print("Hello Git")
                     <li>פותחים את הקובץ.</li>
                     <li>בוחרים איזו גרסה להשאיר (או משלבים את שתיהן).</li>
                     <li>מוחקים את הסימונים של Git (<<<<, ====, >>>>).</li>
-                    <li>מבצעים <code>git add</code> לקובץ המתוקן.</li>
-                    <li>מבצעים <code>git commit</code> כדי לסיים את המיזוג.</li>
+                    [cite_start]<li>מבצעים <code>git add</code> לקובץ המתוקן[cite: 1892].</li>
+                    [cite_start]<li>מבצעים <code>git commit</code> כדי לסיים את המיזוג[cite: 1894].</li>
                 </ol>
             </div>
             
@@ -450,7 +451,7 @@ print("Hello Git")
 
             <div class="info-card" style="margin-top: 30px; text-align: center;">
                 <h3>רוצים עוד תרגול ויזואלי?</h3>
-                [cite_start]<p>המשחק המצוין שהומלץ במצגת: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a> [cite: 1980]</p>
+                <p>המשחק המצוין שהומלץ במצגת: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a></p>
             </div>
         </div>
 
