@@ -237,7 +237,7 @@
         <p>Understanding how the components fit together.</p>
         
         <div class="diagram-box">
-            [Diagram: Producers -> Brokers (Topics/Partitions) -> Consumers]
+            
         </div>
 
         <div class="commands-grid">
@@ -309,6 +309,82 @@
     </section>
 
     <section id="topic3">
+        <h2>⚙️ Broker Configuration</h2>
+        <p>The core configuration for the Kafka Server is typically found in <code>config/server.properties</code>. Here are the most critical settings to understand.</p>
+
+        <h3>1. Connectivity</h3>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">broker.id</span></div>
+                <div class="card-desc">A unique integer identifier for each broker in the cluster.</div>
+                <div class="example-block" onclick="copyText(this)">broker.id=0</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">listeners</span></div>
+                <div class="card-desc">The socket server listens on. Format: <code>PROTOCOL://YOUR.HOST.NAME:PORT</code>.</div>
+                <div class="example-block" onclick="copyText(this)">listeners=PLAINTEXT://localhost:9092</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">advertised.listeners</span></div>
+                <div class="card-desc">The specific IP/Port clients should connect to. Crucial for Docker/Cloud setups.</div>
+                <div class="example-block" onclick="copyText(this)">advertised.listeners=PLAINTEXT://public-ip:9092</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">zookeeper.connect</span></div>
+                <div class="card-desc">Zookeeper connection string. For clusters, list all ZK nodes comma-separated.</div>
+                <div class="example-block" onclick="copyText(this)">zookeeper.connect=localhost:2181</div>
+            </div>
+        </div>
+
+        <h3>2. Logs & Retention</h3>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">log.dirs</span></div>
+                <div class="card-desc">Directory where Kafka persists data. Can be multiple paths.</div>
+                <div class="example-block" onclick="copyText(this)">log.dirs=/tmp/kafka-logs</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">log.retention.hours</span></div>
+                <div class="card-desc">How long to keep data before deleting it. Default is 168 hours (7 days).</div>
+                <div class="example-block" onclick="copyText(this)">log.retention.hours=168</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">auto.create.topics.enable</span></div>
+                <div class="card-desc">Allow topics to be created automatically when a producer writes to them.</div>
+                <div class="example-block" onclick="copyText(this)">auto.create.topics.enable=true</div>
+            </div>
+        </div>
+
+        <h3>3. Full Example (server.properties)</h3>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Production Template</span></div>
+                <div class="card-desc">Common configuration pattern for a broker.</div>
+                <div class="example-block" onclick="copyText(this)">
+# Server Basics
+broker.id=1
+
+# Network
+listeners=PLAINTEXT://0.0.0.0:9092
+advertised.listeners=PLAINTEXT://kafka-broker-1:9092
+
+# Data
+log.dirs=/var/lib/kafka/data
+num.partitions=3
+default.replication.factor=2
+
+# Retention (7 Days)
+log.retention.hours=168
+log.segment.bytes=1073741824
+
+# Zookeeper
+zookeeper.connect=zk1:2181,zk2:2181,zk3:2181
+zookeeper.connection.timeout.ms=18000</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic4">
         <h2>🔌 Kafka Connect</h2>
         <p>A framework to stream data into and out of Kafka without writing custom code.</p>
 
@@ -347,89 +423,6 @@ hdfs.url=hdfs://localhost:9000</div>
                 <div class="code-header"><span class="cmd-title">Run Standalone</span></div>
                 <div class="card-desc">Execute the connector with config files.</div>
                 <div class="example-block" onclick="copyText(this)">bin/connect-standalone.sh config/connect-standalone.properties config/file-source.properties</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic4">
-        <h2>⚙️ Pipeline Lab (MongoDB)</h2>
-        <p>A complete blueprint for streaming data from a Kafka topic directly into a MongoDB collection using Kafka Connect.</p>
-        
-        
-        <h3>1. The Blueprint</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Full Configuration</span></div>
-                <div class="card-desc">JSON payload to configure the <strong>MongoDB Sink Connector</strong>.</div>
-                <div class="example-block" onclick="copyText(this)">
-{
-  "name": "mongo-sink",
-  "config": {
-    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
-    "tasks.max": "1",
-    "topics": "test-topic",
-    "connection.uri": "mongodb://mongo:27017",
-    "database": "mydb",
-    "collection": "events",
-    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable": "false"
-  }
-}</div>
-            </div>
-        </div>
-
-        <h3>2. Configuration Breakdown</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Core Settings</span></div>
-                <div class="card-desc">
-                    <strong>name:</strong> Unique identifier for this connector.<br>
-                    <strong>connector.class:</strong> The specific Java class plugin used (MongoSinkConnector).<br>
-                    <strong>tasks.max:</strong> Parallelism level.
-                </div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Target Settings</span></div>
-                <div class="card-desc">
-                    <strong>connection.uri:</strong> MongoDB connection string.<br>
-                    <strong>database:</strong> Target DB name.<br>
-                    <strong>collection:</strong> Target collection name.
-                </div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Data Handling</span></div>
-                <div class="card-desc">
-                    <strong>value.converter:</strong> Treats the message body as JSON.<br>
-                    <span style="color: #d32f2f;"><strong>schemas.enable: false</strong></span> - Critical when your incoming Kafka messages are plain JSON without a schema attached.
-                </div>
-            </div>
-        </div>
-
-        <h3>3. Execution</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Launch Connector</span></div>
-                <div class="card-desc">Send the config to the Connect REST API.</div>
-                <div class="example-block" onclick="copyText(this)">
-curl -X POST http://localhost:8083/connectors \
--H "Content-Type: application/json" -d '{
-  "name": "mongo-sink",
-  "config": {
-    "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
-    "topics": "test-topic",
-    "connection.uri": "mongodb://mongo:27017",
-    "database": "mydb",
-    "collection": "events",
-    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable": "false"
-  }
-}'</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Verify Status</span></div>
-                <div class="card-desc">Check if the connector is running.</div>
-                <div class="example-block" onclick="copyText(this)">curl -s http://localhost:8083/connectors/mongo-sink/status</div>
             </div>
         </div>
     </section>
@@ -518,7 +511,8 @@ curl -X POST http://localhost:8083/connectors \
     // --- JAVASCRIPT LOGIC ---
     const topics = [
         "Intro & Concepts", "Architecture", "CLI Commands", 
-        "Kafka Connect", "Pipeline Lab (MongoDB)", "Core APIs", "Real Use Cases", "Monitoring & Admin"
+        "Broker Configuration", "Kafka Connect", "Core APIs", 
+        "Real Use Cases", "Monitoring & Admin"
     ];
 
     let currentTopicIndex = 0;
