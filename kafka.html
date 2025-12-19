@@ -4,180 +4,347 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apache Kafka Master Guide</title>
-    <style>
-        /* --- CSS STYLING --- */
-        :root {
-            /* Kafka Brand Colors */
-            --primary-color: #231F20; /* Kafka Black */
-            --secondary-color: #E65100; /* Kafka Orange */
-            --accent-blue: #0077b6; /* Data Eng Blue */
-            --bg-color: #f4f6f8;
-            --text-color: #333333;
-            --sidebar-width: 280px;
-            --border-radius: 8px;
-            --code-bg: #2d2d2d; /* Terminal Black */
-            --code-text: #a5d6ff; /* Terminal Blue/White */
-        }
+   <style>
+/* =========================================================
+   Dracula / PyCharm Dark Theme – FULL STYLE
+   ========================================================= */
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    /* Layout */
+    --sidebar-width: 280px;
+    --border-radius: 8px;
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+    /* Backgrounds */
+    --bg-color: #282a36;
+    --sidebar-bg: #21222c;
+    --panel-bg: #1e1f29;
+    --hover-bg: #343746;
 
-        /* --- SIDEBAR --- */
-        nav {
-            width: var(--sidebar-width);
-            background-color: #ffffff;
-            border-right: 1px solid #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            z-index: 10;
-        }
+    /* Text */
+    --text-color: #f8f8f2;
+    --text-muted: #6272a4;
 
-        .nav-header {
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-color), #4a4a4a);
-            color: white;
-            text-align: center;
-            border-bottom: 4px solid var(--secondary-color);
-        }
+    /* Accents */
+    --primary-color: #bd93f9;     /* Purple */
+    --secondary-color: #ff79c6;   /* Pink */
+    --accent-blue: #8be9fd;
+    --accent-green: #50fa7b;
+    --accent-orange: #ffb86c;
+    --accent-red: #ff5555;
 
-        .nav-header h1 { font-size: 1.4rem; margin-bottom: 5px; font-weight: 700; letter-spacing: 1px; }
-        .nav-header small { color: #ffd180; font-weight: 500; }
+    /* Borders */
+    --border-color: #44475a;
 
-        .search-box { padding: 15px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
-        #searchInput {
-            width: 100%; padding: 10px;
-            border: 1px solid #ccc; border-radius: 6px;
-            font-size: 0.9rem; outline: none; transition: border 0.3s;
-        }
-        #searchInput:focus { border-color: var(--secondary-color); }
+    /* Code */
+    --code-bg: #1e1f29;
+    --code-text: #f8f8f2;
+}
 
-        .nav-list { list-style: none; overflow-y: auto; flex-grow: 1; }
-        .nav-btn {
-            width: 100%; text-align: left; padding: 14px 20px;
-            background: none; border: none; border-bottom: 1px solid #f0f0f0;
-            cursor: pointer; font-size: 0.95rem; color: var(--text-color);
-            transition: all 0.2s; font-weight: 500;
-        }
-        .nav-btn:hover { background-color: #fff3e0; color: var(--secondary-color); }
-        .nav-btn.active {
-            background-color: #ffe0b2; color: #bf360c;
-            border-left: 5px solid var(--secondary-color); font-weight: 700;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* --- MAIN CONTENT --- */
-        main {
-            flex-grow: 1; padding: 40px; overflow-y: auto;
-            max-width: 1200px; margin: 0 auto;
-        }
+/* ---------------- BODY ---------------- */
+body {
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
 
-        section { display: none; padding-bottom: 60px; animation: fadeIn 0.3s; }
-        section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* ---------------- SIDEBAR ---------------- */
+nav {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 10;
+}
 
-        h2 { 
-            font-size: 2.2rem; margin-bottom: 25px; color: var(--primary-color); 
-            border-bottom: 3px solid #e0e0e0; padding-bottom: 10px; 
-        }
-        h3 { font-size: 1.5rem; margin-top: 35px; margin-bottom: 15px; color: var(--secondary-color); border-left: 4px solid var(--secondary-color); padding-left: 10px; }
-        p { margin-bottom: 20px; color: #555; font-size: 1.05rem; }
+.nav-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #1e1f29, #2b2d3a);
+    color: var(--primary-color);
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
 
-        /* --- COMMAND CARDS --- */
-        .commands-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;
-        }
-        .command-card {
-            background: white; border: 1px solid #e0e0e0; border-radius: var(--border-radius);
-            padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; flex-direction: column;
-        }
-        .command-card:hover {
-            transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-top: 3px solid var(--secondary-color);
-        }
-        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .cmd-title { font-family: 'Consolas', monospace; color: var(--primary-color); font-weight: bold; font-size: 1.2rem; }
-        .card-desc { font-size: 0.95rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
+.nav-header h1 {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
 
-        /* --- CLI / CODE BLOCKS --- */
-        .example-block {
-            background-color: var(--code-bg); 
-            color: var(--code-text);
-            border-radius: 6px; 
-            padding: 15px; 
-            margin-top: 10px;
-            font-family: 'Consolas', 'Monaco', monospace; 
-            font-size: 0.95rem; 
-            cursor: pointer; 
-            position: relative; 
-            transition: all 0.2s;
-            word-break: break-all; 
-            line-height: 1.5;
-            border-left: 4px solid #555;
-        }
-        .example-block:hover { 
-            border-left-color: var(--secondary-color);
-            background-color: #383838;
-        }
-        .example-block::after {
-            content: '📋 Copy'; position: absolute; right: 10px; top: 10px;
-            opacity: 0; font-size: 0.75rem;
-            background: rgba(255,255,255,0.2); color: white; padding: 4px 8px; 
-            border-radius: 4px; transition: opacity 0.2s;
-        }
-        .example-block:hover::after { opacity: 1; }
-        
-        .comment { color: #6a9955; font-style: italic; display: block; margin-top: 5px; font-size: 0.85rem; }
-        
-        /* --- DIAGRAM PLACEHOLDERS --- */
-        .diagram-box {
-            background: white; border: 2px dashed #ccc; border-radius: 8px;
-            padding: 30px; text-align: center; color: #888; margin: 20px 0;
-            font-weight: 500;
-        }
+.nav-header small {
+    color: var(--accent-blue);
+    font-weight: 500;
+}
 
-        /* --- INFO BOX --- */
-        .info-box {
-            background: #fff8e1; border-left: 5px solid #ff6f00; padding: 20px;
-            border-radius: 4px; margin-top: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .info-box h4 { color: #e65100; margin-bottom: 10px; font-size: 1.1rem; }
+.search-box {
+    padding: 14px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--sidebar-bg);
+}
 
-        /* --- NAV FOOTER --- */
-        .page-nav {
-            display: flex; justify-content: space-between; margin-top: 60px;
-            padding-top: 25px; border-top: 1px solid #e0e0e0;
-        }
-        .nav-control {
-            background: white; border: 1px solid #ccc; padding: 12px 25px;
-            border-radius: 30px; cursor: pointer; color: #555;
-            transition: all 0.2s; font-weight: 600; font-size: 0.95rem;
-        }
-        .nav-control:hover { 
-            border-color: var(--secondary-color); color: var(--secondary-color); 
-            background: #fff3e0;
-        }
-        .nav-control:disabled { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; border-color: #ccc; color: #999; }
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    background: var(--panel-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    outline: none;
+}
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
-            nav { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ccc; }
-            .nav-list { display: none; }
-            main { padding: 20px; }
-            .commands-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+#searchInput:focus {
+    border-color: var(--primary-color);
+}
+
+/* ---------------- NAV LIST ---------------- */
+.nav-list {
+    list-style: none;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.nav-btn {
+    width: 100%;
+    text-align: left;
+    padding: 14px 20px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background-color: var(--hover-bg);
+    color: var(--accent-blue);
+}
+
+.nav-btn.active {
+    background-color: var(--panel-bg);
+    color: var(--primary-color);
+    border-left: 4px solid var(--primary-color);
+    font-weight: 700;
+}
+
+/* ---------------- MAIN CONTENT ---------------- */
+main {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+    display: none;
+    padding-bottom: 60px;
+    animation: fadeIn 0.25s ease;
+}
+
+section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+    border-left: 4px solid var(--secondary-color);
+    padding-left: 12px;
+}
+
+p {
+    margin-bottom: 20px;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+/* ---------------- COMMAND CARDS ---------------- */
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.command-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.command-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.cmd-title {
+    color: var(--accent-green);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.card-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+/* ---------------- CODE BLOCKS ---------------- */
+.example-block {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    line-height: 1.5;
+    border-left: 4px solid var(--primary-color);
+}
+
+.example-block:hover {
+    background-color: #24253a;
+    border-left-color: var(--secondary-color);
+}
+
+.example-block::after {
+    content: "📋 Copy";
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    opacity: 0;
+    font-size: 0.75rem;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+}
+
+.example-block:hover::after {
+    opacity: 1;
+}
+
+.comment {
+    color: var(--text-muted);
+    font-style: italic;
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+}
+
+/* ---------------- INFO BOX ---------------- */
+.info-box {
+    background: var(--panel-bg);
+    border-left: 4px solid var(--accent-orange);
+    padding: 20px;
+    border-radius: 4px;
+    margin-top: 25px;
+}
+
+.info-box h4 {
+    color: var(--accent-orange);
+    margin-bottom: 10px;
+}
+
+/* ---------------- FOOTER NAV ---------------- */
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color);
+}
+
+.nav-control {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    padding: 12px 25px;
+    border-radius: 30px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.nav-control:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.nav-control:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        height: auto;
+        overflow: auto;
+    }
+
+    nav {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-list {
+        display: none;
+    }
+
+    main {
+        padding: 20px;
+    }
+
+    .commands-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
 <body>
 
@@ -237,7 +404,7 @@
         <p>Understanding how the components fit together.</p>
         
         <div class="diagram-box">
-            
+            [Diagram: Producers -> Brokers (Topics/Partitions) -> Consumers]
         </div>
 
         <div class="commands-grid">
@@ -309,82 +476,6 @@
     </section>
 
     <section id="topic3">
-        <h2>⚙️ Broker Configuration</h2>
-        <p>The core configuration for the Kafka Server is typically found in <code>config/server.properties</code>. Here are the most critical settings to understand.</p>
-
-        <h3>1. Connectivity</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">broker.id</span></div>
-                <div class="card-desc">A unique integer identifier for each broker in the cluster.</div>
-                <div class="example-block" onclick="copyText(this)">broker.id=0</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">listeners</span></div>
-                <div class="card-desc">The socket server listens on. Format: <code>PROTOCOL://YOUR.HOST.NAME:PORT</code>.</div>
-                <div class="example-block" onclick="copyText(this)">listeners=PLAINTEXT://localhost:9092</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">advertised.listeners</span></div>
-                <div class="card-desc">The specific IP/Port clients should connect to. Crucial for Docker/Cloud setups.</div>
-                <div class="example-block" onclick="copyText(this)">advertised.listeners=PLAINTEXT://public-ip:9092</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">zookeeper.connect</span></div>
-                <div class="card-desc">Zookeeper connection string. For clusters, list all ZK nodes comma-separated.</div>
-                <div class="example-block" onclick="copyText(this)">zookeeper.connect=localhost:2181</div>
-            </div>
-        </div>
-
-        <h3>2. Logs & Retention</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">log.dirs</span></div>
-                <div class="card-desc">Directory where Kafka persists data. Can be multiple paths.</div>
-                <div class="example-block" onclick="copyText(this)">log.dirs=/tmp/kafka-logs</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">log.retention.hours</span></div>
-                <div class="card-desc">How long to keep data before deleting it. Default is 168 hours (7 days).</div>
-                <div class="example-block" onclick="copyText(this)">log.retention.hours=168</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">auto.create.topics.enable</span></div>
-                <div class="card-desc">Allow topics to be created automatically when a producer writes to them.</div>
-                <div class="example-block" onclick="copyText(this)">auto.create.topics.enable=true</div>
-            </div>
-        </div>
-
-        <h3>3. Full Example (server.properties)</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Production Template</span></div>
-                <div class="card-desc">Common configuration pattern for a broker.</div>
-                <div class="example-block" onclick="copyText(this)">
-# Server Basics
-broker.id=1
-
-# Network
-listeners=PLAINTEXT://0.0.0.0:9092
-advertised.listeners=PLAINTEXT://kafka-broker-1:9092
-
-# Data
-log.dirs=/var/lib/kafka/data
-num.partitions=3
-default.replication.factor=2
-
-# Retention (7 Days)
-log.retention.hours=168
-log.segment.bytes=1073741824
-
-# Zookeeper
-zookeeper.connect=zk1:2181,zk2:2181,zk3:2181
-zookeeper.connection.timeout.ms=18000</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic4">
         <h2>🔌 Kafka Connect</h2>
         <p>A framework to stream data into and out of Kafka without writing custom code.</p>
 
@@ -427,7 +518,7 @@ hdfs.url=hdfs://localhost:9000</div>
         </div>
     </section>
 
-    <section id="topic5">
+    <section id="topic4">
         <h2>🧩 Core APIs</h2>
         <p>The 4 main APIs used for development.</p>
 
@@ -451,7 +542,7 @@ hdfs.url=hdfs://localhost:9000</div>
         </div>
     </section>
 
-    <section id="topic6">
+    <section id="topic5">
         <h2>🌍 Real Use Cases</h2>
         <p>How giant companies utilize Kafka.</p>
 
@@ -475,7 +566,7 @@ hdfs.url=hdfs://localhost:9000</div>
         </div>
     </section>
 
-    <section id="topic7">
+    <section id="topic6">
         <h2>📊 Monitoring & Admin</h2>
         <p>Keep your cluster healthy.</p>
 
@@ -511,8 +602,7 @@ hdfs.url=hdfs://localhost:9000</div>
     // --- JAVASCRIPT LOGIC ---
     const topics = [
         "Intro & Concepts", "Architecture", "CLI Commands", 
-        "Broker Configuration", "Kafka Connect", "Core APIs", 
-        "Real Use Cases", "Monitoring & Admin"
+        "Kafka Connect", "Core APIs", "Real Use Cases", "Monitoring & Admin"
     ];
 
     let currentTopicIndex = 0;
