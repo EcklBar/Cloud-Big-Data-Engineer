@@ -320,6 +320,7 @@
                 <div class="example-block" onclick="copyText(this)">cat -n file.txt <span class="comment"># Line numbers</span></div>
                 <div class="example-block" onclick="copyText(this)">cat f1 f2 > merged</div>
                 <div class="example-block" onclick="copyText(this)">cat >> file.txt <span class="comment"># Append</span></div>
+                <div class="example-block" onclick="copyText(this)">cat > file.txt <span class="comment"># Create file (Ctrl+C to stop) </span></div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">tac</span></div>
@@ -693,8 +694,8 @@
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Switch</span></div>
                 <div class="card-desc">Change user.</div>
-                <div class="example-block" onclick="copyText(this)">su - user</div>
-                <div class="example-block" onclick="copyText(this)">sudo cmd</div>
+                <div class="example-block" onclick="copyText(this)">su - user<span class="comment"># Load Env </span></div>
+                <div class="example-block" onclick="copyText(this)">sudo cmd<span class="comment"># Run as root [cite: 926]</span></div>
                 <div class="example-block" onclick="copyText(this)">sudo -i <span class="comment"># Root login</span></div>
             </div>
             <div class="command-card">
