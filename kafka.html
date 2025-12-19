@@ -15,8 +15,8 @@
             --text-color: #333333;
             --sidebar-width: 280px;
             --border-radius: 8px;
-            --code-bg: #2d2d2d;
-            --code-text: #f8f8f2;
+            --code-bg: #2d2d2d; /* Terminal Black */
+            --code-text: #a5d6ff; /* Terminal Blue/White */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -88,7 +88,7 @@
             font-size: 2.2rem; margin-bottom: 25px; color: var(--primary-color); 
             border-bottom: 3px solid #e0e0e0; padding-bottom: 10px; 
         }
-        h3 { font-size: 1.5rem; margin-top: 35px; margin-bottom: 15px; color: var(--secondary-color); }
+        h3 { font-size: 1.5rem; margin-top: 35px; margin-bottom: 15px; color: var(--secondary-color); border-left: 4px solid var(--secondary-color); padding-left: 10px; }
         p { margin-bottom: 20px; color: #555; font-size: 1.05rem; }
 
         /* --- COMMAND CARDS --- */
@@ -99,6 +99,7 @@
             background: white; border: 1px solid #e0e0e0; border-radius: var(--border-radius);
             padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column;
         }
         .command-card:hover {
             transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
@@ -106,28 +107,38 @@
         }
         .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .cmd-title { font-family: 'Consolas', monospace; color: var(--primary-color); font-weight: bold; font-size: 1.2rem; }
-        .card-desc { font-size: 0.95rem; color: #666; margin-bottom: 15px; }
+        .card-desc { font-size: 0.95rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
 
-        /* --- COPY BLOCKS --- */
+        /* --- CLI / CODE BLOCKS --- */
         .example-block {
-            background-color: #f5f5f5; border-left: 4px solid var(--secondary-color);
-            padding: 12px 15px; border-radius: 4px; margin-top: 10px;
-            font-family: 'Consolas', monospace; font-size: 0.9rem; color: #333;
-            cursor: pointer; position: relative; transition: background 0.2s;
-            word-break: break-all; line-height: 1.4;
+            background-color: var(--code-bg); 
+            color: var(--code-text);
+            border-radius: 6px; 
+            padding: 15px; 
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 0.95rem; 
+            cursor: pointer; 
+            position: relative; 
+            transition: all 0.2s;
+            word-break: break-all; 
+            line-height: 1.5;
+            border-left: 4px solid #555;
         }
-        .example-block:hover { background-color: #eeeeee; }
+        .example-block:hover { 
+            border-left-color: var(--secondary-color);
+            background-color: #383838;
+        }
         .example-block::after {
-            content: '📋 Copy'; position: absolute; right: 10px; top: 50%;
-            transform: translateY(-50%); opacity: 0; font-size: 0.75rem;
-            background: var(--primary-color); color: white; padding: 3px 8px; 
+            content: '📋 Copy'; position: absolute; right: 10px; top: 10px;
+            opacity: 0; font-size: 0.75rem;
+            background: rgba(255,255,255,0.2); color: white; padding: 4px 8px; 
             border-radius: 4px; transition: opacity 0.2s;
         }
         .example-block:hover::after { opacity: 1; }
         
-        .comment { color: #00796b; font-style: italic; display: block; margin-top: 4px; font-size: 0.85rem; }
-        .parameter { color: #d81b60; font-weight: bold; }
-
+        .comment { color: #6a9955; font-style: italic; display: block; margin-top: 5px; font-size: 0.85rem; }
+        
         /* --- DIAGRAM PLACEHOLDERS --- */
         .diagram-box {
             background: white; border: 2px dashed #ccc; border-radius: 8px;
@@ -173,7 +184,7 @@
 <nav>
     <div class="nav-header">
         <h1>Apache Kafka</h1>
-        [cite_start]<small>Master Guide [cite: 1]</small>
+        <small>Master Guide</small>
     </div>
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="Search topics (e.g. topic, consumer)...">
@@ -185,10 +196,10 @@
 
     <section id="topic0" class="active">
         <h2>🚀 Intro & Concepts</h2>
-        <p>Apache Kafka is a distributed streaming platform based on the publish-subscribe model. [cite_start]It is designed to be fast, scalable, and fault-tolerant[cite: 94].</p>
+        <p>Apache Kafka is a distributed streaming platform based on the publish-subscribe model. It is designed to be fast, scalable, and fault-tolerant.</p>
         
         <div class="info-box">
-            [cite_start]<h4>ETL vs. Data Streaming [cite: 35-71]</h4>
+            <h4>ETL vs. Data Streaming</h4>
             <p><strong>Old World (ETL):</strong> Batch processing, slow, resource-intensive, runs on schedule (not real-time).</p>
             <p><strong>New World (Streaming):</strong> Real-time processing, low latency, fault-tolerant, scalable, handles continuous event streams.</p>
         </div>
@@ -196,27 +207,27 @@
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Broker</span></div>
-                <div class="card-desc">A Kafka server. [cite_start]A cluster is made of multiple brokers[cite: 529].</div>
+                <div class="card-desc">A Kafka server. A cluster is made of multiple brokers.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Topic</span></div>
-                <div class="card-desc">A logical channel for data. [cite_start]Producers write to topics, Consumers read from them[cite: 570].</div>
+                <div class="card-desc">A logical channel for data. Producers write to topics, Consumers read from them.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Partition</span></div>
-                <div class="card-desc">Topics are split into partitions for scalability. [cite_start]Ordering is guaranteed <em>only</em> within a partition[cite: 606].</div>
+                <div class="card-desc">Topics are split into partitions for scalability. Ordering is guaranteed <em>only</em> within a partition.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Offset</span></div>
-                [cite_start]<div class="card-desc">A unique incremental ID assigned to every message in a partition[cite: 598].</div>
+                <div class="card-desc">A unique incremental ID assigned to every message in a partition.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Replication</span></div>
-                [cite_start]<div class="card-desc">Copies of data across brokers for High Availability (HA)[cite: 647].</div>
+                <div class="card-desc">Copies of data across brokers for High Availability (HA).</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Zookeeper</span></div>
-                <div class="card-desc">Manages brokers, leader election, and cluster membership. [cite_start]Mandatory for Kafka[cite: 762].</div>
+                <div class="card-desc">Manages brokers, leader election, and cluster membership. Mandatory for Kafka.</div>
             </div>
         </div>
     </section>
@@ -226,42 +237,44 @@
         <p>Understanding how the components fit together.</p>
         
         <div class="diagram-box">
-            [cite_start][Diagram: Producers -> Brokers (Topics/Partitions) -> Consumers] [cite: 439]
+            [Diagram: Producers -> Brokers (Topics/Partitions) -> Consumers]
         </div>
 
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Producer</span></div>
-                <div class="card-desc">Writes data to topics. [cite_start]Can choose acknowledgment levels (acks=0, 1, or all) [cite: 698-704].</div>
+                <div class="card-desc">Writes data to topics. Can choose acknowledgment levels (acks=0, 1, or all).</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Consumer</span></div>
-                [cite_start]<div class="card-desc">Reads data from topics/partitions[cite: 712].</div>
+                <div class="card-desc">Reads data from topics/partitions.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Consumer Group</span></div>
-                <div class="card-desc">A group of consumers working together. [cite_start]Each partition is consumed by only one member of the group for load balancing [cite: 723-725].</div>
+                <div class="card-desc">A group of consumers working together. Each partition is consumed by only one member of the group for load balancing.</div>
             </div>
         </div>
     </section>
 
     <section id="topic2">
         <h2>💻 CLI Commands</h2>
-        <p>Essential commands for managing your Kafka cluster. (Paths may vary based on installation).</p>
+        <p>Essential commands for managing your Kafka cluster. (Note: Paths may vary based on installation).</p>
 
-        <h3>1. [cite_start]Service Management [cite: 925-927]</h3>
+        <h3>1. Service Management</h3>
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Start Zookeeper</span></div>
+                <div class="card-desc">Must be started before Kafka.</div>
                 <div class="example-block" onclick="copyText(this)">bin/zookeeper-server-start.sh config/zookeeper.properties</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Start Kafka</span></div>
+                <div class="card-desc">Starts the broker.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-server-start.sh config/server.properties</div>
             </div>
         </div>
 
-        <h3>2. [cite_start]Topic Management [cite: 964, 979]</h3>
+        <h3>2. Topic Management</h3>
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Create Topic</span></div>
@@ -270,26 +283,26 @@
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">List Topics</span></div>
-                <div class="card-desc">Show all available topics.</div>
+                <div class="card-desc">Show all available topics in the cluster.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-topics.sh --zookeeper localhost:2181 --list</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Describe Topic</span></div>
-                <div class="card-desc">View partition and leader details.</div>
+                <div class="card-desc">View details like partition count and leader.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic kafka-tst-01</div>
             </div>
         </div>
 
-        <h3>3. [cite_start]Console Clients [cite: 992, 1003]</h3>
+        <h3>3. Console Clients</h3>
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Console Producer</span></div>
-                <div class="card-desc">Send messages manually from CLI.</div>
+                <div class="card-desc">Open an interactive shell to send messages.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-console-producer.sh --broker-list localhost:9092 --topic kafka-tst-01</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Console Consumer</span></div>
-                <div class="card-desc">Read messages from CLI.</div>
+                <div class="card-desc">Read messages from the beginning of the log.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic kafka-tst-01 --from-beginning</div>
             </div>
         </div>
@@ -297,14 +310,14 @@
 
     <section id="topic3">
         <h2>🔌 Kafka Connect</h2>
-        [cite_start]<p>A framework to stream data into and out of Kafka without writing custom code[cite: 1068].</p>
+        <p>A framework to stream data into and out of Kafka without writing custom code.</p>
 
         <div class="info-box">
-            [cite_start]<h4>Architecture [cite: 1076]</h4>
+            <h4>Architecture</h4>
             <ul>
-                [cite_start]<li><strong>Connectors:</strong> The logic (JAR) to connect to systems (HDFS, JDBC, File)[cite: 1092].</li>
-                [cite_start]<li><strong>Tasks:</strong> The actual execution units moving the data[cite: 1119].</li>
-                [cite_start]<li><strong>Workers:</strong> Processes running the connectors and tasks[cite: 1131].</li>
+                <li><strong>Connectors:</strong> The logic (JAR) to connect to systems (HDFS, JDBC, File).</li>
+                <li><strong>Tasks:</strong> The actual execution units moving the data.</li>
+                <li><strong>Workers:</strong> Processes running the connectors and tasks.</li>
             </ul>
         </div>
 
@@ -312,29 +325,27 @@
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Source Config (File)</span></div>
-                [cite_start]<div class="card-desc">Reading from a file[cite: 1170].</div>
+                <div class="card-desc">Example properties for reading from a file.</div>
                 <div class="example-block" onclick="copyText(this)">
 name=kafka-file-source-task
 connector.class=FileStreamSource
 tasks.max=1
 file=/tmp/sourceFile.log
-topic=file-source-test
-                </div>
+topic=file-source-test</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Sink Config (HDFS)</span></div>
-                [cite_start]<div class="card-desc">Writing to Hadoop[cite: 1240].</div>
+                <div class="card-desc">Example properties for writing to Hadoop.</div>
                 <div class="example-block" onclick="copyText(this)">
 name=hdfs-sink-task
 connector.class=HdfsSinkConnector
 tasks.max=1
 topics=file-source-test
-hdfs.url=hdfs://localhost:9000
-                </div>
+hdfs.url=hdfs://localhost:9000</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Run Standalone</span></div>
-                [cite_start]<div class="card-desc">Execute the connector[cite: 1200].</div>
+                <div class="card-desc">Execute the connector with config files.</div>
                 <div class="example-block" onclick="copyText(this)">bin/connect-standalone.sh config/connect-standalone.properties config/file-source.properties</div>
             </div>
         </div>
@@ -342,7 +353,7 @@ hdfs.url=hdfs://localhost:9000
 
     <section id="topic4">
         <h2>🧩 Core APIs</h2>
-        [cite_start]<p>The 4 main APIs used for development[cite: 777].</p>
+        <p>The 4 main APIs used for development.</p>
 
         <div class="commands-grid">
             <div class="command-card">
@@ -371,19 +382,19 @@ hdfs.url=hdfs://localhost:9000
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Netflix</span></div>
-                [cite_start]<div class="card-desc">Video viewing activities, recommendation engine inputs, and user behavior tracking[cite: 243].</div>
+                <div class="card-desc">Video viewing activities, recommendation engine inputs, and user behavior tracking.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Uber</span></div>
-                [cite_start]<div class="card-desc">Matching riders and drivers, calculating ETA, and real-time auditing[cite: 269].</div>
+                <div class="card-desc">Matching riders and drivers, calculating ETA, and real-time auditing.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">PayPal / Fraud</span></div>
-                [cite_start]<div class="card-desc">Real-time fraud detection. analyzing transaction patterns instantly[cite: 251].</div>
+                <div class="card-desc">Real-time fraud detection. analyzing transaction patterns instantly.</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">IoT / Automotive</span></div>
-                [cite_start]<div class="card-desc">Collecting sensor data from vehicles (speed, engine status, location)[cite: 289].</div>
+                <div class="card-desc">Collecting sensor data from vehicles (speed, engine status, location).</div>
             </div>
         </div>
     </section>
@@ -395,17 +406,17 @@ hdfs.url=hdfs://localhost:9000
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Consumer Groups</span></div>
-                [cite_start]<div class="card-desc">List active groups[cite: 106].</div>
+                <div class="card-desc">List active groups.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Group Description</span></div>
-                [cite_start]<div class="card-desc">Check offsets and lag[cite: 106].</div>
+                <div class="card-desc">Check offsets and lag.</div>
                 <div class="example-block" onclick="copyText(this)">bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-group</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">Monitoring Tools</span></div>
-                [cite_start]<div class="card-desc">Popular 3rd party tools[cite: 109]:<br>
+                <div class="card-desc">Popular 3rd party tools:<br>
                 - Confluent Control Center<br>
                 - Yahoo Kafka Manager<br>
                 - LinkedIn Burrow<br>
@@ -454,7 +465,7 @@ hdfs.url=hdfs://localhost:9000
                 // Filter Cards
                 cards.forEach(card => {
                     const text = card.innerText.toLowerCase();
-                    card.style.display = text.includes(term) ? 'block' : 'none';
+                    card.style.display = text.includes(term) ? 'flex' : 'none';
                 });
 
                 if(term.length > 0) {
@@ -481,7 +492,7 @@ hdfs.url=hdfs://localhost:9000
             btn.onclick = () => { 
                 currentTopicIndex = index; 
                 searchInput.value = ''; // Clear search
-                document.querySelectorAll('.command-card').forEach(c => c.style.display = 'block');
+                document.querySelectorAll('.command-card').forEach(c => c.style.display = 'flex');
                 updateView(); 
             };
             li.appendChild(btn);
@@ -505,16 +516,12 @@ hdfs.url=hdfs://localhost:9000
 
     window.copyText = function(element) {
         const fullText = element.innerText;
-        // Split by new line or just take text, but usually CLI commands are one liners or clean blocks
-        // For properties file, we want the whole block.
-        // Let's remove the "Copy" text pseudo element via JS? No, clipboard API takes textContent.
-        // We just need to handle if there are comments inside span tags.
-        
-        let textToCopy = fullText.replace("📋 Copy", "").trim();
+        // Simple logic to get just the code, ignoring 'Copy' pseudo element text (handled by CSS)
+        const textToCopy = fullText.trim();
         
         navigator.clipboard.writeText(textToCopy).then(() => {
             const originalBg = element.style.backgroundColor;
-            element.style.backgroundColor = '#dcedc8'; // Light green success
+            element.style.backgroundColor = '#4caf50'; // Green success
             setTimeout(() => { element.style.backgroundColor = originalBg; }, 300);
         });
     };
