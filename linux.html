@@ -216,47 +216,98 @@
                 <div class="example-block" onclick="copyText(this)">mkdir -p dir1/sub1/sub2 <span class="comment"># Create full path (recursive)</span></div>
                 <div class="example-block" onclick="copyText(this)">mkdir dir1 dir2 dir3 <span class="comment"># Create multiple directories</span></div>
             </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">rmdir</span></div>
+                <div class="card-desc">Remove empty directories.</div>
+                <div class="example-block" onclick="copyText(this)">rmdir empty_folder <span class="comment"># Remove an empty directory</span></div>
+                <div class="example-block" onclick="copyText(this)">rmdir -p path/to/empty <span class="comment"># Remove path of empty directories</span>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">tree</span></div>
+                <div class="card-desc">Display directory structure as a tree.</div>
+                <div class="example-block" onclick="copyText(this)">tree <span class="comment"># Display directory structure</span></div>
+                <div class="example-block" onclick="copyText(this)">tree -L 2 <span class="comment"># Limit display depth to 2 levels</span></div>
+                <div class="example-block" onclick="copyText(this)">tree -d <span class="comment"># List directories only</span></div>
+            </div>
         </div>
     </section>
 
     <section id="topic1">
-        <h2>📄 File Operations</h2>
-        <p>Creating, moving, copying, and deleting files.</p>
+    <h2>📄 File Operations</h2>
+    <p>Creating, moving, copying, and deleting files.</p>
 
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">touch</span></div>
-                <div class="card-desc">Create empty file.</div>
-                <div class="example-block" onclick="copyText(this)">touch file.txt</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">cp</span></div>
-                <div class="card-desc">Copy files/folders.</div>
-                <div class="example-block" onclick="copyText(this)">cp source.txt dest.txt</div>
-                <div class="example-block" onclick="copyText(this)">cp -r data_dir/ backup/ <span class="comment"># Recursive copy</span></div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">mv</span></div>
-                <div class="card-desc">Move or Rename.</div>
-                <div class="example-block" onclick="copyText(this)">mv old.txt new.txt</div>
-                <div class="example-block" onclick="copyText(this)">mv file.csv /tmp/</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">rm</span></div>
-                <div class="card-desc">Remove (Delete).</div>
-                <div class="example-block" onclick="copyText(this)">rm file.txt</div>
-                <div class="example-block" onclick="copyText(this)">rm -rf folder/ <span class="comment"># Force recursive delete</span></div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">find</span></div>
-                <div class="card-desc">Search files.</div>
-                <div class="example-block" onclick="copyText(this)">find . -name "*.csv"</div>
-                <div class="example-block" onclick="copyText(this)">find /logs -mtime -7 <span class="comment"># Last 7 days</span></div>
-                <div class="example-block" onclick="copyText(this)">find . -size +1G <span class="comment"># Bigger than 1GB</span></div>
-            </div>
+    <div class="commands-grid">
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">touch</span></div>
+            <div class="card-desc">Create files or update timestamp.</div>
+            <div class="example-block" onclick="copyText(this)">touch file.txt <span class="comment"># Create new file</span></div>
+            <div class="example-block" onclick="copyText(this)">touch file1 file2 file3 <span class="comment"># Create multiple files</span></div>
+            <div class="example-block" onclick="copyText(this)">touch -t 202312251200 file <span class="comment"># Set specific time</span></div>
         </div>
-    </section>
 
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">cp</span></div>
+            <div class="card-desc">Copy files/folders.</div>
+            <div class="example-block" onclick="copyText(this)">cp source dest <span class="comment"># Copy file</span></div>
+            <div class="example-block" onclick="copyText(this)">cp file.txt backup/ <span class="comment"># Copy to folder</span></div>
+            <div class="example-block" onclick="copyText(this)">cp -r folder1 folder2 <span class="comment"># Recursive copy (folder)</span></div>
+            <div class="example-block" onclick="copyText(this)">cp -p file backup/ <span class="comment"># Preserve permissions</span></div>
+            <div class="example-block" onclick="copyText(this)">cp *.txt backup/ <span class="comment"># Copy all text files</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">mv</span></div>
+            <div class="card-desc">Move or Rename.</div>
+            <div class="example-block" onclick="copyText(this)">mv oldname newname <span class="comment"># Rename</span></div>
+            <div class="example-block" onclick="copyText(this)">mv file /path/to/ <span class="comment"># Move file</span></div>
+            <div class="example-block" onclick="copyText(this)">mv *.log logs/ <span class="comment"># Move all log files</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">rm</span></div>
+            <div class="card-desc">Remove (Delete).</div>
+            <div class="example-block" onclick="copyText(this)">rm file.txt <span class="comment"># Delete file</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -i file.txt <span class="comment"># Ask for confirmation</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -f file.txt <span class="comment"># Force delete</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -r folder/ <span class="comment"># Recursive delete</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -rf folder/ <span class="comment"># Force recursive delete</span></div>
+            <div class="example-block" onclick="copyText(this)">rm *.tmp <span class="comment"># Delete all temp files</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">find</span></div>
+            <div class="card-desc">Advanced file search.</div>
+            <div class="example-block" onclick="copyText(this)">find . -name "*.py" <span class="comment"># Search Python files</span></div>
+            <div class="example-block" onclick="copyText(this)">find / -size +100M <span class="comment"># Files larger than 100MB</span></div>
+            <div class="example-block" onclick="copyText(this)">find . -mtime -7 <span class="comment"># Modified in last 7 days</span></div>
+            <div class="example-block" onclick="copyText(this)">find . -type d -empty <span class="comment"># Empty directories</span></div>
+            <div class="example-block" onclick="copyText(this)">find . -name "*.log" -delete <span class="comment"># Find and delete</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">locate</span></div>
+            <div class="card-desc">Quick database search.</div>
+            <div class="example-block" onclick="copyText(this)">locate filename <span class="comment"># Quick search</span></div>
+            <div class="example-block" onclick="copyText(this)">updatedb <span class="comment"># Update DB (root)</span></div>
+            <div class="example-block" onclick="copyText(this)">locate -i name <span class="comment"># Case insensitive</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">ln</span></div>
+            <div class="card-desc">Create links.</div>
+            <div class="example-block" onclick="copyText(this)">ln -s target link <span class="comment"># Symbolic link</span></div>
+            <div class="example-block" onclick="copyText(this)">ln file hardlink <span class="comment"># Hard link</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">file</span></div>
+            <div class="card-desc">Determine file type.</div>
+            <div class="example-block" onclick="copyText(this)">file document.pdf <span class="comment"># Identify type</span></div>
+            <div class="example-block" onclick="copyText(this)">file -b image.jpg <span class="comment"># Short output</span></div>
+            <div class="example-block" onclick="copyText(this)">file * <span class="comment"># Check all files</span></div>
+        </div>
+    </div>
+</section>
     <section id="topic2">
         <h2>📝 Content & Analysis</h2>
         <p>Inspect data without opening Excel.</p>
