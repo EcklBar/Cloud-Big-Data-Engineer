@@ -314,180 +314,434 @@
 
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">head / tail</span></div>
-                <div class="card-desc">View start/end.</div>
-                <div class="example-block" onclick="copyText(this)">head -n 5 data.csv <span class="comment"># Check headers</span></div>
-                <div class="example-block" onclick="copyText(this)">tail -f app.log <span class="comment"># Live monitor</span></div>
+                <div class="code-header"><span class="cmd-title">cat</span></div>
+                <div class="card-desc">Print content.</div>
+                <div class="example-block" onclick="copyText(this)">cat file.txt</div>
+                <div class="example-block" onclick="copyText(this)">cat -n file.txt <span class="comment"># Line numbers</span></div>
+                <div class="example-block" onclick="copyText(this)">cat f1 f2 > merged</div>
+                <div class="example-block" onclick="copyText(this)">cat >> file.txt <span class="comment"># Append</span></div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">cat / tac</span></div>
-                <div class="card-desc">Print content.</div>
-                <div class="example-block" onclick="copyText(this)">cat config.json</div>
-                <div class="example-block" onclick="copyText(this)">cat parts* > full.csv <span class="comment"># Merge files</span></div>
+                <div class="code-header"><span class="cmd-title">tac</span></div>
+                <div class="card-desc">Reverse cat (Bottom-up).</div>
+                <div class="example-block" onclick="copyText(this)">tac file.txt</div>
+                <div class="example-block" onclick="copyText(this)">echo -e "1\n2" | tac</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">less / more</span></div>
+                <div class="card-desc">Paged view.</div>
+                <div class="example-block" onclick="copyText(this)">less file.txt <span class="comment"># Scrollable</span></div>
+                <div class="example-block" onclick="copyText(this)">more file.txt <span class="comment"># Forward only</span></div>
+                <div class="example-block"><span class="comment">Keys: q=quit, /search, n=next</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">head / tail</span></div>
+                <div class="card-desc">Start / End of file.</div>
+                <div class="example-block" onclick="copyText(this)">head -n 20 file.txt</div>
+                <div class="example-block" onclick="copyText(this)">tail -n 50 file.txt</div>
+                <div class="example-block" onclick="copyText(this)">tail -f log.txt <span class="comment"># Live monitor</span></div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">grep</span></div>
-                <div class="card-desc">Search inside files.</div>
-                <div class="example-block" onclick="copyText(this)">grep "ERROR" server.log</div>
-                <div class="example-block" onclick="copyText(this)">grep -r "db_host" . <span class="comment"># Recursive</span></div>
+                <div class="card-desc">Search text.</div>
+                <div class="example-block" onclick="copyText(this)">grep "pattern" file</div>
+                <div class="example-block" onclick="copyText(this)">grep -i "pat" file <span class="comment"># No-case</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -r "pat" dir/ <span class="comment"># Recursive</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -v "pat" file <span class="comment"># Invert match</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -c "pat" file <span class="comment"># Count</span></div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">wc</span></div>
-                <div class="card-desc">Word Count.</div>
-                <div class="example-block" onclick="copyText(this)">wc -l data.csv <span class="comment"># Count rows</span></div>
+                <div class="code-header"><span class="cmd-title">ripgrep (rg)</span></div>
+                <div class="card-desc">Modern, faster grep.</div>
+                <div class="example-block" onclick="copyText(this)">rg "pattern"</div>
+                <div class="example-block" onclick="copyText(this)">rg -n "pat" <span class="comment"># Line nums</span></div>
+                <div class="example-block" onclick="copyText(this)">rg -t py "import" <span class="comment"># Py files only</span></div>
+                <div class="example-block" onclick="copyText(this)">rg --hidden "secret"</div>
             </div>
-        </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">diff</span></div>
+                <div class="card-desc">Compare files.</div>
+                <div class="example-block" onclick="copyText(this)">diff file1 file2</div>
+                <div class="example-block" onclick="copyText(this)">diff -y file1 file2 <span class="comment"># Side-by-side</span></div>
+                <div class="example-block" onclick="copyText(this)">diff -r dir1 dir2</div>
+            </div>
     </section>
 
     <section id="topic3">
-        <h2>🔤 Variables & Env</h2>
-        <p>Managing environment variables is crucial for Data Engineering (e.g., Spark/Hadoop paths).</p>
-
+        <h2>🔤 Variables & Shell</h2>
+        <p class="section-desc">Environment variables, bash syntax, and quoting.</p>
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">export</span></div>
-                <div class="card-desc">Set environment variables.</div>
-                <div class="example-block" onclick="copyText(this)">export SPARK_HOME=/opt/spark</div>
-                <div class="example-block" onclick="copyText(this)">echo $SPARK_HOME <span class="comment"># Print variable</span></div>
+                <div class="code-header"><span class="cmd-title">Definitions</span></div>
+                <div class="card-desc">Set variables.</div>
+                <div class="example-block" onclick="copyText(this)">VAR="value"</div>
+                <div class="example-block" onclick="copyText(this)">export VAR="val" <span class="comment"># Env var</span></div>
+                <div class="example-block" onclick="copyText(this)">readonly VAR="val"</div>
+                <div class="example-block" onclick="copyText(this)">unset VAR</div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">env / printenv</span></div>
-                <div class="card-desc">List all variables.</div>
-                <div class="example-block" onclick="copyText(this)">env | grep PATH</div>
+                <div class="code-header"><span class="cmd-title">echo</span></div>
+                <div class="card-desc">Print output.</div>
+                <div class="example-block" onclick="copyText(this)">echo $VAR</div>
+                <div class="example-block" onclick="copyText(this)">echo "Hi $USER" <span class="comment"># Expand</span></div>
+                <div class="example-block" onclick="copyText(this)">echo 'Hi $USER' <span class="comment"># Literal</span></div>
+                <div class="example-block" onclick="copyText(this)">echo -e "A\nB" <span class="comment"># Newline</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">env</span></div>
+                <div class="card-desc">Environment info.</div>
+                <div class="example-block" onclick="copyText(this)">env <span class="comment"># List all</span></div>
+                <div class="example-block" onclick="copyText(this)">printenv PATH</div>
+                <div class="example-block" onclick="copyText(this)">env | grep HOME</div>
             </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">System Vars</span></div>
-                <div class="card-desc">Built-in variables.</div>
-                <div class="example-block" onclick="copyText(this)">echo $HOME <span class="comment"># Home directory</span></div>
-                <div class="example-block" onclick="copyText(this)">echo $USER <span class="comment"># Current user</span></div>
+                <div class="card-desc">Built-ins.</div>
+                <div class="example-block">$HOME, $USER, $PATH</div>
+                <div class="example-block">$PWD, $SHELL, $HOSTNAME</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Command Sub $()</span></div>
+                <div class="card-desc">Run cmd inside cmd.</div>
+                <div class="example-block" onclick="copyText(this)">x=$(cat file.txt)</div>
+                <div class="example-block" onclick="copyText(this)">today=$(date +%F)</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Scoping {}</span></div>
+                <div class="card-desc">Delimit variables.</div>
+                <div class="example-block" onclick="copyText(this)">echo "${VAR}man"</div>
+                <div class="example-block" onclick="copyText(this)">${VAR:-default} <span class="comment"># Default val</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Wildcards</span></div>
+                <div class="card-desc">Pattern matching.</div>
+                <div class="example-block">*.txt <span class="comment"># All .txt</span></div>
+                <div class="example-block">file?.txt <span class="comment"># file1, fileA</span></div>
+                <div class="example-block">[a-z]* <span class="comment"># Lowercase start</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Specials # \</span></div>
+                <div class="card-desc">Comments & Escaping.</div>
+                <div class="example-block"># This is a comment</div>
+                <div class="example-block">echo \$100 <span class="comment"># Literal $</span></div>
+                <div class="example-block">echo line \ <span class="comment"># Continue line</span></div>
             </div>
         </div>
     </section>
 
     <section id="topic4">
-        <h2>⚙️ Pipes & Processing</h2>
-        <p>Combining commands to create powerful data pipelines.</p>
-        
-
+        <h2>🔄 I/O & Redirection</h2>
+        <p class="section-desc">Manage Standard Input, Output, and Error.</p>
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Redirection</span></div>
-                <div class="card-desc">Output to files.</div>
+                <div class="code-header"><span class="cmd-title">Output ></span></div>
+                <div class="card-desc">Redirect stdout.</div>
                 <div class="example-block" onclick="copyText(this)">cmd > file.txt <span class="comment"># Overwrite</span></div>
                 <div class="example-block" onclick="copyText(this)">cmd >> file.txt <span class="comment"># Append</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd > /dev/null <span class="comment"># Discard</span></div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Pipe |</span></div>
-                <div class="card-desc">Pass output to next command.</div>
-                <div class="example-block" onclick="copyText(this)">cat file.csv | wc -l</div>
-                <div class="example-block" onclick="copyText(this)">ps aux | grep python</div>
+                <div class="code-header"><span class="cmd-title">Input <</span></div>
+                <div class="card-desc">Redirect stdin.</div>
+                <div class="example-block" onclick="copyText(this)">cmd < input.txt</div>
+                <div class="example-block" onclick="copyText(this)">cmd << EOF <span class="comment"># Here Doc</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd <<< "str" <span class="comment"># Here String</span></div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">awk</span></div>
-                <div class="card-desc">Text processing.</div>
-                <div class="example-block" onclick="copyText(this)">awk -F',' '{print $2}' file.csv</div>
-                <div class="example-block" onclick="copyText(this)">awk '{s+=$1} END {print s}' nums.txt</div>
+                <div class="code-header"><span class="cmd-title">Error 2></span></div>
+                <div class="card-desc">Redirect stderr.</div>
+                <div class="example-block" onclick="copyText(this)">cmd 2> err.log</div>
+                <div class="example-block" onclick="copyText(this)">cmd > out 2>&1 <span class="comment"># Both to same</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd &> all.log <span class="comment"># Short syntax</span></div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">sed</span></div>
-                <div class="card-desc">Stream Editor.</div>
-                <div class="example-block" onclick="copyText(this)">sed 's/old/new/g' file.txt</div>
-                <div class="example-block" onclick="copyText(this)">sed -i 's/,/|/g' file.csv <span class="comment"># Replace in-place</span></div>
+                <div class="code-header"><span class="cmd-title">tee</span></div>
+                <div class="card-desc">Split output (Screen+File).</div>
+                <div class="example-block" onclick="copyText(this)">cmd | tee log.txt</div>
+                <div class="example-block" onclick="copyText(this)">cmd | tee -a log.txt <span class="comment"># Append</span></div>
             </div>
         </div>
     </section>
 
+    
     <section id="topic5">
-        <h2>✏️ VI / VIM Editor</h2>
-        <p>Essential for editing config files on remote servers.</p>
-
+        <h2>⚙️ Pipes & Processing</h2>
+        <p class="section-desc">Advanced text manipulation pipelines.</p>
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Modes</span></div>
-                <div class="card-desc">Switching modes.</div>
-                <div class="example-block" onclick="copyText(this)">vi filename.txt <span class="comment"># Open file</span></div>
-                <div class="example-block" onclick="copyText(this)">i <span class="comment"># Switch to Insert Mode (to type)</span></div>
-                <div class="example-block" onclick="copyText(this)">Esc <span class="comment"># Switch back to Command Mode</span></div>
+                <div class="code-header"><span class="cmd-title">Pipe |</span></div>
+                <div class="card-desc">Chain commands.</div>
+                <div class="example-block" onclick="copyText(this)">cmd1 | cmd2</div>
+                <div class="example-block" onclick="copyText(this)">ps aux | grep python</div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Save & Quit</span></div>
-                <div class="card-desc">Commands (press Esc first).</div>
-                <div class="example-block" onclick="copyText(this)">:w <span class="comment"># Save</span></div>
-                <div class="example-block" onclick="copyText(this)">:q <span class="comment"># Quit</span></div>
-                <div class="example-block" onclick="copyText(this)">:wq <span class="comment"># Save and Quit</span></div>
-                <div class="example-block" onclick="copyText(this)">:q! <span class="comment"># Quit without saving</span></div>
+                <div class="code-header"><span class="cmd-title">cut</span></div>
+                <div class="card-desc">Slice columns.</div>
+                <div class="example-block" onclick="copyText(this)">cut -d',' -f1,3 file.csv</div>
+                <div class="example-block" onclick="copyText(this)">cut -c1-5 file.txt</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">awk</span></div>
+                <div class="card-desc">Programmable filter.</div>
+                <div class="example-block" onclick="copyText(this)">awk '{print $1}' file</div>
+                <div class="example-block" onclick="copyText(this)">awk -F',' '{print $2}' csv</div>
+                <div class="example-block" onclick="copyText(this)">awk '{s+=$3} END {print s}' <span class="comment"># Sum</span></div>
+                <div class="example-block" onclick="copyText(this)">awk 'NR>1 {print}' <span class="comment"># Skip header</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sed</span></div>
+                <div class="card-desc">Stream Editor.</div>
+                <div class="example-block" onclick="copyText(this)">sed 's/old/new/g' file</div>
+                <div class="example-block" onclick="copyText(this)">sed '1d' file <span class="comment"># Del 1st line</span></div>
+                <div class="example-block" onclick="copyText(this)">sed -n '5,10p' file</div>
+                <div class="example-block" onclick="copyText(this)">sed '/bad/d' file <span class="comment"># Del pattern</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">xargs</span></div>
+                <div class="card-desc">Args from stdin.</div>
+                <div class="example-block" onclick="copyText(this)">find . -name "*.tmp" | xargs rm</div>
+                <div class="example-block" onclick="copyText(this)">cat list | xargs touch</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">tr</span></div>
+                <div class="card-desc">Translate characters.</div>
+                <div class="example-block" onclick="copyText(this)">tr 'a-z' 'A-Z' < file</div>
+                <div class="example-block" onclick="copyText(this)">tr -d '0-9' < file</div>
+                <div class="example-block" onclick="copyText(this)">tr -s ' ' < file <span class="comment"># Squeeze spaces</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">wc</span></div>
+                <div class="card-desc">Word Count.</div>
+                <div class="example-block" onclick="copyText(this)">wc -l file <span class="comment"># Lines</span></div>
+                <div class="example-block" onclick="copyText(this)">wc -w file <span class="comment"># Words</span></div>
+                <div class="example-block" onclick="copyText(this)">wc -c file <span class="comment"># Bytes</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sort & uniq</span></div>
+                <div class="card-desc">Sorting.</div>
+                <div class="example-block" onclick="copyText(this)">sort -n file <span class="comment"># Numeric</span></div>
+                <div class="example-block" onclick="copyText(this)">sort -r file <span class="comment"># Reverse</span></div>
+                <div class="example-block" onclick="copyText(this)">uniq -c <span class="comment"># Count uniques</span></div>
+                <div class="example-block" onclick="copyText(this)">sort | uniq</div>
             </div>
         </div>
     </section>
 
     <section id="topic6">
-        <h2>🔐 Permissions</h2>
-        <p>Control who can Read (r), Write (w), and Execute (x).</p>
-        
-
+        <h2>✏️ VI / VIM</h2>
+        <p class="section-desc">Text editor mastery.</p>
         <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Modes</span></div>
+                <div class="card-desc">Switching states.</div>
+                <div class="example-block">i <span class="comment"># Insert Mode</span></div>
+                <div class="example-block">Esc <span class="comment"># Normal Mode</span></div>
+                <div class="example-block">: <span class="comment"># Command Mode</span></div>
+                <div class="example-block">v <span class="comment"># Visual Mode</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Navigation</span></div>
+                <div class="card-desc">Moving (Normal Mode).</div>
+                <div class="example-block">h, j, k, l <span class="comment"># Left, Down, Up, Right</span></div>
+                <div class="example-block">w, b <span class="comment"># Word Fwd/Back</span></div>
+                <div class="example-block">0, $ <span class="comment"># Start/End line</span></div>
+                <div class="example-block">gg, G <span class="comment"># Start/End file</span></div>
+                <div class="example-block">/text <span class="comment"># Search</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Editing</span></div>
+                <div class="card-desc">Editing (Normal Mode).</div>
+                <div class="example-block">x <span class="comment"># Delete char</span></div>
+                <div class="example-block">dd <span class="comment"># Delete line</span></div>
+                <div class="example-block">yy <span class="comment"># Copy line</span></div>
+                <div class="example-block">p <span class="comment"># Paste</span></div>
+                <div class="example-block">u <span class="comment"># Undo</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Commands</span></div>
+                <div class="card-desc">Save & Quit.</div>
+                <div class="example-block">:w <span class="comment"># Save</span></div>
+                <div class="example-block">:q <span class="comment"># Quit</span></div>
+                <div class="example-block">:wq <span class="comment"># Save & Quit</span></div>
+                <div class="example-block">:q! <span class="comment"># Force Quit</span></div>
+                <div class="example-block">:set number</div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Config</span></div>
+                <div class="card-desc">ConfigFiles.</div>
+                <div class="example-block">vim ~/.bashrc</div>
+                <div class="example-block">source ~/.bashrc</div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="topic7">
+        <h2>🔐 Permissions</h2>
+        <p class="section-desc">File access control.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ls -l</span></div>
+                <div class="card-desc">View permissions.</div>
+                <div class="example-block">ls -l file</div>
+                <div class="example-block">ls -ld dir/</div>
+            </div>
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">chmod</span></div>
                 <div class="card-desc">Change mode.</div>
-                <div class="example-block" onclick="copyText(this)">chmod +x script.sh <span class="comment"># Make executable</span></div>
+                <div class="example-block" onclick="copyText(this)">chmod +x script</div>
                 <div class="example-block" onclick="copyText(this)">chmod 755 file <span class="comment"># rwx-rx-rx</span></div>
-                <div class="example-block" onclick="copyText(this)">chmod 400 key.pem <span class="comment"># Protect keys</span></div>
+                <div class="example-block" onclick="copyText(this)">chmod 600 key <span class="comment"># rw-------</span></div>
+                <div class="example-block" onclick="copyText(this)">chmod -R 775 dir/</div>
+                <div class="example-block" onclick="copyText(this)">chmod +t dir <span class="comment"># Sticky bit</span></div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">chown</span></div>
-                <div class="card-desc">Change owner.</div>
+                <div class="code-header"><span class="cmd-title">Ownership</span></div>
+                <div class="card-desc">Owner & Group.</div>
                 <div class="example-block" onclick="copyText(this)">chown user:group file</div>
-                <div class="example-block" onclick="copyText(this)">chown -R user folder/ <span class="comment"># Recursive</span></div>
+                <div class="example-block" onclick="copyText(this)">chown -R user dir/</div>
+                <div class="example-block" onclick="copyText(this)">chgrp group file</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">umask</span></div>
+                <div class="card-desc">Default perms.</div>
+                <div class="example-block" onclick="copyText(this)">umask <span class="comment"># Show</span></div>
+                <div class="example-block" onclick="copyText(this)">umask 022 <span class="comment"># Set</span></div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Common</span></div>
+                <div class="card-desc">Standard codes.</div>
+                <div class="example-block">755 <span class="comment"># Web/Script (rwx,rx,rx)</span></div>
+                <div class="example-block">644 <span class="comment"># Config (rw,r,r)</span></div>
+                <div class="example-block">600 <span class="comment"># Private (rw,-,-)</span></div>
+                <div class="example-block">400 <span class="comment"># Read only (r,-,-)</span></div>
             </div>
         </div>
     </section>
 
-    <section id="topic7">
-        <h2>💻 System & Monitoring</h2>
-        <p>Keep your servers healthy.</p>
-
+      <section id="topic8">
+        <h2>💻 System Info</h2>
+        <p class="section-desc">Monitoring and resources.</p>
         <div class="commands-grid">
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Resources</span></div>
-                <div class="card-desc">Disk and RAM.</div>
-                <div class="example-block" onclick="copyText(this)">df -h <span class="comment"># Disk space</span></div>
-                <div class="example-block" onclick="copyText(this)">du -sh folder/ <span class="comment"># Folder size</span></div>
-                <div class="example-block" onclick="copyText(this)">free -h <span class="comment"># RAM usage</span></div>
+                <div class="code-header"><span class="cmd-title">Disk</span></div>
+                <div class="card-desc">Storage.</div>
+                <div class="example-block" onclick="copyText(this)">df -h <span class="comment"># Disk free</span></div>
+                <div class="example-block" onclick="copyText(this)">du -sh folder <span class="comment"># Usage</span></div>
+                <div class="example-block" onclick="copyText(this)">du -h --max-depth=1</div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Processes</span></div>
-                <div class="card-desc">CPU usage.</div>
-                <div class="example-block" onclick="copyText(this)">top <span class="comment"># Real-time monitor</span></div>
-                <div class="example-block" onclick="copyText(this)">htop <span class="comment"># Visual monitor</span></div>
-                <div class="example-block" onclick="copyText(this)">kill 1234 <span class="comment"># Stop process ID</span></div>
+                <div class="code-header"><span class="cmd-title">Compression</span></div>
+                <div class="card-desc">Gzip tools.</div>
+                <div class="example-block" onclick="copyText(this)">gzip file <span class="comment"># Compress</span></div>
+                <div class="example-block" onclick="copyText(this)">gunzip file.gz <span class="comment"># Decompress</span></div>
+                <div class="example-block" onclick="copyText(this)">zcat file.gz <span class="comment"># Read</span></div>
+                <div class="example-block" onclick="copyText(this)">gzip -r dir/</div>
             </div>
             <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Users</span></div>
-                <div class="card-desc">User management.</div>
-                <div class="example-block" onclick="copyText(this)">whoami <span class="comment"># Current user</span></div>
-                <div class="example-block" onclick="copyText(this)">sudo -i <span class="comment"># Switch to root</span></div>
-                <div class="example-block" onclick="copyText(this)">passwd <span class="comment"># Change password</span></div>
+                <div class="code-header"><span class="cmd-title">Memory</span></div>
+                <div class="card-desc">RAM.</div>
+                <div class="example-block" onclick="copyText(this)">free -h</div>
+                <div class="example-block" onclick="copyText(this)">free -m</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Process Monitor</span></div>
+                <div class="card-desc">Live view.</div>
+                <div class="example-block" onclick="copyText(this)">top</div>
+                <div class="example-block" onclick="copyText(this)">htop</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ps</span></div>
+                <div class="card-desc">Process list.</div>
+                <div class="example-block" onclick="copyText(this)">ps aux</div>
+                <div class="example-block" onclick="copyText(this)">ps -ef</div>
+                <div class="example-block" onclick="copyText(this)">ps -u user</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">kill</span></div>
+                <div class="card-desc">Terminate.</div>
+                <div class="example-block" onclick="copyText(this)">kill PID</div>
+                <div class="example-block" onclick="copyText(this)">kill -9 PID <span class="comment"># Force</span></div>
+                <div class="example-block" onclick="copyText(this)">killall name</div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Info</span></div>
+                <div class="card-desc">Kernel/OS.</div>
+                <div class="example-block" onclick="copyText(this)">uname -a</div>
+                <div class="example-block" onclick="copyText(this)">hostname</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">systemctl</span></div>
+                <div class="card-desc">Services.</div>
+                <div class="example-block" onclick="copyText(this)">systemctl status nginx</div>
+                <div class="example-block" onclick="copyText(this)">systemctl restart nginx</div>
             </div>
         </div>
     </section>
 
-    <section id="topic8">
-        <h2>⏰ Scheduling (Cron)</h2>
-        <p>Automate your Python/Bash scripts.</p>
-        
+        <section id="topic9">
+        <h2>👥 Users</h2>
+        <p class="section-desc">User management.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Info</span></div>
+                <div class="card-desc">Who am I?</div>
+                <div class="example-block" onclick="copyText(this)">whoami</div>
+                <div class="example-block" onclick="copyText(this)">id</div>
+                <div class="example-block" onclick="copyText(this)">who</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Switch</span></div>
+                <div class="card-desc">Change user.</div>
+                <div class="example-block" onclick="copyText(this)">su - user</div>
+                <div class="example-block" onclick="copyText(this)">sudo cmd</div>
+                <div class="example-block" onclick="copyText(this)">sudo -i <span class="comment"># Root login</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Manage</span></div>
+                <div class="card-desc">Create/Modify.</div>
+                <div class="example-block" onclick="copyText(this)">passwd <span class="comment"># Change pw</span></div>
+                <div class="example-block" onclick="copyText(this)">useradd -m user</div>
+                <div class="example-block" onclick="copyText(this)">usermod -aG group user</div>
+                <div class="example-block" onclick="copyText(this)">groups user</div>
+            </div>
+        </div>
+    </section>
 
+    <section id="topic10">
+        <h2>⏰ Scheduling</h2>
+        <p class="section-desc">Timing and automation.</p>
         <div class="commands-grid">
             <div class="command-card">
                 <div class="code-header"><span class="cmd-title">crontab</span></div>
-                <div class="card-desc">Manage schedule.</div>
-                <div class="example-block" onclick="copyText(this)">crontab -e <span class="comment"># Edit jobs</span></div>
-                <div class="example-block" onclick="copyText(this)">crontab -l <span class="comment"># List jobs</span></div>
-                <div class="example-block" onclick="copyText(this)">0 2 * * * /backup.sh <span class="comment"># Run daily at 2AM</span></div>
+                <div class="card-desc">Recurring tasks.</div>
+                <div class="example-block" onclick="copyText(this)">crontab -e</div>
+                <div class="example-block" onclick="copyText(this)">crontab -l</div>
+                <div class="example-block">0 2 * * * /script.sh</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">at</span></div>
+                <div class="card-desc">One-time task.</div>
+                <div class="example-block" onclick="copyText(this)">at 15:00</div>
+                <div class="example-block" onclick="copyText(this)">atq <span class="comment"># List</span></div>
+                <div class="example-block" onclick="copyText(this)">atrm 1 <span class="comment"># Remove</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">watch</span></div>
+                <div class="card-desc">Repeat cmd.</div>
+                <div class="example-block" onclick="copyText(this)">watch df -h</div>
+                <div class="example-block" onclick="copyText(this)">watch -n 5 cmd</div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sleep</span></div>
+                <div class="card-desc">Pause.</div>
+                <div class="example-block" onclick="copyText(this)">sleep 10</div>
+                <div class="example-block" onclick="copyText(this)">sleep 1m</div>
             </div>
         </div>
     </section>
-
-    <section id="topic9">
+                
+    <section id="topic11">
         <h2>🌐 Networking</h2>
         <p>Connecting to servers.</p>
 
@@ -507,7 +761,7 @@
         </div>
     </section>
 
-    <section id="topic10">
+    <section id="topic12">
         <h2>⌨️ Keyboard Shortcuts</h2>
         <p>Speed up your terminal workflow.</p>
 
