@@ -4,29 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apache Kafka Master Guide</title>
-   <style>
+ <style>
 /* =========================================================
-   Dracula / PyCharm Dark Theme – FULL STYLE
+   Dracula / PyCharm Dark – Improved Readability
    ========================================================= */
 
 :root {
-    /* Layout */
     --sidebar-width: 280px;
     --border-radius: 8px;
 
     /* Backgrounds */
     --bg-color: #282a36;
     --sidebar-bg: #21222c;
-    --panel-bg: #1e1f29;
+    --panel-bg: #20222e;
     --hover-bg: #343746;
 
     /* Text */
     --text-color: #f8f8f2;
-    --text-muted: #6272a4;
+    --text-muted: #c7c9d9;
 
     /* Accents */
-    --primary-color: #bd93f9;     /* Purple */
-    --secondary-color: #ff79c6;   /* Pink */
+    --primary-color: #bd93f9;
+    --secondary-color: #ff79c6;
     --accent-blue: #8be9fd;
     --accent-green: #50fa7b;
     --accent-orange: #ffb86c;
@@ -36,7 +35,7 @@
     --border-color: #44475a;
 
     /* Code */
-    --code-bg: #1e1f29;
+    --code-bg: #1a1b26;
     --code-text: #f8f8f2;
 }
 
@@ -64,33 +63,27 @@ nav {
     border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    flex-shrink: 0;
-    z-index: 10;
 }
 
 .nav-header {
     padding: 20px;
     background: linear-gradient(135deg, #1e1f29, #2b2d3a);
-    color: var(--primary-color);
     text-align: center;
     border-bottom: 1px solid var(--border-color);
 }
 
 .nav-header h1 {
     font-size: 1.4rem;
-    margin-bottom: 4px;
-    font-weight: 700;
+    color: var(--primary-color);
 }
 
 .nav-header small {
     color: var(--accent-blue);
-    font-weight: 500;
 }
 
 .search-box {
     padding: 14px;
     border-bottom: 1px solid var(--border-color);
-    background: var(--sidebar-bg);
 }
 
 #searchInput {
@@ -107,7 +100,6 @@ nav {
     border-color: var(--primary-color);
 }
 
-/* ---------------- NAV LIST ---------------- */
 .nav-list {
     list-style: none;
     overflow-y: auto;
@@ -116,15 +108,14 @@ nav {
 
 .nav-btn {
     width: 100%;
-    text-align: left;
     padding: 14px 20px;
     background: none;
     border: none;
     border-bottom: 1px solid var(--border-color);
-    cursor: pointer;
-    font-size: 0.95rem;
+    text-align: left;
     color: var(--text-muted);
-    transition: all 0.2s ease;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .nav-btn:hover {
@@ -133,10 +124,13 @@ nav {
 }
 
 .nav-btn.active {
-    background-color: var(--panel-bg);
     color: var(--primary-color);
     border-left: 4px solid var(--primary-color);
-    font-weight: 700;
+    background: linear-gradient(
+        90deg,
+        rgba(189,147,249,0.15),
+        transparent
+    );
 }
 
 /* ---------------- MAIN CONTENT ---------------- */
@@ -160,15 +154,25 @@ section.active {
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 h2 {
     font-size: 2.2rem;
-    margin-bottom: 25px;
     color: var(--primary-color);
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+}
+
+h2::after {
+    content: "";
+    display: block;
+    margin-top: 10px;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), transparent);
 }
 
 h3 {
@@ -181,9 +185,9 @@ h3 {
 }
 
 p {
-    margin-bottom: 20px;
     color: var(--text-muted);
     font-size: 1.05rem;
+    margin-bottom: 20px;
 }
 
 /* ---------------- COMMAND CARDS ---------------- */
@@ -198,65 +202,54 @@ p {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: 25px;
-    display: flex;
-    flex-direction: column;
-    transition: border 0.2s, box-shadow 0.2s;
+    transition: border 0.2s;
 }
 
 .command-card:hover {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 1px var(--primary-color);
-}
-
-.code-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
 }
 
 .cmd-title {
     color: var(--accent-green);
+    font-size: 1.1rem;
+    margin-bottom: 6px;
     font-weight: bold;
-    font-size: 1.2rem;
 }
 
 .card-desc {
-    font-size: 0.95rem;
     color: var(--text-muted);
+    font-size: 0.95rem;
     margin-bottom: 15px;
-    flex-grow: 1;
 }
 
 /* ---------------- CODE BLOCKS ---------------- */
 .example-block {
-    background-color: var(--code-bg);
+    background: var(--code-bg);
     color: var(--code-text);
     border-radius: 6px;
     padding: 15px;
-    margin-top: 10px;
     font-size: 0.95rem;
-    cursor: pointer;
+    line-height: 1.6;
     position: relative;
-    transition: all 0.2s;
-    line-height: 1.5;
     border-left: 4px solid var(--primary-color);
 }
 
 .example-block:hover {
-    background-color: #24253a;
     border-left-color: var(--secondary-color);
+}
+
+pre {
+    white-space: pre-wrap;
 }
 
 .example-block::after {
     content: "📋 Copy";
     position: absolute;
-    right: 10px;
     top: 10px;
+    right: 10px;
     opacity: 0;
     font-size: 0.75rem;
     background: rgba(255,255,255,0.15);
-    color: white;
     padding: 4px 8px;
     border-radius: 4px;
     transition: opacity 0.2s;
@@ -267,10 +260,8 @@ p {
 }
 
 .comment {
-    color: var(--text-muted);
+    color: #9aa0c3;
     font-style: italic;
-    display: block;
-    margin-top: 6px;
     font-size: 0.85rem;
 }
 
@@ -302,15 +293,14 @@ p {
     border: 1px solid var(--border-color);
     padding: 12px 25px;
     border-radius: 30px;
-    cursor: pointer;
     color: var(--text-muted);
+    cursor: pointer;
     transition: all 0.2s;
-    font-weight: 600;
 }
 
 .nav-control:hover {
-    border-color: var(--primary-color);
     color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .nav-control:disabled {
