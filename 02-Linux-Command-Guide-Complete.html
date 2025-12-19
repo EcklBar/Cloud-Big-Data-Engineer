@@ -1,1767 +1,946 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מדריך פקודות Linux למהנדסי נתונים</title>
+    <title>Linux for Data Engineers - Complete Guide</title>
     <style>
+        /* --- CSS STYLING --- */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --border: #e5e7eb;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --code-bg: #1e293b;
+            --accent-green: #10b981;
+            --sidebar-width: 260px;
+            --border-radius: 8px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: var(--light);
-            color: var(--dark);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 3rem 0;
-            position: relative;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            display: flex;
+            height: 100vh;
             overflow: hidden;
         }
 
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.05) 10px,
-                rgba(255,255,255,0.05) 20px
-            );
-            transform: rotate(45deg);
-            animation: slide 20s linear infinite;
-        }
-
-        @keyframes slide {
-            0% { transform: translateX(0) rotate(45deg); }
-            100% { transform: translateX(50px) rotate(45deg); }
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Search Box */
-        .search-container {
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 100;
-            padding: 1rem 0;
-            box-shadow: var(--shadow);
-            margin-bottom: 2rem;
-        }
-
-        .search-box {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            border: 2px solid var(--border);
-            border-radius: 50px;
-            transition: all 0.3s;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxjaXJjbGUgY3g9IjExIiBjeT0iMTEiIHI9IjgiPjwvY2lyY2xlPjxwYXRoIGQ9Im0yMSAyMS00LjM1LTQuMzUiPjwvcGF0aD48L3N2Zz4=') no-repeat right 1.5rem center;
-            background-size: 20px;
-            padding-right: 3.5rem;
-        }
-
-        #searchInput:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        /* Navigation */
+        /* --- SIDEBAR --- */
         nav {
-            background: white;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+            width: var(--sidebar-width);
+            background-color: white;
+            border-right: 1px solid #e2e8f0;
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 10;
         }
 
-        .nav-item {
-            padding: 0.5rem 1.5rem;
-            background: var(--light);
-            border-radius: 25px;
-            text-decoration: none;
-            color: var(--dark);
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-item:hover {
-            background: var(--primary);
+        .nav-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem 4rem;
-        }
-
-        /* Category Sections */
-        .category {
-            margin-bottom: 3rem;
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-
-        .category.hidden {
-            display: none;
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid var(--primary);
-        }
-
-        .category-icon {
-            font-size: 2rem;
-        }
-
-        .category-title {
-            font-size: 2rem;
-            color: var(--primary);
-        }
-
-        /* Command Cards */
-        .commands-grid {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        }
-
-        .command-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
-            border: 1px solid var(--border);
-        }
-
-        .command-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-        }
-
-        .command-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .command-name {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .command-description {
-            color: #6b7280;
-            margin-bottom: 1rem;
-        }
-
-        .command-examples {
-            background: #f3f4f6;
-            padding: 1rem;
-            border-radius: 8px;
-            border-right: 4px solid var(--primary);
-        }
-
-        .command-example {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: #374151;
-        }
-
-        .command-example:last-child {
-            margin-bottom: 0;
-        }
-
-        .comment {
-            color: #10b981;
-            font-style: italic;
-        }
-
-        /* Tips Box */
-        .tip-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border: 2px solid #f59e0b;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tip-box::before {
-            content: '💡';
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            font-size: 3rem;
-            opacity: 0.3;
-        }
-
-        .tip-box h3 {
-            color: #b45309;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Keyboard Shortcuts Table */
-        .shortcuts-table {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            margin: 2rem 0;
-        }
-
-        .shortcuts-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .shortcuts-table th {
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            text-align: right;
-            font-weight: 600;
-        }
-
-        .shortcuts-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .shortcuts-table tr:hover {
-            background: #f9fafb;
-        }
-
-        .shortcut-key {
-            display: inline-block;
-            background: #e5e7eb;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.9rem;
-            border: 1px solid #d1d5db;
-            box-shadow: 0 2px 0 #d1d5db;
-        }
-
-        /* Back to Top Button */
-        #backToTop {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            background: var(--primary);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        #backToTop:hover {
-            background: var(--primary-dark);
-            transform: translateY(-3px);
-        }
-
-        /* SSH Connection Box */
-        .ssh-box {
-            background: #1f2937;
-            color: #10b981;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 1.1rem;
             text-align: center;
-            box-shadow: var(--shadow);
         }
 
-        /* Responsive */
+        .nav-header h1 { font-size: 1.2rem; margin-bottom: 5px; font-weight: 700; }
+
+        .search-box { padding: 15px; border-bottom: 1px solid #e2e8f0; }
+        #searchInput {
+            width: 100%; padding: 10px;
+            border: 1px solid #cbd5e1; border-radius: 6px;
+            font-size: 0.9rem; outline: none;
+        }
+        #searchInput:focus { border-color: var(--primary-color); }
+
+        .nav-list { list-style: none; overflow-y: auto; flex-grow: 1; }
+        .nav-btn {
+            width: 100%; text-align: left; padding: 15px 20px;
+            background: none; border: none; border-bottom: 1px solid #f1f5f9;
+            cursor: pointer; font-size: 0.95rem; color: var(--text-color);
+            transition: background 0.2s;
+        }
+        .nav-btn:hover { background-color: #f1f5f9; }
+        .nav-btn.active {
+            background-color: #eff6ff; color: var(--primary-color);
+            border-left: 4px solid var(--primary-color); font-weight: 600;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex-grow: 1; padding: 40px; overflow-y: auto;
+            max-width: 1000px; margin: 0 auto;
+        }
+
+        section { display: none; padding-bottom: 50px; animation: fadeIn 0.3s; }
+        section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 2rem; margin-bottom: 20px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        p { margin-bottom: 20px; color: #475569; }
+
+        /* --- COMMAND CARDS --- */
+        .commands-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;
+        }
+        .command-card {
+            background: white; border: 1px solid #e2e8f0; border-radius: var(--border-radius);
+            padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .command-card:hover {
+            transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .cmd-title { font-family: 'Consolas', monospace; color: var(--primary-color); font-weight: bold; font-size: 1.1rem; }
+        .card-desc { font-size: 0.9rem; color: #64748b; margin-bottom: 15px; }
+
+        /* --- COPY BLOCKS --- */
+        .example-block {
+            background-color: #f8fafc; border-left: 3px solid var(--accent-green);
+            padding: 10px; border-radius: 4px; margin-top: 8px;
+            font-family: 'Consolas', monospace; font-size: 0.9rem; color: #334155;
+            cursor: pointer; position: relative; transition: background 0.2s;
+        }
+        .example-block:hover { background-color: #e2e8f0; }
+        .example-block::after {
+            content: '📋 Copy'; position: absolute; right: 10px; top: 50%;
+            transform: translateY(-50%); opacity: 0; font-size: 0.75rem;
+            background: #fff; padding: 2px 5px; border-radius: 4px; border: 1px solid #cbd5e1;
+        }
+        .example-block:hover::after { opacity: 1; }
+        .comment { color: #94a3b8; font-style: italic; display: block; margin-top: 2px; font-size: 0.8rem; }
+
+        /* --- SHORTCUTS TABLE --- */
+        .shortcuts-table {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin: 2rem 0;
+            overflow-x: auto;
+        }
+        .shortcuts-table table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .shortcuts-table th {
+            background: var(--primary-color); color: white; padding: 1rem;
+            text-align: left; font-weight: 600;
+        }
+        .shortcuts-table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+        .shortcuts-table tr:hover { background: #f8fafc; }
+        .shortcut-key {
+            display: inline-block; background: #f1f5f9; padding: 0.2rem 0.5rem;
+            border-radius: 4px; font-family: monospace; font-size: 0.9rem;
+            border: 1px solid #cbd5e1; box-shadow: 0 2px 0 #cbd5e1; font-weight: bold;
+        }
+
+        /* --- NAV FOOTER --- */
+        .page-nav {
+            display: flex; justify-content: space-between; margin-top: 50px;
+            padding-top: 20px; border-top: 1px solid #e2e8f0;
+        }
+        .nav-control {
+            background: white; border: 1px solid #cbd5e1; padding: 10px 20px;
+            border-radius: var(--border-radius); cursor: pointer; color: var(--text-color);
+            transition: all 0.2s; font-weight: 500;
+        }
+        .nav-control:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .nav-control:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
+            body { flex-direction: column; height: auto; overflow: auto; }
+            nav { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #e2e8f0; }
+            .nav-list { display: none; }
+            main { padding: 20px; }
             .commands-grid { grid-template-columns: 1fr; }
-            .nav-container { justify-content: flex-start; }
         }
-
-        /* Utilities */
-        .text-muted { color: #6b7280; }
-        .text-small { font-size: 0.875rem; }
-        .mb-1 { margin-bottom: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        .mb-3 { margin-bottom: 1.5rem; }
     </style>
-    <script>
-        // פונקציית חיפוש
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const categories = document.querySelectorAll('.category');
-            const commandCards = document.querySelectorAll('.command-card');
-            
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase().trim();
-                
-                if (searchTerm === '') {
-                    // הצג הכל אם אין טקסט בחיפוש
-                    categories.forEach(cat => cat.classList.remove('hidden'));
-                    commandCards.forEach(card => card.style.display = '');
-                    return;
-                }
-                
-                let hasResults = false;
-                
-                categories.forEach(category => {
-                    let categoryHasMatch = false;
-                    const cards = category.querySelectorAll('.command-card');
-                    
-                    cards.forEach(card => {
-                        const text = card.textContent.toLowerCase();
-                        if (text.includes(searchTerm)) {
-                            card.style.display = '';
-                            categoryHasMatch = true;
-                            hasResults = true;
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                    
-                    if (categoryHasMatch) {
-                        category.classList.remove('hidden');
-                    } else {
-                        category.classList.add('hidden');
-                    }
-                });
-            });
-            
-            // גלילה חלקה לקטגוריות
-            document.querySelectorAll('.nav-item').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId);
-                    if (targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            });
-            
-            // כפתור חזרה למעלה
-            const backToTop = document.getElementById('backToTop');
-            
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset > 300) {
-                    backToTop.style.display = 'flex';
-                } else {
-                    backToTop.style.display = 'none';
-                }
-            });
-            
-            backToTop.addEventListener('click', function() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
-    </script>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-content">
-            <h1>🐧 מדריך פקודות Linux</h1>
-            <p class="subtitle">המדריך המלא למהנדסי נתונים - כל הפקודות במקום אחד</p>
-            <div class="ssh-box">
-                ssh -p 1222 naya@hotbox1.ddns.net
+
+<nav>
+    <div class="nav-header">
+        <h1>🐧 Linux for Data</h1>
+        <small>Complete Guide</small>
+    </div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search command...">
+    </div>
+    <ul class="nav-list" id="navList"></ul>
+</nav>
+
+<main id="contentArea">
+
+    <section id="topic0" class="active">
+        <h2>📁 Directories & Navigation</h2>
+        <p>Mastering the file tree structure is the first step.</p>
+        
+        
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">pwd</span></div>
+                <div class="card-desc">Print Working Directory.</div>
+                <div class="example-block" onclick="copyText(this)">pwd</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ls</span></div>
+                <div class="card-desc">List directory content.</div>
+                <div class="example-block" onclick="copyText(this)">ls <span class="comment"># Basic list</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -l <span class="comment"># Long format (permissions, etc.)</span></div>
+                <div class="example-block" onclick="copyText(this)">ll <span class="comment"># Common alias for ls -l</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -la <span class="comment"># List all (hidden) + details</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lh <span class="comment"># Human readable sizes</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lt <span class="comment"># Sort by time</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lS <span class="comment"># Sort by size</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -r <span class="comment"># Reverse order</span></div>
+                <div class="example-block" onclick="copyText(this)">ls -lR <span class="comment"># Recursive list</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">cd</span></div>
+                <div class="card-desc">Change Directory.</div>
+                <div class="example-block" onclick="copyText(this)">cd /path/to/dir <span class="comment"># Go to specific path</span></div>
+                <div class="example-block" onclick="copyText(this)">cd .. <span class="comment"># Go up one level</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ../folder <span class="comment"># Go to sibling folder</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ~ <span class="comment"># Go to home directory</span></div>
+                <div class="example-block" onclick="copyText(this)">cd <span class="comment"># Go home (shortcut)</span></div>
+                <div class="example-block" onclick="copyText(this)">cd ~/folder <span class="comment"># Path inside home</span></div>
+                <div class="example-block" onclick="copyText(this)">cd - <span class="comment"># Back to previous dir</span></div>
+                <div class="example-block" onclick="copyText(this)">cd . <span class="comment"># Current directory</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">mkdir</span></div>
+                <div class="card-desc">Create new directories.</div>
+                <div class="example-block" onclick="copyText(this)">mkdir new_folder <span class="comment"># Create a new directory</span></div>
+                <div class="example-block" onclick="copyText(this)">mkdir -p dir1/sub1/sub2 <span class="comment"># Create full path (recursive)</span></div>
+                <div class="example-block" onclick="copyText(this)">mkdir dir1 dir2 dir3 <span class="comment"># Create multiple directories</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">rmdir</span></div>
+                <div class="card-desc">Remove empty directories.</div>
+                <div class="example-block" onclick="copyText(this)">rmdir empty_folder <span class="comment"># Remove an empty directory</span></div>
+                <div class="example-block" onclick="copyText(this)">rmdir -p path/to/empty <span class="comment"># Remove path of empty directories</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">tree</span></div>
+                <div class="card-desc">Display directory structure as a tree.</div>
+                <div class="example-block" onclick="copyText(this)">tree <span class="comment"># Display directory structure</span></div>
+                <div class="example-block" onclick="copyText(this)">tree -L 2 <span class="comment"># Limit display depth to 2 levels</span></div>
+                <div class="example-block" onclick="copyText(this)">tree -d <span class="comment"># List directories only</span></div>
             </div>
         </div>
-    </header>
+    </section>
 
-    <!-- Search -->
-    <div class="search-container">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="חפש פקודה או מונח..." autocomplete="off">
+    <section id="topic1">
+    <h2>📄 File Operations</h2>
+    <p>Creating, moving, copying, and deleting files.</p>
+
+    <div class="commands-grid">
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">touch</span></div>
+            <div class="card-desc">Create files or update timestamp.</div>
+            <div class="example-block" onclick="copyText(this)">touch file.txt <span class="comment"># Create new file</span></div>
+            <div class="example-block" onclick="copyText(this)">touch file1 file2 file3 <span class="comment"># Create multiple files</span></div>
+            <div class="example-block" onclick="copyText(this)">touch -t 202312251200 file <span class="comment"># Set specific time</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">cp</span></div>
+            <div class="card-desc">Copy files/folders.</div>
+            <div class="example-block" onclick="copyText(this)">cp source dest <span class="comment"># Copy file</span></div>
+            <div class="example-block" onclick="copyText(this)">cp file.txt backup/ <span class="comment"># Copy to folder</span></div>
+            <div class="example-block" onclick="copyText(this)">cp -r folder1 folder2 <span class="comment"># Recursive copy (folder)</span></div>
+            <div class="example-block" onclick="copyText(this)">cp -p file backup/ <span class="comment"># Preserve permissions</span></div>
+            <div class="example-block" onclick="copyText(this)">cp *.txt backup/ <span class="comment"># Copy all text files</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">mv</span></div>
+            <div class="card-desc">Move or Rename.</div>
+            <div class="example-block" onclick="copyText(this)">mv oldname newname <span class="comment"># Rename</span></div>
+            <div class="example-block" onclick="copyText(this)">mv file /path/to/ <span class="comment"># Move file</span></div>
+            <div class="example-block" onclick="copyText(this)">mv *.log logs/ <span class="comment"># Move all log files</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">rm</span></div>
+            <div class="card-desc">Remove (Delete).</div>
+            <div class="example-block" onclick="copyText(this)">rm file.txt <span class="comment"># Delete file</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -i file.txt <span class="comment"># Ask for confirmation</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -f file.txt <span class="comment"># Force delete</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -r folder/ <span class="comment"># Recursive delete</span></div>
+            <div class="example-block" onclick="copyText(this)">rm -rf folder/ <span class="comment"># Force recursive delete</span></div>
+            <div class="example-block" onclick="copyText(this)">rm *.tmp <span class="comment"># Delete all temp files</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">find</span></div>
+            <div class="card-desc">Advanced file search.</div>
+            <div class="example-block" onclick="copyText(this)">find . -name "*.py" <span class="comment"># Search Python files</span></div>
+            <div class="example-block" onclick="copyText(this)">find / -size +100M <span class="comment"># Files larger than 100MB</span></div>
+            <div class="example-block" onclick="copyText(this)">find . -mtime -7 <span class="comment"># Modified in last 7 days</span></div>
+            <div class="example-block" onclick="copyText(this)">find . -type d -empty <span class="comment"># Empty directories</span></div>
+            <div class="example-block" onclick="copyText(this)">find . -name "*.log" -delete <span class="comment"># Find and delete</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">locate</span></div>
+            <div class="card-desc">Quick database search.</div>
+            <div class="example-block" onclick="copyText(this)">locate filename <span class="comment"># Quick search</span></div>
+            <div class="example-block" onclick="copyText(this)">updatedb <span class="comment"># Update DB (root)</span></div>
+            <div class="example-block" onclick="copyText(this)">locate -i name <span class="comment"># Case insensitive</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">ln</span></div>
+            <div class="card-desc">Create links.</div>
+            <div class="example-block" onclick="copyText(this)">ln -s target link <span class="comment"># Symbolic link</span></div>
+            <div class="example-block" onclick="copyText(this)">ln file hardlink <span class="comment"># Hard link</span></div>
+        </div>
+
+        <div class="command-card">
+            <div class="code-header"><span class="cmd-title">file</span></div>
+            <div class="card-desc">Determine file type.</div>
+            <div class="example-block" onclick="copyText(this)">file document.pdf <span class="comment"># Identify type</span></div>
+            <div class="example-block" onclick="copyText(this)">file -b image.jpg <span class="comment"># Short output</span></div>
+            <div class="example-block" onclick="copyText(this)">file * <span class="comment"># Check all files</span></div>
         </div>
     </div>
+</section>
+    <section id="topic2">
+        <h2>📝 Content & Analysis</h2>
+        <p>Inspect data without opening Excel.</p>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="#directories" class="nav-item">📁 תיקיות</a>
-            <a href="#files" class="nav-item">📄 קבצים</a>
-            <a href="#content" class="nav-item">📝 תוכן</a>
-            <a href="#variables" class="nav-item">🔤 משתנים</a>
-            <a href="#io" class="nav-item">🔄 הפניות</a>
-            <a href="#pipes" class="nav-item">🔗 צינורות</a>
-            <a href="#vi" class="nav-item">✏️ VI</a>
-            <a href="#permissions" class="nav-item">🔐 הרשאות</a>
-            <a href="#system" class="nav-item">💻 מערכת</a>
-            <a href="#users" class="nav-item">👥 משתמשים</a>
-            <a href="#scheduling" class="nav-item">⏰ תזמון</a>
-            <a href="#shortcuts" class="nav-item">⌨️ קיצורים</a>
-            <a href="#tips" class="nav-item">💡 טיפים</a>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">cat</span></div>
+                <div class="card-desc">Print content.</div>
+                <div class="example-block" onclick="copyText(this)">cat file.txt</div>
+                <div class="example-block" onclick="copyText(this)">cat -n file.txt <span class="comment"># Line numbers</span></div>
+                <div class="example-block" onclick="copyText(this)">cat f1 f2 > merged</div>
+                <div class="example-block" onclick="copyText(this)">cat >> file.txt <span class="comment"># Append</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">tac</span></div>
+                <div class="card-desc">Reverse cat (Bottom-up).</div>
+                <div class="example-block" onclick="copyText(this)">tac file.txt</div>
+                <div class="example-block" onclick="copyText(this)">echo -e "1\n2" | tac</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">less / more</span></div>
+                <div class="card-desc">Paged view.</div>
+                <div class="example-block" onclick="copyText(this)">less file.txt <span class="comment"># Scrollable</span></div>
+                <div class="example-block" onclick="copyText(this)">more file.txt <span class="comment"># Forward only</span></div>
+                <div class="example-block"><span class="comment">Keys: q=quit, /search, n=next</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">head / tail</span></div>
+                <div class="card-desc">Start / End of file.</div>
+                <div class="example-block" onclick="copyText(this)">head -n 20 file.txt</div>
+                <div class="example-block" onclick="copyText(this)">tail -n 50 file.txt</div>
+                <div class="example-block" onclick="copyText(this)">tail -f log.txt <span class="comment"># Live monitor</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">grep</span></div>
+                <div class="card-desc">Search text.</div>
+                <div class="example-block" onclick="copyText(this)">grep "pattern" file</div>
+                <div class="example-block" onclick="copyText(this)">grep -i "pat" file <span class="comment"># No-case</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -r "pat" dir/ <span class="comment"># Recursive</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -v "pat" file <span class="comment"># Invert match</span></div>
+                <div class="example-block" onclick="copyText(this)">grep -c "pat" file <span class="comment"># Count</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ripgrep (rg)</span></div>
+                <div class="card-desc">Modern, faster grep.</div>
+                <div class="example-block" onclick="copyText(this)">rg "pattern"</div>
+                <div class="example-block" onclick="copyText(this)">rg -n "pat" <span class="comment"># Line nums</span></div>
+                <div class="example-block" onclick="copyText(this)">rg -t py "import" <span class="comment"># Py files only</span></div>
+                <div class="example-block" onclick="copyText(this)">rg --hidden "secret"</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">diff</span></div>
+                <div class="card-desc">Compare files.</div>
+                <div class="example-block" onclick="copyText(this)">diff file1 file2</div>
+                <div class="example-block" onclick="copyText(this)">diff -y file1 file2 <span class="comment"># Side-by-side</span></div>
+                <div class="example-block" onclick="copyText(this)">diff -r dir1 dir2</div>
+            </div>
+    </section>
+
+    <section id="topic3">
+        <h2>🔤 Variables & Shell</h2>
+        <p class="section-desc">Environment variables, bash syntax, and quoting.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Definitions</span></div>
+                <div class="card-desc">Set variables.</div>
+                <div class="example-block" onclick="copyText(this)">VAR="value"</div>
+                <div class="example-block" onclick="copyText(this)">export VAR="val" <span class="comment"># Env var</span></div>
+                <div class="example-block" onclick="copyText(this)">readonly VAR="val"</div>
+                <div class="example-block" onclick="copyText(this)">unset VAR</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">echo</span></div>
+                <div class="card-desc">Print output.</div>
+                <div class="example-block" onclick="copyText(this)">echo $VAR</div>
+                <div class="example-block" onclick="copyText(this)">echo "Hi $USER" <span class="comment"># Expand</span></div>
+                <div class="example-block" onclick="copyText(this)">echo 'Hi $USER' <span class="comment"># Literal</span></div>
+                <div class="example-block" onclick="copyText(this)">echo -e "A\nB" <span class="comment"># Newline</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">env</span></div>
+                <div class="card-desc">Environment info.</div>
+                <div class="example-block" onclick="copyText(this)">env <span class="comment"># List all</span></div>
+                <div class="example-block" onclick="copyText(this)">printenv PATH</div>
+                <div class="example-block" onclick="copyText(this)">env | grep HOME</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">System Vars</span></div>
+                <div class="card-desc">Built-ins.</div>
+                <div class="example-block">$HOME, $USER, $PATH</div>
+                <div class="example-block">$PWD, $SHELL, $HOSTNAME</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Command Sub $()</span></div>
+                <div class="card-desc">Run cmd inside cmd.</div>
+                <div class="example-block" onclick="copyText(this)">x=$(cat file.txt)</div>
+                <div class="example-block" onclick="copyText(this)">today=$(date +%F)</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Scoping {}</span></div>
+                <div class="card-desc">Delimit variables.</div>
+                <div class="example-block" onclick="copyText(this)">echo "${VAR}man"</div>
+                <div class="example-block" onclick="copyText(this)">${VAR:-default} <span class="comment"># Default val</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Wildcards</span></div>
+                <div class="card-desc">Pattern matching.</div>
+                <div class="example-block">*.txt <span class="comment"># All .txt</span></div>
+                <div class="example-block">file?.txt <span class="comment"># file1, fileA</span></div>
+                <div class="example-block">[a-z]* <span class="comment"># Lowercase start</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Specials # \</span></div>
+                <div class="card-desc">Comments & Escaping.</div>
+                <div class="example-block"># This is a comment</div>
+                <div class="example-block">echo \$100 <span class="comment"># Literal $</span></div>
+                <div class="example-block">echo line \ <span class="comment"># Continue line</span></div>
+            </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- תיקיות -->
-        <section id="directories" class="category">
-            <div class="category-header">
-                <span class="category-icon">📁</span>
-                <h2 class="category-title">עבודה עם תיקיות</h2>
+    <section id="topic4">
+        <h2>🔄 I/O & Redirection</h2>
+        <p class="section-desc">Manage Standard Input, Output, and Error.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Output ></span></div>
+                <div class="card-desc">Redirect stdout.</div>
+                <div class="example-block" onclick="copyText(this)">cmd > file.txt <span class="comment"># Overwrite</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd >> file.txt <span class="comment"># Append</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd > /dev/null <span class="comment"># Discard</span></div>
             </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">pwd</code>
-                    </div>
-                    <p class="command-description">הצגת הנתיב המלא של התיקייה הנוכחית</p>
-                    <div class="command-examples">
-                        <div class="command-example">pwd <span class="comment"># מציג את הנתיב המלא של התיקייה הנוכחית</span></div>
-                        <div class="command-example"># פלט: /home/user/documents</div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">ls</code>
-                    </div>
-                    <p class="command-description">הצגת תוכן התיקייה</p>
-                    <div class="command-examples">
-                        <div class="command-example">ls <span class="comment"># רשימה בסיסית</span></div>
-                        <div class="command-example">ls -l or ll <span class="comment"># רשימה מפורטת עם פרטים</span></div>
-                        <div class="command-example">ls -la <span class="comment"># כולל קבצים נסתרים</span></div>
-                        <div class="command-example">ls -lh <span class="comment"># גדלים בפורמט קריא לאדם</span></div>
-                        <div class="command-example">ls -lt <span class="comment"># ממוין לפי זמן שינוי</span></div>
-                        <div class="command-example">ls -lS <span class="comment"># ממוין לפי גודל</span></div>
-                        <div class="command-example">ls -a <span class="comment"># קבצים נסתרים בלבד</span></div>
-                        <div class="command-example">ls -r <span class="comment"># מציג את הקבצים בסדר הפוך</span></div>
-                        <div class="command-example">ls -lR <span class="comment"># רקורסיבי</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">cd</code>
-                    </div>
-                    <p class="command-description">מעבר בין תיקיות</p>
-                    <div class="command-examples">
-                        <div class="command-example">cd /path/to/dir <span class="comment"># מעבר לתיקייה ספציפית</span></div>
-                        <div class="command-example">cd ../folder <span class="comment"># מעבר לתיקייה בשם folder מתוך תיקיית האב</span></div>
-                        <div class="command-example">cd ~ <span class="comment"># מעבר לתיקיית הבית</span></div>
-                        <div class="command-example">cd ~/folder <span class="comment"># גישה לתיקייה בשם folder שנמצאת בתוך תיקיית הבית שלך</span></div>
-                        <div class="command-example">cd .. <span class="comment"># מעבר לתיקייה האב</span></div>
-                        <div class="command-example">cd . <span class="comment"># תיקייה נוכחית</span></div>
-                        <div class="command-example">cd - <span class="comment"># מעבר לתיקייה הקודמת</span></div>
-                        <div class="command-example">cd <span class="comment"># מעבר לתיקיית הבית (ללא פרמטרים)</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">mkdir</code>
-                    </div>
-                    <p class="command-description">יצירת תיקיות חדשות</p>
-                    <div class="command-examples">
-                        <div class="command-example">mkdir new_folder <span class="comment"># יצירת תיקייה חדשה</span></div>
-                        <div class="command-example">mkdir -p dir1/subdir1/subdir-subdir1 <span class="comment"># יוצר את כל התיקיות הנדרשות בנתיב, גם אם חלק מהן לא קיימות</span></div>
-                        <div class="command-example">mkdir dir1 dir2 dir3 <span class="comment"># יצירת מספר תיקיות בבת אחת</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">rmdir</code>
-                    </div>
-                    <p class="command-description">מחיקת תיקיות ריקות</p>
-                    <div class="command-examples">
-                        <div class="command-example">rmdir empty_folder <span class="comment"># מחיקת תיקייה ריקה</span></div>
-                        <div class="command-example">rmdir -p path/to/empty <span class="comment"># מחיקת נתיב של תיקיות ריקות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">tree</code>
-                    </div>
-                    <p class="command-description">הצגת מבנה תיקיות בצורת עץ</p>
-                    <div class="command-examples">
-                        <div class="command-example">tree <span class="comment"># הצגת מבנה התיקיות</span></div>
-                        <div class="command-example">tree -L 2 <span class="comment"># עומק 2 רמות</span></div>
-                        <div class="command-example">tree -d <span class="comment"># רק תיקיות</span></div>
-                    </div>
-                </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Input <</span></div>
+                <div class="card-desc">Redirect stdin.</div>
+                <div class="example-block" onclick="copyText(this)">cmd < input.txt</div>
+                <div class="example-block" onclick="copyText(this)">cmd << EOF <span class="comment"># Here Doc</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd <<< "str" <span class="comment"># Here String</span></div>
             </div>
-        </section>
-
-        <!-- קבצים -->
-        <section id="files" class="category">
-            <div class="category-header">
-                <span class="category-icon">📄</span>
-                <h2 class="category-title">עבודה עם קבצים</h2>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Error 2></span></div>
+                <div class="card-desc">Redirect stderr.</div>
+                <div class="example-block" onclick="copyText(this)">cmd 2> err.log</div>
+                <div class="example-block" onclick="copyText(this)">cmd > out 2>&1 <span class="comment"># Both to same</span></div>
+                <div class="example-block" onclick="copyText(this)">cmd &> all.log <span class="comment"># Short syntax</span></div>
             </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">touch</code>
-                    </div>
-                    <p class="command-description">יצירת קבצים או עדכון זמן</p>
-                    <div class="command-examples">
-                        <div class="command-example">touch file.txt <span class="comment"># יצירת קובץ חדש או עדכון זמן</span></div>
-                        <div class="command-example">touch file1 file2 file3 <span class="comment"># יצירת מספר קבצים</span></div>
-                        <div class="command-example">touch -t 202312251200 file <span class="comment"># קביעת זמן ספציפי</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">cp</code>
-                    </div>
-                    <p class="command-description">העתקת קבצים ותיקיות</p>
-                    <div class="command-examples">
-                        <div class="command-example">cp source dest <span class="comment"># העתקת קובץ</span></div>
-                        <div class="command-example">cp file.txt backup/ <span class="comment"># העתקה לתיקייה</span></div>
-                        <div class="command-example">cp -r folder1 folder2 <span class="comment"># העתקת תיקייה</span></div>
-                        <div class="command-example">cp -p file backup/ <span class="comment"># שמירת הרשאות וזמנים</span></div>
-                        <div class="command-example">cp *.txt backup/ <span class="comment"># העתקת כל קבצי הטקסט</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">mv</code>
-                    </div>
-                    <p class="command-description">העברה ושינוי שם</p>
-                    <div class="command-examples">
-                        <div class="command-example">mv oldname newname <span class="comment"># שינוי שם</span></div>
-                        <div class="command-example">mv file /path/to/ <span class="comment"># העברת קובץ</span></div>
-                        <div class="command-example">mv *.log logs/ <span class="comment"># העברת כל קבצי הלוג</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">rm</code>
-                    </div>
-                    <p class="command-description">מחיקת קבצים ותיקיות</p>
-                    <div class="command-examples">
-                        <div class="command-example">rm file.txt <span class="comment"># מחיקת קובץ</span></div>
-                        <div class="command-example">rm -i file.txt <span class="comment"># מחיקה עם אישור</span></div>
-                        <div class="command-example">rm -f file.txt <span class="comment"># מחיקה כפויה</span></div>
-                        <div class="command-example">rm -r folder/ <span class="comment"># מחיקת תיקייה ותוכנה</span></div>
-                        <div class="command-example">rm -rf folder/ <span class="comment"># מחיקה כפויה ללא אישורים</span></div>
-                        <div class="command-example">rm *.tmp <span class="comment"># מחיקת כל הקבצים הזמניים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">find</code>
-                    </div>
-                    <p class="command-description">חיפוש קבצים מתקדם</p>
-                    <div class="command-examples">
-                        <div class="command-example">find . -name "*.py" <span class="comment"># חיפוש קבצי Python</span></div>
-                        <div class="command-example">find / -size +100M <span class="comment"># קבצים גדולים מ-100MB</span></div>
-                        <div class="command-example">find /home -type f -size +100M <span class="comment"># קבצים גדולים מ-100MB</span></div>
-                        <div class="command-example">find . -mtime -7 <span class="comment"># קבצים ששונו בשבוע האחרון</span></div>
-                        <div class="command-example">find . -type d -empty <span class="comment"># תיקיות ריקות</span></div>
-                        <div class="command-example">find . -name "*.log" -delete <span class="comment"># חיפוש ומחיקה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">locate</code>
-                    </div>
-                    <p class="command-description">חיפוש מהיר במאגר</p>
-                    <div class="command-examples">
-                        <div class="command-example">locate filename <span class="comment"># חיפוש מהיר במאגר</span></div>
-                        <div class="command-example">updatedb <span class="comment"># עדכון מאגר החיפוש (כ-root)</span></div>
-                        <div class="command-example">locate -i name <span class="comment"># חיפוש לא רגיש לאותיות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">ln</code>
-                    </div>
-                    <p class="command-description">יצירת קישורים</p>
-                    <div class="command-examples">
-                        <div class="command-example">ln -s target link <span class="comment"># קישור סמלי</span></div>
-                        <div class="command-example">ln file hardlink <span class="comment"># קישור קשיח</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">file</code>
-                    </div>
-                    <p class="command-description">זיהוי סוג קובץ</p>
-                    <div class="command-examples">
-                        <div class="command-example">file document.pdf <span class="comment"># זיהוי סוג קובץ</span></div>
-                        <div class="command-example">file -b image.jpg <span class="comment"># פלט קצר</span></div>
-                        <div class="command-example">file * <span class="comment"># בדיקת כל הקבצים</span></div>
-                    </div>
-                </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">tee</span></div>
+                <div class="card-desc">Split output (Screen+File).</div>
+                <div class="example-block" onclick="copyText(this)">cmd | tee log.txt</div>
+                <div class="example-block" onclick="copyText(this)">cmd | tee -a log.txt <span class="comment"># Append</span></div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- תוכן קבצים -->
-        <section id="content" class="category">
-            <div class="category-header">
-                <span class="category-icon">📝</span>
-                <h2 class="category-title">עבודה עם תוכן קבצים</h2>
+    
+    <section id="topic5">
+        <h2>⚙️ Pipes & Processing</h2>
+        <p class="section-desc">Advanced text manipulation pipelines.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Pipe |</span></div>
+                <div class="card-desc">Chain commands.</div>
+                <div class="example-block" onclick="copyText(this)">cmd1 | cmd2</div>
+                <div class="example-block" onclick="copyText(this)">ps aux | grep python</div>
             </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">cat</code>
-                    </div>
-                    <p class="command-description">הצגת תוכן מלא</p>
-                    <div class="command-examples">
-                        <div class="command-example">cat file.txt <span class="comment"># הצגת כל התוכן</span></div>
-                        <div class="command-example">cat file1.txt file2.txt <span class="comment"># הצגת מספר קבצים</span></div>
-                        <div class="command-example">cat -n file.txt <span class="comment"># עם מספור שורות</span></div>
-                        <div class="command-example">cat -b file.txt <span class="comment"># מספור רק שורות לא ריקות</span></div>
-                        <div class="command-example">cat file1 file2 > merged <span class="comment"># חיבור של כמה קבצים לקובץ אחד</span></div>
-                        <div class="command-example">cat >> file.txt <span class="comment"># הוספה לקובץ (Ctrl+D לסיום)</span></div>
-                        <div class="command-example">cat new.txt >> full.txt <span class="comment"># הוספת תוכן קובץ לקובץ אחר</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">tac</code>
-                    </div>
-                    <p class="command-description">הצגת תוכן בסדר הפוך (מלמטה למעלה)</p>
-                    <div class="command-examples">
-                        <div class="command-example">tac file.txt <span class="comment"># הצגת קובץ מלמטה למעלה (cat הפוך)</span></div>
-                        <div class="command-example">echo -e "א\nב\nג" | tac <span class="comment"># שימוש עם צינורות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">less / more</code>
-                    </div>
-                    <p class="command-description">צפייה מדורגת בקובץ</p>
-                    <div class="command-examples">
-                        <div class="command-example">less count.txt <span class="comment"># ניווט חופשי בקובץ</span></div>
-                        <div class="command-example">more count.txt <span class="comment"># ניווט קדימה בלבד</span></div>
-                        <div class="command-example"># קיצורי less:</div>
-                        <div class="command-example"># חץ למטה / j = שורה קדימה</div>
-                        <div class="command-example"># חץ למעלה / k = שורה אחורה</div>
-                        <div class="command-example"># Space או f = עמוד קדימה</div>
-                        <div class="command-example"># b = עמוד אחורה</div>
-                        <div class="command-example"># g = תחילת הקובץ, G = סוף הקובץ</div>
-                        <div class="command-example"># /pattern = חיפוש קדימה</div>
-                        <div class="command-example"># ?pattern = חיפוש אחורה</div>
-                        <div class="command-example"># n = תוצאה הבאה, N = תוצאה קודמת</div>
-                        <div class="command-example"># q = יציאה</div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">head / tail</code>
-                    </div>
-                    <p class="command-description">הצגת תחילת/סוף קובץ</p>
-                    <div class="command-examples">
-                        <div class="command-example">head file.txt <span class="comment"># 10 שורות ראשונות</span></div>
-                        <div class="command-example">head -n 20 file.txt <span class="comment"># 20 שורות ראשונות</span></div>
-                        <div class="command-example">head -c 100 file.txt <span class="comment"># 100 תווים ראשונים</span></div>
-                        <div class="command-example">tail file.txt <span class="comment"># 10 שורות אחרונות</span></div>
-                        <div class="command-example">tail -n 50 file.txt <span class="comment"># 50 שורות אחרונות</span></div>
-                        <div class="command-example">tail -f logfile.txt <span class="comment"># מעקב חי אחר קובץ לוג</span></div>
-                        <div class="command-example">tail -F logfile.txt <span class="comment"># מעקב עם טיפול בהחלפת קבצים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">grep</code>
-                    </div>
-                    <p class="command-description">חיפוש תבניות בטקסט</p>
-                    <div class="command-examples">
-                        <div class="command-example">grep "pattern" file <span class="comment"># חיפוש בסיסי</span></div>
-                        <div class="command-example">grep -i "pattern" file <span class="comment"># חיפוש לא רגיש לאותיות</span></div>
-                        <div class="command-example">grep -n "pattern" file <span class="comment"># עם מספרי שורות</span></div>
-                        <div class="command-example">grep -r "pattern" dir/ <span class="comment"># חיפוש רקורסיבי</span></div>
-                        <div class="command-example">grep -v "pattern" file <span class="comment"># שורות שלא מכילות תבנית</span></div>
-                        <div class="command-example">grep -c "pattern" file <span class="comment"># ספירת התאמות</span></div>
-                        <div class="command-example">grep -E "regex" file <span class="comment"># ביטויים רגולריים מורחבים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">ripgrep (rg)</code>
-                    </div>
-                    <p class="command-description">חיפוש מהיר ומתקדם - חלופה משופרת ל-grep</p>
-                    <div class="command-examples">
-                        <div class="command-example">rg "search_term" <span class="comment"># חיפוש בסיסי</span></div>
-                        <div class="command-example">rg -n "search_term" <span class="comment"># חיפוש עם מספרי שורות</span></div>
-                        <div class="command-example">rg -i "PATTERN" <span class="comment"># חיפוש case-insensitive</span></div>
-                        <div class="command-example">rg -C 3 "pattern" <span class="comment"># הצגת הקשר (3 שורות מסביב)</span></div>
-                        <div class="command-example">rg -t py "import" <span class="comment"># חיפוש רק בקבצי Python</span></div>
-                        <div class="command-example">rg -uuu "pattern" <span class="comment"># ביטול כל הסינון האוטומטי</span></div>
-                        <div class="command-example">rg --hidden "pattern" <span class="comment"># הכללת קבצים נסתרים</span></div>
-                        <div class="command-example">rg --binary "pattern" <span class="comment"># חיפוש בקבצים בינאריים</span></div>
-                        <div class="command-example">rg -c "pattern" <span class="comment"># ספירת התאמות</span></div>
-                        <div class="command-example">rg -i --color=always 'email.*com' <span class="comment"># עם צביעה מודגשת</span></div>
-                        <div class="command-example">rg -i -l 'email.*com' <span class="comment"># הצגת שמות קבצים בלבד</span></div>
-                        <div class="command-example">rg -i -o 'email.*com' <span class="comment"># הצגת ההתאמות בלבד</span></div>
-                        <div class="command-example">rg -i -o 'email.*com' > found_emails.txt <span class="comment"># שמירת התאמות</span></div>
-                        <div class="command-example">rg -i -o 'email.*com' | wc -l <span class="comment"># ספירת התאמות</span></div>
-                        <div class="command-example">rg -i -o 'email.*com' | sort | uniq <span class="comment"># הסרת כפילויות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">wc</code>
-                    </div>
-                    <p class="command-description">ספירת מילים ושורות</p>
-                    <div class="command-examples">
-                        <div class="command-example">wc file.txt <span class="comment"># שורות, מילים, תווים</span></div>
-                        <div class="command-example">wc -l file.txt <span class="comment"># רק שורות</span></div>
-                        <div class="command-example">wc -w file.txt <span class="comment"># רק מילים</span></div>
-                        <div class="command-example">wc -c file.txt <span class="comment"># רק בייטים</span></div>
-                        <div class="command-example">wc -m file.txt <span class="comment"># רק תווים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">sort</code>
-                    </div>
-                    <p class="command-description">מיון שורות</p>
-                    <div class="command-examples">
-                        <div class="command-example">sort file.txt <span class="comment"># מיון אלפביתי</span></div>
-                        <div class="command-example">sort -n file.txt <span class="comment"># מיון נומרי</span></div>
-                        <div class="command-example">sort -r file.txt <span class="comment"># מיון הפוך</span></div>
-                        <div class="command-example">sort -k 2 file.txt <span class="comment"># מיון לפי עמודה 2</span></div>
-                        <div class="command-example">sort -u file.txt <span class="comment"># מיון והסרת כפילויות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">uniq</code>
-                    </div>
-                    <p class="command-description">הסרת כפילויות</p>
-                    <div class="command-examples">
-                        <div class="command-example">uniq file.txt <span class="comment"># הסרת כפילויות רצופות</span></div>
-                        <div class="command-example">uniq -c file.txt <span class="comment"># עם ספירה</span></div>
-                        <div class="command-example">uniq -d file.txt <span class="comment"># רק שורות כפולות</span></div>
-                        <div class="command-example">uniq -u file.txt <span class="comment"># רק שורות ייחודיות</span></div>
-                        <div class="command-example">sort file.txt | uniq -c | sort -nr <span class="comment"># ספירת מילים וסידור לפי תדירות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">diff</code>
-                    </div>
-                    <p class="command-description">השוואת קבצים</p>
-                    <div class="command-examples">
-                        <div class="command-example">diff file1 file2 <span class="comment"># השוואה בסיסית</span></div>
-                        <div class="command-example">diff -u file1 file2 <span class="comment"># פורמט unified</span></div>
-                        <div class="command-example">diff -y file1 file2 <span class="comment"># תצוגה זה לצד זה</span></div>
-                        <div class="command-example">diff -r dir1 dir2 <span class="comment"># השוואת תיקיות</span></div>
-                    </div>
-                </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">cut</span></div>
+                <div class="card-desc">Slice columns.</div>
+                <div class="example-block" onclick="copyText(this)">cut -d',' -f1,3 file.csv</div>
+                <div class="example-block" onclick="copyText(this)">cut -c1-5 file.txt</div>
             </div>
-        </section>
-
-        <!-- משתנים -->
-        <section id="variables" class="category">
-            <div class="category-header">
-                <span class="category-icon">🔤</span>
-                <h2 class="category-title">עבודה עם משתנים</h2>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">awk</span></div>
+                <div class="card-desc">Programmable filter.</div>
+                <div class="example-block" onclick="copyText(this)">awk '{print $1}' file</div>
+                <div class="example-block" onclick="copyText(this)">awk -F',' '{print $2}' csv</div>
+                <div class="example-block" onclick="copyText(this)">awk '{s+=$3} END {print s}' <span class="comment"># Sum</span></div>
+                <div class="example-block" onclick="copyText(this)">awk 'NR>1 {print}' <span class="comment"># Skip header</span></div>
             </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">הגדרת משתנים</code>
-                    </div>
-                    <p class="command-description">יצירה והגדרת משתנים</p>
-                    <div class="command-examples">
-                        <div class="command-example">VAR="value" <span class="comment"># משתנה מקומי</span></div>
-                        <div class="command-example">name="John Doe" <span class="comment"># משתנה עם רווחים</span></div>
-                        <div class="command-example">count=100 <span class="comment"># משתנה נומרי</span></div>
-                        <div class="command-example">export VAR="value" <span class="comment"># משתנה סביבה</span></div>
-                        <div class="command-example">export PATH="/usr/local/bin:$PATH" <span class="comment"># הוספה ל-PATH</span></div>
-                        <div class="command-example">readonly VAR="value" <span class="comment"># משתנה לקריאה בלבד</span></div>
-                        <div class="command-example">unset VAR <span class="comment"># מחיקת משתנה</span></div>
-                    </div>
-                </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sed</span></div>
+                <div class="card-desc">Stream Editor.</div>
+                <div class="example-block" onclick="copyText(this)">sed 's/old/new/g' file</div>
+                <div class="example-block" onclick="copyText(this)">sed '1d' file <span class="comment"># Del 1st line</span></div>
+                <div class="example-block" onclick="copyText(this)">sed -n '5,10p' file</div>
+                <div class="example-block" onclick="copyText(this)">sed '/bad/d' file <span class="comment"># Del pattern</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">xargs</span></div>
+                <div class="card-desc">Args from stdin.</div>
+                <div class="example-block" onclick="copyText(this)">find . -name "*.tmp" | xargs rm</div>
+                <div class="example-block" onclick="copyText(this)">cat list | xargs touch</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">tr</span></div>
+                <div class="card-desc">Translate characters.</div>
+                <div class="example-block" onclick="copyText(this)">tr 'a-z' 'A-Z' < file</div>
+                <div class="example-block" onclick="copyText(this)">tr -d '0-9' < file</div>
+                <div class="example-block" onclick="copyText(this)">tr -s ' ' < file <span class="comment"># Squeeze spaces</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">wc</span></div>
+                <div class="card-desc">Word Count.</div>
+                <div class="example-block" onclick="copyText(this)">wc -l file <span class="comment"># Lines</span></div>
+                <div class="example-block" onclick="copyText(this)">wc -w file <span class="comment"># Words</span></div>
+                <div class="example-block" onclick="copyText(this)">wc -c file <span class="comment"># Bytes</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sort & uniq</span></div>
+                <div class="card-desc">Sorting.</div>
+                <div class="example-block" onclick="copyText(this)">sort -n file <span class="comment"># Numeric</span></div>
+                <div class="example-block" onclick="copyText(this)">sort -r file <span class="comment"># Reverse</span></div>
+                <div class="example-block" onclick="copyText(this)">uniq -c <span class="comment"># Count uniques</span></div>
+                <div class="example-block" onclick="copyText(this)">sort | uniq</div>
+            </div>
+        </div>
+    </section>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">echo</code>
-                    </div>
-                    <p class="command-description">הצגת משתנים וטקסט</p>
-                    <div class="command-examples">
-                        <div class="command-example">echo $VAR <span class="comment"># הצגת ערך משתנה</span></div>
-                        <div class="command-example">echo ${VAR} <span class="comment"># סינטקס מפורש</span></div>
-                        <div class="command-example">echo "Hello $USER" <span class="comment"># שילוב בטקסט</span></div>
-                        <div class="command-example">echo 'Hello $USER' <span class="comment"># ללא הרחבה (literal)</span></div>
-                        <div class="command-example">echo -e "line1\nline2" <span class="comment"># מאפשר escape sequences</span></div>
-                        <div class="command-example">echo -e "line1\tline2" <span class="comment"># מאפשר escape sequences</span></div>
-                        <div class="command-example">echo filename1 \ filename2 <span class="comment"># המשך שורה</span></div>
-                    </div>
-                </div>
+    <section id="topic6">
+        <h2>✏️ VI / VIM</h2>
+        <p class="section-desc">Text editor mastery.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Modes</span></div>
+                <div class="card-desc">Switching states.</div>
+                <div class="example-block">i <span class="comment"># Insert Mode</span></div>
+                <div class="example-block">Esc <span class="comment"># Normal Mode</span></div>
+                <div class="example-block">: <span class="comment"># Command Mode</span></div>
+                <div class="example-block">v <span class="comment"># Visual Mode</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Navigation</span></div>
+                <div class="card-desc">Moving (Normal Mode).</div>
+                <div class="example-block">h, j, k, l <span class="comment"># Left, Down, Up, Right</span></div>
+                <div class="example-block">w, b <span class="comment"># Word Fwd/Back</span></div>
+                <div class="example-block">0, $ <span class="comment"># Start/End line</span></div>
+                <div class="example-block">gg, G <span class="comment"># Start/End file</span></div>
+                <div class="example-block">/text <span class="comment"># Search</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Editing</span></div>
+                <div class="card-desc">Editing (Normal Mode).</div>
+                <div class="example-block">x <span class="comment"># Delete char</span></div>
+                <div class="example-block">dd <span class="comment"># Delete line</span></div>
+                <div class="example-block">yy <span class="comment"># Copy line</span></div>
+                <div class="example-block">p <span class="comment"># Paste</span></div>
+                <div class="example-block">u <span class="comment"># Undo</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Commands</span></div>
+                <div class="card-desc">Save & Quit.</div>
+                <div class="example-block">:w <span class="comment"># Save</span></div>
+                <div class="example-block">:q <span class="comment"># Quit</span></div>
+                <div class="example-block">:wq <span class="comment"># Save & Quit</span></div>
+                <div class="example-block">:q! <span class="comment"># Force Quit</span></div>
+                <div class="example-block">:set number</div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Config</span></div>
+                <div class="card-desc">ConfigFiles.</div>
+                <div class="example-block">vim ~/.bashrc</div>
+                <div class="example-block">source ~/.bashrc</div>
+            </div>
+        </div>
+    </section>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">env / printenv</code>
-                    </div>
-                    <p class="command-description">הצגת משתני סביבה</p>
-                    <div class="command-examples">
-                        <div class="command-example">env <span class="comment"># הצגת כל משתני הסביבה</span></div>
-                        <div class="command-example">printenv <span class="comment"># זהה ל-env</span></div>
-                        <div class="command-example">printenv PATH <span class="comment"># הצגת משתנה ספציפי</span></div>
-                        <div class="command-example">set <span class="comment"># הצגת כל המשתנים (מקומיים + סביבה)</span></div>
-                        <div class="command-example">env | grep HOME <span class="comment"># חיפוש במשתני סביבה</span></div>
-                    </div>
-                </div>
+    
+    <section id="topic7">
+        <h2>🔐 Permissions</h2>
+        <p class="section-desc">File access control.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ls -l</span></div>
+                <div class="card-desc">View permissions.</div>
+                <div class="example-block">ls -l file</div>
+                <div class="example-block">ls -ld dir/</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">chmod</span></div>
+                <div class="card-desc">Change mode.</div>
+                <div class="example-block" onclick="copyText(this)">chmod +x script</div>
+                <div class="example-block" onclick="copyText(this)">chmod 755 file <span class="comment"># rwx-rx-rx</span></div>
+                <div class="example-block" onclick="copyText(this)">chmod 600 key <span class="comment"># rw-------</span></div>
+                <div class="example-block" onclick="copyText(this)">chmod -R 775 dir/</div>
+                <div class="example-block" onclick="copyText(this)">chmod +t dir <span class="comment"># Sticky bit</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Ownership</span></div>
+                <div class="card-desc">Owner & Group.</div>
+                <div class="example-block" onclick="copyText(this)">chown user:group file</div>
+                <div class="example-block" onclick="copyText(this)">chown -R user dir/</div>
+                <div class="example-block" onclick="copyText(this)">chgrp group file</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">umask</span></div>
+                <div class="card-desc">Default perms.</div>
+                <div class="example-block" onclick="copyText(this)">umask <span class="comment"># Show</span></div>
+                <div class="example-block" onclick="copyText(this)">umask 022 <span class="comment"># Set</span></div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Common</span></div>
+                <div class="card-desc">Standard codes.</div>
+                <div class="example-block">755 <span class="comment"># Web/Script (rwx,rx,rx)</span></div>
+                <div class="example-block">644 <span class="comment"># Config (rw,r,r)</span></div>
+                <div class="example-block">600 <span class="comment"># Private (rw,-,-)</span></div>
+                <div class="example-block">400 <span class="comment"># Read only (r,-,-)</span></div>
+            </div>
+        </div>
+    </section>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">משתני מערכת</code>
-                    </div>
-                    <p class="command-description">משתנים חשובים</p>
-                    <div class="command-examples">
-                        <div class="command-example">$HOME <span class="comment"># תיקיית הבית</span></div>
-                        <div class="command-example">$USER <span class="comment"># שם המשתמש</span></div>
-                        <div class="command-example">$PATH <span class="comment"># נתיבי חיפוש לתוכניות</span></div>
-                        <div class="command-example">$PWD <span class="comment"># תיקייה נוכחית</span></div>
-                        <div class="command-example">$SHELL <span class="comment"># מעטפת פקודות נוכחית</span></div>
-                        <div class="command-example">$PS1 <span class="comment"># prompt הפקודה</span></div>
-                        <div class="command-example">$HOSTNAME <span class="comment"># שם השרת</span></div>
-                    </div>
-                </div>
+      <section id="topic8">
+        <h2>💻 System Info</h2>
+        <p class="section-desc">Monitoring and resources.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Disk</span></div>
+                <div class="card-desc">Storage.</div>
+                <div class="example-block" onclick="copyText(this)">df -h <span class="comment"># Disk free</span></div>
+                <div class="example-block" onclick="copyText(this)">du -sh folder <span class="comment"># Usage</span></div>
+                <div class="example-block" onclick="copyText(this)">du -h --max-depth=1</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Compression</span></div>
+                <div class="card-desc">Gzip tools.</div>
+                <div class="example-block" onclick="copyText(this)">gzip file <span class="comment"># Compress</span></div>
+                <div class="example-block" onclick="copyText(this)">gunzip file.gz <span class="comment"># Decompress</span></div>
+                <div class="example-block" onclick="copyText(this)">zcat file.gz <span class="comment"># Read</span></div>
+                <div class="example-block" onclick="copyText(this)">gzip -r dir/</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Memory</span></div>
+                <div class="card-desc">RAM.</div>
+                <div class="example-block" onclick="copyText(this)">free -h</div>
+                <div class="example-block" onclick="copyText(this)">free -m</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Process Monitor</span></div>
+                <div class="card-desc">Live view.</div>
+                <div class="example-block" onclick="copyText(this)">top</div>
+                <div class="example-block" onclick="copyText(this)">htop</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ps</span></div>
+                <div class="card-desc">Process list.</div>
+                <div class="example-block" onclick="copyText(this)">ps aux</div>
+                <div class="example-block" onclick="copyText(this)">ps -ef</div>
+                <div class="example-block" onclick="copyText(this)">ps -u user</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">kill</span></div>
+                <div class="card-desc">Terminate.</div>
+                <div class="example-block" onclick="copyText(this)">kill PID</div>
+                <div class="example-block" onclick="copyText(this)">kill -9 PID <span class="comment"># Force</span></div>
+                <div class="example-block" onclick="copyText(this)">killall name</div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Info</span></div>
+                <div class="card-desc">Kernel/OS.</div>
+                <div class="example-block" onclick="copyText(this)">uname -a</div>
+                <div class="example-block" onclick="copyText(this)">hostname</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">systemctl</span></div>
+                <div class="card-desc">Services.</div>
+                <div class="example-block" onclick="copyText(this)">systemctl status nginx</div>
+                <div class="example-block" onclick="copyText(this)">systemctl restart nginx</div>
+            </div>
+        </div>
+    </section>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">Command Substitution</code>
-                    </div>
-                    <p class="command-description">החלפת פקודה ושרשור מחרוזות</p>
-                    <div class="command-examples">
-                        <div class="command-example">x=$(cat /tmp/file) <span class="comment"># החלפת פקודה</span></div>
-                        <div class="command-example">echo $x <span class="comment"># הצגת התוכן שנשמר</span></div>
-                        <div class="command-example">currentDateTime=$(date +%Y-%m-%d_%H:%M:%S)</div>
-                        <div class="command-example">prefix="hello"</div>
-                        <div class="command-example">echo "${prefix}-world" <span class="comment"># פלט: hello-world</span></div>
-                    </div>
-                </div>
+        <section id="topic9">
+        <h2>👥 Users</h2>
+        <p class="section-desc">User management.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Info</span></div>
+                <div class="card-desc">Who am I?</div>
+                <div class="example-block" onclick="copyText(this)">whoami</div>
+                <div class="example-block" onclick="copyText(this)">id</div>
+                <div class="example-block" onclick="copyText(this)">who</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Switch</span></div>
+                <div class="card-desc">Change user.</div>
+                <div class="example-block" onclick="copyText(this)">su - user</div>
+                <div class="example-block" onclick="copyText(this)">sudo cmd</div>
+                <div class="example-block" onclick="copyText(this)">sudo -i <span class="comment"># Root login</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Manage</span></div>
+                <div class="card-desc">Create/Modify.</div>
+                <div class="example-block" onclick="copyText(this)">passwd <span class="comment"># Change pw</span></div>
+                <div class="example-block" onclick="copyText(this)">useradd -m user</div>
+                <div class="example-block" onclick="copyText(this)">usermod -aG group user</div>
+                <div class="example-block" onclick="copyText(this)">groups user</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="topic10">
+        <h2>⏰ Scheduling</h2>
+        <p class="section-desc">Timing and automation.</p>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">crontab</span></div>
+                <div class="card-desc">Recurring tasks.</div>
+                <div class="example-block" onclick="copyText(this)">crontab -e</div>
+                <div class="example-block" onclick="copyText(this)">crontab -l</div>
+                <div class="example-block">0 2 * * * /script.sh</div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">at</span></div>
+                <div class="card-desc">One-time task.</div>
+                <div class="example-block" onclick="copyText(this)">at 15:00</div>
+                <div class="example-block" onclick="copyText(this)">atq <span class="comment"># List</span></div>
+                <div class="example-block" onclick="copyText(this)">atrm 1 <span class="comment"># Remove</span></div>
+            </div>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">watch</span></div>
+                <div class="card-desc">Repeat cmd.</div>
+                <div class="example-block" onclick="copyText(this)">watch df -h</div>
+                <div class="example-block" onclick="copyText(this)">watch -n 5 cmd</div>
+            </div>
+             <div class="command-card">
+                <div class="code-header"><span class="cmd-title">sleep</span></div>
+                <div class="card-desc">Pause.</div>
+                <div class="example-block" onclick="copyText(this)">sleep 10</div>
+                <div class="example-block" onclick="copyText(this)">sleep 1m</div>
+            </div>
+        </div>
+    </section>
                 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">תיחום משתנים</code>
-                    </div>
-                    <p class="command-description">שימוש בסוגריים מסולסלים</p>
-                    <div class="command-examples">
-                        <div class="command-example">prefix=$user</div>
-                        <div class="command-example">echo Hello ${prefix}man and ${prefix}girl</div>
-                        <div class="command-example">${VAR:-default} <span class="comment"># אם VAR ריק, השתמש ב-default</span></div>
-                        <div class="command-example">${#VAR} <span class="comment"># אורך המשתנה</span></div>
-                    </div>
-                </div>
-                
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">Pound Sign (#)</code>
-                    </div>
-                    <p class="command-description">הערות ותיעוד</p>
-                    <div class="command-examples">
-                        <div class="command-example"># זוהי הערה - מתעלמים ממנה</div>
-                        <div class="command-example">echo hello # הערה בסוף שורה</div>
-                        <div class="command-example">ls # is it empty?</div>
-                        <div class="command-example">echo #aaa <span class="comment"># ההערה לא תודפס</span></div>
-                    </div>
-                </div>
+    <section id="topic11">
+        <h2>🌐 Networking</h2>
+        <p>Connecting to servers.</p>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">Backslash (\)</code>
-                    </div>
-                    <p class="command-description">Escaping וחיבור שורות</p>
-                    <div class="command-examples">
-                        <div class="command-example">echo hello \r world</div>
-                        <div class="command-example">echo escaping \\\ \$\ \`\ \"\ \'</div>
-                        <div class="command-example">echo escaping \\\?\*\"\'</div>
-                        <div class="command-example">echo This command line \<br>is split in three \<br>> parts</div>
-                    </div>
-                </div>
-                
-                 <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">Wildcards</code>
-                    </div>
-                    <p class="command-description">תווים מיוחדים להתאמת קבצים</p>
-                    <div class="command-examples">
-                        <div class="command-example">ls *.txt <span class="comment"># כל קבצי txt</span></div>
-                        <div class="command-example">ls part* <span class="comment"># כל מה שמתחיל ב-part</span></div>
-                        <div class="command-example">ls file?.txt <span class="comment"># file1.txt, file2.txt וכו'</span></div>
-                        <div class="command-example">ls file[123].txt <span class="comment"># file1.txt, file2.txt, file3.txt</span></div>
-                        <div class="command-example">ls [a-z]*.txt <span class="comment"># קבצים שמתחילים באות קטנה</span></div>
-                        <div class="command-example">rm *.tmp <span class="comment"># מחיקת כל קבצי tmp</span></div>
-                    </div>
-                </div>
+        <div class="commands-grid">
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">ssh & scp</span></div>
+                <div class="card-desc">Connect and Transfer.</div>
+                <div class="example-block" onclick="copyText(this)">ssh user@server</div>
+                <div class="example-block" onclick="copyText(this)">scp file.csv user@server:/tmp</div>
             </div>
-        </section>
-
-        <!-- הפניות קלט/פלט -->
-        <section id="io" class="category">
-            <div class="category-header">
-                <span class="category-icon">🔄</span>
-                <h2 class="category-title">הפניית קלט/פלט</h2>
+            <div class="command-card">
+                <div class="code-header"><span class="cmd-title">Download</span></div>
+                <div class="card-desc">Get files from web.</div>
+                <div class="example-block" onclick="copyText(this)">wget http://site.com/data.zip</div>
+                <div class="example-block" onclick="copyText(this)">curl -O http://site.com/data.json</div>
             </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">הפניית פלט</code>
-                    </div>
-                    <p class="command-description">ניתוב פלט לקבצים</p>
-                    <div class="command-examples">
-                        <div class="command-example">cmd > file.txt <span class="comment"># כתיבה לקובץ (החלפה)</span></div>
-                        <div class="command-example">cmd >> file.txt <span class="comment"># הוספה לקובץ</span></div>
-                        <div class="command-example">cmd 2> error.log <span class="comment"># הפניית שגיאות</span></div>
-                        <div class="command-example">cmd > output.txt 2>&1 <span class="comment"># הפניית שגיאות לאותו יעד של הפלט הרגיל</span></div>
-                        <div class="command-example">cmd &> all.log <span class="comment"># הפניית פלט ושגיאות יחד (קיצור)</span></div>
-                        <div class="command-example">cmd > /dev/null <span class="comment"># התעלמות מפלט ("פח האשפה")</span></div>
-                        <div class="command-example">cmd 2> /dev/null <span class="comment"># התעלמות משגיאות בלבד</span></div>
-                    </div>
-                </div>
+        </div>
+    </section>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">הפניית קלט</code>
-                    </div>
-                    <p class="command-description">קלט מקבצים</p>
-                    <div class="command-examples">
-                        <div class="command-example">cmd < input.txt <span class="comment"># קלט מקובץ</span></div>
-                        <div class="command-example">cmd << 'EOF' <span class="comment"># Here Document</span></div>
-                        <div class="command-example">line 1</div>
-                        <div class="command-example">line 2</div>
-                        <div class="command-example">EOF</div>
-                        <div class="command-example">cmd <<< "single line" <span class="comment"># Here String</span></div>
-                    </div>
-                </div>
+    <section id="topic12">
+        <h2>⌨️ Keyboard Shortcuts</h2>
+        <p>Speed up your terminal workflow.</p>
 
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">tee</code>
-                    </div>
-                    <p class="command-description">פיצול פלט</p>
-                    <div class="command-examples">
-                        <div class="command-example">cmd | tee file.txt <span class="comment"># פלט למסך ולקובץ</span></div>
-                        <div class="command-example">cmd | tee -a file.txt <span class="comment"># הוספה לקובץ</span></div>
-                        <div class="command-example">cmd | tee f1 f2 f3 <span class="comment"># פלט למספר קבצים</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="shortcuts-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Keys</th>
+                        <th>Action</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">A</span></td>
+                        <td>Start of line</td>
+                        <td>Jump cursor to the beginning</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">E</span></td>
+                        <td>End of line</td>
+                        <td>Jump cursor to the end</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">C</span></td>
+                        <td>Cancel</td>
+                        <td>Stop the running command</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">D</span></td>
+                        <td>Exit</td>
+                        <td>Close terminal or logout</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">L</span></td>
+                        <td>Clear</td>
+                        <td>Clear the screen</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">R</span></td>
+                        <td>History Search</td>
+                        <td>Search past commands</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Z</span></td>
+                        <td>Suspend</td>
+                        <td>Send process to background</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">W</span></td>
+                        <td>Delete Word</td>
+                        <td>Delete word backwards</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">Tab</span></td>
+                        <td>Autocomplete</td>
+                        <td>Auto-complete file/command names</td>
+                    </tr>
+                    <tr>
+                        <td><span class="shortcut-key">↑</span> / <span class="shortcut-key">↓</span></td>
+                        <td>History</td>
+                        <td>Navigate previous commands</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-        <!-- צינורות ומסננים -->
-        <section id="pipes" class="category">
-            <div class="category-header">
-                <span class="category-icon">🔗</span>
-                <h2 class="category-title">צינורות ומסננים</h2>
-            </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">pipe |</code>
-                    </div>
-                    <p class="command-description">חיבור בין פקודות</p>
-                    <div class="command-examples">
-                        <div class="command-example">cmd1 | cmd2 | cmd3 <span class="comment"># חיבור פקודות</span></div>
-                        <div class="command-example">ps aux | grep python <span class="comment"># חיפוש תהליכי Python</span></div>
-                        <div class="command-example">cat file | sort | uniq <span class="comment"># מיון והסרת כפילויות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">cut</code>
-                    </div>
-                    <p class="command-description">חיתוך עמודות</p>
-                    <div class="command-examples">
-                        <div class="command-example">cut -d',' -f1,3 file.csv <span class="comment"># עמודות 1 ו-3 מקובץ CSV</span></div>
-                        <div class="command-example">cut -c1-10 file.txt <span class="comment"># תווים 1-10 מכל שורה</span></div>
-                        <div class="command-example">cut -d':' -f1 /etc/passwd <span class="comment"># שמות משתמשים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">awk</code>
-                    </div>
-                    <p class="command-description">עיבוד טקסט מתקדם</p>
-                    <div class="command-examples">
-                        <div class="command-example">awk '{print $1}' file <span class="comment"># עמודה ראשונה</span></div>
-                        <div class="command-example">awk -F',' '{print $2}' csv <span class="comment"># עמודה שנייה בCSV</span></div>
-                        <div class="command-example">awk '{sum+=$3} END {print sum}' <span class="comment"># סכום עמודה שלישית</span></div>
-                        <div class="command-example">awk 'NR>1 {print}' file <span class="comment"># דילוג על שורה ראשונה</span></div>
-                        <div class="command-example"># דוח יומי אוטומטי:</div>
-                        <div class="command-example">echo -e "\nDaily Summary Report:" > daily_summary.txt</div>
-                        <div class="command-example">echo "Date: $(date)" >> daily_summary.txt</div>
-                        <div class="command-example">echo "Total Products: $(tail -n +2 sales_extended.csv | wc -l)" >> daily_summary.txt</div>
-                        <div class="command-example">echo "Total Revenue: $(tail -n +2 sales_extended.csv | awk -F',' '{sum+=$4*$5} END {print sum}')" >> daily_summary.txt</div>
-                        <div class="command-example">echo "Top Salesperson: $(tail -n +2 sales_extended.csv | cut -d',' -f7 | sort | uniq -c | sort -nr | head -1 | awk '{print $2}')" >> daily_summary.txt</div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">sed</code>
-                    </div>
-                    <p class="command-description">עריכת זרם</p>
-                    <div class="command-examples">
-                        <div class="command-example">sed 's/old/new/g' file <span class="comment"># החלפת טקסט</span></div>
-                        <div class="command-example">sed '1d' file <span class="comment"># מחיקת שורה ראשונה</span></div>
-                        <div class="command-example">sed -n '5,10p' file <span class="comment"># הצגת שורות 5-10</span></div>
-                        <div class="command-example">sed '/pattern/d' file <span class="comment"># מחיקת שורות עם תבנית</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">xargs</code>
-                    </div>
-                    <p class="command-description">בניית ארגומנטים</p>
-                    <div class="command-examples">
-                        <div class="command-example">find . -name "*.txt" | xargs rm <span class="comment"># מחיקת כל קבצי txt</span></div>
-                        <div class="command-example">echo "file1 file2" | xargs touch <span class="comment"># יצירת קבצים</span></div>
-                        <div class="command-example">cat list | xargs -I {} mv {} backup/ <span class="comment"># העברת קבצים מרשימה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">tr</code>
-                    </div>
-                    <p class="command-description">תרגום תווים</p>
-                    <div class="command-examples">
-                        <div class="command-example">tr 'a-z' 'A-Z' < file <span class="comment"># המרה לאותיות גדולות</span></div>
-                        <div class="command-example">tr -d '0-9' < file <span class="comment"># מחיקת ספרות</span></div>
-                        <div class="command-example">tr -s ' ' < file <span class="comment"># דחיסת רווחים</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- עורך VI -->
-        <section id="vi" class="category">
-            <div class="category-header">
-                <span class="category-icon">✏️</span>
-                <h2 class="category-title">עורך VI/VIM</h2>
-            </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">מצבי עבודה</code>
-                    </div>
-                    <p class="command-description">מעבר בין מצבים</p>
-                    <div class="command-examples">
-                        <div class="command-example">vi filename.txt <span class="comment"># פתיחת קובץ</span></div>
-                        <div class="command-example">vim filename.txt <span class="comment"># פתיחה ב-VIM (משופר)</span></div>
-                        <div class="command-example">i <span class="comment"># מצב הכנסה (Insert Mode)</span></div>
-                        <div class="command-example">Esc <span class="comment"># חזרה למצב רגיל (Normal Mode)</span></div>
-                        <div class="command-example">: <span class="comment"># מצב פקודות (Command Mode)</span></div>
-                        <div class="command-example">v <span class="comment"># מצב ויזואלי (Visual Mode)</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">ניווט</code>
-                    </div>
-                    <p class="command-description">תנועה במסמך</p>
-                    <div class="command-examples">
-                        <div class="command-example">h,j,k,l <span class="comment"># שמאל,מטה,מעלה,ימין</span></div>
-                        <div class="command-example">w,b <span class="comment"># מילה קדימה/אחורה</span></div>
-                        <div class="command-example">0,$ <span class="comment"># תחילת/סוף שורה</span></div>
-                        <div class="command-example">gg,G <span class="comment"># תחילת/סוף קובץ</span></div>
-                        <div class="command-example">:n <span class="comment"># מעבר לשורה n</span></div>
-                        <div class="command-example">Ctrl+f, Ctrl+b <span class="comment"># עמוד קדימה/אחורה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">עריכה</code>
-                    </div>
-                    <p class="command-description">פעולות עריכה</p>
-                    <div class="command-examples">
-                        <div class="command-example">x <span class="comment"># מחק תו</span></div>
-                        <div class="command-example">dd <span class="comment"># מחק שורה</span></div>
-                        <div class="command-example">yy <span class="comment"># העתק שורה</span></div>
-                        <div class="command-example">p <span class="comment"># הדבק</span></div>
-                        <div class="command-example">u <span class="comment"># ביטול פעולה אחרונה</span></div>
-                        <div class="command-example">Ctrl+r <span class="comment"># חזרה על פעולה</span></div>
-                        <div class="command-example">/pattern <span class="comment"># חיפוש</span></div>
-                        <div class="command-example">n, N <span class="comment"># חיפוש הבא/קודם</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">פקודות במצב פקודות</code>
-                    </div>
-                    <p class="command-description">פקודות שמירה ויציאה</p>
-                    <div class="command-examples">
-                        <div class="command-example">:w <span class="comment"># שמור</span></div>
-                        <div class="command-example">:q <span class="comment"># צא</span></div>
-                        <div class="command-example">:wq או :x <span class="comment"># שמור וצא</span></div>
-                        <div class="command-example">:q! <span class="comment"># צא ללא שמירה</span></div>
-                        <div class="command-example">:w filename <span class="comment"># שמירה עם שם חדש</span></div>
-                        <div class="command-example">:set number <span class="comment"># הצגת מספרי שורות</span></div>
-                        <div class="command-example">:set nonumber <span class="comment"># הסתרת מספרי שורות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">vim config</code>
-                    </div>
-                    <p class="command-description">עריכת קבצי תצורה</p>
-                    <div class="command-examples">
-                        <div class="command-example">vim ~/.bashrc <span class="comment"># עריכת הגדרות bash</span></div>
-                        <div class="command-example">vim ~/.zshrc <span class="comment"># עריכת הגדרות zsh</span></div>
-                        <div class="command-example">source ~/.bashrc <span class="comment"># טעינת הגדרות bash</span></div>
-                        <div class="command-example">source ~/.zshrc <span class="comment"># טעינת הגדרות zsh</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- הרשאות -->
-        <section id="permissions" class="category">
-            <div class="category-header">
-                <span class="category-icon">🔐</span>
-                <h2 class="category-title">הרשאות קבצים</h2>
-            </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">ls -l</code>
-                    </div>
-                    <p class="command-description">הצגת הרשאות</p>
-                    <div class="command-examples">
-                        <div class="command-example">ls -l filename.txt <span class="comment"># הרשאות קובץ ספציפי</span></div>
-                        <div class="command-example">ls -la <span class="comment"># כל הקבצים כולל נסתרים</span></div>
-                        <div class="command-example">ls -ld directory/ <span class="comment"># הרשאות תיקייה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">chmod</code>
-                    </div>
-                    <p class="command-description">שינוי הרשאות</p>
-                    <div class="command-examples">
-                        <div class="command-example">chmod u+x file <span class="comment"># הוסף הרצה לבעלים</span></div>
-                        <div class="command-example">chmod g-w file <span class="comment"># הסר כתיבה מקבוצה</span></div>
-                        <div class="command-example">chmod g+w file <span class="comment"># להוסיף כתיבה לקבוצה</span></div>
-                        <div class="command-example">chmod go-w file <span class="comment"># הסרת כתיבה לקבוצה</span></div>
-                        <div class="command-example">chmod o+r file <span class="comment"># הוסף קריאה לאחרים</span></div>
-                        <div class="command-example">chmod o-r file <span class="comment"># להסיר קריאה מאחרים</span></div>
-                        <div class="command-example">chmod a+x file <span class="comment"># הוסף הרצה לכולם</span></div>
-                        <div class="command-example">chmod u=rw,g=r,o= file <span class="comment"># קבע הרשאות מדויקות</span></div>
-                        <div class="command-example">chmod u+s file <span class="comment"># הגדרת setuid - הרצת התוכנית עם הרשאות הבעלים</span></div>
-                        <div class="command-example">chmod g+s directory <span class="comment"># הגדרת setgid - קבצים חדשים יקבלו קבוצת בעלות של התיקייה</span></div>
-                        <div class="command-example">chmod +t directory <span class="comment"># Sticky bit - מונע מחיקת קבצים על ידי משתמשים אחרים בתיקייה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">chown</code>
-                    </div>
-                    <p class="command-description">שינוי בעלות</p>
-                    <div class="command-examples">
-                        <div class="command-example">chown user:group file <span class="comment"># שינוי בעלים וקבוצה</span></div>
-                        <div class="command-example">chown user file <span class="comment"># שינוי בעלים בלבד</span></div>
-                        <div class="command-example">chown :group file <span class="comment"># שינוי קבוצה בלבד</span></div>
-                        <div class="command-example">chown -R user:group dir/ <span class="comment"># רקורסיבי לתיקייה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">chgrp</code>
-                    </div>
-                    <p class="command-description">שינוי קבוצה</p>
-                    <div class="command-examples">
-                        <div class="command-example">chgrp groupname file <span class="comment"># שינוי קבוצה</span></div>
-                        <div class="command-example">chgrp -R groupname dir/ <span class="comment"># רקורסיבי</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">umask</code>
-                    </div>
-                    <p class="command-description">הרשאות ברירת מחדל</p>
-                    <div class="command-examples">
-                        <div class="command-example">umask <span class="comment"># הצג umask נוכחי</span></div>
-                        <div class="command-example">umask 022 <span class="comment"># קבע umask חדש</span></div>
-                        <div class="command-example">umask -S <span class="comment"># הצג בפורמט סמלי</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">הרשאות נפוצות</code>
-                    </div>
-                    <p class="command-description">ערכים מומלצים</p>
-                    <div class="command-examples">
-                        <div class="command-example">644 <span class="comment"># rw-r--r-- - בעלים יכול לקרוא ולכתוב, אחרים רק לקרוא</span></div>
-                        <div class="command-example">755 <span class="comment"># rwxr-xr-x - בעלים יכול הכל, אחרים לקרוא ולהריץ</span></div>
-                        <div class="command-example">600 <span class="comment"># rw------- - רק בעלים יכול לקרוא ולכתוב/sensitive</span></div>
-                        <div class="command-example">755 <span class="comment"># rwxr-xr-x - בעלים יכול הכל, אחרים לקרוא ולהריץ</span></div>
-                        <div class="command-example">700 <span class="comment"># rwx------ - רק בעל הקובץ יכול לגשת</span></div>
-                        <div class="command-example">775 <span class="comment"># rwxrwxr-x - תיקיות משותפות לקבוצה</span></div>
-                        <div class="command-example">chmod 777 file <span class="comment"># rwxrwxrwx (לא מומלץ!) כולם יכולים לקרוא, לכתוב ולהריץ</span></div>
-                        <div class="command-example">444 <span class="comment"># r--r--r-- - רק קריאה לכולם</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- מידע מערכת -->
-        <section id="system" class="category">
-            <div class="category-header">
-                <span class="category-icon">💻</span>
-                <h2 class="category-title">מידע מערכת</h2>
-            </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">df</code>
-                    </div>
-                    <p class="command-description">שטח דיסק</p>
-                    <div class="command-examples">
-                        <div class="command-example">df <span class="comment"># שטח דיסק בסיסי</span></div>
-                        <div class="command-example">df -h <span class="comment"># תצוגה קריאה לאדם</span></div>
-                        <div class="command-example">df -T <span class="comment"># עם סוג מערכת קבצים</span></div>
-                        <div class="command-example">df /home <span class="comment"># שטח בנתיב מסוים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">du</code>
-                    </div>
-                    <p class="command-description">גודל תיקיות</p>
-                    <div class="command-examples">
-                        <div class="command-example">du <span class="comment"># גודל תיקיות</span></div>
-                        <div class="command-example">du -h <span class="comment"># תצוגה קריאה</span></div>
-                        <div class="command-example">du -sh <span class="comment"># סיכום בלבד</span></div>
-                        <div class="command-example">du -sh * <span class="comment"># גודל כל הפריטים</span></div>
-                        <div class="command-example">du -h --max-depth=1 <span class="comment"># עומק אחד בלבד</span></div>
-                        <div class="command-example">du -sh /var/log <span class="comment"># גודל תיקייה ספציפית</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">gzip / gunzip</code>
-                    </div>
-                    <p class="command-description">דחיסה ופתיחת קבצים</p>
-                    <div class="command-examples">
-                        <div class="command-example">gzip file.txt <span class="comment"># דחיסת קובץ (מחליף את המקור)</span></div>
-                        <div class="command-example">gzip -k file.txt <span class="comment"># דחיסה עם שמירת המקור</span></div>
-                        <div class="command-example">gzip -r directory/ <span class="comment"># דחיסה רקורסיבית של כל הקבצים</span></div>
-                        <div class="command-example">gzip -l file.gz <span class="comment"># מידע על קובץ דחוס</span></div>
-                        <div class="command-example">gzip -t file.gz <span class="comment"># בדיקת תקינות</span></div>
-                        <div class="command-example">gzip -f file.txt <span class="comment"># דחיסה כפויה (דורס קיים)</span></div>
-                        <div class="command-example">gunzip file.gz <span class="comment"># פתיחת קובץ דחוס</span></div>
-                        <div class="command-example">gunzip -k file.gz <span class="comment"># פתיחה עם שמירת הדחוס</span></div>
-                        <div class="command-example">zcat file.gz <span class="comment"># הצגת תוכן קובץ דחוס</span></div>
-                        <div class="command-example">zmore file.gz <span class="comment"># דפדוף בקובץ דחוס</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">free</code>
-                    </div>
-                    <p class="command-description">זיכרון מערכת</p>
-                    <div class="command-examples">
-                        <div class="command-example">free <span class="comment"># זיכרון בבייטים</span></div>
-                        <div class="command-example">free -h <span class="comment"># תצוגה קריאה</span></div>
-                        <div class="command-example">free -m <span class="comment"># במגה-בייטים</span></div>
-                        <div class="command-example">free -s 2 <span class="comment"># רענון כל 2 שניות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">top / htop</code>
-                    </div>
-                    <p class="command-description">ניטור תהליכים</p>
-                    <div class="command-examples">
-                        <div class="command-example">top <span class="comment"># ניטור תהליכים בזמן אמת</span></div>
-                        <div class="command-example">htop <span class="comment"># ניטור משופר (אם מותקן)</span></div>
-                        <div class="command-example">top -u user <span class="comment"># תהליכים של משתמש מסוים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">ps</code>
-                    </div>
-                    <p class="command-description">רשימת תהליכים</p>
-                    <div class="command-examples">
-                        <div class="command-example">ps <span class="comment"># תהליכים של המשתמש הנוכחי</span></div>
-                        <div class="command-example">ps aux <span class="comment"># כל התהליכים מפורט</span></div>
-                        <div class="command-example">ps -ef <span class="comment"># כל התהליכים (System V)</span></div>
-                        <div class="command-example">ps -u user <span class="comment"># תהליכים של משתמש מסוים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">uname</code>
-                    </div>
-                    <p class="command-description">מידע מערכת</p>
-                    <div class="command-examples">
-                        <div class="command-example">uname <span class="comment"># שם המערכת</span></div>
-                        <div class="command-example">uname -a <span class="comment"># כל המידע</span></div>
-                        <div class="command-example">uname -r <span class="comment"># גרסת קרנל</span></div>
-                        <div class="command-example">hostname <span class="comment"># שם המחשב</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">kill</code>
-                    </div>
-                    <p class="command-description">סיום תהליכים</p>
-                    <div class="command-examples">
-                        <div class="command-example">kill PID <span class="comment"># סיום תהליך רגיל</span></div>
-                        <div class="command-example">kill -9 PID <span class="comment"># סיום כפוי</span></div>
-                        <div class="command-example">killall process_name <span class="comment"># סיום לפי שם</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">systemctl</code>
-                    </div>
-                    <p class="command-description">ניהול שירותים</p>
-                    <div class="command-examples">
-                        <div class="command-example">systemctl status service <span class="comment"># סטטוס שירות</span></div>
-                        <div class="command-example">systemctl start service <span class="comment"># הפעלת שירות</span></div>
-                        <div class="command-example">systemctl stop service <span class="comment"># עצירת שירות</span></div>
-                        <div class="command-example">systemctl restart service <span class="comment"># הפעלה מחדש</span></div>
-                        <div class="command-example">systemctl enable service <span class="comment"># הפעלה אוטומטית</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- משתמשים וקבוצות -->
-        <section id="users" class="category">
-            <div class="category-header">
-                <span class="category-icon">👥</span>
-                <h2 class="category-title">משתמשים וקבוצות</h2>
-            </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">whoami / id</code>
-                    </div>
-                    <p class="command-description">מידע משתמש נוכחי</p>
-                    <div class="command-examples">
-                        <div class="command-example">whoami <span class="comment"># שם המשתמש הנוכחי</span></div>
-                        <div class="command-example">id <span class="comment"># מידע מלא על המשתמש</span></div>
-                        <div class="command-example">id username <span class="comment"># מידע על משתמש אחר</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">su / sudo</code>
-                    </div>
-                    <p class="command-description">החלפת משתמש והרשאות</p>
-                    <div class="command-examples">
-                        <div class="command-example">su - username <span class="comment"># החלפת משתמש</span></div>
-                        <div class="command-example">sudo command <span class="comment"># הרצה עם הרשאות root</span></div>
-                        <div class="command-example">sudo -i <span class="comment"># כניסה כ-root</span></div>
-                        <div class="command-example">sudo -u user command <span class="comment"># הרצה כמשתמש אחר</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">passwd</code>
-                    </div>
-                    <p class="command-description">שינוי סיסמה</p>
-                    <div class="command-examples">
-                        <div class="command-example">passwd <span class="comment"># שינוי סיסמה שלך</span></div>
-                        <div class="command-example">passwd username <span class="comment"># שינוי סיסמה למשתמש (כ-root)</span></div>
-                        <div class="command-example">passwd -l user <span class="comment"># נעילת משתמש</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">useradd / adduser</code>
-                    </div>
-                    <p class="command-description">הוספת משתמש</p>
-                    <div class="command-examples">
-                        <div class="command-example">useradd username <span class="comment"># הוספת משתמש (בסיסי)</span></div>
-                        <div class="command-example">adduser username <span class="comment"># הוספת משתמש (אינטראקטיבי)</span></div>
-                        <div class="command-example">useradd -m -s /bin/bash user <span class="comment"># עם תיקיית בית ושל</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">groups</code>
-                    </div>
-                    <p class="command-description">ניהול קבוצות</p>
-                    <div class="command-examples">
-                        <div class="command-example">groups <span class="comment"># הקבוצות שלך</span></div>
-                        <div class="command-example">groups username <span class="comment"># קבוצות של משתמש</span></div>
-                        <div class="command-example">usermod -aG group user <span class="comment"># הוספת משתמש לקבוצה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">who / w</code>
-                    </div>
-                    <p class="command-description">משתמשים מחוברים</p>
-                    <div class="command-examples">
-                        <div class="command-example">who <span class="comment"># משתמשים מחוברים</span></div>
-                        <div class="command-example">w <span class="comment"># משתמשים ופעילות</span></div>
-                        <div class="command-example">last <span class="comment"># היסטוריית התחברויות</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- תזמון משימות -->
-        <section id="scheduling" class="category">
-            <div class="category-header">
-                <span class="category-icon">⏰</span>
-                <h2 class="category-title">תזמון משימות</h2>
-            </div>
-            
-            <div class="commands-grid">
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">crontab</code>
-                    </div>
-                    <p class="command-description">משימות מתוזמנות</p>
-                    <div class="command-examples">
-                        <div class="command-example">crontab -e <span class="comment"># עריכת משימות</span></div>
-                        <div class="command-example">crontab -l <span class="comment"># רשימת משימות</span></div>
-                        <div class="command-example">crontab -r <span class="comment"># מחיקת כל המשימות</span></div>
-                        <div class="command-example">0 2 * * * /script.sh <span class="comment"># כל יום ב-2:00</span></div>
-                        <div class="command-example">*/5 * * * * command <span class="comment"># כל 5 דקות</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">at</code>
-                    </div>
-                    <p class="command-description">משימה חד פעמית</p>
-                    <div class="command-examples">
-                        <div class="command-example">at 15:00 <span class="comment"># תזמון ל-15:00</span></div>
-                        <div class="command-example">at now + 2 hours <span class="comment"># בעוד שעתיים</span></div>
-                        <div class="command-example">atq <span class="comment"># רשימת משימות ממתינות</span></div>
-                        <div class="command-example">atrm <span class="comment"># ביטול משימה</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">watch</code>
-                    </div>
-                    <p class="command-description">הרצה חוזרת</p>
-                    <div class="command-examples">
-                        <div class="command-example">watch df -h <span class="comment"># רענון כל 2 שניות</span></div>
-                        <div class="command-example">watch -n 5 command <span class="comment"># רענון כל 5 שניות</span></div>
-                        <div class="command-example">watch -d ls -l <span class="comment"># הדגשת שינויים</span></div>
-                    </div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-header">
-                        <code class="command-name">sleep</code>
-                    </div>
-                    <p class="command-description">השהיית הרצה</p>
-                    <div class="command-examples">
-                        <div class="command-example">sleep 10 <span class="comment"># השהייה של 10 שניות</span></div>
-                        <div class="command-example">sleep 2m <span class="comment"># השהייה של 2 דקות</span></div>
-                        <div class="command-example">sleep 1h <span class="comment"># השהייה של שעה</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- טבלת קיצורי מקלדת -->
-        <section id="shortcuts" class="category">
-            <div class="category-header">
-                <span class="category-icon">⌨️</span>
-                <h2 class="category-title">קיצורי מקלדת</h2>
-            </div>
-            
-            <div class="shortcuts-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>קיצור</th>
-                            <th>פעולה</th>
-                            <th>תיאור</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">A</span></td>
-                            <td>תחילת שורה</td>
-                            <td>מעבר לתחילת השורה הנוכחית</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">E</span></td>
-                            <td>סוף שורה</td>
-                            <td>מעבר לסוף השורה הנוכחית</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">C</span></td>
-                            <td>ביטול פקודה</td>
-                            <td>עצירת הפקודה הרצה</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">D</span></td>
-                            <td>יציאה</td>
-                            <td>סגירת הטרמינל או יציאה</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">L</span></td>
-                            <td>ניקוי מסך</td>
-                            <td>ניקוי הטרמינל (כמו clear)</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">R</span></td>
-                            <td>חיפוש בהיסטוריה</td>
-                            <td>חיפוש בפקודות קודמות</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">Z</span></td>
-                            <td>השהיית תהליך</td>
-                            <td>העברת התהליך לרקע</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">K</span></td>
-                            <td>מחיקה מהסמן לסוף</td>
-                            <td>מחיקת הטקסט מהסמן עד סוף השורה</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">U</span></td>
-                            <td>מחיקה מהסמן לתחילה</td>
-                            <td>מחיקת הטקסט מתחילת השורה עד הסמן</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Ctrl</span> + <span class="shortcut-key">W</span></td>
-                            <td>מחיקת מילה</td>
-                            <td>מחיקת המילה האחרונה</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">Tab</span></td>
-                            <td>השלמה אוטומטית</td>
-                            <td>השלמת שמות קבצים ופקודות</td>
-                        </tr>
-                        <tr>
-                            <td><span class="shortcut-key">↑</span> / <span class="shortcut-key">↓</span></td>
-                            <td>היסטוריה</td>
-                            <td>ניווט בפקודות קודמות</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- טיפים למהנדסי נתונים -->
-        <section id="tips" class="category">
-            <div class="category-header">
-                <span class="category-icon">💡</span>
-                <h2 class="category-title">טיפים למהנדסי נתונים</h2>
-            </div>
-            
-            <div class="tip-box">
-                <h3>פקודות חיוניות למהנדסי נתונים</h3>
-                <div class="command-examples">
-                    <div class="command-example"># עיבוד נתונים</div>
-                    <div class="command-example">grep, awk, sed, cut, sort, uniq, wc</div>
-                    <div class="command-example"># ניטור מערכת</div>
-                    <div class="command-example">top, htop, df, du, ps, kill</div>
-                    <div class="command-example"># רשת והעברת קבצים</div>
-                    <div class="command-example">wget, curl, scp, rsync</div>
-                    <div class="command-example"># דחיסה וארכיון</div>
-                    <div class="command-example">tar, gzip, zip, unzip</div>
-                    <div class="command-example"># תהליכים ברקע</div>
-                    <div class="command-example">nohup, screen, tmux, jobs, bg, fg</div>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <h3>עקרונות חשובים</h3>
-                <ul>
-                    <li><strong>אוטומציה</strong>: השתמש בסקריפטים ו-pipes ליצירת תהליכי עיבוד נתונים אוטומטיים</li>
-                    <li><strong>תיעוד</strong>: השתמש בהערות ובקבצי לוג לתיעוד התהליכים</li>
-                    <li><strong>אבטחה</strong>: הגדר הרשאות מתאימות לקבצי נתונים רגישים</li>
-                    <li><strong>ארגון</strong>: צור מבנה תיקיות לוגי וקבוע לפרויקטים</li>
-                    <li><strong>גיבוי</strong>: השתמש בגרסאות וגיבויים של נתונים חשובים</li>
-                </ul>
-            </div>
-
-            <div class="tip-box">
-                <h3>טיפים מתקדמים</h3>
-                <ol>
-                    <li>השתמש ב-<code>history</code> לחזרה על פקודות קודמות</li>
-                    <li>למד shortcuts של מקלדת (Ctrl+A, Ctrl+E, Ctrl+R)</li>
-                    <li>צור aliases לפקודות נפוצות ב-<code>~/.bashrc</code></li>
-                    <li>השתמש ב-tab completion לחיסכון בזמן</li>
-                    <li>למד regex לחיפושים מתקדמים עם grep ו-sed</li>
-                </ol>
-            </div>
-
-            <div class="tip-box">
-                <h3>פקודות נוספות שימושיות</h3>
-                <div class="command-examples">
-                    <div class="command-example"># Command Substitution - החלפת פקודה</div>
-                    <div class="command-example">x=$(cat /tmp/file)</div>
-                    <div class="command-example">echo $x</div>
-                    <div class="command-example"># שרשור מחרוזות עם סוגריים מסולסלים</div>
-                    <div class="command-example">prefix="hello"</div>
-                    <div class="command-example">echo "${prefix}-world" <span class="comment"># פלט: hello-world</span></div>
-                    <div class="command-example"># /dev/null = "פח האשפה" להתעלמות מפלט</div>
-                    <div class="command-example">command > /dev/null 2>&1</div>
-                    <div class="command-example"># tac - הצגת תוכן קובץ מלמטה למעלה (cat הפוך)</div>
-                    <div class="command-example">tac file.txt</div>
-                    <div class="command-example">echo -e "א\nב\nג" | tac</div>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <h3>משאבים להמשך למידה</h3>
-                <ul>
-                    <li><code>man command</code> - מדריך מפורט לכל פקודה</li>
-                    <li><code>info command</code> - מידע נוסף על פקודות GNU</li>
-                    <li><code>/usr/share/doc/</code> - תיעוד מערכת מקומי</li>
-                    <li>Online: Linux Academy, Red Hat Learning, Ubuntu Documentation</li>
-                </ul>
-            </div>
-
-            <div class="tip-box" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border-color: #0284c7;">
-                <h3 style="color: #0c4a6e;">סיכום</h3>
-                <p>זהו מדריך מקיף שיעזור לך להבין ולתרגל את עיקרי הלינוקס הדרושים למהנדס נתונים. המשך לתרגל ולהתנסות עם פקודות אלה בסביבה אמתית!</p>
-                <p><strong>זכור:</strong> הדרך הטובה ביותר ללמוד לינוקס היא דרך תרגול מעשי. אל תפחד לנסות פקודות חדשות (בסביבת בדיקה כמובן) ולקרוא את ה-man pages.</p>
-            </div>
-        </section>
+    <div class="page-nav">
+        <button id="prevBtn" class="nav-control" disabled>← Previous</button>
+        <button id="nextBtn" class="nav-control">Next Topic →</button>
     </div>
+</main>
 
-    <!-- Back to Top Button -->
-    <button id="backToTop" title="חזור למעלה">↑</button>
+<script>
+    // --- JAVASCRIPT LOGIC ---
+    const topics = [
+        "Directories & Navigation", // topic0
+        "File Operations",          // topic1
+        "Content & Analysis",       // topic2
+        "Variables & Shell",        // topic3
+        "I/O & Redirection",        // topic4
+        "Pipes & Processing",       // topic5
+        "VI / VIM",                 // topic6
+        "Permissions",              // topic7
+        "System Info",              // topic8
+        "Users",                    // topic9
+        "Scheduling",               // topic10
+        "Networking",               // topic11
+        "Keyboard Shortcuts"        // topic12
+    ];
+
+    let currentTopicIndex = 0;
+    const totalTopics = topics.length;
+
+    const navList = document.getElementById('navList');
+    const sections = document.querySelectorAll('section');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const searchInput = document.getElementById('searchInput');
+
+    function init() {
+        generateSidebar();
+        updateView();
+        
+        prevBtn.addEventListener('click', () => { if(currentTopicIndex > 0) { currentTopicIndex--; updateView(); } });
+        nextBtn.addEventListener('click', () => { if(currentTopicIndex < totalTopics - 1) { currentTopicIndex++; updateView(); } });
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.command-card');
+            const rows = document.querySelectorAll('.shortcuts-table tr');
+
+            // Filter cards
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(term) ? 'block' : 'none';
+            });
+
+            // Filter shortcut table rows
+            rows.forEach((row, index) => {
+                if(index === 0) return; // Skip header
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
+            });
+
+            if(term.length > 0) {
+                sections.forEach(sec => sec.style.display = 'block');
+            } else {
+                updateView();
+            }
+        });
+    }
+
+    function generateSidebar() {
+        navList.innerHTML = '';
+        topics.forEach((topic, index) => {
+            const li = document.createElement('li');
+            li.className = 'nav-item';
+            const btn = document.createElement('button');
+            btn.className = 'nav-btn';
+            btn.innerHTML = `<span>${index + 1}. ${topic}</span>`;
+            btn.onclick = () => { currentTopicIndex = index; searchInput.value = ''; updateView(); };
+            li.appendChild(btn);
+            navList.appendChild(li);
+        });
+    }
+
+    function updateView() {
+        sections.forEach((sec, idx) => {
+            sec.style.display = 'none'; sec.classList.remove('active');
+            // Reset searches
+            const cards = sec.querySelectorAll('.command-card');
+            cards.forEach(c => c.style.display = 'block');
+            const rows = sec.querySelectorAll('.shortcuts-table tr');
+            rows.forEach(r => r.style.display = '');
+
+            if(idx === currentTopicIndex) { sec.style.display = 'block'; sec.classList.add('active'); }
+        });
+        document.querySelectorAll('.nav-btn').forEach((btn, idx) => {
+            btn.classList.remove('active');
+            if(idx === currentTopicIndex) btn.classList.add('active');
+        });
+        prevBtn.disabled = currentTopicIndex === 0;
+        nextBtn.disabled = currentTopicIndex === totalTopics - 1;
+        document.getElementById('contentArea').scrollTop = 0;
+    }
+
+    window.copyText = function(element) {
+        const fullText = element.innerText;
+        const commandOnly = fullText.split('#')[0].trim();
+        navigator.clipboard.writeText(commandOnly).then(() => {
+            const originalBg = element.style.backgroundColor;
+            element.style.backgroundColor = '#d1fae5';
+            setTimeout(() => { element.style.backgroundColor = originalBg; }, 300);
+        });
+    };
+
+    init();
+</script>
 </body>
 </html>
-                        
