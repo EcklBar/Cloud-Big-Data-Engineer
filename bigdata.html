@@ -934,14 +934,42 @@ chsh -s $(which zsh)</div>
                         <li>עדכונים אוטומטיים</li>
                         <li>קהילה פעילה ותמיכה רחבה</li>
                     </ul>
-                    <div class="command-box"># התקנה
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</div>
                 </div>
             </div>
 
-            <h3>תוספים מומלצים ל-Oh My Zsh</h3>
+            <h3>התקנת Oh My Zsh - שלב אחר שלב</h3>
+
+            <div style="background: var(--bg-light); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
+                <h4 style="color: var(--primary-color); margin-bottom: var(--space-md);">שלב 1: התקנת Oh My Zsh</h4>
+                <div class="command-box">sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</div>
+            </div>
+
+            <div style="background: var(--bg-light); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
+                <h4 style="color: var(--primary-color); margin-bottom: var(--space-md);">שלב 2: התקנת תוספים חיוניים</h4>
+
+                <p style="margin-bottom: var(--space-sm); color: var(--text-muted);"><strong>Autosuggestions</strong> - הצעות אוטומטיות מההיסטוריה</p>
+                <div class="command-box">git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions</div>
+
+                <p style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--text-muted);"><strong>Syntax Highlighting</strong> - הדגשת תחביר בזמן אמת</p>
+                <div class="command-box">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting</div>
+            </div>
+
+            <div style="background: var(--bg-light); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
+                <h4 style="color: var(--primary-color); margin-bottom: var(--space-md);">שלב 3: הגדרת התוספים</h4>
+
+                <p style="margin-bottom: var(--space-sm); color: var(--text-muted);">פתח את קובץ התצורה:</p>
+                <div class="command-box">open ~/.zshrc</div>
+
+                <p style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--text-muted);">מצא את השורה <code>plugins=(git)</code> ושנה אותה ל:</p>
+                <div class="command-box">plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</div>
+
+                <p style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--text-muted);">שמור את הקובץ והפעל מחדש את הטרמינל או הרץ:</p>
+                <div class="command-box">source ~/.zshrc</div>
+            </div>
+
+            <h3>תוספים מומלצים נוספים</h3>
             <div style="background: var(--bg-light); padding: var(--space-md); border-radius: var(--radius-md); margin: var(--space-md) 0;">
-                <h4>תוספים חיוניים</h4>
+                <h4>תוספים חיוניים למהנדסי נתונים</h4>
                 <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm);">
                     <span class="tech-tag">git</span>
                     <span class="tech-tag">docker</span>
@@ -949,21 +977,18 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
                     <span class="tech-tag">aws</span>
                     <span class="tech-tag">python</span>
                     <span class="tech-tag">npm</span>
-                    <span class="tech-tag">autojump</span>
-                    <span class="tech-tag">zsh-autosuggestions</span>
-                    <span class="tech-tag">zsh-syntax-highlighting</span>
+                    <span class="tech-tag">terraform</span>
+                    <span class="tech-tag">ansible</span>
                 </div>
             </div>
 
-            <h3>הגדרת Oh My Zsh</h3>
-            <div class="command-box"># עריכת קובץ התצורה
-nano ~/.zshrc
+            <h3>בחירת ערכת נושא (Theme)</h3>
+            <div class="command-box"># ערכות נושא פופולריות:
+ZSH_THEME="robbyrussell"     # קלאסי ונקי
+ZSH_THEME="agnoster"         # עשיר ויפה
+ZSH_THEME="powerlevel10k/powerlevel10k"  # מתקדם ביותר
 
-# הוספת תוספים
-plugins=(git docker kubectl python npm)
-
-# בחירת ערכת נושא
-ZSH_THEME="robbyrussell"  # או agnoster, powerlevel10k</div>
+# ערוך את ~/.zshrc והחלף את ה-theme</div>
 
             <div class="highlight-box">
                 <h3>למה להשתמש בכלים המודרניים?</h3>
