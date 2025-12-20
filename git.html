@@ -50,7 +50,7 @@
 
         @keyframes bgScroll { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+        .hero-content { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
         .hero h1 { font-size: 4em; font-weight: 900; margin-bottom: 10px; letter-spacing: -2px; }
         .hero h1 span { color: var(--primary); }
         .hero p { font-size: 1.5em; font-weight: 300; opacity: 0.9; margin-bottom: 30px; }
@@ -92,12 +92,12 @@
         }
 
         /* --- MAIN CONTENT --- */
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .container { max-width: 1400px; margin: 40px auto; padding: 0 30px; }
 
         .section {
             background: white;
             border-radius: 20px;
-            padding: 50px;
+            padding: 60px;
             margin-bottom: 40px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             display: none;
@@ -108,19 +108,19 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { font-size: 2.5em; color: var(--secondary); margin-bottom: 30px; border-bottom: 4px solid var(--primary); display: inline-block; padding-bottom: 5px; }
-        h3 { font-size: 1.8em; color: var(--primary); margin: 30px 0 15px; }
-        h4 { font-size: 1.3em; color: var(--secondary); margin: 20px 0 10px; }
-        p, li { font-size: 1.1em; margin-bottom: 15px; }
+        h2 { font-size: 2.8em; color: var(--secondary); margin-bottom: 35px; border-bottom: 4px solid var(--primary); display: inline-block; padding-bottom: 8px; }
+        h3 { font-size: 2em; color: var(--primary); margin: 35px 0 20px; }
+        h4 { font-size: 1.4em; color: var(--secondary); margin: 25px 0 12px; }
+        p, li { font-size: 1.15em; margin-bottom: 16px; line-height: 1.8; }
 
         /* --- CARDS & GRID --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 35px; }
 
         .info-card {
             background: white;
             border: 1px solid #eee;
             border-radius: 15px;
-            padding: 25px;
+            padding: 30px;
             transition: transform 0.3s, box-shadow 0.3s;
             border-top: 5px solid var(--secondary);
         }
@@ -133,8 +133,8 @@
         .command-box {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             border-radius: 12px;
-            padding: 25px 30px;
-            margin: 20px 0;
+            padding: 30px 35px;
+            margin: 25px 0;
             position: relative;
             direction: ltr;
             text-align: left;
@@ -173,14 +173,14 @@
         .command-line {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 12px;
-            padding: 8px 12px;
+            margin-bottom: 14px;
+            padding: 10px 14px;
             border-radius: 6px;
             transition: background 0.2s;
             position: relative;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            gap: 10px;
+            gap: 12px;
         }
 
         .command-line:hover {
@@ -265,14 +265,15 @@
         /* --- DIAGRAMS --- */
         .diagram-container {
             display: flex; justify-content: space-around; align-items: center;
-            background: #eef2f5; padding: 40px; border-radius: 15px; margin: 30px 0;
-            flex-wrap: wrap; gap: 20px;
+            background: #eef2f5; padding: 50px; border-radius: 15px; margin: 35px 0;
+            flex-wrap: wrap; gap: 25px;
         }
 
         .stage {
-            background: white; padding: 20px 40px; border-radius: 10px;
+            background: white; padding: 25px 50px; border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center;
             font-weight: bold; position: relative; border: 2px solid transparent;
+            font-size: 1.1em;
         }
 
         .stage.working { border-color: var(--danger); color: var(--danger); }
@@ -321,8 +322,8 @@
 
         #git-graph {
             width: 100%;
-            max-width: 800px;
-            height: 400px;
+            max-width: 1000px;
+            height: 450px;
             position: relative;
             background: #f8f9fa;
             border-radius: 10px;
@@ -370,7 +371,7 @@
         /* --- EXERCISES --- */
         .exercise {
             background: #fff8e1; border: 2px dashed #ffe0b2;
-            padding: 30px; border-radius: 15px; margin-top: 40px;
+            padding: 35px; border-radius: 15px; margin-top: 40px;
         }
         .exercise h3 { color: #f57c00; margin-top: 0; display: flex; align-items: center; gap: 10px; }
 
