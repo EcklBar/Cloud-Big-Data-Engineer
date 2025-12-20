@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="מדריך מקצועי ומקיף למערכת ההפעלה Linux - היסטוריה, הפצות, פקודות ותרגילים מעשיים">
-    <title>Linux | מדריך מקצועי למהנדסי נתונים</title>
+    <meta name="description" content="מדריך מקיף ואינטראקטיבי לפקודות Docker עם חיפוש מתקדם">
+    <title>Docker | מדריך מקצועי למהנדסי נתונים</title>
 
     <style>
         /* ============================================
@@ -16,6 +16,10 @@
             --primary-gradient-end: #764ba2;
             --primary-color: #667eea;
             --secondary-color: #764ba2;
+
+            /* Docker Colors */
+            --docker-blue: #2496ed;
+            --docker-dark: #0c2340;
 
             /* Neutral Colors */
             --text-primary: #2c3e50;
@@ -34,12 +38,6 @@
             --accent-blue: #3498db;
             --accent-orange: #e67e22;
             --accent-red: #e74c3c;
-            --accent-yellow: #f1c40f;
-
-            /* Terminal Colors */
-            --terminal-bg: #263238;
-            --terminal-text: #aed581;
-            --terminal-highlight: #ffeb3b;
 
             /* Spacing System */
             --space-xs: 8px;
@@ -53,7 +51,6 @@
             --radius-md: 12px;
             --radius-lg: 20px;
             --radius-xl: 25px;
-            --radius-full: 50%;
 
             /* Shadows */
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -110,26 +107,26 @@
            📦 Layout Components
            ============================================ */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: var(--space-md);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            margin-top: var(--space-md);
+            margin-bottom: var(--space-md);
         }
 
         /* ============================================
            🎯 Header Section
            ============================================ */
         .header {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--docker-dark) 0%, var(--docker-blue) 100%);
+            color: white;
             padding: var(--space-xl) var(--space-lg);
             text-align: center;
-            margin-bottom: var(--space-lg);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
-            animation: fadeInDown 0.8s ease;
         }
 
         .header::before {
@@ -145,7 +142,7 @@
         .header-logo {
             font-size: var(--text-sm);
             font-weight: 600;
-            color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.9);
             margin-bottom: var(--space-sm);
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -154,57 +151,175 @@
         .header h1 {
             font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin-bottom: var(--space-md);
             font-family: var(--font-display);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-md);
         }
 
         .header p {
             font-size: var(--text-xl);
-            color: var(--text-light);
-            font-weight: 300;
-            margin-bottom: var(--space-md);
+            opacity: 0.9;
         }
 
-        .linux-logo {
-            width: 80px;
-            height: 80px;
-            margin: var(--space-md) auto;
-            display: block;
-            animation: bounce 2s ease-in-out infinite;
+        .docker-logo {
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         /* ============================================
-           📄 Section Components
+           🔍 Search Section
            ============================================ */
-        .section {
-            background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            margin-bottom: var(--space-lg);
-            box-shadow: var(--shadow-md);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-            animation: fadeInUp 0.8s ease;
-            animation-fill-mode: both;
+        .search-container {
+            padding: var(--space-lg);
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--bg-lighter);
         }
 
-        .section:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: var(--text-lg);
+            border: 2px solid var(--bg-lighter);
+            border-radius: 50px;
+            outline: none;
+            transition: all var(--transition-base);
+            background: white;
+            font-family: var(--font-primary);
+        }
+
+        .search-box:focus {
+            border-color: var(--docker-blue);
+            box-shadow: 0 0 20px rgba(36, 150, 237, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: var(--text-light);
+        }
+
+        /* ============================================
+           📐 Content Layout
+           ============================================ */
+        .content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 300px);
+        }
+
+        /* ============================================
+           🧭 Sidebar Navigation
+           ============================================ */
+        .sidebar {
+            background: var(--bg-light);
+            border-left: 1px solid var(--bg-lighter);
+            padding: var(--space-md) 0;
+            overflow-y: auto;
+            max-height: calc(100vh - 300px);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--bg-lighter);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--bg-lighter);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: var(--text-base);
+        }
+
+        .nav-item:hover {
+            background: var(--docker-blue);
+            color: white;
+            transform: translateX(-5px);
+            padding-right: 25px;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            color: white;
+            border-right: 4px solid var(--secondary-color);
+            padding-right: 16px;
+        }
+
+        /* ============================================
+           📄 Main Content Area
+           ============================================ */
+        .main-content {
+            padding: var(--space-xl);
+            overflow-y: auto;
+            max-height: calc(100vh - 300px);
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--bg-lighter);
+            border-radius: 4px;
+        }
+
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: var(--docker-blue);
+        }
+
+        .section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section h2 {
-            font-size: var(--text-3xl);
-            font-weight: 700;
             color: var(--text-primary);
+            font-size: var(--text-3xl);
             margin-bottom: var(--space-lg);
             padding-bottom: var(--space-sm);
-            border-bottom: 3px solid var(--primary-color);
+            border-bottom: 3px solid var(--docker-blue);
             position: relative;
         }
 
@@ -212,377 +327,186 @@
             content: '';
             position: absolute;
             bottom: -3px;
-            left: 0;
+            right: 0;
             width: 60px;
             height: 3px;
             background: var(--secondary-color);
-            animation: slideRight 0.6s ease;
+            animation: slideLeft 0.6s ease;
         }
 
-        .section h3 {
-            font-size: var(--text-2xl);
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin: var(--space-lg) 0 var(--space-md) 0;
+        @keyframes slideLeft {
+            from { width: 0; }
+            to { width: 60px; }
         }
 
         /* ============================================
-           🎨 Card Components
+           🎴 Command Cards
            ============================================ */
-        .highlight-box {
-            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
-            color: var(--bg-white);
-            padding: var(--space-lg);
+        .command-grid {
+            display: grid;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .command-card {
+            background: white;
+            border: 1px solid var(--bg-lighter);
             border-radius: var(--radius-md);
-            margin: var(--space-lg) 0;
-            text-align: center;
-            box-shadow: var(--shadow-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            border-right: 4px solid var(--docker-blue);
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-right-color: var(--primary-color);
+        }
+
+        .command-usage {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            font-size: var(--text-lg);
+        }
+
+        .command-code {
+            background: linear-gradient(135deg, #263238 0%, #37474f 100%);
+            padding: 12px 15px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: var(--text-base);
+            color: #aed581;
+            border-right: 3px solid #ffeb3b;
+            margin-top: var(--space-sm);
+            word-break: break-word;
+            cursor: pointer;
+            transition: all var(--transition-base);
             position: relative;
             overflow: hidden;
+            white-space: pre-wrap;
         }
 
-        .highlight-box::before {
-            content: '';
+        .command-code::before {
+            content: '📋';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 3s ease-in-out infinite;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
         }
 
-        .highlight-box h3 {
-            color: var(--bg-white);
-            margin-bottom: var(--space-md);
-            position: relative;
-            z-index: 1;
+        .command-code:hover {
+            background: linear-gradient(135deg, #37474f 0%, #455a64 100%);
+            padding-right: 35px;
         }
 
-        .highlight-box p {
-            position: relative;
-            z-index: 1;
-            font-size: var(--text-lg);
-            line-height: 1.8;
-        }
-
-        /* Special highlight boxes */
-        .highlight-box.info {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1565c0;
-        }
-
-        .highlight-box.warning {
-            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            color: #e65100;
-        }
-
-        .highlight-box.success {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            color: #2e7d32;
+        .command-code:hover::before {
+            opacity: 1;
         }
 
         /* ============================================
-           📊 Grid Layouts
+           📚 Definition Cards
            ============================================ */
-        .stats-grid,
-        .distro-grid,
-        .agenda-list {
+        .definitions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--space-md);
-            margin: var(--space-lg) 0;
         }
 
-        .stat-card {
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
-            padding: var(--space-lg);
+        .definition-card {
+            background: white;
+            border: 1px solid var(--bg-lighter);
             border-radius: var(--radius-md);
-            text-align: center;
-            border-left: 4px solid var(--primary-color);
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            border-right: 4px solid #9b59b6;
+            transition: all var(--transition-base);
         }
 
-        .stat-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: var(--shadow-lg);
+        .definition-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
 
-        .stat-card h4 {
-            font-size: var(--text-4xl);
-            font-weight: 700;
-            color: var(--primary-color);
+        .definition-term {
+            font-weight: bold;
+            color: #9b59b6;
+            font-size: var(--text-xl);
             margin-bottom: var(--space-sm);
         }
 
-        .stat-card p {
+        .definition-text {
             color: var(--text-muted);
+            line-height: 1.8;
             font-size: var(--text-base);
         }
 
-        .distro-card {
-            background: var(--bg-white);
-            padding: var(--space-lg);
+        /* ============================================
+           🔔 Copy Notification
+           ============================================ */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--accent-green);
+            color: white;
+            padding: 15px 25px;
             border-radius: var(--radius-md);
-            border: 2px solid var(--bg-lighter);
-            transition: all var(--transition-base);
-        }
-
-        .distro-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary-color);
-            box-shadow: var(--shadow-md);
-        }
-
-        .distro-card h4 {
-            font-size: var(--text-xl);
+            transform: translateX(-400px);
+            transition: transform var(--transition-base);
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
-            gap: var(--space-xs);
+            gap: var(--space-sm);
         }
 
-        .agenda-item {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            border-left: 4px solid var(--primary-color);
-            font-weight: 500;
-            transition: all var(--transition-base);
-        }
-
-        .agenda-item:hover {
-            transform: translateX(-4px);
-            box-shadow: var(--shadow-md);
+        .copy-notification.show {
+            transform: translateX(0);
         }
 
         /* ============================================
-           📊 Table Styles
+           🎨 Highlight Effect
            ============================================ */
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: var(--space-md) 0;
-            background: var(--bg-white);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .comparison-table th {
-            background: var(--primary-color);
-            color: var(--bg-white);
-            padding: var(--space-md);
-            text-align: right;
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
             font-weight: 600;
         }
-
-        .comparison-table td {
-            padding: var(--space-md);
-            border-bottom: 1px solid var(--bg-lighter);
-        }
-
-        .comparison-table tr:hover {
-            background: var(--bg-light);
-        }
-
-        /* ============================================
-           💻 Command Box / Terminal
-           ============================================ */
-        .command-box {
-            background: var(--terminal-bg);
-            color: var(--terminal-text);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            font-family: var(--font-mono);
-            margin: var(--space-md) 0;
-            overflow-x: auto;
-            box-shadow: var(--shadow-sm);
-            position: relative;
-        }
-
-        .command-box::before {
-            content: '$ ';
-            color: var(--terminal-highlight);
-            font-weight: bold;
-        }
-
-        /* ============================================
-           🏷️ Tags & Badges
-           ============================================ */
-        .tech-tag {
-            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-            color: var(--bg-white);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: var(--text-sm);
-            font-weight: 500;
-            display: inline-block;
-            margin: 5px;
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .tech-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* ============================================
-           📝 Lists
-           ============================================ */
-        ul {
-            list-style: none;
-            padding-right: var(--space-md);
-        }
-
-        li {
-            margin: var(--space-sm) 0;
-            padding-right: var(--space-lg);
-            position: relative;
-            line-height: 1.7;
-            color: var(--text-muted);
-        }
-
-        li::before {
-            content: "🐧";
-            position: absolute;
-            right: 0;
-            top: 0;
-        }
-
-        li strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        ol {
-            padding-right: var(--space-xl);
-        }
-
-        ol li::before {
-            content: none;
-        }
-
-        ol li {
-            margin: var(--space-lg) 0;
-            line-height: 1.8;
-        }
-
-        /* ============================================
-           🎨 Timeline/History
-           ============================================ */
-        .timeline-box {
-            background: linear-gradient(to right, #e3f2fd, #bbdefb);
-            padding: var(--space-lg);
-            border-radius: var(--radius-md);
-            margin: var(--space-md) 0;
-        }
-
-        .timeline-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: var(--space-md);
-        }
-
-        .timeline-content > div {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .timeline-content strong {
-            color: var(--primary-color);
-            font-weight: 700;
-        }
-
-        /* ============================================
-           ✨ Animations
-           ============================================ */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideRight {
-            from {
-                width: 0;
-            }
-            to {
-                width: 60px;
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-                opacity: 0.8;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* Staggered animation for sections */
-        .section:nth-child(1) { animation-delay: 0.1s; }
-        .section:nth-child(2) { animation-delay: 0.2s; }
-        .section:nth-child(3) { animation-delay: 0.3s; }
-        .section:nth-child(4) { animation-delay: 0.4s; }
-        .section:nth-child(5) { animation-delay: 0.5s; }
 
         /* ============================================
            📱 Responsive Design
            ============================================ */
         @media (max-width: 768px) {
-            :root {
-                --text-5xl: 2rem;
-                --text-4xl: 1.75rem;
-                --text-3xl: 1.5rem;
+            .content {
+                grid-template-columns: 1fr;
             }
 
-            .container {
-                padding: var(--space-sm);
+            .sidebar {
+                border-left: none;
+                border-bottom: 1px solid var(--bg-lighter);
+                max-height: 300px;
             }
 
-            .section {
-                padding: var(--space-md);
+            .main-content {
+                max-height: none;
             }
 
-            .timeline-content {
+            .header h1 {
+                font-size: 2rem;
                 flex-direction: column;
             }
 
-            ol {
-                padding-right: var(--space-md);
+            .docker-logo {
+                font-size: 2rem;
+            }
+
+            .container {
+                margin: var(--space-sm);
             }
         }
 
@@ -593,25 +517,30 @@
             text-align: center;
         }
 
-        .mt-lg {
-            margin-top: var(--space-lg);
-        }
-
-        .mb-lg {
-            margin-bottom: var(--space-lg);
-        }
-
-        .fw-bold {
-            font-weight: 700;
-        }
-
         code {
             background: var(--bg-lighter);
             padding: 2px 6px;
             border-radius: 4px;
             font-family: var(--font-mono);
             font-size: 0.9em;
-            color: var(--secondary-color);
+            color: var(--docker-blue);
+        }
+
+        /* ============================================
+           ✨ Special Effects
+           ============================================ */
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-right: 4px solid var(--accent-blue);
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: var(--text-base);
+            line-height: 1.8;
         }
     </style>
 </head>
@@ -620,862 +549,978 @@
         <!-- Header -->
         <header class="header" role="banner">
             <div class="header-logo">DATA ENGINEERING HUB</div>
-            <h1>Linux</h1>
-            <p>מערכת ההפעלה בקוד פתוח המובילה בעולם</p>
-            <svg class="linux-logo" viewBox="0 0 100 100" width="100" height="100">
-                <!-- גוף הפינגווין מהצד -->
-                <ellipse cx="50" cy="55" rx="20" ry="30" fill="#333" />
-
-                <!-- בטן צהובה -->
-                <ellipse cx="55" cy="60" rx="10" ry="20" fill="#ffd700" />
-
-                <!-- עין אחת -->
-                <ellipse cx="60" cy="35" rx="3" ry="4" fill="white" />
-
-                <!-- מקור בולט -->
-                <path d="M65 40 Q70 38 65 36" fill="#ffa500" />
-            </svg>
+            <h1>
+                <span class="docker-logo">🐳</span>
+                Docker - מדריך מקיף
+            </h1>
+            <p>מדריך אינטראקטיבי לכל פקודות Docker עם חיפוש מתקדם</p>
         </header>
 
-        <!-- Section 1: What is Linux -->
-        <section class="section">
-            <h2>מהו Linux?</h2>
+        <!-- Search Section -->
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-box" 
+                placeholder="🔍 חפש פקודות, תיאורים או דוגמאות... (Ctrl+F)" 
+                id="searchInput"
+                autocomplete="off"
+            >
+        </div>
 
-            <div class="highlight-box">
-                <h3>הגדרה</h3>
-                <p>Linux הוא ליבת מערכת הפעלה בקוד פתוח שנוצרה על ידי לינוס טורבאלדס</p>
-            </div>
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <a href="#" class="nav-item active" data-section="definitions">📚 הגדרות</a>
+                <a href="#" class="nav-item" data-section="help">❓ עזרה</a>
+                <a href="#" class="nav-item" data-section="running">🚀 הרצת קונטיינרים</a>
+                <a href="#" class="nav-item" data-section="inspecting">🔍 בדיקת קונטיינרים</a>
+                <a href="#" class="nav-item" data-section="managing">⚙️ ניהול קונטיינרים</a>
+                <a href="#" class="nav-item" data-section="building">🔨 בניית Images</a>
+                <a href="#" class="nav-item" data-section="registries">📦 עבודה עם Registries</a>
+                <a href="#" class="nav-item" data-section="images">🖼️ ניהול Images</a>
+                <a href="#" class="nav-item" data-section="containers">📋 ניהול מתקדם</a>
+                <a href="#" class="nav-item" data-section="volumes">💾 ניהול Volumes</a>
+                <a href="#" class="nav-item" data-section="compose">🎼 Docker Compose</a>
+                <a href="#" class="nav-item" data-section="dockerfile">📝 הוראות Dockerfile</a>
+                <a href="#" class="nav-item" data-section="practices">✨ Best Practices</a>
+                <a href="#" class="nav-item" data-section="networking">🌐 רשתות</a>
+                <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
+                <a href="#" class="nav-item" data-section="linux">🐧 פקודות Linux</a>
+            </nav>
 
-            <ul>
-                <li>משמש כבסיס להפצות Linux שונות, ומציע יציבות, אבטחה וגמישות</li>
-                <li>בשימוש נרחב בשרתים, מחשבים שולחניים, סמארטפונים ומכשירים נוספים</li>
-                <li>מערכת אקולוגית עצומה של תוכנות חינמיות בקוד פתוח</li>
-                <li>מספק גם ממשק שורת פקודה וגם ממשקים גרפיים</li>
-            </ul>
-        </section>
-
-        <!-- Section 2: Linux in the World -->
-        <section class="section">
-            <h2>Linux בעולם - נתונים מרשימים</h2>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>97%</h4>
-                    <p>ממחשבי העל בעולם</p>
-                </div>
-                <div class="stat-card">
-                    <h4>80%</h4>
-                    <p>מכלל הסמארטפונים</p>
-                </div>
-                <div class="stat-card">
-                    <h4>70%</h4>
-                    <p>משרתי האינטרנט</p>
-                </div>
-            </div>
-
-            <h3>Linux נמצא בכל מקום:</h3>
-            <ul>
-                <li><strong>מחשוב ענן</strong> מבוסס ברובו על מערכות Linux</li>
-                <li><strong>רוב תוכנות הקוד הפתוח</strong> מפותחות על Linux</li>
-                <li><strong>מיליוני מחשבים שולחניים</strong> ברחבי העולם</li>
-                <li><strong>מכשירי חשמל, מודמים, נתבים</strong> ומכוניות אוטונומיות</li>
-                <li><strong>תחנות חלל, מחשבים ניידים</strong> ועוד...</li>
-            </ul>
-
-            <div class="highlight-box">
-                <p style="font-size: var(--text-xl); font-weight: 600;">
-                    Linux היא ללא ספק מערכת ההפעלה הנפוצה ביותר בעולם!
-                </p>
-            </div>
-        </section>
-
-        <!-- Section 3: Linux History -->
-        <section class="section">
-            <h2>היסטוריה של Linux - הנקודות החשובות</h2>
-
-            <div class="distro-grid">
-                <div class="distro-card">
-                    <h4>🐣 1983-1991: פרויקט GNU</h4>
-                    <ul>
-                        <li><strong>ריצ'רד סטולמן</strong> החל את פרויקט GNU ב-MIT</li>
-                        <li><strong>המטרה:</strong> מערכת הפעלה חופשית כחלופה ל-Unix</li>
-                        <li>פיתח כלים חיוניים: GCC, bash ועוד</li>
-                        <li><strong style="color: #e74c3c;">הבעיה:</strong> חסרה הליבה (kernel)</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4>🐧 1991: לידת Linux</h4>
-                    <ul>
-                        <li><strong>לינוס טורוואלדס</strong> - סטודנט פיני בן 21</li>
-                        <li><strong>25.8.91:</strong> ההודעה המפורסמת</li>
-                        <li><strong>17.9.91:</strong> גרסה 0.01 משוחררת</li>
-                        <li>הושפע מ-MINIX של אנדרו טננבאום</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4>🤝 העקרונות המייסדים</h4>
-                    <ul>
-                        <li><strong>קוד פתוח:</strong> הקוד זמין לכולם</li>
-                        <li><strong>פיתוח קהילתי:</strong> תרומות מרחבי העולם</li>
-                        <li><strong>רישיון GPL:</strong> חופש לשנות ולהפיץ</li>
-                        <li><strong>GNU + Linux</strong> = מערכת שלמה</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>אבני דרך חשובות</h3>
-            <div class="timeline-box">
-                <div class="timeline-content">
-                    <div>
-                        <strong>1992</strong> - פורט לארכיטקטורות נוספות<br>
-                        <strong>1994</strong> - גרסה 1.0 יציבה<br>
-                        <strong>1996</strong> - טקס הפינגווין נבחר כקמע
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Definitions Section -->
+                <section class="section active" id="definitions">
+                    <h2>📚 הגדרות Docker</h2>
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Image</div>
+                            <div class="definition-text">תבנית לקריאה בלבד (read-only) המכילה את כל הקבצים, הספריות והתלויות הנדרשות להרצת אפליקציה בקונטיינר Docker.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Container</div>
+                            <div class="definition-text">מופע פועל (running instance) של image. כלומר, חבילה הניתנת להרצה הכוללת את הקוד, הספריות והתלויות הנדרשות להרצת האפליקציה.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Dockerfile</div>
+                            <div class="definition-text">סקריפט המכיל הוראות ליצירת image. קובץ טקסט עם פקודות המגדירות כיצד לבנות את ה-image.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Registry</div>
+                            <div class="definition-text">מאגר לאחסון, שיתוף וניהול Docker images. כולל Docker Hub, Amazon ECR, Azure Container Registry ו-Google Cloud Container Registry.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Engine</div>
+                            <div class="definition-text">אפליקציה לניהול Docker containers. כוללת שרת (Docker daemon), כלי שורת פקודה (Docker client) ו-API לאינטראקציה עם ה-daemon.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Client</div>
+                            <div class="definition-text">כלי שורת פקודה לאינטראקציה עם Docker Engine לניהול images וקונטיינרים.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Daemon</div>
+                            <div class="definition-text">תהליך רקע (background process) המנהל Docker images וקונטיינרים בהתאם לפקודות שנשלחות מה-Docker client.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Compose</div>
+                            <div class="definition-text">כלי להגדרה והרצה של אפליקציות Docker מרובות קונטיינרים באמצעות קובץ YAML לתצורת השירותים.</div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>1993</strong> - הפצות ראשונות (Slackware, Debian)<br>
-                        <strong>1998</strong> - נטסקייפ משחררת קוד<br>
-                        <strong>2000</strong> - IBM משקיעה מיליארד דולר
+                </section>
+
+                <!-- Getting Help Section -->
+                <section class="section" id="help">
+                    <h2>❓ קבלת עזרה</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג גרסת Docker</div>
+                            <div class="command-code">docker --version</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג מידע על מערכת Docker</div>
+                            <div class="command-code">docker info</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">קבל עזרה על Docker</div>
+                            <div class="command-code">docker --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">קבל עזרה על פקודת Docker ספציפית</div>
+                            <div class="command-code">docker [command] --help</div>
+                        </div>
                     </div>
-                    <div>
-                        <strong>2007</strong> - גוגל מכריזה על אנדרואיד<br>
-                        <strong>2011</strong> - Linux על 90% מהמחשבי-על<br>
-                        <strong>היום</strong> - השולט בכל מקום
+                </section>
+
+                <!-- Running Containers Section -->
+                <section class="section" id="running">
+                    <h2>🚀 הרצת קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר</div>
+                            <div class="command-code">docker run [image]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר בדיקה לוודא שההתקנה עובדת</div>
+                            <div class="command-code">docker run hello-world</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר ולאחר מכן השתמש בו להרצת פקודה</div>
+                            <div class="command-code">docker run [image] [command]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ Python באופן אינטראקטיבי</div>
+                            <div class="command-code">docker run python -c "print('Python is Docker')"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ R והדפס מודל</div>
+                            <div class="command-code">docker run rocker/r-base r -e "print(lm(dist~speed, cars))"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר במצב אינטראקטיבי</div>
+                            <div class="command-code">docker run --interactive --tty rocker/r-base</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר והסר אותו כשסיימת</div>
+                            <div class="command-code">docker run --rm my_mysql</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ image ברקע (detached mode)</div>
+                            <div class="command-code">docker run --detach postgres</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ image עם שם מוגדר</div>
+                            <div class="command-code">docker run --name [name] redis</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ image כמשתמש ספציפי</div>
+                            <div class="command-code">docker run --user doctordocker mongo</div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="highlight-box">
-                <h3>המסר המרכזי</h3>
-                <p>מה שהתחיל כפרויקט אישי קטן של סטודנט הפך למערכת ההפעלה הנפוצה ביותר בעולם - מהטלפונים הניידים ועד לענני גוגל ואמזון!</p>
-            </div>
-        </section>
-
-        <!-- Section 4: Linux Distributions -->
-        <section class="section">
-            <h2>הפצות Linux</h2>
-
-            <h3>מהי הפצת Linux?</h3>
-            <ul>
-                <li><strong>אוסף של תוכנות</strong> (בדרך כלל קוד פתוח) על גבי ליבת Linux</li>
-                <li><strong>כוללת תוכנות שרת</strong>, כלי ניהול מערכת, תיעוד ויישומי שולחן עבודה</li>
-                <li><strong>מאוחסנת במאגר תוכנה</strong> מרכזי ומאובטח</li>
-                <li><strong>מספקת מראה ותחושה אחידים</strong>, ניהול תוכנה קל ומטרה תפעולית ספציפית</li>
-            </ul>
-
-            <h3>הפצות מובילות</h3>
-
-            <div class="distro-grid">
-                <div class="distro-card">
-                    <h4><span style="color: #cc0000;">🎩 Red Hat</span></h4>
-                    <ul>
-                        <li>חברת Linux מסחרית בשווי מיליארד דולר</li>
-                        <li>מאות מומחי Linux ותמיכה מעולה</li>
-                        <li>מוצרים: Red Hat Enterprise Linux ו-Fedora</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4><span style="color: #dd4814;">🟠 Ubuntu</span></h4>
-                    <ul>
-                        <li>החלה לשלוח דיסקים חינמיים ב-2004</li>
-                        <li>פופולרית מאוד למשתמשים ביתיים</li>
-                        <li>המטרה: שולחן עבודה גרפי ללא צורך בשורת פקודה</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4><span style="color: #a80030;">🔴 Debian</span></h4>
-                    <ul>
-                        <li>אלפי מפתחים מאורגנים בוחרים מנהיג פרויקט כל שנתיים</li>
-                        <li>נחשבת לאחת ההפצות היציבות ביותר</li>
-                        <li>גרסאות נקראות על שם דמויות מהסרט Toy Story</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4><span style="color: #262577;">🟣 CentOS</span></h4>
-                    <ul>
-                        <li>פלטפורמת מחשוב חינמית ברמה ארגונית</li>
-                        <li>נתמכת על ידי הקהילה</li>
-                        <li>ב-2014 הצטרפה ל-RHEL תוך שמירה על עצמאות</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>הפצות נוספות</h3>
-            <ul>
-                <li><strong>Oracle Enterprise Linux</strong> ו-<strong>Scientific Linux</strong> - מבוססות על Red Hat Enterprise Linux</li>
-                <li><strong>Linux Mint</strong>, <strong>Edubuntu</strong> ועוד רבות - מבוססות על Ubuntu</li>
-                <li>בסך הכל קיימות מאות הפצות Linux שונות!</li>
-            </ul>
-        </section>
-
-        <!-- Section 5: Choosing a Distribution -->
-        <section class="section">
-            <h2>בחירת הפצת Linux</h2>
-
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>שם ההפצה</th>
-                        <th>מאפיינים ושימושים</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Red Hat Enterprise</strong></td>
-                        <td>לארגונים הזקוקים לחוזה תמיכה טוב (RHEL)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>CentOS</strong></td>
-                        <td>Red Hat ללא חוזה התמיכה מ-Red Hat</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Fedora</strong></td>
-                        <td>Red Hat למחשב נייד/שולחני ללא תמיכה</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Linux Mint</strong></td>
-                        <td>שולחן עבודה גרפי אישי לסרטים, מוזיקה ומשחקים</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Debian</strong></td>
-                        <td>טובה לשרתים, מחשבים ניידים וכל מכשיר אחר</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ubuntu</strong></td>
-                        <td>פופולרית מאוד, מבוססת על Debian</td>
-                    </tr>
-                    <tr>
-                        <td><strong>אחרות</strong></td>
-                        <td>משתמשים מתקדמים עשויים להעדיף Arch, Gentoo, SUSE, Scientific...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Section 6: Agenda -->
-        <section class="section">
-            <h2>Linux בסיסי - סדר היום</h2>
-
-            <div class="agenda-list">
-                <div class="agenda-item">התחברות באמצעות Putty</div>
-                <div class="agenda-item">עבודה עם תיקיות</div>
-                <div class="agenda-item">עבודה עם קבצים</div>
-                <div class="agenda-item">עבודה עם תוכן קבצים</div>
-                <div class="agenda-item">עץ הקבצים של Linux</div>
-            </div>
-        </section>
-
-        <!-- Section 7: PuTTY -->
-        <section class="section">
-            <h2>שימוש ב-PuTTY</h2>
-
-            <h3>מהו PuTTY?</h3>
-            <ul>
-                <li><strong>אמולטור טרמינל וקליינט SSH</strong> חינמי בקוד פתוח ל-Windows</li>
-                <li><strong>מאפשר התחברות מאובטחת</strong> לשרתי Linux מרוחקים</li>
-                <li><strong>ביצוע פקודות והעברת קבצים</strong></li>
-                <li><strong>ממשק קל וידידותי</strong> למשתמש</li>
-                <li><strong>נמצא בשימוש נרחב</strong> על ידי מנהלי מערכת ומפתחים</li>
-            </ul>
-
-            <div class="highlight-box info">
-                <h3>🔐 מהו SSH?</h3>
-                <p><strong>SSH = Secure Shell - פרוטוקול מאובטח לחיבור למחשבים מרחוק</strong></p>
-                <p>נוצר ב-1995 כדי לאבטח תקשורת דרך האינטרנט, ומאז הפך לסטנדרט עולמי בכל מערכות ההפעלה, במיוחד בלינוקס ו-Unix.</p>
-            </div>
-
-            <div class="tech-tag">💡 טיפ: לשימוש מתקדם יותר, מומלץ MobaXterm</div>
-        </section>
-
-        <!-- Section 8: Modern Terminals -->
-        <section class="section">
-            <h2>כלי טרמינל מודרניים למהנדסי נתונים</h2>
-
-            <div class="distro-grid">
-                <div class="distro-card">
-                    <h4>🚀 Warp - AI Terminal</h4>
-                    <ul>
-                        <li>טרמינל מודרני עם יכולות AI מובנות</li>
-                        <li>השלמה אוטומטית חכמה של פקודות</li>
-                        <li>ממשק גרפי יפהפה ומודרני</li>
-                        <li>היסטוריית פקודות חכמה עם חיפוש</li>
-                        <li>תמיכה ב-Workflows לאוטומציה</li>
-                        <li>עורך מובנה לפקודות מרובות שורות</li>
-                    </ul>
-                    <div class="tech-tag">מומלץ למפתחים ומהנדסי נתונים</div>
-                </div>
-
-                <div class="distro-card">
-                    <h4>🐚 Zsh - Z Shell</h4>
-                    <ul>
-                        <li>Shell מודרני וחזק יותר מ-bash</li>
-                        <li>השלמה אוטומטית מתקדמת</li>
-                        <li>תיקון שגיאות אוטומטי</li>
-                        <li>היסטוריה משותפת בין חלונות</li>
-                        <li>Globbing מתקדם (חיפוש קבצים)</li>
-                        <li>ברירת מחדל ב-macOS</li>
-                    </ul>
-                    <div class="command-box"># התקנה ב-Linux
-sudo apt install zsh
-# הגדרה כ-shell ברירת מחדל
-chsh -s $(which zsh)</div>
-                </div>
-
-                <div class="distro-card">
-                    <h4>🎨 Oh My Zsh</h4>
-                    <ul>
-                        <li>Framework לניהול תצורת Zsh</li>
-                        <li>מעל 300 תוספים (plugins) מובנים</li>
-                        <li>מעל 140 ערכות נושא (themes)</li>
-                        <li>עדכונים אוטומטיים</li>
-                        <li>קהילה פעילה ותמיכה רחבה</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>התקנת Oh My Zsh - שלב אחר שלב</h3>
-
-            <div style="background: var(--bg-light); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
-                <h4 style="color: var(--primary-color); margin-bottom: var(--space-md);">שלב 1: התקנת Oh My Zsh</h4>
-                <div class="command-box">sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</div>
-            </div>
-
-            <div style="background: var(--bg-light); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
-                <h4 style="color: var(--primary-color); margin-bottom: var(--space-md);">שלב 2: התקנת תוספים חיוניים</h4>
-
-                <p style="margin-bottom: var(--space-sm); color: var(--text-muted);"><strong>Autosuggestions</strong> - הצעות אוטומטיות מההיסטוריה</p>
-                <div class="command-box">git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions</div>
-
-                <p style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--text-muted);"><strong>Syntax Highlighting</strong> - הדגשת תחביר בזמן אמת</p>
-                <div class="command-box">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting</div>
-            </div>
-
-            <div style="background: var(--bg-light); padding: var(--space-lg); border-radius: var(--radius-md); margin: var(--space-md) 0;">
-                <h4 style="color: var(--primary-color); margin-bottom: var(--space-md);">שלב 3: הגדרת התוספים</h4>
-
-                <p style="margin-bottom: var(--space-sm); color: var(--text-muted);">פתח את קובץ התצורה:</p>
-                <div class="command-box">open ~/.zshrc</div>
-
-                <p style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--text-muted);">מצא את השורה <code>plugins=(git)</code> ושנה אותה ל:</p>
-                <div class="command-box">plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</div>
-
-                <p style="margin: var(--space-md) 0 var(--space-sm) 0; color: var(--text-muted);">שמור את הקובץ והפעל מחדש את הטרמינל או הרץ:</p>
-                <div class="command-box">source ~/.zshrc</div>
-            </div>
-
-            <h3>תוספים מומלצים נוספים</h3>
-            <div style="background: var(--bg-light); padding: var(--space-md); border-radius: var(--radius-md); margin: var(--space-md) 0;">
-                <h4>תוספים חיוניים למהנדסי נתונים</h4>
-                <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm);">
-                    <span class="tech-tag">git</span>
-                    <span class="tech-tag">docker</span>
-                    <span class="tech-tag">kubectl</span>
-                    <span class="tech-tag">aws</span>
-                    <span class="tech-tag">python</span>
-                    <span class="tech-tag">npm</span>
-                    <span class="tech-tag">terraform</span>
-                    <span class="tech-tag">ansible</span>
-                </div>
-            </div>
-
-            <h3>בחירת ערכת נושא (Theme)</h3>
-            <div class="command-box"># ערכות נושא פופולריות:
-ZSH_THEME="robbyrussell"     # קלאסי ונקי
-ZSH_THEME="agnoster"         # עשיר ויפה
-ZSH_THEME="powerlevel10k/powerlevel10k"  # מתקדם ביותר
-
-# ערוך את ~/.zshrc והחלף את ה-theme</div>
-
-            <div class="highlight-box">
-                <h3>למה להשתמש בכלים המודרניים?</h3>
-                <p>כלים אלו מאיצים משמעותית את העבודה היומיומית, מקלים על ניווט וניהול שרתים, ומספקים חוויית משתמש מעולה עם יכולות אוטומציה מתקדמות.</p>
-            </div>
-        </section>
-
-        <!-- Section 9: Connecting with PuTTY -->
-        <section class="section">
-            <h2>התחברות באמצעות PuTTY</h2>
-
-            <h3>שלבי ההתחברות:</h3>
-            <ol>
-                <li>הורדת PuTTY מ-<span class="tech-tag">www.putty.org</span></li>
-                <li>יצירת חיבור חדש</li>
-                <li>הזנת כתובת IP של שרת Linux ופורט SSH (22 כברירת מחדל)</li>
-                <li>מתן שם ושמירת ה-Session</li>
-                <li>בפתיחת ה-Session - הזנת שם משתמש וסיסמה</li>
-            </ol>
-
-            <div class="command-box">נאי/naya (עבור DE's machine)</div>
-
-            <h3>פתרון בעיות:</h3>
-            <ul>
-                <li><strong>וידוא שהשרת פועל</strong></li>
-                <li><strong>בדיקת כתובת IP ומספרי פורט</strong></li>
-                <li><strong>וידוא שה-Firewall לא חוסם חיבורים</strong></li>
-            </ul>
-        </section>
-
-        <!-- Section 10: Everything is a File -->
-        <section class="section">
-            <h2>קונספט מרכזי: Everything is a File</h2>
-
-            <div class="highlight-box">
-                <h3>העיקרון המרכזי של Unix/Linux</h3>
-                <p>"הכל הוא קובץ" - גישה לעיצוב ממשק במערכות Unix ונגזרותיה</p>
-            </div>
-
-            <h3>מה זה אומר בפועל?</h3>
-            <div class="distro-grid">
-                <div class="distro-card">
-                    <h4>📄 קבצים רגילים</h4>
-                    <ul>
-                        <li>מסמכים, תמונות, סרטונים</li>
-                        <li>קבצי תצורה וסקריפטים</li>
-                        <li>קבצים בינאריים והפעלה</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4>📁 תיקיות</h4>
-                    <ul>
-                        <li>גם תיקיות הן "קבצים מיוחדים"</li>
-                        <li>מכילות רשימה של קבצים אחרים</li>
-                        <li>ניתן לקרוא אותן כמו קובץ</li>
-                    </ul>
-                </div>
-
-                <div class="distro-card">
-                    <h4>🔧 התקני חומרה</h4>
-                    <ul>
-                        <li><code>/dev/sda</code> - דיסק קשיח</li>
-                        <li><code>/dev/tty</code> - טרמינל</li>
-                        <li><code>/dev/null</code> - "חור שחור"</li>
-                        <li><code>/dev/random</code> - מספרים אקראיים</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>היתרונות של הגישה</h3>
-            <ul>
-                <li><strong>אחידות:</strong> אותן פקודות עובדות על הכל - <code>cat</code>, <code>echo</code>, <code>grep</code></li>
-                <li><strong>פשטות:</strong> אין צורך בממשקים מיוחדים לכל סוג משאב</li>
-                <li><strong>גמישות:</strong> ניתן להפנות פלט מכל דבר לכל דבר</li>
-                <li><strong>כוח:</strong> שליטה מלאה במערכת דרך ממשק אחיד</li>
-            </ul>
-
-            <h3>דוגמאות מעשיות</h3>
-            <div class="command-box"># קריאת מידע על המעבד
-cat /proc/cpuinfo
-
-# שליחת הודעה לטרמינל אחר
-echo "Hello" > /dev/pts/1
-
-# מחיקת נתונים מיותרים
-command_with_output > /dev/null
-
-# קריאת נתונים אקראיים
-head -c 100 /dev/random | base64</div>
-
-            <div class="highlight-box warning">
-                <h3>💡 הבנת הקונספט חשובה כי:</h3>
-                <p>זה מסביר למה ב-Linux אפשר לעשות דברים מדהימים עם פקודות פשוטות, ולמה הכל כל כך גמיש ועוצמתי!</p>
-            </div>
-        </section>
-
-        <!-- Section 11: Exercises List -->
-        <section class="section">
-            <h2>תרגילים מעשיים ל-Linux למהנדסי נתונים</h2>
-
-            <div class="highlight-box">
-                <h3>רשימת תרגילים</h3>
-                <p>8 תרגילים מעשיים ללימוד Linux</p>
-            </div>
-
-            <div class="agenda-list">
-                <div class="agenda-item">תרגיל 1 - עבודה עם תיקיות</div>
-                <div class="agenda-item">תרגיל 2 - עבודה עם קבצים</div>
-                <div class="agenda-item">תרגיל 3 - עבודה עם תוכן קבצים</div>
-                <div class="agenda-item">תרגיל 4 - עבודה עם משתנים</div>
-                <div class="agenda-item">תרגיל 5 - I/O redirection</div>
-                <div class="agenda-item">תרגיל 6 - Pipes ו-Filters</div>
-                <div class="agenda-item">תרגיל 7 - שימוש בעורך VI</div>
-                <div class="agenda-item">תרגיל 8 - הרשאות קבצים</div>
-            </div>
-        </section>
-
-        <!-- Exercise 1 -->
-        <section class="section">
-            <h2>תרגיל 1 - עבודה עם תיקיות (Directories)</h2>
-
-            <ol>
-                <li>הצג את התיקיה הנוכחית שלך
-                    <div class="command-box">pwd</div>
-                </li>
-
-                <li>עבור לתיקיה <code>/etc</code>
-                    <div class="command-box">cd /etc</div>
-                </li>
-
-                <li>עבור לתיקיית הבית שלך בשלושה לחיצות מקשים בלבד
-                    <div class="command-box">cd ~</div>
-                </li>
-
-                <li>עבור לתיקיה <code>/var/log</code> באמצעות מקש Tab
-                    <div class="command-box">cd /var/log [TAB]</div>
-                </li>
-
-                <li>הצג את תוכן התיקיה <code>/var/log</code>
-                    <div class="command-box">ls /var/log</div>
-                </li>
-
-                <li>עבור לתיקיית האב של התיקיה הנוכחית
-                    <div class="command-box">cd ..</div>
-                </li>
-
-                <li>הישאר היכן שאתה והצג את תוכן <code>/etc</code>
-                    <div class="command-box">ls /etc</div>
-                </li>
-
-                <li>הישאר היכן שאתה והצג את תוכן <code>/bin</code> ו-<code>/sbin</code>
-                    <div class="command-box">ls /bin /sbin</div>
-                </li>
-
-                <li>הישאר היכן שאתה והצג את תוכן תיקיית הבית (~)
-                    <div class="command-box">ls ~</div>
-                </li>
-
-                <li>הצג את כל הקבצים (כולל נסתרים) בתיקיית הבית שלך
-                    <div class="command-box">ls -la ~</div>
-                </li>
-
-                <li>הצג את הקבצים ב-<code>/boot</code> בפורמט קריא לאדם (גודל)
-                    <div class="command-box">ls -lh /boot</div>
-                </li>
-
-                <li>צור תיקיה בשם <code>testdir</code> בתיקיית הבית שלך
-                    <div class="command-box">mkdir ~/testdir</div>
-                </li>
-
-                <li>עבור ל-<code>/etc</code>, הישאר שם וצור תיקיה בשם <code>newdir</code> בתיקיית הבית
-                    <div class="command-box">cd /etc
-mkdir ~/newdir</div>
-                </li>
-
-                <li>צור את התיקיות הבאות עם תת-תיקיות:
-                    <div class="command-box">mkdir -p ~/tutorial/linux/dir1/dir2/dir3</div>
-                    <ul>
-                        <li>dir3 היא תת-תיקיה של dir2</li>
-                        <li>dir2 היא תת-תיקיה של dir1</li>
-                    </ul>
-                </li>
-
-                <li>מחק את התיקיה <code>testdir</code>
-                    <div class="command-box">rmdir ~/testdir</div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 2 -->
-        <section class="section">
-            <h2>תרגיל 2 - עבודה עם קבצים (Files)</h2>
-
-            <ol>
-                <li>הצג את הקבצים בתיקיה <code>/bin/</code>
-                    <div class="command-box">ls /bin/</div>
-                </li>
-
-                <li>צור קובץ בשם "myfile.txt" בתיקיית הבית שלך
-                    <div class="command-box">touch ~/myfile.txt</div>
-                </li>
-
-                <li>שנה את שם הקובץ ל-"mynewfile.txt"
-                    <div class="command-box">mv ~/myfile.txt ~/mynewfile.txt</div>
-                </li>
-
-                <li>העתק את הקובץ ל-"mycopy.txt"
-                    <div class="command-box">cp ~/mynewfile.txt ~/mycopy.txt</div>
-                </li>
-
-                <li>צור תיקיה בשם "tmpdir" בתיקיית הבית שלך
-                    <div class="command-box">mkdir ~/tmpdir</div>
-                </li>
-
-                <li>העתק את הקובץ שלך לתיקיה זו
-                    <div class="command-box">cp ~/mycopy.txt ~/tmpdir/</div>
-                </li>
-
-                <li>הצג את תוכן התיקיה וודא שהקובץ הועתק
-                    <div class="command-box">ls ~/tmpdir/</div>
-                </li>
-
-                <li>מחק את התיקיה ואת תוכנה בפקודה אחת
-                    <div class="command-box">rm -rf ~/tmpdir</div>
-                </li>
-
-                <li>מחק את כל הקבצים שיצרת בתרגיל זה
-                    <div class="command-box">rm ~/mynewfile.txt ~/mycopy.txt</div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 3 -->
-        <section class="section">
-            <h2>תרגיל 3 - עבודה עם תוכן קבצים</h2>
-
-            <ol>
-                <li>הצג את 12 השורות הראשונות של <code>/etc/services</code>
-                    <div class="command-box">head -12 /etc/services</div>
-                </li>
-
-                <li>הצג את השורה האחרונה של <code>/etc/passwd</code>
-                    <div class="command-box">tail -1 /etc/passwd</div>
-                </li>
-
-                <li>השתמש ב-cat כדי ליצור קובץ בשם count.txt בתיקיית הבית עם השורות הבאות:
-                    <div class="command-box">cat > ~/count.txt
-One
-Two
-Three
-Four
-Five
-[Ctrl+D]</div>
-                </li>
-
-                <li>השתמש ב-cat כדי ליצור גיבוי של הקובץ ל-catBCK.txt
-                    <div class="command-box">cat ~/count.txt > ~/catBCK.txt</div>
-                </li>
-
-                <li>השתמש גם ב-"more" וגם ב-"less" להצגת תוכן <code>/etc/services</code>
-                    <div class="command-box">more /etc/services
-less /etc/services</div>
-                    <p style="margin-top: var(--space-sm); color: var(--text-muted);">נסה לראות את ההבדל בין שתי הפקודות</p>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 4 -->
-        <section class="section">
-            <h2>תרגיל 4 - עבודה עם משתנים (Variables)</h2>
-
-            <ol>
-                <li>השתמש ב-echo להצגת Hello ואחריו שם המשתמש שלך (משתנה bash)
-                    <div class="command-box">echo Hello $USER</div>
-                </li>
-
-                <li>צור משתנה בשם <code>answer</code> עם הערך 42
-                    <div class="command-box">answer=42</div>
-                </li>
-
-                <li>העתק את הערך של <code>$LANG</code> ל-<code>$MyLANG</code> והצג אותו
-                    <div class="command-box">MyLANG=$LANG
-echo $MyLANG</div>
-                </li>
-
-                <li>בטל את המשתנה <code>answer</code>
-                    <div class="command-box">unset answer</div>
-                </li>
-
-                <li>צור משתנה והקצה לו את הערך 'Hello', צור משתנה נוסף עם הערך 'World', השתמש ב-echo ובשני המשתנים כדי להציג 'HelloWorld'
-                    <div class="command-box">var1='Hello'
-var2='World'
-echo $var1$var2</div>
-                </li>
-
-                <li>ייצא את המשתנה שלך
-                    <div class="command-box">export var1</div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 5 -->
-        <section class="section">
-            <h2>תרגיל 5 - I/O Redirection</h2>
-
-            <ol>
-                <li>הפנה את הפלט של <code>pwd</code> עם המחרוזת 'Files Under path:' והדפס את כל הקבצים תחת תיקיית הבית שלך לקובץ (צור קבצים בתיקייה אם נדרש)
-                    <div class="command-box">echo "Files Under path: $(pwd)" > ~/file_list.txt
-ls ~ >> ~/file_list.txt</div>
-
-                    <p style="margin-top: var(--space-md);"><strong>דוגמה לפלט:</strong></p>
-                    <div style="background: var(--bg-light); color: var(--text-primary); padding: var(--space-md); border-radius: var(--radius-md); font-family: var(--font-mono); margin-top: var(--space-sm);">Files Under path: /home/naya
-
-linux1.txt
-linux.txt
-part1
-part2
-part3
-system.log</div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 6 -->
-        <section class="section">
-            <h2>תרגיל 6 - Pipes ו-Filters</h2>
-
-            <ol>
-                <li>השתמש ב-pipe על הקובץ <code>/var/log/messages</code>:
-                    <ul style="margin-top: var(--space-sm);">
-                        <li>ספור את מספר השורות
-                            <div class="command-box">cat /var/log/messages | wc -l</div>
-                        </li>
-                        <li>הצג את 4 השורות הראשונות מ-10 השורות האחרונות
-                            <div class="command-box">tail -10 /var/log/messages | head -4</div>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>השתמש ב-grep על הקובץ <code>/var/log/messages</code>:
-                    <ul style="margin-top: var(--space-sm);">
-                        <li>הצג רק שורות מהחודש הנוכחי
-                            <div class="command-box">grep "$(date +%b)" /var/log/messages</div>
-                        </li>
-                        <li>הצג שורות תוך ביטול כל השורות מהחודש הנוכחי
-                            <div class="command-box">grep -v "$(date +%b)" /var/log/messages</div>
-                        </li>
-                        <li>הצג שורות המכילות את המילה "ERROR", תוך התעלמות מגודל אותיות
-                            <div class="command-box">grep -i "ERROR" /var/log/messages</div>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>צור קובץ חדש (sort.file) עם התוכן הבא:
-                    <div class="command-box">cat > ~/sort.file
-C3
-A1
-B2
-D4
-[Ctrl+D]</div>
-                    <ul style="margin-top: var(--space-sm);">
-                        <li>הצג את תוכן הקובץ
-                            <div class="command-box">cat ~/sort.file</div>
-                        </li>
-                        <li>מיין את תוכן הקובץ
-                            <div class="command-box">sort ~/sort.file</div>
-                        </li>
-                        <li>מיין את תוכן הקובץ בסדר הפוך
-                            <div class="command-box">sort -r ~/sort.file</div>
-                        </li>
-                        <li>הצג רק את הערך "C3" (בשתי שיטות)
-                            <div class="command-box">grep "C3" ~/sort.file
-grep -w "C3" ~/sort.file</div>
-                        </li>
-                        <li>הצג רק את הערך "B2" (בשתי שיטות)
-                            <div class="command-box">grep "B2" ~/sort.file
-sed -n '/B2/p' ~/sort.file</div>
-                        </li>
-                    </ul>
-                </li>
-
-                <li>צור קובץ חדש (uniq.file) עם התוכן הבא:
-                    <div class="command-box">cat > ~/uniq.file
-C3
-A1
-A1
-B2
-D4
-A1
-[Ctrl+D]</div>
-                    <ul style="margin-top: var(--space-sm);">
-                        <li>הצג את תוכן הקובץ
-                            <div class="command-box">cat ~/uniq.file</div>
-                        </li>
-                        <li>הסר ערכים כפולים
-                            <div class="command-box">sort ~/uniq.file | uniq</div>
-                        </li>
-                        <li>הסר כפילויות ומיין את הפלט בסדר הפוך
-                            <div class="command-box">sort ~/uniq.file | uniq | sort -r</div>
-                        </li>
-                    </ul>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 7 -->
-        <section class="section">
-            <h2>תרגיל 7 - שימוש בעורך VI</h2>
-
-            <ol>
-                <li>הפעל את כלי vi ובצע את הפעולות הבאות (שם קובץ: file.txt):
-                    <div class="command-box">vi ~/file.txt</div>
-                </li>
-
-                <li>הכנס: "This is the first line"
-                    <div class="command-box">i
-This is the first line
-[ESC]</div>
-                </li>
-
-                <li>הכנס: "This is the second line"
-                    <div class="command-box">o
-This is the second line
-[ESC]</div>
-                </li>
-
-                <li>הכנס: This line is going to be deleted
-                    <div class="command-box">o
-This line is going to be deleted
-[ESC]</div>
-                </li>
-
-                <li>מחק את השורה השלישית באמצעות פקודת "delete row"
-                    <div class="command-box">dd</div>
-                </li>
-
-                <li>שנה את המילה "first" למילה "edited"
-                    <div class="command-box">/first
-cw
-edited
-[ESC]</div>
-                </li>
-
-                <li>שמור את הקובץ וצא בפקודה אחת
-                    <div class="command-box">:wq</div>
-                </li>
-
-                <li>הצג את הקובץ שלך באמצעות "cat"
-                    <div class="command-box">cat ~/file.txt</div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Exercise 8 -->
-        <section class="section">
-            <h2>תרגיל 8 - הרשאות קבצים (File Permissions)</h2>
-
-            <ol>
-                <li>צור קובץ חדש בשם "mysecret.txt"
-                    <div class="command-box">touch ~/mysecret.txt</div>
-                </li>
-
-                <li>בדוק את הרשאות הקובץ הנוכחיות ברמות "owner", "group" ו-"other"
-                    <div class="command-box">ls -l ~/mysecret.txt</div>
-                </li>
-
-                <li>הוסף הרשאת "Write" ברמות "group" ו-"other"
-                    <div class="command-box">chmod g+w,o+w ~/mysecret.txt</div>
-                </li>
-
-                <li>באמצעות סימון נומרי, הוסף הרשאות מלאות ברמת owner ו-group, ו-"Read" ו-"Execute" ברמת "other"
-                    <div class="command-box">chmod 775 ~/mysecret.txt</div>
-                </li>
-
-                <li>אמת את הרשאות הקובץ שלך
-                    <div class="command-box">ls -l ~/mysecret.txt</div>
-                </li>
-            </ol>
-        </section>
-
-        <!-- Final Section -->
-        <section class="section" style="background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%); color: var(--bg-white); text-align: center;">
-            <h2 style="color: var(--bg-white); border-bottom: none;">🎉 כל הכבוד!</h2>
-            <p style="font-size: var(--text-xl); margin: var(--space-md) 0;">סיימת את כל התרגילים בהצלחה</p>
-            <p style="font-size: var(--text-lg);">עכשיו יש לך בסיס טוב בעבודה עם Linux!</p>
-        </section>
+                </section>
+
+                <!-- Inspecting Containers Section -->
+                <section class="section" id="inspecting">
+                    <h2>🔍 בדיקת קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג את כל הקונטיינרים הפועלים</div>
+                            <div class="command-code">docker ps</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג את כל הקונטיינרים (כולל לא פעילים)</div>
+                            <div class="command-code">docker ps --all</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">סנן קונטיינר פועל לפי שם</div>
+                            <div class="command-code">docker ps -f "name=[container-name]"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוגים קיימים של קונטיינר</div>
+                            <div class="command-code">docker logs [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוגים חיים של קונטיינר (מעקב בזמן אמת)</div>
+                            <div class="command-code">docker logs -f [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוג עם חותמות זמן</div>
+                            <div class="command-code">docker logs --timestamps --follow [container-id]</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Managing Containers Section -->
+                <section class="section" id="managing">
+                    <h2>⚙️ ניהול קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">צור קונטיינר מ-image</div>
+                            <div class="command-code">docker create [image]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל קונטיינר</div>
+                            <div class="command-code">docker start [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור קונטיינר עם shell אינטראקטיבי</div>
+                            <div class="command-code">docker create --name py --interactive --tty python</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור image חדש מקונטיינר</div>
+                            <div class="command-code">docker container commit [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור קונטיינר</div>
+                            <div class="command-code">docker stop [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">השהה קונטיינר (pause)</div>
+                            <div class="command-code">docker pause [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בטל השהיה (unpause)</div>
+                            <div class="command-code">docker unpause [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרוג קונטיינר (kill)</div>
+                            <div class="command-code">docker kill [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרוג והסר קונטיינר בפקודה אחת</div>
+                            <div class="command-code">docker rm --force [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר קונטיינר שהופסק</div>
+                            <div class="command-code">docker rm [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר קונטיינר (תחביר מודרני)</div>
+                            <div class="command-code">docker container rm [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסרה בכוח (תחביר מודרני)</div>
+                            <div class="command-code">docker container rm --force [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור והסר בפקודה אחת</div>
+                            <div class="command-code">docker rm -f [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור ואז הפעל מחדש קונטיינר</div>
+                            <div class="command-code">docker restart [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">מחק את כל הקונטיינרים שהופסקו</div>
+                            <div class="command-code">docker container prune</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Building Images Section -->
+                <section class="section" id="building">
+                    <h2>🔨 בניית Images</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">בנה image</div>
+                            <div class="command-code">docker build [path]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה image מהתיקייה הנוכחית</div>
+                            <div class="command-code">docker build .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בחר שם בעת בניית image</div>
+                            <div class="command-code">docker build -t first_image .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה image עם tag</div>
+                            <div class="command-code">docker build --tag [name:tag] [path]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה image עם גרסה ספציפית</div>
+                            <div class="command-code">docker build --tag myimage:2023-edition .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה image ללא שימוש ב-cache</div>
+                            <div class="command-code">docker build --no-cache [path]</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Working with Registries Section -->
+                <section class="section" id="registries">
+                    <h2>📦 עבודה עם Registries</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">התחבר ל-Docker Hub</div>
+                            <div class="command-code">docker login --username doctordocker</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">משוך image מ-registry</div>
+                            <div class="command-code">docker pull julia</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">משוך גרסה ספציפית של image</div>
+                            <div class="command-code">docker pull julia:1.8.5-bullseye</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">תייג image למאגר</div>
+                            <div class="command-code">docker tag python doctordocker/myrepo</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דחוף image ל-registry</div>
+                            <div class="command-code">docker push doctordocker/myrepo</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חפש image</div>
+                            <div class="command-code">docker search "image-search-text"</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Image Management Section -->
+                <section class="section" id="images">
+                    <h2>🖼️ ניהול Images</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">משוך image</div>
+                            <div class="command-code">docker pull &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">משוך גרסה ספציפית</div>
+                            <div class="command-code">docker pull &lt;image-name&gt;:&lt;image-version&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">משוך image ממאגר פרטי</div>
+                            <div class="command-code">docker pull &lt;private-registry-url&gt;/&lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג את כל ה-images המקומיים</div>
+                            <div class="command-code">docker images</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר image</div>
+                            <div class="command-code">docker image rm &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר את כל ה-images</div>
+                            <div class="command-code">docker image prune -a</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דחוף image למאגר פרטי</div>
+                            <div class="command-code">docker push &lt;private-registry-url&gt;/&lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">תן שם חדש ל-image</div>
+                            <div class="command-code">docker tag &lt;old-name&gt; &lt;new-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שמור image לקובץ</div>
+                            <div class="command-code">docker save -o &lt;file-name&gt; &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">טען image מקובץ</div>
+                            <div class="command-code">docker load -i &lt;file-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ראה את ההוראות שנוצרו ליצירת image</div>
+                            <div class="command-code">docker history &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש בדיסק של Docker</div>
+                            <div class="command-code">docker system df</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר image (תחביר קצר)</div>
+                            <div class="command-code">docker rmi [image-name]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">רשימת images (תחביר מודרני)</div>
+                            <div class="command-code">docker image ls</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר images שאינם בשימוש</div>
+                            <div class="command-code">docker image prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר build cache</div>
+                            <div class="command-code">docker builder prune</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Container Management Section -->
+                <section class="section" id="containers">
+                    <h2>📋 ניהול מתקדם של קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הפעל קונטיינר</div>
+                            <div class="command-code">docker run &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל קונטיינר אינטראקטיבי</div>
+                            <div class="command-code">docker run -it &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל קונטיינר ברקע (detached)</div>
+                            <div class="command-code">docker run -d &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל קונטיינר עם שם</div>
+                            <div class="command-code">docker run --name &lt;container-name&gt; &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר והסר אוטומטית בסיום</div>
+                            <div class="command-code">docker run -it --rm &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עגן volume מהמארח לקונטיינר</div>
+                            <div class="command-code">docker run -v &lt;source&gt;:&lt;destination&gt; &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דרוס את ה-CMD שהוגדר ב-image</div>
+                            <div class="command-code">docker run &lt;image&gt; &lt;shell-command&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דרוס משתנה סביבה ב-docker run</div>
+                            <div class="command-code">docker run --env &lt;name&gt;=&lt;value&gt; &lt;image-name&gt;</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Volume Management Section -->
+                <section class="section" id="volumes">
+                    <h2>💾 ניהול Volumes</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">צור volume עם שם</div>
+                            <div class="command-code">docker volume create &lt;volumename&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג את כל ה-volumes</div>
+                            <div class="command-code">docker volume ls</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג מידע מפורט על volume</div>
+                            <div class="command-code">docker volume inspect &lt;volumename&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר volume</div>
+                            <div class="command-code">docker volume rm &lt;volumename&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר volumes שאינם בשימוש</div>
+                            <div class="command-code">docker volume prune</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Docker Compose Section -->
+                <section class="section" id="compose">
+                    <h2>🎼 Docker Compose</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הפעל שירותים מוגדרים ב-docker-compose.yml</div>
+                            <div class="command-code">docker-compose start</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור שירותים</div>
+                            <div class="command-code">docker-compose stop</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">השהה שירותים</div>
+                            <div class="command-code">docker-compose pause</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בטל השהיה</div>
+                            <div class="command-code">docker-compose unpause</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג קונטיינרים עבור השירותים</div>
+                            <div class="command-code">docker-compose ps</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור והפעל קונטיינרים</div>
+                            <div class="command-code">docker-compose up</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל ברקע</div>
+                            <div class="command-code">docker-compose up -d</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור והסר קונטיינרים, רשתות, volumes</div>
+                            <div class="command-code">docker-compose down</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוגים של כל השירותים</div>
+                            <div class="command-code">docker-compose logs</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה מחדש את ה-images</div>
+                            <div class="command-code">docker-compose build</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dockerfile Instructions Section -->
+                <section class="section" id="dockerfile">
+                    <h2>📝 הוראות Dockerfile</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">התחל Dockerfile מ-image</div>
+                            <div class="command-code">FROM &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר משתנה סביבה לבנייה ולהרצה</div>
+                            <div class="command-code">ENV [name]=[value]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר משתנה זמן בנייה</div>
+                            <div class="command-code">ARG [name]=[default_value]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר את תיקיית העבודה</div>
+                            <div class="command-code">WORKDIR [path]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עבור למשתמש</div>
+                            <div class="command-code">USER [username]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קובץ מקומי ל-image</div>
+                            <div class="command-code">COPY [existing path] [image path]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הוסף פקודת shell ל-image</div>
+                            <div class="command-code">RUN &lt;valid-shell-command&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">התקנה ללא אינטראקציה</div>
+                            <div class="command-code">RUN apt-get install -y python3</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ פקודה בעת השקת הקונטיינר</div>
+                            <div class="command-code">CMD ["executable", "param1"]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קבצים מהמארח ל-image</div>
+                            <div class="command-code">COPY &lt;src-path-on-host&gt; &lt;dest-path-on-image&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק תיקייה</div>
+                            <div class="command-code">COPY &lt;src-folder&gt; &lt;dest-folder&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר פקודת ברירת מחדל</div>
+                            <div class="command-code">CMD &lt;shell-command&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שנה משתמש נוכחי</div>
+                            <div class="command-code">USER &lt;user-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור משתנה זמן בנייה בלבד</div>
+                            <div class="command-code">ARG &lt;name&gt;=&lt;value&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור משתנה סביבה</div>
+                            <div class="command-code">ENV &lt;name&gt;=&lt;value&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה image מ-Dockerfile</div>
+                            <div class="command-code">docker build /location/to/Dockerfile</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה מהתיקייה הנוכחית</div>
+                            <div class="command-code">docker build .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דרוס ARG בזמן build</div>
+                            <div class="command-code">docker build --build-arg &lt;name&gt;=&lt;value&gt; .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חשוף פורט</div>
+                            <div class="command-code">EXPOSE &lt;port&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר נקודת כניסה</div>
+                            <div class="command-code">ENTRYPOINT ["executable", "param1"]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הוסף metadata ל-image</div>
+                            <div class="command-code">LABEL key="value"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור נקודת עיגון</div>
+                            <div class="command-code">VOLUME ["/data"]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הוסף קבצים וחלץ ארכיונים</div>
+                            <div class="command-code">ADD &lt;src&gt; &lt;dest&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר בדיקת בריאות</div>
+                            <div class="command-code">HEALTHCHECK --interval=30s CMD curl -f http://localhost/ || exit 1</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Best Practices Section -->
+                <section class="section" id="practices">
+                    <h2>✨ שיטות עבודה מומלצות</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">שמור על images קטנים - הורד, חלץ ונקה בהוראת RUN אחת</div>
+                            <div class="command-code">RUN curl &lt;file_url&gt; -o &lt;dest&gt; \
+    && unzip &lt;dest&gt;/&lt;file&gt;.zip -d &lt;dir&gt; \
+    && rm &lt;dest&gt;/&lt;file&gt;.zip</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">השתמש ב-multi-stage builds</div>
+                            <div class="command-code">FROM node:14 AS build
+WORKDIR /app
+COPY . .
+RUN npm install && npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">השתמש ב-.dockerignore</div>
+                            <div class="command-code"># .dockerignore
+node_modules
+.git
+*.log
+.env</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל כמשתמש לא-root</div>
+                            <div class="command-code">RUN adduser -D myuser
+USER myuser</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צא מתצוגת לוגים חיים</div>
+                            <div class="command-code">CTRL+C</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box" style="margin-top: var(--space-lg);">
+                        <p><strong>💡 טיפים חשובים:</strong></p>
+                        <ul style="margin-top: var(--space-sm); padding-right: var(--space-lg);">
+                            <li style="margin: var(--space-sm) 0;">השתמש ב-images רשמיים כבסיס</li>
+                            <li style="margin: var(--space-sm) 0;">מזער את מספר השכבות (layers)</li>
+                            <li style="margin: var(--space-sm) 0;">סדר את ההוראות מהכי פחות משתנות לכי יותר משתנות</li>
+                            <li style="margin: var(--space-sm) 0;">אל תשמור סודות ב-images</li>
+                            <li style="margin: var(--space-sm) 0;">השתמש ב-health checks</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Networking Section -->
+                <section class="section" id="networking">
+                    <h2>🌐 רשתות Docker</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג את כל הרשתות</div>
+                            <div class="command-code">docker network ls</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור רשת חדשה</div>
+                            <div class="command-code">docker network create &lt;network-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חבר קונטיינר לרשת</div>
+                            <div class="command-code">docker network connect &lt;network-name&gt; &lt;container-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נתק קונטיינר מרשת</div>
+                            <div class="command-code">docker network disconnect &lt;network-name&gt; &lt;container-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק רשת</div>
+                            <div class="command-code">docker network inspect &lt;network-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר רשת</div>
+                            <div class="command-code">docker network rm &lt;network-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר רשתות שאינן בשימוש</div>
+                            <div class="command-code">docker network prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר עם רשת ספציפית</div>
+                            <div class="command-code">docker run --network=&lt;network-name&gt; &lt;image&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פרסם פורט קונטיינר למארח</div>
+                            <div class="command-code">docker run -p &lt;host-port&gt;:&lt;container-port&gt; &lt;image&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פרסם את כל הפורטים החשופים</div>
+                            <div class="command-code">docker run -P &lt;image&gt;</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting Section -->
+                <section class="section" id="troubleshooting">
+                    <h2>🔧 פתרון בעיות ופקודות מתקדמות</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הרץ פקודה בקונטיינר פועל</div>
+                            <div class="command-code">docker exec -it &lt;container&gt; &lt;command&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פתח bash shell בקונטיינר פועל</div>
+                            <div class="command-code">docker exec -it &lt;container&gt; /bin/bash</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קבצים מקונטיינר למארח</div>
+                            <div class="command-code">docker cp &lt;container&gt;:&lt;src-path&gt; &lt;dest-path&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קבצים ממארח לקונטיינר</div>
+                            <div class="command-code">docker cp &lt;src-path&gt; &lt;container&gt;:&lt;dest-path&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק פרטי קונטיינר</div>
+                            <div class="command-code">docker inspect &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש במשאבים</div>
+                            <div class="command-code">docker stats</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש במשאבים לקונטיינר ספציפי</div>
+                            <div class="command-code">docker stats &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים בקונטיינר</div>
+                            <div class="command-code">docker top &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג מיפוי פורטים</div>
+                            <div class="command-code">docker port &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שינויים בקונטיינר</div>
+                            <div class="command-code">docker diff &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">המתן ליציאת קונטיינר והצג קוד יציאה</div>
+                            <div class="command-code">docker wait &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עדכן תצורת קונטיינר</div>
+                            <div class="command-code">docker update --restart=unless-stopped &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה הכל (קונטיינרים, images, רשתות, volumes)</div>
+                            <div class="command-code">docker system prune -a --volumes</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ייצא קונטיינר כארכיון tar</div>
+                            <div class="command-code">docker export &lt;container&gt; &gt; &lt;file&gt;.tar</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ייבא ארכיון tar כ-image</div>
+                            <div class="command-code">docker import &lt;file&gt;.tar &lt;image-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">התחבר לקונטיינר פועל</div>
+                            <div class="command-code">docker attach &lt;container&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר עם הגבלות משאבים</div>
+                            <div class="command-code">docker run --memory=512m --cpus=1.5 &lt;image&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הגדר מדיניות הפעלה מחדש</div>
+                            <div class="command-code">docker run --restart=always &lt;image&gt;</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Linux Commands Section -->
+                <section class="section" id="linux">
+                    <h2>🐧 פקודות Linux בסיסיות (דרישות מוקדמות)</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">פתח קובץ בעורך nano</div>
+                            <div class="command-code">nano &lt;file-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור קובץ ריק</div>
+                            <div class="command-code">touch &lt;file-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הדפס טקסט לקונסול</div>
+                            <div class="command-code">echo "&lt;text&gt;"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הוסף פלט לסוף קובץ</div>
+                            <div class="command-code">&lt;command&gt; &gt;&gt; &lt;file&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">אשר אוטומטית את כל השאלות</div>
+                            <div class="command-code">&lt;command&gt; -y</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תוכן קובץ</div>
+                            <div class="command-code">cat &lt;file-name&gt;</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תיקייה נוכחית</div>
+                            <div class="command-code">pwd</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">רשימת קבצים</div>
+                            <div class="command-code">ls -la</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
+
+    <!-- Copy Notification -->
+    <div class="copy-notification" id="copyNotification">
+        ✅ הפקודה הועתקה ללוח!
+    </div>
+
+    <script>
+        // ============================================
+        // Navigation functionality
+        // ============================================
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all nav items and sections
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked nav item
+                item.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = item.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Scroll to top of main content
+                document.querySelector('.main-content').scrollTop = 0;
+            });
+        });
+
+        // ============================================
+        // Copy to clipboard functionality
+        // ============================================
+        document.querySelectorAll('.command-code').forEach(code => {
+            code.addEventListener('click', () => {
+                const text = code.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyNotification();
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+
+        function showCopyNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // ============================================
+        // Search functionality
+        // ============================================
+        const searchInput = document.getElementById('searchInput');
+        const allCards = document.querySelectorAll('.command-card, .definition-card');
+        const allSections = document.querySelectorAll('.section');
+
+        // Store original HTML
+        allCards.forEach(card => {
+            card.originalHTML = card.innerHTML;
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                // Reset view
+                allCards.forEach(card => {
+                    card.style.display = 'block';
+                    card.innerHTML = card.originalHTML;
+                });
+                allSections.forEach(section => section.classList.remove('active'));
+                document.getElementById('definitions').classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelector('.nav-item[data-section="definitions"]').classList.add('active');
+                return;
+            }
+
+            let hasResults = false;
+            
+            allCards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                if (cardText.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    hasResults = true;
+                    
+                    // Highlight search term
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    card.innerHTML = card.originalHTML.replace(regex, '<span class="highlight">$1</span>');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show all sections when searching
+            if (hasResults) {
+                allSections.forEach(section => section.classList.add('active'));
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            }
+        });
+
+        // ============================================
+        // Keyboard shortcuts
+        // ============================================
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+F or Cmd+F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+                searchInput.blur();
+            }
+        });
+
+        // ============================================
+        // Add tooltips
+        // ============================================
+        document.querySelectorAll('.command-code').forEach(code => {
+            code.title = 'לחץ להעתקה ללוח';
+        });
+
+        // ============================================
+        // Smooth scroll for sidebar
+        // ============================================
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelector('.main-content').scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // ============================================
+        // Add animation on card hover
+        // ============================================
+        document.querySelectorAll('.command-card, .definition-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // ============================================
+        // Initialize
+        // ============================================
+        console.log('🐳 Docker Interactive Guide loaded successfully!');
+        console.log('💡 Tip: Press Ctrl+F to search for commands');
+    </script>
 </body>
 </html>
