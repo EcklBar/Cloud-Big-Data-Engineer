@@ -416,66 +416,204 @@ print("Hello Git")
             <p style="margin-top: 20px;"><strong>Recommendation:</strong> Use VSCode. It shows helpful buttons like <em>"Accept Incoming Change"</em> making the process easy.</p>
         </div>
 
-        <div id="commands" class="section">
-            <h2>Comprehensive Command List</h2>
-            
+       <div id="commands" class="section">
+            <h2>Comprehensive Git Command Reference</h2>
+        
+            <!-- ================= Repository ================= -->
             <div class="grid">
                 <div class="info-card">
                     <h3>Repository Setup</h3>
                     <div class="command-box">
-                        <span class="cmd">git init</span> <span class="comment"># Create new repo</span><br>
-                        <span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Clone existing repo</span><br>
-                        <span class="cmd">git remote -v</span> <span class="comment"># View remotes</span><br>
-                        <span class="cmd">git remote add origin</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Add remote</span>
+                        <span class="cmd">git init</span>
+                        <span class="desc">Create a new local Git repository in the current directory.</span><br>
+        
+                        <span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span>
+                        <span class="desc">Download a full copy of a remote repository.</span><br>
+        
+                        <span class="cmd">git status</span>
+                        <span class="desc">Show the current state of the working directory and staging area.</span><br>
+        
+                        <span class="cmd">git remote</span>
+                        <span class="desc">List all configured remote repositories.</span><br>
+        
+                        <span class="cmd">git remote -v</span>
+                        <span class="desc">Show remote repositories with their fetch & push URLs.</span><br>
+        
+                        <span class="cmd">git remote add</span> <span class="arg">&lt;name&gt; &lt;url&gt;</span>
+                        <span class="desc">Add a new remote repository.</span>
                     </div>
                 </div>
+        
+                <!-- ================= Staging & Commit ================= -->
                 <div class="info-card">
                     <h3>Staging & Committing</h3>
                     <div class="command-box">
-                        <span class="cmd">git status</span> <span class="comment"># Check status</span><br>
-                        <span class="cmd">git add .</span> <span class="comment"># Stage all changes</span><br>
-                        <span class="cmd">git restore --staged</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Unstage file</span><br>
-                        <span class="cmd">git commit -m</span> <span class="arg">"msg"</span> <span class="comment"># Commit changes</span><br>
-                        <span class="cmd">git reset --hard</span> <span class="comment"># Discard all changes</span>
+                        <span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span>
+                        <span class="desc">Stage a specific file for the next commit.</span><br>
+        
+                        <span class="cmd">git add .</span>
+                        <span class="desc">Stage all modified and new files.</span><br>
+        
+                        <span class="cmd">git restore --staged</span> <span class="arg">&lt;file&gt;</span>
+                        <span class="desc">Remove a file from the staging area.</span><br>
+        
+                        <span class="cmd">git restore --staged</span>
+                        <span class="desc">Unstage all staged files.</span><br>
+        
+                        <span class="cmd">git reset</span>
+                        <span class="desc">Unstage changes without modifying files.</span><br>
+        
+                        <span class="cmd">git commit</span>
+                        <span class="desc">Create a commit using the default editor.</span><br>
+        
+                        <span class="cmd">git commit -m</span> <span class="arg">"msg"</span>
+                        <span class="desc">Create a commit with a short message.</span>
                     </div>
                 </div>
             </div>
-
+        
+            <!-- ================= Branching ================= -->
             <div class="grid">
                 <div class="info-card">
-                    <h3>Branching & Merging</h3>
+                    <h3>Branching</h3>
                     <div class="command-box">
-                        <span class="cmd">git branch</span> <span class="comment"># List branches</span><br>
-                        <span class="cmd">git checkout -b</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Create & switch</span><br>
-                        <span class="cmd">git branch -D</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Force delete branch</span><br>
-                        <span class="cmd">git merge</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># Merge into current</span><br>
-                        <span class="cmd">git cherry-pick</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Apply specific commit</span>
+                        <span class="cmd">git branch</span>
+                        <span class="desc">List all local branches.</span><br>
+        
+                        <span class="cmd">git branch</span> <span class="arg">&lt;name&gt;</span>
+                        <span class="desc">Create a new branch.</span><br>
+        
+                        <span class="cmd">git branch -m</span> <span class="arg">&lt;old&gt; &lt;new&gt;</span>
+                        <span class="desc">Rename an existing branch.</span><br>
+        
+                        <span class="cmd">git branch -d</span> <span class="arg">&lt;name&gt;</span>
+                        <span class="desc">Delete a branch if it was merged.</span><br>
+        
+                        <span class="cmd">git branch -D</span> <span class="arg">&lt;name&gt;</span>
+                        <span class="desc">Force delete a branch.</span><br>
+        
+                        <span class="cmd">git checkout</span> <span class="arg">&lt;branch&gt;</span>
+                        <span class="desc">Switch to another branch.</span><br>
+        
+                        <span class="cmd">git checkout -b</span> <span class="arg">&lt;name&gt;</span>
+                        <span class="desc">Create and switch to a new branch.</span><br>
+        
+                        <span class="cmd">git checkout -B</span> <span class="arg">&lt;name&gt;</span>
+                        <span class="desc">Reset or recreate a branch at current HEAD.</span>
                     </div>
                 </div>
+        
+                <!-- ================= Merging ================= -->
+                <div class="info-card">
+                    <h3>Merging</h3>
+                    <div class="command-box">
+                        <span class="cmd">git merge</span> <span class="arg">&lt;branch&gt;</span>
+                        <span class="desc">Merge another branch into the current one.</span><br>
+        
+                        <span class="cmd">git merge --ff-only</span> <span class="arg">&lt;branch&gt;</span>
+                        <span class="desc">Merge only if fast-forward is possible.</span><br>
+        
+                        <span class="cmd">git merge --no-ff</span> <span class="arg">&lt;branch&gt;</span>
+                        <span class="desc">Always create a merge commit.</span><br>
+        
+                        <span class="cmd">git merge --squash</span> <span class="arg">&lt;branch&gt;</span>
+                        <span class="desc">Combine all commits into one.</span><br>
+        
+                        <span class="cmd">git merge -s octopus</span>
+                        <span class="arg">&lt;b1&gt; &lt;b2&gt;</span>
+                        <span class="desc">Merge multiple branches at once.</span>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- ================= Cherry-pick ================= -->
+            <div class="grid">
+                <div class="info-card">
+                    <h3>Cherry-pick</h3>
+                    <div class="command-box">
+                        <span class="cmd">git cherry-pick</span> <span class="arg">&lt;commit&gt;</span>
+                        <span class="desc">Apply a specific commit from another branch.</span><br>
+        
+                        <span class="cmd">git cherry-pick</span> <span class="arg">&lt;h1&gt; &lt;h2&gt;</span>
+                        <span class="desc">Apply multiple commits.</span><br>
+        
+                        <span class="cmd">git cherry-pick --continue</span>
+                        <span class="desc">Continue after resolving conflicts.</span><br>
+        
+                        <span class="cmd">git cherry-pick --abort</span>
+                        <span class="desc">Cancel the cherry-pick process.</span>
+                    </div>
+                </div>
+        
+                <!-- ================= History ================= -->
                 <div class="info-card">
                     <h3>History & Inspection</h3>
                     <div class="command-box">
-                        <span class="cmd">git log --oneline</span> <span class="comment"># Compact history</span><br>
-                        <span class="cmd">git log --graph</span> <span class="comment"># Visual history</span><br>
-                        <span class="cmd">git diff</span> <span class="comment"># View changes</span><br>
-                        <span class="cmd">git blame</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># See who changed lines</span><br>
-                        <span class="cmd">git tag</span> <span class="arg">v1.0</span> <span class="comment"># Tag a version</span>
+                        <span class="cmd">git log</span>
+                        <span class="desc">Show full commit history.</span><br>
+        
+                        <span class="cmd">git log --oneline</span>
+                        <span class="desc">Compact commit history.</span><br>
+        
+                        <span class="cmd">git log --oneline --graph --all</span>
+                        <span class="desc">Visual graph of all branches.</span><br>
+        
+                        <span class="cmd">git show</span> <span class="arg">&lt;commit&gt;</span>
+                        <span class="desc">Display details of a specific commit.</span><br>
+        
+                        <span class="cmd">git diff</span>
+                        <span class="desc">Show changes between working tree and index.</span><br>
+        
+                        <span class="cmd">git diff --staged</span>
+                        <span class="desc">Show staged changes.</span><br>
+        
+                        <span class="cmd">git blame</span> <span class="arg">&lt;file&gt;</span>
+                        <span class="desc">Show who last modified each line.</span><br>
+        
+                        <span class="cmd">git tag</span> <span class="arg">v1.0</span>
+                        <span class="desc">Create a version tag.</span>
                     </div>
                 </div>
             </div>
-
+        
+            <!-- ================= Recovery ================= -->
             <div class="grid">
                 <div class="info-card">
-                    <h3>Advanced / Recovery</h3>
+                    <h3>Undo & Recovery</h3>
                     <div class="command-box">
-                        <span class="cmd">git revert</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Undo commit (new commit)</span><br>
-                        <span class="cmd">git reflog</span> <span class="comment"># View reference logs (recovery)</span><br>
-                        <span class="cmd">git stash</span> <span class="comment"># Save changes temporarily</span><br>
-                        <span class="cmd">git rebase -i</span> <span class="comment"># Interactive rebase</span>
+                        <span class="cmd">git revert</span> <span class="arg">&lt;commit&gt;</span>
+                        <span class="desc">Undo a commit safely by creating a new one.</span><br>
+        
+                        <span class="cmd">git reset --soft</span> <span class="arg">HEAD~1</span>
+                        <span class="desc">Undo last commit, keep changes staged.</span><br>
+        
+                        <span class="cmd">git reset --mixed</span> <span class="arg">HEAD~1</span>
+                        <span class="desc">Undo commit, keep changes unstaged.</span><br>
+        
+                        <span class="cmd">git reset --hard</span> <span class="arg">HEAD~1</span>
+                        <span class="desc">Undo commit and discard all changes.</span><br>
+        
+                        <span class="cmd">git reflog</span>
+                        <span class="desc">Show reference log for recovery.</span>
+                    </div>
+                </div>
+        
+                <div class="info-card">
+                    <h3>Rebase</h3>
+                    <div class="command-box">
+                        <span class="cmd">git rebase -i</span> <span class="arg">master</span>
+                        <span class="desc">Rewrite commit history interactively.</span><br><br>
+        
+                        <span class="desc">pick – use commit</span><br>
+                        <span class="desc">reword – edit message</span><br>
+                        <span class="desc">edit – pause and amend</span><br>
+                        <span class="desc">squash / fixup – combine commits</span><br>
+                        <span class="desc">drop – remove commit</span>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div id="exercises" class="section">
             <h2>Hands-on Labs</h2>
