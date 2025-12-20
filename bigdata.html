@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="מדריך מקצועי ומקיף לתחום הנדסת הנתונים - טכנולוגיות, כלים ושיטות עבודה">
-    <title>הנדסת נתונים | מדריך מקצועי למהנדסי נתונים</title>
+    <meta name="description" content="מדריך מקצועי ומקיף למערכת ההפעלה Linux - היסטוריה, הפצות, פקודות ותרגילים מעשיים">
+    <title>Linux | מדריך מקצועי למהנדסי נתונים</title>
 
     <style>
         /* ============================================
@@ -34,14 +34,12 @@
             --accent-blue: #3498db;
             --accent-orange: #e67e22;
             --accent-red: #e74c3c;
+            --accent-yellow: #f1c40f;
 
-            /* Cloud Provider Colors */
-            --aws-orange: #ff9900;
-            --aws-dark: #232f3e;
-            --gcp-blue: #4285f4;
-            --gcp-green: #34a853;
-            --azure-blue: #0078d4;
-            --azure-teal: #40e0d0;
+            /* Terminal Colors */
+            --terminal-bg: #263238;
+            --terminal-text: #aed581;
+            --terminal-highlight: #ffeb3b;
 
             /* Spacing System */
             --space-xs: 8px;
@@ -66,6 +64,7 @@
             /* Typography */
             --font-primary: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             --font-display: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', 'Monaco', 'Consolas', monospace;
 
             /* Font Sizes */
             --text-xs: 0.75rem;
@@ -167,6 +166,15 @@
             font-size: var(--text-xl);
             color: var(--text-light);
             font-weight: 300;
+            margin-bottom: var(--space-md);
+        }
+
+        .linux-logo {
+            width: 80px;
+            height: 80px;
+            margin: var(--space-md) auto;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
         }
 
         /* ============================================
@@ -258,66 +266,152 @@
             line-height: 1.8;
         }
 
+        /* Special highlight boxes */
+        .highlight-box.info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #1565c0;
+        }
+
+        .highlight-box.warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            color: #e65100;
+        }
+
+        .highlight-box.success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e7d32;
+        }
+
         /* ============================================
            📊 Grid Layouts
            ============================================ */
-        .tech-grid,
-        .capabilities-grid {
+        .stats-grid,
+        .distro-grid,
+        .agenda-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--space-md);
             margin: var(--space-lg) 0;
         }
 
-        .tech-category,
-        .capability-card {
+        .stat-card {
             background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
             padding: var(--space-lg);
             border-radius: var(--radius-md);
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            text-align: center;
             border-left: 4px solid var(--primary-color);
-            position: relative;
-            overflow: hidden;
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
         }
 
-        .capability-card {
-            border-left: none;
-            border-right: 4px solid var(--secondary-color);
+        .stat-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-lg);
         }
 
-        .tech-category:hover,
-        .capability-card:hover {
+        .stat-card h4 {
+            font-size: var(--text-4xl);
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: var(--space-sm);
+        }
+
+        .stat-card p {
+            color: var(--text-muted);
+            font-size: var(--text-base);
+        }
+
+        .distro-card {
+            background: var(--bg-white);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            border: 2px solid var(--bg-lighter);
+            transition: all var(--transition-base);
+        }
+
+        .distro-card:hover {
             transform: translateY(-4px);
+            border-color: var(--primary-color);
             box-shadow: var(--shadow-md);
         }
 
-        .tech-category h4,
-        .capability-card h4 {
-            font-size: var(--text-lg);
+        .distro-card h4 {
+            font-size: var(--text-xl);
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
             gap: var(--space-xs);
         }
 
-        .tech-category p,
-        .capability-card p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: var(--space-sm);
+        .agenda-item {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-color);
+            font-weight: 500;
+            transition: all var(--transition-base);
+        }
+
+        .agenda-item:hover {
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ============================================
+           📊 Table Styles
+           ============================================ */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-md) 0;
+            background: var(--bg-white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .comparison-table th {
+            background: var(--primary-color);
+            color: var(--bg-white);
+            padding: var(--space-md);
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--bg-lighter);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        /* ============================================
+           💻 Command Box / Terminal
+           ============================================ */
+        .command-box {
+            background: var(--terminal-bg);
+            color: var(--terminal-text);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            margin: var(--space-md) 0;
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .command-box::before {
+            content: '$ ';
+            color: var(--terminal-highlight);
+            font-weight: bold;
         }
 
         /* ============================================
            🏷️ Tags & Badges
            ============================================ */
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-xs);
-        }
-
         .tech-tag {
             background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
             color: var(--bg-white);
@@ -326,6 +420,7 @@
             font-size: var(--text-sm);
             font-weight: 500;
             display: inline-block;
+            margin: 5px;
             transition: transform var(--transition-fast), box-shadow var(--transition-fast);
             box-shadow: var(--shadow-sm);
         }
@@ -333,66 +428,6 @@
         .tech-tag:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
-        }
-
-        /* ============================================
-           🔄 Flow Diagram
-           ============================================ */
-        .data-flow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: var(--space-lg) 0;
-            padding: var(--space-lg);
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
-            border-radius: var(--radius-md);
-            flex-wrap: wrap;
-            gap: var(--space-md);
-        }
-
-        .flow-step {
-            background: var(--bg-white);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
-            text-align: center;
-            min-width: 140px;
-            box-shadow: var(--shadow-sm);
-            position: relative;
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-            animation: fadeInUp 0.6s ease;
-            animation-fill-mode: both;
-        }
-
-        .flow-step:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .flow-step::after {
-            content: "←";
-            position: absolute;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: var(--text-2xl);
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        .flow-step:last-child::after {
-            display: none;
-        }
-
-        .flow-step h4 {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: var(--space-xs);
-            font-size: var(--text-base);
-        }
-
-        .flow-step p {
-            color: var(--text-light);
-            font-size: var(--text-sm);
         }
 
         /* ============================================
@@ -412,15 +447,10 @@
         }
 
         li::before {
-            content: "";
+            content: "🐧";
             position: absolute;
             right: 0;
-            top: 8px;
-            width: 8px;
-            height: 8px;
-            background: var(--primary-color);
-            border-radius: 2px;
-            transform: rotate(45deg);
+            top: 0;
         }
 
         li strong {
@@ -428,97 +458,44 @@
             font-weight: 600;
         }
 
-        /* ============================================
-           🎯 Cloud Provider Cards
-           ============================================ */
-        .cloud-card-aws {
-            background: linear-gradient(135deg, var(--aws-orange) 0%, var(--aws-dark) 100%) !important;
+        ol {
+            padding-right: var(--space-xl);
         }
 
-        .cloud-card-gcp {
-            background: linear-gradient(135deg, var(--gcp-blue) 0%, var(--gcp-green) 100%) !important;
+        ol li::before {
+            content: none;
         }
 
-        .cloud-card-azure {
-            background: linear-gradient(135deg, var(--azure-blue) 0%, var(--azure-teal) 100%) !important;
-        }
-
-        .cloud-card-aws h4,
-        .cloud-card-gcp h4,
-        .cloud-card-azure h4 {
-            color: var(--bg-white) !important;
-        }
-
-        /* ============================================
-           📊 Service Model Diagram
-           ============================================ */
-        .service-model-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-md);
+        ol li {
             margin: var(--space-lg) 0;
-        }
-
-        .service-model-card {
-            border: 2px solid var(--bg-lighter);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: transform var(--transition-base), box-shadow var(--transition-base);
-        }
-
-        .service-model-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .service-model-card h3 {
-            background: var(--primary-color);
-            color: var(--bg-white);
-            padding: var(--space-md);
-            margin: 0;
-            text-align: center;
-            font-size: var(--text-lg);
-        }
-
-        .service-layer {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid var(--bg-white);
-            font-size: var(--text-sm);
-            transition: background var(--transition-fast);
-        }
-
-        .service-layer:hover {
-            background: rgba(102, 126, 234, 0.05);
-        }
-
-        .layer-user {
-            background: #5a7fdb;
-            color: var(--bg-white);
-        }
-
-        .layer-provider {
-            background: #90ee90;
-            color: var(--text-primary);
-        }
-
-        .service-model-footer {
-            text-align: center;
-            padding: var(--space-md);
-            background: var(--bg-light);
-            color: var(--text-light);
-            font-size: var(--text-sm);
+            line-height: 1.8;
         }
 
         /* ============================================
-           🎨 Icon System (SVG Icons)
+           🎨 Timeline/History
            ============================================ */
-        .icon {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            vertical-align: middle;
+        .timeline-box {
+            background: linear-gradient(to right, #e3f2fd, #bbdefb);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-md) 0;
+        }
+
+        .timeline-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .timeline-content > div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .timeline-content strong {
+            color: var(--primary-color);
+            font-weight: 700;
         }
 
         /* ============================================
@@ -566,19 +543,21 @@
             }
         }
 
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
         /* Staggered animation for sections */
         .section:nth-child(1) { animation-delay: 0.1s; }
         .section:nth-child(2) { animation-delay: 0.2s; }
         .section:nth-child(3) { animation-delay: 0.3s; }
         .section:nth-child(4) { animation-delay: 0.4s; }
         .section:nth-child(5) { animation-delay: 0.5s; }
-
-        /* Staggered animation for flow steps */
-        .flow-step:nth-child(1) { animation-delay: 0.1s; }
-        .flow-step:nth-child(2) { animation-delay: 0.2s; }
-        .flow-step:nth-child(3) { animation-delay: 0.3s; }
-        .flow-step:nth-child(4) { animation-delay: 0.4s; }
-        .flow-step:nth-child(5) { animation-delay: 0.5s; }
 
         /* ============================================
            📱 Responsive Design
@@ -598,20 +577,12 @@
                 padding: var(--space-md);
             }
 
-            .data-flow {
+            .timeline-content {
                 flex-direction: column;
             }
 
-            .flow-step::after {
-                content: "↓";
-                right: 50%;
-                top: auto;
-                bottom: -25px;
-                transform: translateX(50%);
-            }
-
-            .service-model-grid {
-                grid-template-columns: 1fr;
+            ol {
+                padding-right: var(--space-md);
             }
         }
 
@@ -634,124 +605,13 @@
             font-weight: 700;
         }
 
-        .text-gradient {
-            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* ============================================
-           🌟 Special Effects
-           ============================================ */
-        .emphasis-text {
-            color: var(--accent-red);
-            font-weight: 700;
-            text-decoration: underline;
-            text-decoration-color: var(--accent-red);
-            text-decoration-thickness: 2px;
-            text-underline-offset: 4px;
-        }
-
-        .info-banner {
-            background: linear-gradient(135deg, var(--bg-light), var(--bg-lighter));
-            padding: var(--space-lg);
-            border-radius: var(--radius-md);
-            border-right: 4px solid var(--accent-blue);
-            margin: var(--space-lg) 0;
-        }
-
-        .info-banner p {
-            font-style: italic;
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: var(--text-lg);
-            line-height: 1.8;
-        }
-
-        /* ============================================
-           🎨 4 V's Cards
-           ============================================ */
-        .vs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-md);
-            margin: var(--space-lg) 0;
-        }
-
-        .v-card {
-            background: var(--bg-white);
-            padding: var(--space-lg);
-            border-radius: var(--radius-md);
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-            transition: all var(--transition-base);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .v-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .v-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .v-card h4 {
-            font-size: var(--text-xl);
-            color: var(--primary-color);
-            margin-bottom: var(--space-sm);
-        }
-
-        .v-card p {
-            color: var(--text-muted);
-            font-size: var(--text-base);
-        }
-
-        /* ============================================
-           🎯 Conclusion Section
-           ============================================ */
-        .conclusion-box {
-            text-align: center;
-            margin: var(--space-xl) 0;
-            padding: var(--space-xl);
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-        }
-
-        .conclusion-box h3 {
-            color: var(--text-primary);
-            margin-bottom: var(--space-md);
-            font-size: var(--text-3xl);
-        }
-
-        .conclusion-box p {
-            font-size: var(--text-xl);
-            line-height: 1.9;
-            color: var(--text-secondary);
-        }
-
-        /* ============================================
-           🎨 Print Styles
-           ============================================ */
-        @media print {
-            body {
-                background: white;
-            }
-
-            .section {
-                page-break-inside: avoid;
-                box-shadow: none;
-            }
+        code {
+            background: var(--bg-lighter);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--secondary-color);
         }
     </style>
 </head>
@@ -760,981 +620,836 @@
         <!-- Header -->
         <header class="header" role="banner">
             <div class="header-logo">DATA ENGINEERING HUB</div>
-            <h1>הנדסת נתונים</h1>
-            <p>מדריך מקצועי ומקיף לתחום הנדסת הנתונים</p>
+            <h1>Linux</h1>
+            <p>מערכת ההפעלה בקוד פתוח המובילה בעולם</p>
+            <svg class="linux-logo" viewBox="0 0 100 100" width="100" height="100">
+                <!-- גוף הפינגווין מהצד -->
+                <ellipse cx="50" cy="55" rx="20" ry="30" fill="#333" />
+
+                <!-- בטן צהובה -->
+                <ellipse cx="55" cy="60" rx="10" ry="20" fill="#ffd700" />
+
+                <!-- עין אחת -->
+                <ellipse cx="60" cy="35" rx="3" ry="4" fill="white" />
+
+                <!-- מקור בולט -->
+                <path d="M65 40 Q70 38 65 36" fill="#ffa500" />
+            </svg>
         </header>
 
-        <!-- Section 1: What is Data Engineering -->
+        <!-- Section 1: What is Linux -->
         <section class="section">
-            <h2>מהי הנדסת נתונים?</h2>
-
-            <div class="highlight-box">
-                <h3>המטרה העיקרית</h3>
-                <p>להפוך נתונים גולמיים לידע ותובנות פעילות</p>
-            </div>
-
-            <div class="data-flow">
-                <div class="flow-step">
-                    <h4>נתונים גולמיים</h4>
-                    <p>Raw Data</p>
-                </div>
-                <div class="flow-step">
-                    <h4>מידע</h4>
-                    <p>Information</p>
-                </div>
-                <div class="flow-step">
-                    <h4>ידע</h4>
-                    <p>Knowledge</p>
-                </div>
-                <div class="flow-step">
-                    <h4>תובנות</h4>
-                    <p>Insights</p>
-                </div>
-                <div class="flow-step">
-                    <h4>חכמה</h4>
-                    <p>Wisdom</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 2: Apache NiFi -->
-        <section class="section">
-            <h2>Apache NiFi</h2>
-
-            <div class="highlight-box">
-                <h3>פלטפורמת אינטגרציית נתונים</h3>
-                <p>Apache NiFi היא פלטפורמת קוד פתוח המאפשרת אוטומציה של זרימת נתונים בין מערכות,<br>
-                ומקלה על איסוף, הפצה וניהול נתונים בזמן אמת</p>
-            </div>
-
-            <h3>Big Data Integration - ארכיטקטורת NiFi</h3>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>📥 Sources - מקורות נתונים</h4>
-                    <ul>
-                        <li><strong>Business data</strong> - בסיסי נתונים ומערכות ארגוניות</li>
-                        <li><strong>Internet & Social Media</strong> - רשתות חברתיות ואינטרנט</li>
-                        <li><strong>Sensors & machines</strong> - חיישנים ומכונות IoT</li>
-                        <li><strong>Archives & Open Data</strong> - ארכיונים ונתונים פתוחים</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>⚙️ יכולות עיבוד ב-NiFi</h4>
-                    <ul>
-                        <li><strong>Route</strong> - ניתוב נתונים לפי תנאים</li>
-                        <li><strong>Transform</strong> - המרת פורמטים ומבנים</li>
-                        <li><strong>Enrich</strong> - העשרת נתונים</li>
-                        <li><strong>Validate</strong> - אימות איכות הנתונים</li>
-                        <li><strong>Distribute</strong> - חלוקה למערכות יעד</li>
-                        <li><strong>Mediate</strong> - תיווך בין פרוטוקולים</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🎯 יעדים ושימושים</h4>
-                    <ul>
-                        <li><strong>Data Warehouse</strong> - מחסני נתונים</li>
-                        <li><strong>Data Lake</strong> - אגמי נתונים</li>
-                        <li><strong>Apps & Processing</strong> - אפליקציות ועיבוד</li>
-                        <li><strong>Visualizing</strong> - כלי ויזואליזציה</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3>מאפייני הנתונים (4 V's)</h3>
-            <div class="vs-grid">
-                <div class="v-card">
-                    <h4>Volume</h4>
-                    <p>KB עד PB</p>
-                </div>
-                <div class="v-card">
-                    <h4>Velocity</h4>
-                    <p>Batch עד Real-time</p>
-                </div>
-                <div class="v-card">
-                    <h4>Variety</h4>
-                    <p>מובנה עד לא-מובנה</p>
-                </div>
-                <div class="v-card">
-                    <h4>Veracity</h4>
-                    <p>אמין עד לא-אמין</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Modern Data Systems -->
-        <section class="section">
-            <h2>עיצוב מערכות נתונים מודרניות</h2>
-
-            <div class="highlight-box">
-                <h3>ארכיטקטורה משולבת</h3>
-                <p>שילוב של טכנולוגיות שונות למענה על צרכים מגוונים</p>
-            </div>
-
-            <h3>סוגי נתונים ופתרונות</h3>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>📊 מקורות נתונים</h4>
-                    <ul>
-                        <li><strong>Unstructured Data</strong> - נתונים לא מובנים</li>
-                        <li><strong>Relational Data</strong> - נתונים יחסיים (RDBMS)</li>
-                        <li><strong>JSON Documents</strong> - מסמכי JSON</li>
-                        <li><strong>Key/Value Data</strong> - נתוני מפתח-ערך</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🔧 פתרונות טכנולוגיים</h4>
-                    <p><strong>NoSQL:</strong> MongoDB, Couchbase</p>
-                    <p><strong>Analytics:</strong> Spark, Hadoop, Drill</p>
-                    <p><strong>BI Tools:</strong> Cloudera, Apache Drill</p>
-                    <p><strong>Real-time:</strong> HBase, Cassandra</p>
-                    <p><strong>SQL on Big Data:</strong> Phoenix, Drill</p>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🎯 מקרי שימוש</h4>
-                    <ul>
-                        <li><strong>Transactional Workloads</strong> - עומסי עבודה טרנזקציוניים</li>
-                        <li><strong>BigData BI via SQL</strong> - BI על ביג דאטה</li>
-                        <li><strong>Operational reads/writes</strong> - קריאות/כתיבות תפעוליות</li>
-                        <li><strong>Advanced Analytics</strong> - אנליטיקה מתקדמת</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="info-banner">
-                <p>הארכיטקטורה המודרנית משלבת טכנולוגיות מרובות כדי לתת מענה אופטימלי לכל סוג של צורך עסקי וטכני</p>
-            </div>
-        </section>
-
-        <!-- Section 4: Cloud Computing -->
-        <section class="section">
-            <h2>מחשוב ענן (Cloud Computing)</h2>
-
-            <div class="highlight-box">
-                <h3>הספקים המובילים</h3>
-                <p>שלושת ענקיות הענן המספקות תשתית גלובלית</p>
-            </div>
-
-            <div class="tech-grid mt-lg">
-                <div class="tech-category cloud-card-gcp">
-                    <h4>☁️ Google Cloud</h4>
-                    <div class="tech-list mt-lg">
-                        <span class="tech-tag">BigQuery</span>
-                        <span class="tech-tag">Dataflow</span>
-                        <span class="tech-tag">Dataproc</span>
-                        <span class="tech-tag">Pub/Sub</span>
-                    </div>
-                </div>
-
-                <div class="tech-category cloud-card-aws">
-                    <h4>☁️ AWS</h4>
-                    <div class="tech-list mt-lg">
-                        <span class="tech-tag">S3</span>
-                        <span class="tech-tag">EMR</span>
-                        <span class="tech-tag">Redshift</span>
-                        <span class="tech-tag">Athena</span>
-                        <span class="tech-tag">Glue</span>
-                    </div>
-                </div>
-
-                <div class="tech-category cloud-card-azure">
-                    <h4>☁️ Microsoft Azure</h4>
-                    <div class="tech-list mt-lg">
-                        <span class="tech-tag">Synapse</span>
-                        <span class="tech-tag">Data Factory</span>
-                        <span class="tech-tag">Databricks</span>
-                        <span class="tech-tag">Stream Analytics</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-lg">
-                <p style="font-size: var(--text-2xl); font-weight: 600; margin-bottom: var(--space-sm);">🏢 ↔️ ☁️</p>
-                <p style="font-size: var(--text-lg);">העברה דו-כיוונית של נתונים ועומסי עבודה בין הארגון לענן</p>
-            </div>
-
-            <h3>יתרונות מחשוב הענן להנדסת נתונים</h3>
-            <ul>
-                <li><strong>סקלביליות אינסופית</strong> - הרחבה וצמצום לפי דרישה</li>
-                <li><strong>עלויות גמישות</strong> - תשלום לפי שימוש בפועל</li>
-                <li><strong>זמינות גלובלית</strong> - גישה מכל מקום בעולם</li>
-                <li><strong>שירותים מנוהלים</strong> - פחות תחזוקה, יותר פיתוח</li>
-                <li><strong>חדשנות מתמדת</strong> - גישה לטכנולוגיות החדשות ביותר</li>
-            </ul>
-        </section>
-
-        <!-- Section 5: Cloud Service Models -->
-        <section class="section">
-            <h2>מודלי שירותי ענן (Cloud Service Models)</h2>
-
-            <div class="service-model-grid">
-                <div class="service-model-card">
-                    <h3>On Premise</h3>
-                    <div>
-                        <div class="service-layer layer-user">Applications</div>
-                        <div class="service-layer layer-user">Data</div>
-                        <div class="service-layer layer-user">Runtime</div>
-                        <div class="service-layer layer-user">Middleware</div>
-                        <div class="service-layer layer-user">OS</div>
-                        <div class="service-layer layer-user">Virtualization</div>
-                        <div class="service-layer layer-user">Servers</div>
-                        <div class="service-layer layer-user">Storage</div>
-                        <div class="service-layer layer-user">Networking</div>
-                    </div>
-                    <div class="service-model-footer">אתה מנהל הכל</div>
-                </div>
-
-                <div class="service-model-card">
-                    <h3>IaaS</h3>
-                    <div>
-                        <div class="service-layer layer-user">Applications</div>
-                        <div class="service-layer layer-user">Data</div>
-                        <div class="service-layer layer-user">Runtime</div>
-                        <div class="service-layer layer-user">Middleware</div>
-                        <div class="service-layer layer-user">OS</div>
-                        <div class="service-layer layer-provider">Virtualization</div>
-                        <div class="service-layer layer-provider">Servers</div>
-                        <div class="service-layer layer-provider">Storage</div>
-                        <div class="service-layer layer-provider">Networking</div>
-                    </div>
-                    <div class="service-model-footer">אתה מנהל | הספק מנהל</div>
-                </div>
-
-                <div class="service-model-card">
-                    <h3>PaaS</h3>
-                    <div>
-                        <div class="service-layer layer-user">Applications</div>
-                        <div class="service-layer layer-user">Data</div>
-                        <div class="service-layer layer-provider">Runtime</div>
-                        <div class="service-layer layer-provider">Middleware</div>
-                        <div class="service-layer layer-provider">OS</div>
-                        <div class="service-layer layer-provider">Virtualization</div>
-                        <div class="service-layer layer-provider">Servers</div>
-                        <div class="service-layer layer-provider">Storage</div>
-                        <div class="service-layer layer-provider">Networking</div>
-                    </div>
-                    <div class="service-model-footer">Microsoft Azure</div>
-                </div>
-
-                <div class="service-model-card">
-                    <h3>SaaS</h3>
-                    <div>
-                        <div class="service-layer layer-provider">Applications</div>
-                        <div class="service-layer layer-provider">Data</div>
-                        <div class="service-layer layer-provider">Runtime</div>
-                        <div class="service-layer layer-provider">Middleware</div>
-                        <div class="service-layer layer-provider">OS</div>
-                        <div class="service-layer layer-provider">Virtualization</div>
-                        <div class="service-layer layer-provider">Servers</div>
-                        <div class="service-layer layer-provider">Storage</div>
-                        <div class="service-layer layer-provider">Networking</div>
-                    </div>
-                    <div class="service-model-footer">הספק מנהל הכל</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 6: Cloud Benefits -->
-        <section class="section">
-            <h2>יתרונות מחשוב ענן</h2>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>💰 עלות (Cost)</h4>
-                    <p><strong>לא צריך יותר:</strong></p>
-                    <ul>
-                        <li>לקנות חומרה ותוכנה</li>
-                        <li>להקים ולתפעל מרכזי נתונים באתר</li>
-                        <li>להשקיע בתשתיות פיזיות</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>⚡ מהירות (Speed)</h4>
-                    <ul>
-                        <li><strong>Self service</strong> - קבלת משאבי מחשוב עצומים תוך דקות</li>
-                        <li>מסיר את האחריות לתכנון קיבולת</li>
-                        <li>הפעלה מהירה של סביבות חדשות</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🌍 סקאלה גלובלית</h4>
-                    <ul>
-                        <li>יכולת לגדול באופן אלסטי</li>
-                        <li>הוספה/הפחתה של כוח מחשוב, אחסון ורוחב פס לפי הצורך</li>
-                        <li>פריסה גלובלית במספר אזורים</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🚀 פרודוקטיביות</h4>
-                    <p>צוותי IT יכולים להקדיש זמן להשגת יעדים עסקיים חשובים יותר במקום תחזוקת תשתיות</p>
-                </div>
-
-                <div class="capability-card">
-                    <h4>📊 ביצועים</h4>
-                    <ul>
-                        <li>רשת עולמית של מרכזי נתונים מאובטחים</li>
-                        <li>שדרוג מתמיד לחומרה החדשה ביותר</li>
-                        <li>טוב יותר ממרכזי נתונים בודדים בארגון</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🔒 אבטחה</h4>
-                    <ul>
-                        <li>סט של מדיניות, טכנולוגיות ובקרות שמחזקות את תנוחת האבטחה</li>
-                        <li>הגנה על הנתונים, האפליקציות והתשתית מפני איומים פוטנציאליים</li>
-                        <li>עמידה בתקנים ורגולציות בינלאומיות</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 7: AWS Services -->
-        <section class="section">
-            <h2>AWS - שירותי ענן</h2>
-
-            <div class="highlight-box">
-                <h3>Amazon Web Services</h3>
-                <p>הענן של אמזון - הספק המוביל בשירותי ענן</p>
-            </div>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>💻 EC2 - Elastic Compute Cloud</h4>
-                    <ul>
-                        <li>יצירת instances, מכונות וירטואליות ושירותים מסוגים שונים</li>
-                        <li>תשלום על מה שאתה צריך כשאתה צריך</li>
-                        <li>סקלביליות מלאה - הגדלה/הקטנה לפי דרישה</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🗄️ S3 - Simple Storage Service</h4>
-                    <ul>
-                        <li>אחסון ענן כללי (זול אך לא מהיר במיוחד)</li>
-                        <li>זמינות (Availability) של 99.99%</li>
-                        <li>עמידות (Durability) של 99.999999999% (11 תשיעיות!)</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="tech-grid mt-lg">
-                <div class="tech-category">
-                    <h4>שירותי AWS נוספים להנדסת נתונים</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">EMR - Elastic MapReduce</span>
-                        <span class="tech-tag">Redshift - Data Warehouse</span>
-                        <span class="tech-tag">Athena - SQL on S3</span>
-                        <span class="tech-tag">Glue - ETL Service</span>
-                        <span class="tech-tag">Kinesis - Real-time Streaming</span>
-                        <span class="tech-tag">Lambda - Serverless Compute</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 8: Main Activity Areas -->
-        <section class="section">
-            <h2>תחומי פעילות עיקריים</h2>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>🔧 בסיסי נתונים יחסיים</h4>
-                    <p>ניהול וארגון נתונים מובנים במבנה טבלאי מסורתי</p>
-                </div>
-                <div class="capability-card">
-                    <h4>📊 BI והנדסת נתונים</h4>
-                    <p>פיתוח מערכות בינה עסקית וכלי דיווח</p>
-                </div>
-                <div class="capability-card">
-                    <h4>☁️ פתרונות ענן</h4>
-                    <p>פיתוח פתרונות מבוססי ענן גמישים ומדרגים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>🗄️ ביג דאטה ו-NoSQL</h4>
-                    <p>עבודה עם נפחי נתונים גדולים ומבני נתונים לא מובנים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>🧠 מדע הנתונים</h4>
-                    <p>פיתוח מודלים אנליטיים ואלגוריתמי למידת מכונה</p>
-                </div>
-                <div class="capability-card">
-                    <h4>💻 פיתוח תוכנה</h4>
-                    <p>בניית אפליקציות ומערכות לעיבוד נתונים</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 9: Technology Stack -->
-        <section class="section">
-            <h2>מחסנית הטכנולוגיות</h2>
-
-            <div class="tech-grid">
-                <div class="tech-category">
-                    <h4>אנליטיקה, BI ומדע נתונים</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Tableau</span>
-                        <span class="tech-tag">Power BI</span>
-                        <span class="tech-tag">SQL Server</span>
-                        <span class="tech-tag">Oracle BI</span>
-                        <span class="tech-tag">R</span>
-                        <span class="tech-tag">Python</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>פלטפורמות ענן</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">AWS</span>
-                        <span class="tech-tag">Microsoft Azure</span>
-                        <span class="tech-tag">Google Cloud</span>
-                        <span class="tech-tag">Snowflake</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>בסיסי נתונים יחסיים</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Oracle Database</span>
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">PostgreSQL</span>
-                        <span class="tech-tag">Microsoft SQL Server</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>ביג דאטה ו-NoSQL</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Hadoop</span>
-                        <span class="tech-tag">Spark</span>
-                        <span class="tech-tag">Cassandra</span>
-                        <span class="tech-tag">MongoDB</span>
-                        <span class="tech-tag">Elasticsearch</span>
-                        <span class="tech-tag">Redis</span>
-                        <span class="tech-tag">Kafka</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 10: Data Engineer Capabilities -->
-        <section class="section">
-            <h2>יכולות מהנדס נתונים</h2>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>🏗️ בניית תשתיות נתונים</h4>
-                    <p>יצירת ארכיטקטורות מתקדמות לניהול ועיבוד נתונים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>🔄 פיתוח צינורות נתונים</h4>
-                    <p>בניית תהליכי ETL/ELT מתקדמים ואוטומטיים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>🔗 יצירת אפליקציות ו-API</h4>
-                    <p>פיתוח ממשקי תכנות ואפליקציות לעיבוד נתונים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>⚡ הפיכת נתונים לשימושיים</h4>
-                    <p>טרנספורמציה של נתונים גולמיים לפורמט מובן ופעיל</p>
-                </div>
-                <div class="capability-card">
-                    <h4>☁️ פתרונות ענן</h4>
-                    <p>יצירת פתרונות מבוססי ענן מדרגים ויעילים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>🔍 אופטימיזציה וביצועים</h4>
-                    <p>שיפור ביצועי שאילתות ותהליכי עיבוד נתונים</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 11: Data Pipelines -->
-        <section class="section">
-            <h2>צינורות נתונים (Data Pipelines)</h2>
+            <h2>מהו Linux?</h2>
 
             <div class="highlight-box">
                 <h3>הגדרה</h3>
-                <p>סדרה של שלבים ללכידה, טרנספורמציה וטעינת נתונים ליעדים מוגדרים</p>
-            </div>
-
-            <h3>דרישות עיקריות:</h3>
-            <ul>
-                <li><strong>תמיכה בפונקציונליות מגוונת</strong> - טרנספורמציות מורכבות</li>
-                <li><strong>עמידה בדרישות ביצועים</strong> - זמני תגובה, throughput</li>
-                <li><strong>יכולות הרחבה</strong> (Scalability) - התמודדות עם גידול בנפחים</li>
-                <li><strong>עמידות בתקלות</strong> (Fault Tolerance) - המשכיות עסקית</li>
-                <li><strong>ניטור ותחזוקה</strong> - logging, alerting, debugging</li>
-            </ul>
-        </section>
-
-        <!-- Section 12: Batch vs Streaming -->
-        <section class="section">
-            <h2>Batch vs Streaming Processing</h2>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>📦 Batch Processing</h4>
-                    <p><strong>עיבוד קבוצתי:</strong></p>
-                    <ul>
-                        <li>מטפל בסטים גדולים של נתונים במרווחי זמן מוגדרים</li>
-                        <li>תהליך ETL מסורתי - העברת נתונים ממקורות ליעדים</li>
-                        <li>יעיל כאשר לא נדרשת זמינות נתונים בזמן אמת</li>
-                        <li>דוגמאות: דוחות יומיים, סיכומים חודשיים</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>⚡ Streaming Processing</h4>
-                    <p><strong>עיבוד בזמן אמת:</strong></p>
-                    <ul>
-                        <li>נתונים נוצרים ומועברים ברציפות ממקורות רבים</li>
-                        <li>אלפי קלטי נתונים בגדלים קטנים (KB) במקביל</li>
-                        <li>איסוף נתונים ממכשירים מפוזרים גיאוגרפית בזמן יצירתם</li>
-                        <li>דוגמאות: IoT sensors, financial trading, real-time analytics</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 13: Big Data Birth -->
-        <section class="section">
-            <h2>הולדת הביג דאטה</h2>
-
-            <div class="highlight-box">
-                <h3>האתגר</h3>
-                <p>מערכות RDBMS מסורתיות לא יכלו להתמודד עם סקאלות של ביג דאטה</p>
+                <p>Linux הוא ליבת מערכת הפעלה בקוד פתוח שנוצרה על ידי לינוס טורבאלדס</p>
             </div>
 
             <ul>
-                <li><strong>חברות נאלצו למצוא פתרונות חלופיים</strong> - מגבלות הטכנולוגיה המסורתית</li>
-                <li><strong>BigData ו-NoSQL נכנסו לעולם</strong> - והציגו מגוון רחב של פתרונות נתונים</li>
-                <li><strong>יכולות חדשות:</strong> רכישה, אחסון וניתוח של נפחי נתונים עצומים</li>
-                <li><strong>הדגש עבר מ-Schema on Write ל-Schema on Read</strong> - גמישות מקסימלית</li>
-            </ul>
-
-            <div class="info-banner">
-                <p>הביג דאטה שינה את הדרך שבה חברות חושבות על נתונים - מנכס מוגבל לאינסוף אפשרויות</p>
-            </div>
-        </section>
-
-        <!-- Section 14: Cloud Migration -->
-        <section class="section">
-            <h2>המעבר לענן</h2>
-
-            <p style="font-size: var(--text-lg); margin-bottom: var(--space-md);">
-                חברות עוברות יותר ויותר לארכיטקטורות מבוססות ענן עם ספקים כמו:
-            </p>
-
-            <div class="tech-list mb-lg">
-                <span class="tech-tag">AWS</span>
-                <span class="tech-tag">Google Cloud Platform</span>
-                <span class="tech-tag">Microsoft Azure</span>
-                <span class="tech-tag">Alibaba Cloud</span>
-                <span class="tech-tag">Oracle Cloud</span>
-            </div>
-
-            <div class="info-banner">
-                <p>הענן הציבורי מציע סט מקיף ויעיל של שירותים מנוהלים לרכישה, אחסון וניתוח נתונים בכל סקאלה ומהירות.</p>
-            </div>
-        </section>
-
-        <!-- Section 15: ACID vs BASE -->
-        <section class="section">
-            <h2>ACID vs BASE</h2>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>🔒 ACID</h4>
-                    <p><strong>Synchronous Replication</strong></p>
-                    <ul>
-                        <li>רפליקציה סינכרונית בין Master ו-Replica</li>
-                        <li>המתנה לאישור כתיבה משני הצדדים</li>
-                        <li>עקביות מלאה של הנתונים (Consistency)</li>
-                        <li>מתאים למערכות בנקאות, טרנזקציות כספיות</li>
-                    </ul>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🔄 BASE</h4>
-                    <p><strong>Asynchronous Replication</strong></p>
-                    <ul>
-                        <li>רפליקציה א-סינכרונית</li>
-                        <li>אישור מיידי ללקוח לאחר כתיבה ל-Master</li>
-                        <li>עקביות בסופו של דבר (Eventual Consistency)</li>
-                        <li>מתאים לרשתות חברתיות, e-commerce, analytics</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 16: Modern Data Platforms -->
-        <section class="section">
-            <h2>פלטפורמות נתונים מודרניות</h2>
-
-            <h3>On-premises או בענן</h3>
-
-            <div class="tech-grid">
-                <div class="tech-category">
-                    <h4>בסיסי נתונים יחסיים</h4>
-                    <p><strong>Commercial:</strong></p>
-                    <div class="tech-list">
-                        <span class="tech-tag">Oracle</span>
-                        <span class="tech-tag">SQL Server</span>
-                        <span class="tech-tag">IBM DB2</span>
-                    </div>
-                    <p style="margin-top: var(--space-sm);"><strong>Open Source:</strong></p>
-                    <div class="tech-list">
-                        <span class="tech-tag">PostgreSQL</span>
-                        <span class="tech-tag">MySQL</span>
-                        <span class="tech-tag">MariaDB</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>ביג דאטה</h4>
-                    <p><strong>Data Lakes (Analytics):</strong></p>
-                    <div class="tech-list">
-                        <span class="tech-tag">Cloudera</span>
-                        <span class="tech-tag">Amazon S3</span>
-                        <span class="tech-tag">Amazon EMR</span>
-                        <span class="tech-tag">Amazon Athena</span>
-                        <span class="tech-tag">Azure Data Lake</span>
-                    </div>
-                    <p style="margin-top: var(--space-sm);"><strong>NoSQL (Operational):</strong></p>
-                    <div class="tech-list">
-                        <span class="tech-tag">MongoDB</span>
-                        <span class="tech-tag">Redis</span>
-                        <span class="tech-tag">Cassandra</span>
-                        <span class="tech-tag">DynamoDB</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>Cloud Data Warehouse</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Amazon Redshift</span>
-                        <span class="tech-tag">Snowflake</span>
-                        <span class="tech-tag">Google BigQuery</span>
-                        <span class="tech-tag">Azure Synapse</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>Search Engines</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Elasticsearch</span>
-                        <span class="tech-tag">Splunk</span>
-                        <span class="tech-tag">Apache Solr</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 17: Hadoop -->
-        <section class="section">
-            <h2>Apache Hadoop - הדור הראשון של Data Lakes</h2>
-
-            <div class="highlight-box">
-                <h3>פלטפורמת האנליטיקה של ביג דאטה</h3>
-                <p>הפלטפורמה המובילה הראשונה לניתוח נפחי נתונים גדולים</p>
-            </div>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>🎯 Hadoop Core</h4>
-                    <p>פלטפורמה מבוזרת לניתוח batch של נפחים גדולים של נתונים מובנים ולא מובנים</p>
-                </div>
-                <div class="capability-card">
-                    <h4>🌐 Hadoop Ecosystem</h4>
-                    <p>מרחיב את יכולות Hadoop עם כלים לטעינת נתונים, ניתוח, ויזואליזציה, אינטגרציה ותמיכה בזמן אמת</p>
-                </div>
-            </div>
-
-            <h3>למה Hadoop חשוב?</h3>
-
-            <div class="tech-grid">
-                <div class="v-card">
-                    <h4>מהירות</h4>
-                    <p>עיבוד ואחסון מהיר</p>
-                </div>
-                <div class="v-card">
-                    <h4>עלות</h4>
-                    <p>עלות נמוכה</p>
-                </div>
-                <div class="v-card">
-                    <h4>סקלביליות</h4>
-                    <p>גדילה אופקית</p>
-                </div>
-                <div class="v-card">
-                    <h4>כוח מחשוב</h4>
-                    <p>עיבוד מבוזר</p>
-                </div>
-                <div class="v-card">
-                    <h4>גמישות</h4>
-                    <p>כל סוגי הנתונים</p>
-                </div>
-                <div class="v-card">
-                    <h4>עמידות</h4>
-                    <p>סובלנות לתקלות</p>
-                </div>
-            </div>
-
-            <ul style="margin-top: var(--space-lg);">
-                <li>התחיל כפתרון on-premises, כיום זמין גם בענן</li>
-                <li>ההפצה המובילה של Hadoop היא <strong>Cloudera</strong></li>
+                <li>משמש כבסיס להפצות Linux שונות, ומציע יציבות, אבטחה וגמישות</li>
+                <li>בשימוש נרחב בשרתים, מחשבים שולחניים, סמארטפונים ומכשירים נוספים</li>
+                <li>מערכת אקולוגית עצומה של תוכנות חינמיות בקוד פתוח</li>
+                <li>מספק גם ממשק שורת פקודה וגם ממשקים גרפיים</li>
             </ul>
         </section>
 
-        <!-- Section 18: Apache Spark -->
+        <!-- Section 2: Linux in the World -->
         <section class="section">
-            <h2>Apache Spark</h2>
+            <h2>Linux בעולם - נתונים מרשימים</h2>
 
-            <div class="highlight-box">
-                <h3>מנוע מהיר וכללי לעיבוד נתונים בקנה מידה גדול</h3>
-                <p>אחד מפרויקטי Apache הצומחים במהירות הגבוהה ביותר</p>
-            </div>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>⚡ מאפיינים עיקריים</h4>
-                    <ul>
-                        <li>כולל map ו-reduce וגם מודלים לעיבוד non-batch</li>
-                        <li>עובד ישירות עם HDFS</li>
-                        <li>עיבוד כמעט בזמן אמת</li>
-                        <li>Caching בזיכרון לאיטרציות יעילות</li>
-                        <li>מהיר פי 100 מ-MapReduce</li>
-                    </ul>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>97%</h4>
+                    <p>ממחשבי העל בעולם</p>
                 </div>
-                <div class="capability-card">
-                    <h4>🛠️ Framework ברמה גבוהה</h4>
-                    <ul>
-                        <li>מתכנתים יכולים להתמקד בלוגיקה ולא בתשתית</li>
-                        <li>עיבוד מבוזר על פני צמתי worker</li>
-                        <li>אחסון מבוזר עם סקלביליות אופקית</li>
-                        <li>סובלנות לתקלות מובנית</li>
-                    </ul>
+                <div class="stat-card">
+                    <h4>80%</h4>
+                    <p>מכלל הסמארטפונים</p>
+                </div>
+                <div class="stat-card">
+                    <h4>70%</h4>
+                    <p>משרתי האינטרנט</p>
                 </div>
             </div>
 
-            <h3>רכיבי Spark העיקריים</h3>
-            <div class="vs-grid">
-                <div class="v-card">
-                    <h4>Spark SQL</h4>
-                    <p>עיבוד נתונים מובנים</p>
-                </div>
-                <div class="v-card">
-                    <h4>Spark Streaming</h4>
-                    <p>עיבוד נתונים בזמן אמת</p>
-                </div>
-                <div class="v-card">
-                    <h4>Spark ML</h4>
-                    <p>למידת מכונה וניתוח מתקדם</p>
-                </div>
-                <div class="v-card">
-                    <h4>GraphX</h4>
-                    <p>עיבוד וניתוח גרפים</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 19: NoSQL -->
-        <section class="section">
-            <h2>NoSQL Databases - ביג דאטה תפעולי</h2>
-
-            <div class="highlight-box">
-                <h3>יכולות עיקריות</h3>
-                <p>אחסון ושליפת נתונים בזמן אמת במהירות וסקאלה גבוהה<br>
-                (תומך במיליוני פעולות הכנסה/שליפה בשנייה)</p>
-            </div>
-
+            <h3>Linux נמצא בכל מקום:</h3>
             <ul>
-                <li><strong>משמש באפליקציות ביג דאטה</strong> ואפליקציות web בזמן אמת</li>
-                <li><strong>דוחה את המגבלות</strong> של המודל היחסי לטובת ביצועים וזמינות</li>
-                <li><strong>גמישות סכמה</strong> - Schema-less או Schema-flexible</li>
-                <li><strong>סקלביליות אופקית</strong> - הוספת שרתים לגדילה</li>
+                <li><strong>מחשוב ענן</strong> מבוסס ברובו על מערכות Linux</li>
+                <li><strong>רוב תוכנות הקוד הפתוח</strong> מפותחות על Linux</li>
+                <li><strong>מיליוני מחשבים שולחניים</strong> ברחבי העולם</li>
+                <li><strong>מכשירי חשמל, מודמים, נתבים</strong> ומכוניות אוטונומיות</li>
+                <li><strong>תחנות חלל, מחשבים ניידים</strong> ועוד...</li>
             </ul>
 
-            <div class="tech-grid mt-lg">
-                <div class="tech-category">
-                    <h4>Document Stores</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">MongoDB</span>
-                        <span class="tech-tag">Couchbase</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>Key-Value Stores</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Redis</span>
-                        <span class="tech-tag">DynamoDB</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>Wide Column Stores</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Cassandra</span>
-                        <span class="tech-tag">HBase</span>
-                    </div>
-                </div>
-
-                <div class="tech-category">
-                    <h4>Graph Databases</h4>
-                    <div class="tech-list">
-                        <span class="tech-tag">Neo4j</span>
-                        <span class="tech-tag">Amazon Neptune</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 20: Search Engines -->
-        <section class="section">
-            <h2>מנועי חיפוש (Search Engines)</h2>
-
-            <p style="font-size: var(--text-lg); margin-bottom: var(--space-md);">
-                מנועי חיפוש ואנליטיקה אינטואיטיביים המסוגלים לחקור כמויות עצומות של נתונים למקרי שימוש שונים.
-            </p>
-
-            <div class="info-banner">
-                <p>דוגמאות: Google Ngram Viewer ו-Google Trends הם דוגמאות נאות לכוח של מנועי חיפוש בניתוח נתונים בסקאלה גדולה</p>
-            </div>
-
-            <h3>Elastic Stack - מנוע החיפוש הפופולרי ביותר</h3>
-
-            <div class="data-flow">
-                <div class="flow-step">
-                    <h4>1. Collection</h4>
-                    <p>Beats</p>
-                </div>
-                <div class="flow-step">
-                    <h4>2. Enrichment</h4>
-                    <p>Logstash</p>
-                </div>
-                <div class="flow-step">
-                    <h4>3. Storage</h4>
-                    <p>Elasticsearch</p>
-                </div>
-                <div class="flow-step">
-                    <h4>4. Alerting</h4>
-                    <p>X-Pack</p>
-                </div>
-                <div class="flow-step">
-                    <h4>5. Visualization</h4>
-                    <p>Kibana</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 21: Streaming Platforms -->
-        <section class="section">
-            <h2>פלטפורמות Data Streaming</h2>
-
             <div class="highlight-box">
-                <h3>מטרה</h3>
-                <p>פלטפורמות streaming מתוכננות לטפל בנפחים גבוהים של זרמי נתונים בזמן אמת<br>
-                ומאפשרות בניית אפליקציות סקלביליות, עמידות לתקלות וזמינות גבוהה</p>
-            </div>
-
-            <h3>Apache Kafka</h3>
-            <div class="capability-card">
-                <h4>🔄 פלטפורמת ה-Streaming המובילה</h4>
-                <p>משמשת כ"מרכז מבוזר" בו <strong>Producers</strong> מפרסמים הודעות לנושאים (topics) ספציפיים,
-                ו-<strong>Consumers</strong> נרשמים לנושאים אלה כדי לקבל את ההודעות בזמן אמת.</p>
-
-                <div style="margin-top: var(--space-md);">
-                    <p><strong>ארכיטקטורה:</strong></p>
-                    <ul>
-                        <li><strong>Producers</strong> - שולחים הודעות ל-Kafka Cluster</li>
-                        <li><strong>Topics</strong> - מחולקים ל-Partitions לסקלביליות</li>
-                        <li><strong>Consumers</strong> - קוראים הודעות מה-Topics</li>
-                        <li><strong>ZooKeeper/KRaft</strong> - ניהול ותיאום המערכת</li>
-                    </ul>
-                </div>
-
-                <div style="margin-top: var(--space-md);">
-                    <p><strong>שימושים נפוצים:</strong></p>
-                    <div class="tech-list">
-                        <span class="tech-tag">Web Activity Tracking</span>
-                        <span class="tech-tag">Microservices</span>
-                        <span class="tech-tag">Monitoring</span>
-                        <span class="tech-tag">Real-time Analytics</span>
-                        <span class="tech-tag">IoT Data</span>
-                        <span class="tech-tag">Log Aggregation</span>
-                        <span class="tech-tag">Event Sourcing</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 22: The Rise of Data Engineering -->
-        <section class="section">
-            <h2>עליית הנדסת הנתונים</h2>
-
-            <div class="highlight-box">
-                <h3>The Rise of Data Engineering</h3>
-                <p style="font-size: var(--text-xl);">מהנדסי נתונים הם עמוד השדרה של ארכיטקטורת הנתונים המודרנית</p>
-            </div>
-
-            <div class="capabilities-grid">
-                <div class="capability-card">
-                    <h4>🏗️ עמוד השדרה של הארכיטקטורה</h4>
-                    <p>ברור כיום שמהנדסי נתונים מהווים את <span class="emphasis-text">עמוד השדרה</span> של ארכיטקטורת הנתונים המודרנית, המאפשרת פונקציונליות עסקית וצמיחה</p>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🎯 תפקיד רב-תחומי</h4>
-                    <p>הנדסת נתונים היא תפקיד רב-תחומי הדורש מערך רחב של כישורים, כמו גם ידע טכני ועסקי עמוק</p>
-                </div>
-
-                <div class="capability-card">
-                    <h4>🚀 חיוניות בעידן המודרני</h4>
-                    <p>העידן המודרני של ביג דאטה ובינה מלאכותית לא יכול לשרוד יום אחד ללא מהנדסי נתונים</p>
-                </div>
-            </div>
-
-            <h3 class="text-center mt-lg">מסע הנדסת הנתונים</h3>
-
-            <div class="data-flow">
-                <div class="flow-step">
-                    <h4>📚 לימוד</h4>
-                    <p>רכישת מיומנויות</p>
-                </div>
-                <div class="flow-step">
-                    <h4>🔧 יישום</h4>
-                    <p>בניית פתרונות</p>
-                </div>
-                <div class="flow-step">
-                    <h4>📊 ניתוח</h4>
-                    <p>הפקת תובנות</p>
-                </div>
-                <div class="flow-step">
-                    <h4>💡 חדשנות</h4>
-                    <p>יצירת ערך</p>
-                </div>
-                <div class="flow-step">
-                    <h4>🎯 השפעה</h4>
-                    <p>צמיחה עסקית</p>
-                </div>
-            </div>
-
-            <div class="conclusion-box">
-                <h3>המסקנה</h3>
-                <p>
-                    הנדסת נתונים היא לא רק מקצוע - היא התשתית הקריטית שעליה נבנה העתיד הדיגיטלי.<br>
-                    <strong class="text-gradient">כל ארגון מודרני זקוק למהנדסי נתונים מיומנים כדי להצליח בעידן הנתונים.</strong>
+                <p style="font-size: var(--text-xl); font-weight: 600;">
+                    Linux היא ללא ספק מערכת ההפעלה הנפוצה ביותר בעולם!
                 </p>
             </div>
+        </section>
+
+        <!-- Section 3: Linux History -->
+        <section class="section">
+            <h2>היסטוריה של Linux - הנקודות החשובות</h2>
+
+            <div class="distro-grid">
+                <div class="distro-card">
+                    <h4>🐣 1983-1991: פרויקט GNU</h4>
+                    <ul>
+                        <li><strong>ריצ'רד סטולמן</strong> החל את פרויקט GNU ב-MIT</li>
+                        <li><strong>המטרה:</strong> מערכת הפעלה חופשית כחלופה ל-Unix</li>
+                        <li>פיתח כלים חיוניים: GCC, bash ועוד</li>
+                        <li><strong style="color: #e74c3c;">הבעיה:</strong> חסרה הליבה (kernel)</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4>🐧 1991: לידת Linux</h4>
+                    <ul>
+                        <li><strong>לינוס טורוואלדס</strong> - סטודנט פיני בן 21</li>
+                        <li><strong>25.8.91:</strong> ההודעה המפורסמת</li>
+                        <li><strong>17.9.91:</strong> גרסה 0.01 משוחררת</li>
+                        <li>הושפע מ-MINIX של אנדרו טננבאום</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4>🤝 העקרונות המייסדים</h4>
+                    <ul>
+                        <li><strong>קוד פתוח:</strong> הקוד זמין לכולם</li>
+                        <li><strong>פיתוח קהילתי:</strong> תרומות מרחבי העולם</li>
+                        <li><strong>רישיון GPL:</strong> חופש לשנות ולהפיץ</li>
+                        <li><strong>GNU + Linux</strong> = מערכת שלמה</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>אבני דרך חשובות</h3>
+            <div class="timeline-box">
+                <div class="timeline-content">
+                    <div>
+                        <strong>1992</strong> - פורט לארכיטקטורות נוספות<br>
+                        <strong>1994</strong> - גרסה 1.0 יציבה<br>
+                        <strong>1996</strong> - טקס הפינגווין נבחר כקמע
+                    </div>
+                    <div>
+                        <strong>1993</strong> - הפצות ראשונות (Slackware, Debian)<br>
+                        <strong>1998</strong> - נטסקייפ משחררת קוד<br>
+                        <strong>2000</strong> - IBM משקיעה מיליארד דולר
+                    </div>
+                    <div>
+                        <strong>2007</strong> - גוגל מכריזה על אנדרואיד<br>
+                        <strong>2011</strong> - Linux על 90% מהמחשבי-על<br>
+                        <strong>היום</strong> - השולט בכל מקום
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>המסר המרכזי</h3>
+                <p>מה שהתחיל כפרויקט אישי קטן של סטודנט הפך למערכת ההפעלה הנפוצה ביותר בעולם - מהטלפונים הניידים ועד לענני גוגל ואמזון!</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Linux Distributions -->
+        <section class="section">
+            <h2>הפצות Linux</h2>
+
+            <h3>מהי הפצת Linux?</h3>
+            <ul>
+                <li><strong>אוסף של תוכנות</strong> (בדרך כלל קוד פתוח) על גבי ליבת Linux</li>
+                <li><strong>כוללת תוכנות שרת</strong>, כלי ניהול מערכת, תיעוד ויישומי שולחן עבודה</li>
+                <li><strong>מאוחסנת במאגר תוכנה</strong> מרכזי ומאובטח</li>
+                <li><strong>מספקת מראה ותחושה אחידים</strong>, ניהול תוכנה קל ומטרה תפעולית ספציפית</li>
+            </ul>
+
+            <h3>הפצות מובילות</h3>
+
+            <div class="distro-grid">
+                <div class="distro-card">
+                    <h4><span style="color: #cc0000;">🎩 Red Hat</span></h4>
+                    <ul>
+                        <li>חברת Linux מסחרית בשווי מיליארד דולר</li>
+                        <li>מאות מומחי Linux ותמיכה מעולה</li>
+                        <li>מוצרים: Red Hat Enterprise Linux ו-Fedora</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4><span style="color: #dd4814;">🟠 Ubuntu</span></h4>
+                    <ul>
+                        <li>החלה לשלוח דיסקים חינמיים ב-2004</li>
+                        <li>פופולרית מאוד למשתמשים ביתיים</li>
+                        <li>המטרה: שולחן עבודה גרפי ללא צורך בשורת פקודה</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4><span style="color: #a80030;">🔴 Debian</span></h4>
+                    <ul>
+                        <li>אלפי מפתחים מאורגנים בוחרים מנהיג פרויקט כל שנתיים</li>
+                        <li>נחשבת לאחת ההפצות היציבות ביותר</li>
+                        <li>גרסאות נקראות על שם דמויות מהסרט Toy Story</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4><span style="color: #262577;">🟣 CentOS</span></h4>
+                    <ul>
+                        <li>פלטפורמת מחשוב חינמית ברמה ארגונית</li>
+                        <li>נתמכת על ידי הקהילה</li>
+                        <li>ב-2014 הצטרפה ל-RHEL תוך שמירה על עצמאות</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>הפצות נוספות</h3>
+            <ul>
+                <li><strong>Oracle Enterprise Linux</strong> ו-<strong>Scientific Linux</strong> - מבוססות על Red Hat Enterprise Linux</li>
+                <li><strong>Linux Mint</strong>, <strong>Edubuntu</strong> ועוד רבות - מבוססות על Ubuntu</li>
+                <li>בסך הכל קיימות מאות הפצות Linux שונות!</li>
+            </ul>
+        </section>
+
+        <!-- Section 5: Choosing a Distribution -->
+        <section class="section">
+            <h2>בחירת הפצת Linux</h2>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>שם ההפצה</th>
+                        <th>מאפיינים ושימושים</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Red Hat Enterprise</strong></td>
+                        <td>לארגונים הזקוקים לחוזה תמיכה טוב (RHEL)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CentOS</strong></td>
+                        <td>Red Hat ללא חוזה התמיכה מ-Red Hat</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fedora</strong></td>
+                        <td>Red Hat למחשב נייד/שולחני ללא תמיכה</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Linux Mint</strong></td>
+                        <td>שולחן עבודה גרפי אישי לסרטים, מוזיקה ומשחקים</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Debian</strong></td>
+                        <td>טובה לשרתים, מחשבים ניידים וכל מכשיר אחר</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ubuntu</strong></td>
+                        <td>פופולרית מאוד, מבוססת על Debian</td>
+                    </tr>
+                    <tr>
+                        <td><strong>אחרות</strong></td>
+                        <td>משתמשים מתקדמים עשויים להעדיף Arch, Gentoo, SUSE, Scientific...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Section 6: Agenda -->
+        <section class="section">
+            <h2>Linux בסיסי - סדר היום</h2>
+
+            <div class="agenda-list">
+                <div class="agenda-item">התחברות באמצעות Putty</div>
+                <div class="agenda-item">עבודה עם תיקיות</div>
+                <div class="agenda-item">עבודה עם קבצים</div>
+                <div class="agenda-item">עבודה עם תוכן קבצים</div>
+                <div class="agenda-item">עץ הקבצים של Linux</div>
+            </div>
+        </section>
+
+        <!-- Section 7: PuTTY -->
+        <section class="section">
+            <h2>שימוש ב-PuTTY</h2>
+
+            <h3>מהו PuTTY?</h3>
+            <ul>
+                <li><strong>אמולטור טרמינל וקליינט SSH</strong> חינמי בקוד פתוח ל-Windows</li>
+                <li><strong>מאפשר התחברות מאובטחת</strong> לשרתי Linux מרוחקים</li>
+                <li><strong>ביצוע פקודות והעברת קבצים</strong></li>
+                <li><strong>ממשק קל וידידותי</strong> למשתמש</li>
+                <li><strong>נמצא בשימוש נרחב</strong> על ידי מנהלי מערכת ומפתחים</li>
+            </ul>
+
+            <div class="highlight-box info">
+                <h3>🔐 מהו SSH?</h3>
+                <p><strong>SSH = Secure Shell - פרוטוקול מאובטח לחיבור למחשבים מרחוק</strong></p>
+                <p>נוצר ב-1995 כדי לאבטח תקשורת דרך האינטרנט, ומאז הפך לסטנדרט עולמי בכל מערכות ההפעלה, במיוחד בלינוקס ו-Unix.</p>
+            </div>
+
+            <div class="tech-tag">💡 טיפ: לשימוש מתקדם יותר, מומלץ MobaXterm</div>
+        </section>
+
+        <!-- Section 8: Modern Terminals -->
+        <section class="section">
+            <h2>כלי טרמינל מודרניים למהנדסי נתונים</h2>
+
+            <div class="distro-grid">
+                <div class="distro-card">
+                    <h4>🚀 Warp - AI Terminal</h4>
+                    <ul>
+                        <li>טרמינל מודרני עם יכולות AI מובנות</li>
+                        <li>השלמה אוטומטית חכמה של פקודות</li>
+                        <li>ממשק גרפי יפהפה ומודרני</li>
+                        <li>היסטוריית פקודות חכמה עם חיפוש</li>
+                        <li>תמיכה ב-Workflows לאוטומציה</li>
+                        <li>עורך מובנה לפקודות מרובות שורות</li>
+                    </ul>
+                    <div class="tech-tag">מומלץ למפתחים ומהנדסי נתונים</div>
+                </div>
+
+                <div class="distro-card">
+                    <h4>🐚 Zsh - Z Shell</h4>
+                    <ul>
+                        <li>Shell מודרני וחזק יותר מ-bash</li>
+                        <li>השלמה אוטומטית מתקדמת</li>
+                        <li>תיקון שגיאות אוטומטי</li>
+                        <li>היסטוריה משותפת בין חלונות</li>
+                        <li>Globbing מתקדם (חיפוש קבצים)</li>
+                        <li>ברירת מחדל ב-macOS</li>
+                    </ul>
+                    <div class="command-box"># התקנה ב-Linux
+sudo apt install zsh
+# הגדרה כ-shell ברירת מחדל
+chsh -s $(which zsh)</div>
+                </div>
+
+                <div class="distro-card">
+                    <h4>🎨 Oh My Zsh</h4>
+                    <ul>
+                        <li>Framework לניהול תצורת Zsh</li>
+                        <li>מעל 300 תוספים (plugins) מובנים</li>
+                        <li>מעל 140 ערכות נושא (themes)</li>
+                        <li>עדכונים אוטומטיים</li>
+                        <li>קהילה פעילה ותמיכה רחבה</li>
+                    </ul>
+                    <div class="command-box"># התקנה
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</div>
+                </div>
+            </div>
+
+            <h3>תוספים מומלצים ל-Oh My Zsh</h3>
+            <div style="background: var(--bg-light); padding: var(--space-md); border-radius: var(--radius-md); margin: var(--space-md) 0;">
+                <h4>תוספים חיוניים</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm);">
+                    <span class="tech-tag">git</span>
+                    <span class="tech-tag">docker</span>
+                    <span class="tech-tag">kubectl</span>
+                    <span class="tech-tag">aws</span>
+                    <span class="tech-tag">python</span>
+                    <span class="tech-tag">npm</span>
+                    <span class="tech-tag">autojump</span>
+                    <span class="tech-tag">zsh-autosuggestions</span>
+                    <span class="tech-tag">zsh-syntax-highlighting</span>
+                </div>
+            </div>
+
+            <h3>הגדרת Oh My Zsh</h3>
+            <div class="command-box"># עריכת קובץ התצורה
+nano ~/.zshrc
+
+# הוספת תוספים
+plugins=(git docker kubectl python npm)
+
+# בחירת ערכת נושא
+ZSH_THEME="robbyrussell"  # או agnoster, powerlevel10k</div>
+
+            <div class="highlight-box">
+                <h3>למה להשתמש בכלים המודרניים?</h3>
+                <p>כלים אלו מאיצים משמעותית את העבודה היומיומית, מקלים על ניווט וניהול שרתים, ומספקים חוויית משתמש מעולה עם יכולות אוטומציה מתקדמות.</p>
+            </div>
+        </section>
+
+        <!-- Section 9: Connecting with PuTTY -->
+        <section class="section">
+            <h2>התחברות באמצעות PuTTY</h2>
+
+            <h3>שלבי ההתחברות:</h3>
+            <ol>
+                <li>הורדת PuTTY מ-<span class="tech-tag">www.putty.org</span></li>
+                <li>יצירת חיבור חדש</li>
+                <li>הזנת כתובת IP של שרת Linux ופורט SSH (22 כברירת מחדל)</li>
+                <li>מתן שם ושמירת ה-Session</li>
+                <li>בפתיחת ה-Session - הזנת שם משתמש וסיסמה</li>
+            </ol>
+
+            <div class="command-box">נאי/naya (עבור DE's machine)</div>
+
+            <h3>פתרון בעיות:</h3>
+            <ul>
+                <li><strong>וידוא שהשרת פועל</strong></li>
+                <li><strong>בדיקת כתובת IP ומספרי פורט</strong></li>
+                <li><strong>וידוא שה-Firewall לא חוסם חיבורים</strong></li>
+            </ul>
+        </section>
+
+        <!-- Section 10: Everything is a File -->
+        <section class="section">
+            <h2>קונספט מרכזי: Everything is a File</h2>
+
+            <div class="highlight-box">
+                <h3>העיקרון המרכזי של Unix/Linux</h3>
+                <p>"הכל הוא קובץ" - גישה לעיצוב ממשק במערכות Unix ונגזרותיה</p>
+            </div>
+
+            <h3>מה זה אומר בפועל?</h3>
+            <div class="distro-grid">
+                <div class="distro-card">
+                    <h4>📄 קבצים רגילים</h4>
+                    <ul>
+                        <li>מסמכים, תמונות, סרטונים</li>
+                        <li>קבצי תצורה וסקריפטים</li>
+                        <li>קבצים בינאריים והפעלה</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4>📁 תיקיות</h4>
+                    <ul>
+                        <li>גם תיקיות הן "קבצים מיוחדים"</li>
+                        <li>מכילות רשימה של קבצים אחרים</li>
+                        <li>ניתן לקרוא אותן כמו קובץ</li>
+                    </ul>
+                </div>
+
+                <div class="distro-card">
+                    <h4>🔧 התקני חומרה</h4>
+                    <ul>
+                        <li><code>/dev/sda</code> - דיסק קשיח</li>
+                        <li><code>/dev/tty</code> - טרמינל</li>
+                        <li><code>/dev/null</code> - "חור שחור"</li>
+                        <li><code>/dev/random</code> - מספרים אקראיים</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>היתרונות של הגישה</h3>
+            <ul>
+                <li><strong>אחידות:</strong> אותן פקודות עובדות על הכל - <code>cat</code>, <code>echo</code>, <code>grep</code></li>
+                <li><strong>פשטות:</strong> אין צורך בממשקים מיוחדים לכל סוג משאב</li>
+                <li><strong>גמישות:</strong> ניתן להפנות פלט מכל דבר לכל דבר</li>
+                <li><strong>כוח:</strong> שליטה מלאה במערכת דרך ממשק אחיד</li>
+            </ul>
+
+            <h3>דוגמאות מעשיות</h3>
+            <div class="command-box"># קריאת מידע על המעבד
+cat /proc/cpuinfo
+
+# שליחת הודעה לטרמינל אחר
+echo "Hello" > /dev/pts/1
+
+# מחיקת נתונים מיותרים
+command_with_output > /dev/null
+
+# קריאת נתונים אקראיים
+head -c 100 /dev/random | base64</div>
+
+            <div class="highlight-box warning">
+                <h3>💡 הבנת הקונספט חשובה כי:</h3>
+                <p>זה מסביר למה ב-Linux אפשר לעשות דברים מדהימים עם פקודות פשוטות, ולמה הכל כל כך גמיש ועוצמתי!</p>
+            </div>
+        </section>
+
+        <!-- Section 11: Exercises List -->
+        <section class="section">
+            <h2>תרגילים מעשיים ל-Linux למהנדסי נתונים</h2>
+
+            <div class="highlight-box">
+                <h3>רשימת תרגילים</h3>
+                <p>8 תרגילים מעשיים ללימוד Linux</p>
+            </div>
+
+            <div class="agenda-list">
+                <div class="agenda-item">תרגיל 1 - עבודה עם תיקיות</div>
+                <div class="agenda-item">תרגיל 2 - עבודה עם קבצים</div>
+                <div class="agenda-item">תרגיל 3 - עבודה עם תוכן קבצים</div>
+                <div class="agenda-item">תרגיל 4 - עבודה עם משתנים</div>
+                <div class="agenda-item">תרגיל 5 - I/O redirection</div>
+                <div class="agenda-item">תרגיל 6 - Pipes ו-Filters</div>
+                <div class="agenda-item">תרגיל 7 - שימוש בעורך VI</div>
+                <div class="agenda-item">תרגיל 8 - הרשאות קבצים</div>
+            </div>
+        </section>
+
+        <!-- Exercise 1 -->
+        <section class="section">
+            <h2>תרגיל 1 - עבודה עם תיקיות (Directories)</h2>
+
+            <ol>
+                <li>הצג את התיקיה הנוכחית שלך
+                    <div class="command-box">pwd</div>
+                </li>
+
+                <li>עבור לתיקיה <code>/etc</code>
+                    <div class="command-box">cd /etc</div>
+                </li>
+
+                <li>עבור לתיקיית הבית שלך בשלושה לחיצות מקשים בלבד
+                    <div class="command-box">cd ~</div>
+                </li>
+
+                <li>עבור לתיקיה <code>/var/log</code> באמצעות מקש Tab
+                    <div class="command-box">cd /var/log [TAB]</div>
+                </li>
+
+                <li>הצג את תוכן התיקיה <code>/var/log</code>
+                    <div class="command-box">ls /var/log</div>
+                </li>
+
+                <li>עבור לתיקיית האב של התיקיה הנוכחית
+                    <div class="command-box">cd ..</div>
+                </li>
+
+                <li>הישאר היכן שאתה והצג את תוכן <code>/etc</code>
+                    <div class="command-box">ls /etc</div>
+                </li>
+
+                <li>הישאר היכן שאתה והצג את תוכן <code>/bin</code> ו-<code>/sbin</code>
+                    <div class="command-box">ls /bin /sbin</div>
+                </li>
+
+                <li>הישאר היכן שאתה והצג את תוכן תיקיית הבית (~)
+                    <div class="command-box">ls ~</div>
+                </li>
+
+                <li>הצג את כל הקבצים (כולל נסתרים) בתיקיית הבית שלך
+                    <div class="command-box">ls -la ~</div>
+                </li>
+
+                <li>הצג את הקבצים ב-<code>/boot</code> בפורמט קריא לאדם (גודל)
+                    <div class="command-box">ls -lh /boot</div>
+                </li>
+
+                <li>צור תיקיה בשם <code>testdir</code> בתיקיית הבית שלך
+                    <div class="command-box">mkdir ~/testdir</div>
+                </li>
+
+                <li>עבור ל-<code>/etc</code>, הישאר שם וצור תיקיה בשם <code>newdir</code> בתיקיית הבית
+                    <div class="command-box">cd /etc
+mkdir ~/newdir</div>
+                </li>
+
+                <li>צור את התיקיות הבאות עם תת-תיקיות:
+                    <div class="command-box">mkdir -p ~/tutorial/linux/dir1/dir2/dir3</div>
+                    <ul>
+                        <li>dir3 היא תת-תיקיה של dir2</li>
+                        <li>dir2 היא תת-תיקיה של dir1</li>
+                    </ul>
+                </li>
+
+                <li>מחק את התיקיה <code>testdir</code>
+                    <div class="command-box">rmdir ~/testdir</div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 2 -->
+        <section class="section">
+            <h2>תרגיל 2 - עבודה עם קבצים (Files)</h2>
+
+            <ol>
+                <li>הצג את הקבצים בתיקיה <code>/bin/</code>
+                    <div class="command-box">ls /bin/</div>
+                </li>
+
+                <li>צור קובץ בשם "myfile.txt" בתיקיית הבית שלך
+                    <div class="command-box">touch ~/myfile.txt</div>
+                </li>
+
+                <li>שנה את שם הקובץ ל-"mynewfile.txt"
+                    <div class="command-box">mv ~/myfile.txt ~/mynewfile.txt</div>
+                </li>
+
+                <li>העתק את הקובץ ל-"mycopy.txt"
+                    <div class="command-box">cp ~/mynewfile.txt ~/mycopy.txt</div>
+                </li>
+
+                <li>צור תיקיה בשם "tmpdir" בתיקיית הבית שלך
+                    <div class="command-box">mkdir ~/tmpdir</div>
+                </li>
+
+                <li>העתק את הקובץ שלך לתיקיה זו
+                    <div class="command-box">cp ~/mycopy.txt ~/tmpdir/</div>
+                </li>
+
+                <li>הצג את תוכן התיקיה וודא שהקובץ הועתק
+                    <div class="command-box">ls ~/tmpdir/</div>
+                </li>
+
+                <li>מחק את התיקיה ואת תוכנה בפקודה אחת
+                    <div class="command-box">rm -rf ~/tmpdir</div>
+                </li>
+
+                <li>מחק את כל הקבצים שיצרת בתרגיל זה
+                    <div class="command-box">rm ~/mynewfile.txt ~/mycopy.txt</div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 3 -->
+        <section class="section">
+            <h2>תרגיל 3 - עבודה עם תוכן קבצים</h2>
+
+            <ol>
+                <li>הצג את 12 השורות הראשונות של <code>/etc/services</code>
+                    <div class="command-box">head -12 /etc/services</div>
+                </li>
+
+                <li>הצג את השורה האחרונה של <code>/etc/passwd</code>
+                    <div class="command-box">tail -1 /etc/passwd</div>
+                </li>
+
+                <li>השתמש ב-cat כדי ליצור קובץ בשם count.txt בתיקיית הבית עם השורות הבאות:
+                    <div class="command-box">cat > ~/count.txt
+One
+Two
+Three
+Four
+Five
+[Ctrl+D]</div>
+                </li>
+
+                <li>השתמש ב-cat כדי ליצור גיבוי של הקובץ ל-catBCK.txt
+                    <div class="command-box">cat ~/count.txt > ~/catBCK.txt</div>
+                </li>
+
+                <li>השתמש גם ב-"more" וגם ב-"less" להצגת תוכן <code>/etc/services</code>
+                    <div class="command-box">more /etc/services
+less /etc/services</div>
+                    <p style="margin-top: var(--space-sm); color: var(--text-muted);">נסה לראות את ההבדל בין שתי הפקודות</p>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 4 -->
+        <section class="section">
+            <h2>תרגיל 4 - עבודה עם משתנים (Variables)</h2>
+
+            <ol>
+                <li>השתמש ב-echo להצגת Hello ואחריו שם המשתמש שלך (משתנה bash)
+                    <div class="command-box">echo Hello $USER</div>
+                </li>
+
+                <li>צור משתנה בשם <code>answer</code> עם הערך 42
+                    <div class="command-box">answer=42</div>
+                </li>
+
+                <li>העתק את הערך של <code>$LANG</code> ל-<code>$MyLANG</code> והצג אותו
+                    <div class="command-box">MyLANG=$LANG
+echo $MyLANG</div>
+                </li>
+
+                <li>בטל את המשתנה <code>answer</code>
+                    <div class="command-box">unset answer</div>
+                </li>
+
+                <li>צור משתנה והקצה לו את הערך 'Hello', צור משתנה נוסף עם הערך 'World', השתמש ב-echo ובשני המשתנים כדי להציג 'HelloWorld'
+                    <div class="command-box">var1='Hello'
+var2='World'
+echo $var1$var2</div>
+                </li>
+
+                <li>ייצא את המשתנה שלך
+                    <div class="command-box">export var1</div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 5 -->
+        <section class="section">
+            <h2>תרגיל 5 - I/O Redirection</h2>
+
+            <ol>
+                <li>הפנה את הפלט של <code>pwd</code> עם המחרוזת 'Files Under path:' והדפס את כל הקבצים תחת תיקיית הבית שלך לקובץ (צור קבצים בתיקייה אם נדרש)
+                    <div class="command-box">echo "Files Under path: $(pwd)" > ~/file_list.txt
+ls ~ >> ~/file_list.txt</div>
+
+                    <p style="margin-top: var(--space-md);"><strong>דוגמה לפלט:</strong></p>
+                    <div style="background: var(--bg-light); color: var(--text-primary); padding: var(--space-md); border-radius: var(--radius-md); font-family: var(--font-mono); margin-top: var(--space-sm);">Files Under path: /home/naya
+
+linux1.txt
+linux.txt
+part1
+part2
+part3
+system.log</div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 6 -->
+        <section class="section">
+            <h2>תרגיל 6 - Pipes ו-Filters</h2>
+
+            <ol>
+                <li>השתמש ב-pipe על הקובץ <code>/var/log/messages</code>:
+                    <ul style="margin-top: var(--space-sm);">
+                        <li>ספור את מספר השורות
+                            <div class="command-box">cat /var/log/messages | wc -l</div>
+                        </li>
+                        <li>הצג את 4 השורות הראשונות מ-10 השורות האחרונות
+                            <div class="command-box">tail -10 /var/log/messages | head -4</div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>השתמש ב-grep על הקובץ <code>/var/log/messages</code>:
+                    <ul style="margin-top: var(--space-sm);">
+                        <li>הצג רק שורות מהחודש הנוכחי
+                            <div class="command-box">grep "$(date +%b)" /var/log/messages</div>
+                        </li>
+                        <li>הצג שורות תוך ביטול כל השורות מהחודש הנוכחי
+                            <div class="command-box">grep -v "$(date +%b)" /var/log/messages</div>
+                        </li>
+                        <li>הצג שורות המכילות את המילה "ERROR", תוך התעלמות מגודל אותיות
+                            <div class="command-box">grep -i "ERROR" /var/log/messages</div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>צור קובץ חדש (sort.file) עם התוכן הבא:
+                    <div class="command-box">cat > ~/sort.file
+C3
+A1
+B2
+D4
+[Ctrl+D]</div>
+                    <ul style="margin-top: var(--space-sm);">
+                        <li>הצג את תוכן הקובץ
+                            <div class="command-box">cat ~/sort.file</div>
+                        </li>
+                        <li>מיין את תוכן הקובץ
+                            <div class="command-box">sort ~/sort.file</div>
+                        </li>
+                        <li>מיין את תוכן הקובץ בסדר הפוך
+                            <div class="command-box">sort -r ~/sort.file</div>
+                        </li>
+                        <li>הצג רק את הערך "C3" (בשתי שיטות)
+                            <div class="command-box">grep "C3" ~/sort.file
+grep -w "C3" ~/sort.file</div>
+                        </li>
+                        <li>הצג רק את הערך "B2" (בשתי שיטות)
+                            <div class="command-box">grep "B2" ~/sort.file
+sed -n '/B2/p' ~/sort.file</div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>צור קובץ חדש (uniq.file) עם התוכן הבא:
+                    <div class="command-box">cat > ~/uniq.file
+C3
+A1
+A1
+B2
+D4
+A1
+[Ctrl+D]</div>
+                    <ul style="margin-top: var(--space-sm);">
+                        <li>הצג את תוכן הקובץ
+                            <div class="command-box">cat ~/uniq.file</div>
+                        </li>
+                        <li>הסר ערכים כפולים
+                            <div class="command-box">sort ~/uniq.file | uniq</div>
+                        </li>
+                        <li>הסר כפילויות ומיין את הפלט בסדר הפוך
+                            <div class="command-box">sort ~/uniq.file | uniq | sort -r</div>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 7 -->
+        <section class="section">
+            <h2>תרגיל 7 - שימוש בעורך VI</h2>
+
+            <ol>
+                <li>הפעל את כלי vi ובצע את הפעולות הבאות (שם קובץ: file.txt):
+                    <div class="command-box">vi ~/file.txt</div>
+                </li>
+
+                <li>הכנס: "This is the first line"
+                    <div class="command-box">i
+This is the first line
+[ESC]</div>
+                </li>
+
+                <li>הכנס: "This is the second line"
+                    <div class="command-box">o
+This is the second line
+[ESC]</div>
+                </li>
+
+                <li>הכנס: This line is going to be deleted
+                    <div class="command-box">o
+This line is going to be deleted
+[ESC]</div>
+                </li>
+
+                <li>מחק את השורה השלישית באמצעות פקודת "delete row"
+                    <div class="command-box">dd</div>
+                </li>
+
+                <li>שנה את המילה "first" למילה "edited"
+                    <div class="command-box">/first
+cw
+edited
+[ESC]</div>
+                </li>
+
+                <li>שמור את הקובץ וצא בפקודה אחת
+                    <div class="command-box">:wq</div>
+                </li>
+
+                <li>הצג את הקובץ שלך באמצעות "cat"
+                    <div class="command-box">cat ~/file.txt</div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Exercise 8 -->
+        <section class="section">
+            <h2>תרגיל 8 - הרשאות קבצים (File Permissions)</h2>
+
+            <ol>
+                <li>צור קובץ חדש בשם "mysecret.txt"
+                    <div class="command-box">touch ~/mysecret.txt</div>
+                </li>
+
+                <li>בדוק את הרשאות הקובץ הנוכחיות ברמות "owner", "group" ו-"other"
+                    <div class="command-box">ls -l ~/mysecret.txt</div>
+                </li>
+
+                <li>הוסף הרשאת "Write" ברמות "group" ו-"other"
+                    <div class="command-box">chmod g+w,o+w ~/mysecret.txt</div>
+                </li>
+
+                <li>באמצעות סימון נומרי, הוסף הרשאות מלאות ברמת owner ו-group, ו-"Read" ו-"Execute" ברמת "other"
+                    <div class="command-box">chmod 775 ~/mysecret.txt</div>
+                </li>
+
+                <li>אמת את הרשאות הקובץ שלך
+                    <div class="command-box">ls -l ~/mysecret.txt</div>
+                </li>
+            </ol>
+        </section>
+
+        <!-- Final Section -->
+        <section class="section" style="background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%); color: var(--bg-white); text-align: center;">
+            <h2 style="color: var(--bg-white); border-bottom: none;">🎉 כל הכבוד!</h2>
+            <p style="font-size: var(--text-xl); margin: var(--space-md) 0;">סיימת את כל התרגילים בהצלחה</p>
+            <p style="font-size: var(--text-lg);">עכשיו יש לך בסיס טוב בעבודה עם Linux!</p>
         </section>
     </div>
 </body>
