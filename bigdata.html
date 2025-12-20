@@ -664,6 +664,9 @@
                 <a href="#" class="nav-item" data-section="layers">🗂️ מערכת Layers</a>
                 <a href="#" class="nav-item" data-section="cmd-vs-entrypoint">🎭 CMD vs ENTRYPOINT</a>
                 <a href="#" class="nav-item" data-section="copy-vs-add">📄 COPY vs ADD</a>
+                <a href="#" class="nav-item" data-section="signals">🎯 Signal Handling</a>
+                <a href="#" class="nav-item" data-section="dockerignore">📄 .dockerignore</a>
+                <a href="#" class="nav-item" data-section="arg-vs-env">🔀 ARG vs ENV</a>
                 <a href="#" class="nav-item" data-section="registries">📦 Registry</a>
                 <a href="#" class="nav-item" data-section="images">🖼️ ניהול Images</a>
                 <a href="#" class="nav-item" data-section="containers">📋 ניהול מתקדם</a>
@@ -1527,12 +1530,373 @@ ADD app.py /app/</div>
 
                     <div class="success-box">
                         <p><strong>💡 Best Practice:</strong> השתמש ב-COPY אלא אם כן אתה צריך באופן ספציפי את היכולות המתקדמות של ADD</p>
-                    </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Registry Section -->
-                <section class="section" id="registries">
-                    <h2>📦 Docker Registry</h2>
+            <!-- Signal Handling & PID 1 Section -->
+            <section class="section" id="signals">
+                <h2>🎯 Signal Handling & PID 1 Problem</h2>
+                
+                <h3>מהי בעיית PID 1?</h3>
+                <div class="warning-box">
+                    <p><strong>⚠️ בעיה קריטית:</strong> התהליך הראשון בקונטיינר (PID 1) מקבל טיפול מיוחד מה-kernel של Linux. אם הוא לא מטפל נכון ב-signals, הקונטיינר לא יכבה בצורה נכונה!</p>
+                </div>
+
+                <h3>Shell Form vs Exec Form</h3>
+                <div class="comparison-container">
+                    <div class="comparison-box">
+                        <h4>❌ Shell Form (בעיה)</h4>
+                        <div class="command-code" style="background: rgba(218, 54, 51, 0.15); color: #ff7b72;">CMD python app.py
+# או
+ENTRYPOINT python app.py</div>
+                        <div class="definition-text" style="margin-top: 15px;">
+                            <p><strong>מה קורה:</strong></p>
+                            <ul>
+                                <li>Docker מריץ: <code>/bin/sh -c "python app.py"</code></li>
+                                <li><code>/bin/sh</code> הוא PID 1 (לא Python!)</li>
+                                <li>ה-shell לא מעביר signals לתהליך הבן</li>
+                                <li><code>docker stop</code> ימתין 10 שניות ואז יהרוג בכוח (SIGKILL)</li>
+                                <li>❌ Graceful shutdown לא עובד</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="comparison-box">
+                        <h4>✅ Exec Form (נכון)</h4>
+                        <div class="command-code" style="background: rgba(35, 134, 54, 0.15); color: #7ee787;">CMD ["python", "app.py"]
+# או
+ENTRYPOINT ["python", "app.py"]</div>
+                        <div class="definition-text" style="margin-top: 15px;">
+                            <p><strong>מה קורה:</strong></p>
+                            <ul>
+                                <li>Python רץ ישירות כ-PID 1</li>
+                                <li>מקבל SIGTERM ישירות מ-Docker</li>
+                                <li>יכול לסגור connections, לשמור מצב, וכו'</li>
+                                <li>✅ Graceful shutdown עובד!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>בדיקה: מי PID 1?</h3>
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-usage">בדוק מי PID 1 בקונטיינר שלך</div>
+                        <div class="command-code">docker exec [container] ps aux</div>
+                        <p style="margin-top: 10px; color: var(--text-muted);">השורה הראשונה תראה מי PID 1</p>
+                    </div>
+                </div>
+
+                <h3>פתרון למצבים מיוחדים: tini</h3>
+                <div class="info-box">
+                    <p><strong>💡 כאשר אתה צריך shell script או entrypoint מורכב:</strong></p>
+                    <p>השתמש ב-<code>tini</code> - init system זעיר שמטפל נכון ב-signals</p>
+                </div>
+
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;">FROM python:3.9-slim
+
+# התקן tini
+RUN apt-get update && \
+    apt-get install -y tini && \
+    rm -rf /var/lib/apt/lists/*
+
+# הגדר tini כ-entrypoint
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# עכשיו אפשר להשתמש ב-shell script
+CMD ["./start.sh"]</div>
+
+                <h3>דוגמה מעשית: Flask App</h3>
+                <div class="comparison-container">
+                    <div class="comparison-box">
+                        <h4>❌ לא יעבוד טוב</h4>
+                        <div class="command-code" style="background: rgba(218, 54, 51, 0.15);">FROM python:3.9
+COPY app.py .
+CMD python app.py
+# docker stop ייקח 10 שניות!</div>
+                    </div>
+
+                    <div class="comparison-box">
+                        <h4>✅ עובד מצוין</h4>
+                        <div class="command-code" style="background: rgba(35, 134, 54, 0.15);">FROM python:3.9
+COPY app.py .
+CMD ["python", "app.py"]
+# docker stop יהיה מיידי</div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>🎯 כלל אצבע:</strong></p>
+                    <ul>
+                        <li>תמיד השתמש ב-<strong>Exec Form</strong> (JSON array) למעט אם אתה באמת צריך shell features (pipes, variables, etc.)</li>
+                        <li>אם אתה צריך shell, הוסף <code>tini</code> או <code>dumb-init</code></li>
+                        <li>בדוק ש-<code>docker stop</code> לא לוקח 10+ שניות</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- .dockerignore Section -->
+            <section class="section" id="dockerignore">
+                <h2>📄 .dockerignore - חובה!</h2>
+
+                <div class="info-box">
+                    <p><strong>מהו .dockerignore?</strong></p>
+                    <p>כמו .gitignore אבל ל-Docker - מונע העתקה של קבצים מיותרים לבניית ה-image</p>
+                </div>
+
+                <h3>למה זה חשוב?</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚡ Build מהיר יותר</h4>
+                        <p>פחות קבצים להעתיק</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📦 Image קטן יותר</h4>
+                        <p>רק מה שצריך</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 יותר מאובטח</h4>
+                        <p>סודות לא נכנסים</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💾 פחות cache invalidation</h4>
+                        <p>שינויים לא רלוונטיים לא משפיעים</p>
+                    </div>
+                </div>
+
+                <h3>דוגמת .dockerignore מושלמת</h3>
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+*.log
+logs/
+
+# Documentation
+*.md
+README*
+docs/
+LICENSE
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+tests/
+test/
+*.test.js
+*.spec.js</div>
+
+                <h3>טיפים לשימוש</h3>
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-usage">✅ התחל עם הכל, פתח ספציפית</div>
+                        <div class="command-code"># חסום הכל
+*
+
+# פתח רק את הנדרש
+!src/
+!requirements.txt
+!package.json</div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-usage">🔍 בדוק מה נכנס ל-build context</div>
+                        <div class="command-code">docker build -t test . --progress=plain 2>&1 | grep "COPY"</div>
+                        <p style="margin-top: 10px; color: var(--text-muted);">תראה אילו קבצים מועתקים</p>
+                    </div>
+                </div>
+
+                <div class="success-box">
+                    <p><strong>💡 טיפ מקצועי:</strong> .dockerignore טוב יכול להקטין את ה-build context ב-90%+ ולהאיץ build פי 10!</p>
+                </div>
+            </section>
+
+            <!-- ARG vs ENV Detailed Section -->
+            <section class="section" id="arg-vs-env">
+                <h2>🔀 ARG vs ENV - מתי להשתמש במה?</h2>
+
+                <div class="comparison-container">
+                    <div class="comparison-box">
+                        <h4>ARG - זמן בנייה בלבד</h4>
+                        <div class="command-code">ARG PYTHON_VERSION=3.9
+FROM python:${PYTHON_VERSION}
+
+ARG BUILD_DATE
+RUN echo "Built on ${BUILD_DATE}"</div>
+                        
+                        <h5 style="margin-top: 20px; color: var(--accent-blue);">מאפיינים:</h5>
+                        <ul>
+                            <li>✅ זמין רק בזמן <code>docker build</code></li>
+                            <li>❌ לא זמין בקונטיינר רץ</li>
+                            <li>✅ ניתן לדרוס: <code>--build-arg</code></li>
+                            <li>❌ לא מופיע ב-<code>docker inspect</code></li>
+                        </ul>
+
+                        <h5 style="margin-top: 15px; color: var(--accent-green);">שימושים:</h5>
+                        <ul>
+                            <li>גרסאות base images</li>
+                            <li>build flags</li>
+                            <li>paths זמניים</li>
+                        </ul>
+                    </div>
+
+                    <div class="comparison-box">
+                        <h4>ENV - בנייה + runtime</h4>
+                        <div class="command-code">ENV PORT=8000
+ENV NODE_ENV=production
+ENV DATABASE_URL=postgres://...</div>
+                        
+                        <h5 style="margin-top: 20px; color: var(--accent-blue);">מאפיינים:</h5>
+                        <ul>
+                            <li>✅ זמין בזמן build</li>
+                            <li>✅ זמין בקונטיינר רץ</li>
+                            <li>✅ ניתן לדרוס: <code>docker run -e</code></li>
+                            <li>✅ מופיע ב-<code>docker inspect</code></li>
+                        </ul>
+
+                        <h5 style="margin-top: 15px; color: var(--accent-green);">שימושים:</h5>
+                        <ul>
+                            <li>הגדרות אפליקציה</li>
+                            <li>paths קבועים</li>
+                            <li>feature flags</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>שילוב ARG + ENV</h3>
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># קבל ערך בזמן build
+ARG APP_VERSION=1.0.0
+
+# שמור אותו כ-ENV לזמן runtime
+ENV VERSION=${APP_VERSION}
+
+# Build:
+docker build --build-arg APP_VERSION=2.0.0 -t myapp .
+
+# Runtime - הגרסה תהיה זמינה:
+docker run myapp printenv VERSION
+# Output: 2.0.0</div>
+
+                <h3>השוואה מעשית</h3>
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-usage">דוגמה: ARG לבחירת base image</div>
+                        <div class="command-code">ARG PYTHON_VERSION=3.9
+FROM python:${PYTHON_VERSION}-slim
+
+# Build different versions:
+# docker build --build-arg PYTHON_VERSION=3.10 -t app:py310 .
+# docker build --build-arg PYTHON_VERSION=3.11 -t app:py311 .</div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-usage">דוגמה: ENV להגדרות אפליקציה</div>
+                        <div class="command-code">ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+
+# Override בזמן run:
+# docker run -e FLASK_ENV=development myapp</div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>⚠️ אזהרת אבטחה קריטית!</strong></p>
+                    <p>גם ARG וגם ENV נשארים בהיסטוריה של ה-image! <strong>אל תשים בהם סודות!</strong></p>
+                    <div class="command-code" style="margin-top: 10px; background: rgba(218, 54, 51, 0.15);">❌ אל תעשה:
+ARG DB_PASSWORD=secret123
+ENV API_KEY=supersecret
+
+# כל אחד יכול לראות:
+docker history myimage</div>
+                </div>
+
+                <h3>BuildKit Secrets - הפתרון המודרני</h3>
+                <div class="success-box">
+                    <p><strong>✅ השתמש ב-BuildKit secrets עבור מידע רגיש:</strong></p>
+                </div>
+
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># Dockerfile
+RUN --mount=type=secret,id=db_password \
+    DB_PASS=$(cat /run/secrets/db_password) \
+    ./install-with-secret.sh
+
+# Build command
+export DOCKER_BUILDKIT=1
+docker build \
+    --secret id=db_password,src=./secrets/db.txt \
+    -t myapp .
+
+# הסוד לא נשאר ב-image!</div>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <p><strong>💡 יתרונות BuildKit Secrets:</strong></p>
+                    <ul>
+                        <li>✅ הסוד לא נשמר ב-image layers</li>
+                        <li>✅ לא מופיע ב-<code>docker history</code></li>
+                        <li>✅ נמחק אחרי הבנייה</li>
+                        <li>✅ לא נגיש מחוץ ל-RUN שמשתמש בו</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Registry Section -->
+            <section class="section" id="registries">
+                <h2>📦 Docker Registry</h2>
                     
                     <h3>מהו Registry?</h3>
                     <div class="info-box">
