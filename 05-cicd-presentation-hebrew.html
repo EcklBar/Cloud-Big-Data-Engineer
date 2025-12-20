@@ -3,1024 +3,1244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CI/CD למהנדסי נתונים - Naya College</title>
+    <title>CI/CD & GitHub Actions - מדריך מקיף</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-purple: #667eea;
+            --primary-blue: #3498db;
+            --primary-dark: #2c3e50;
+            --accent-orange: #e67e22;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #555;
+            --border-color: #e9ecef;
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --space-md: 20px;
+            --space-lg: 30px;
+            --radius-md: 10px;
+            --transition-normal: 0.3s ease;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans Hebrew', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            direction: rtl;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-purple) 0%, #764ba2 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
-        .presentation-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        .container {
+            max-width: 1600px;
+            margin: 20px auto;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
         }
 
         .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 40px;
             text-align: center;
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            animation: slideDown 0.8s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .header h1 {
-            color: #2d3748;
-            font-size: 2.5em;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .infinity-logo {
-            width: 60px;
-            height: 30px;
-            position: relative;
-        }
-
-        .infinity-logo svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .navigation {
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .nav-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 25px;
+        .cicd-logo {
+            font-size: 3rem;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .search-container {
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            outline: none;
+            transition: all var(--transition-normal);
+        }
+
+        .search-box:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 25px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            transition: all var(--transition-normal);
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            color: #4a5568;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            font-family: inherit;
+            font-weight: 500;
         }
 
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            background: white;
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .nav-item:hover, .nav-item.active {
+            background: var(--primary-blue);
             color: white;
+            transform: translateX(-5px);
         }
 
-        .slide {
-            display: none;
-            animation: fadeIn 0.6s ease-in-out;
-            background: white;
-            border-radius: 20px;
+        .main-content {
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            min-height: 500px;
+            overflow-y: auto;
         }
 
-        .slide.active {
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
             display: block;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .slide h2 {
-            color: #2d3748;
-            font-size: 2em;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid;
-            border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+        .section h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-blue);
         }
 
-        .slide h3 {
-            color: #4a5568;
-            font-size: 1.5em;
-            margin: 25px 0 15px;
-        }
-
-        .slide h4 {
-            color: #4a5568;
-            font-size: 1.2em;
-            margin: 20px 0 10px;
-        }
-
-        .slide ul {
-            list-style: none;
-            padding-right: 0;
-        }
-
-        .slide li {
-            padding: 12px 35px 12px 0;
-            position: relative;
-            color: #4a5568;
-            line-height: 1.8;
-            transition: transform 0.3s ease;
-        }
-
-        .slide li:hover {
-            transform: translateX(-5px);
-        }
-
-        .slide li:before {
-            content: "◀";
-            position: absolute;
-            right: 0;
-            color: #667eea;
-            font-size: 12px;
-        }
-
-        .slide ul ul {
-            margin-top: 10px;
-            margin-right: 20px;
-        }
-
-        .slide ul ul li:before {
-            content: "◆";
-            font-size: 10px;
-            color: #764ba2;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .section h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
             margin-top: 30px;
+            margin-bottom: 15px;
         }
 
-        .tech-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        .info-box, .warning-box, .success-box {
             padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            border-right: 4px solid;
         }
 
-        .tech-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: var(--primary-blue);
         }
 
-        .tech-card h4 {
-            color: #2d3748;
+        .warning-box {
+            background: rgba(231, 76, 60, 0.1);
+            border-color: var(--accent-red);
+        }
+
+        .success-box {
+            background: rgba(39, 174, 96, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .timeline {
+            position: relative;
+            padding-right: 40px;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary-blue);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -28px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            border: 3px solid white;
+        }
+
+        .timeline-item h4 {
+            color: var(--primary-blue);
             margin-bottom: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid var(--primary-blue);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .pros-cons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros-box, .cons-box {
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .pros-box {
+            background: rgba(39, 174, 96, 0.1);
+            border-right: 4px solid var(--accent-green);
+        }
+
+        .cons-box {
+            background: rgba(231, 76, 60, 0.1);
+            border-right: 4px solid var(--accent-red);
         }
 
         .code-block {
             background: #1e1e1e;
             color: #d4d4d4;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: var(--radius-md);
             margin: 20px 0;
             overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             direction: ltr;
             text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        .code-block .comment {
-            color: #6a9955;
+        .comparison-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
         }
 
-        .code-block .keyword {
-            color: #569cd6;
+        .comparison-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--primary-blue);
         }
 
-        .code-block .string {
-            color: #ce9178;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .control-btn {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            font-family: inherit;
-        }
-
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .control-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .progress-bar {
+        .copy-notification {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
+            top: 20px;
+            left: 20px;
+            background: var(--accent-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            transform: translateX(-400px);
+            transition: transform 0.3s;
             z-index: 1000;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: width 0.3s ease;
+        .copy-notification.show {
+            transform: translateX(0);
         }
 
-        .icon {
-            display: inline-block;
-            width: 80px;
-            height: 80px;
-            margin: 20px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
         }
 
-        .icon:hover {
-            opacity: 1;
-        }
-
-        .english-term {
-            color: #764ba2;
-            font-style: italic;
-            font-size: 0.9em;
-        }
+        ul { padding-right: 25px; margin: 15px 0; }
+        li { margin-bottom: 10px; }
+        strong { color: var(--primary-dark); }
+        code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px; font-family: monospace; }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .slide {
-                padding: 20px;
-            }
-            
-            .slide h2 {
-                font-size: 1.5em;
-            }
-            
-            .navigation {
-                display: none;
-            }
+            .content { grid-template-columns: 1fr; }
+            .sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
+            .header h1 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
-    <div class="progress-bar">
-        <div class="progress-fill" id="progress"></div>
+    <div class="container">
+        <header class="header">
+            <div style="font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; opacity: 0.9; margin-bottom: 10px;">
+                DATA ENGINEERING HUB
+            </div>
+            <h1>
+                <span class="cicd-logo">⚙️</span>
+                CI/CD & GitHub Actions
+            </h1>
+            <p>מדריך מקיף למהנדסי נתונים - אינטגרציה ופריסה רציפה</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="🔍 חפש נושאים, מושגים או כלים..." id="searchInput">
+        </div>
+
+        <div class="content">
+            <nav class="sidebar">
+                <a href="#" class="nav-item active" data-section="intro">🎯 מבוא ל-CI/CD</a>
+                <a href="#" class="nav-item" data-section="history">📜 SDLC ההיסטורי</a>
+                <a href="#" class="nav-item" data-section="drawbacks">⚠️ החסרונות</a>
+                <a href="#" class="nav-item" data-section="evolution">📈 התפתחות התוכנה</a>
+                <a href="#" class="nav-item" data-section="containers">🐳 Containers</a>
+                <a href="#" class="nav-item" data-section="cloud">☁️ עידן הענן</a>
+                <a href="#" class="nav-item" data-section="kubernetes">☸️ Kubernetes</a>
+                <a href="#" class="nav-item" data-section="cicd-overview">🔄 סקירת CI/CD</a>
+                <a href="#" class="nav-item" data-section="jenkins">🔧 Jenkins</a>
+                <a href="#" class="nav-item" data-section="cicd-systems">🛠️ מערכות CI/CD</a>
+                <a href="#" class="nav-item" data-section="iac">📝 Infrastructure as Code</a>
+                <a href="#" class="nav-item" data-section="devops">👥 DevOps</a>
+                <a href="#" class="nav-item" data-section="github-actions">🎬 GitHub Actions</a>
+                <a href="#" class="nav-item" data-section="workflows">📋 Workflows</a>
+                <a href="#" class="nav-item" data-section="example">💡 דוגמה מעשית</a>
+            </nav>
+
+            <main class="main-content">
+                <!-- מבוא -->
+                <section class="section active" id="intro">
+                    <h2>🎯 מבוא ל-CI/CD</h2>
+
+                    <div class="info-box">
+                        <h3>מהו CI/CD?</h3>
+                        <p><strong>CI/CD</strong> מייצג שני תהליכים מרכזיים בפיתוח תוכנה מודרני:</p>
+                        <ul>
+                            <li><strong>CI - Continuous Integration (אינטגרציה רציפה)</strong>: תהליך של שילוב שינויי קוד באופן תכוף ואוטומטי</li>
+                            <li><strong>CD - Continuous Deployment (פריסה רציפה)</strong>: תהליך של פריסת שינויים לסביבת הייצור באופן אוטומטי</li>
+                        </ul>
+                    </div>
+
+                    <h3>מטרות CI/CD</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>⚡ מהירות</h4>
+                            <p>קיצור זמן הגעת features למשתמשים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔒 אמינות</h4>
+                            <p>בדיקות אוטומטיות לפני כל פריסה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 אוטומציה</h4>
+                            <p>הפחתת טעויות אנוש</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 שקיפות</h4>
+                            <p>מעקב אחר כל שינוי</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- היסטוריה -->
+                <section class="section" id="history">
+                    <h2>📜 SDLC ההיסטורי</h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>ניהול גרסאות מרכזי</h4>
+                            <p>פיתוח תוכנה נוהל באמצעות מערכות ניהול גרסאות מרכזיות (Centralized VCS)</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>מחזורי פיתוח ארוכים</h4>
+                            <p>כל release עבר מחזורים ארוכים: פיתוח → בדיקה → תיקון → חזרה</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>גרסאות מוגבלות</h4>
+                            <p>הפקת גרסה לא הייתה אירוע תכוף</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>הפצה פיזית</h4>
+                            <p>תוכנה שוחררה בחבילות גרסה: דיסקים, חבילות התקנה</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>עדכון ידני</h4>
+                            <p>לקוחות עדכנו באופן אקטיבי את גרסת התוכנה שלהם</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- חסרונות -->
+                <section class="section" id="drawbacks">
+                    <h2>⚠️ החסרונות של SDLC ההיסטורי</h2>
+
+                    <div class="warning-box">
+                        <h3>בעיות מרכזיות:</h3>
+                        <ul>
+                            <li><strong>תיקוני באגים לוקחים זמן רב</strong> - מגיעים רק בגרסאות עתידיות</li>
+                            <li><strong>שיפורים מתרחשים בקפיצות</strong> - לא בצורה הדרגתית</li>
+                            <li><strong>הפקת release ידנית</strong> - מופעלת באופן ידני ולא אוטומטי</li>
+                            <li><strong>עלות גבוהה</strong> - של תיאום, בדיקות והפצה</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>💡 התוצאה:</strong> חוסר גמישות, תגובה איטית לבאגים, וחוויית משתמש לא אופטימלית</p>
+                    </div>
+                </section>
+
+                <!-- התפתחות -->
+                <section class="section" id="evolution">
+                    <h2>📈 התפתחות התוכנה</h2>
+
+                    <h3>🔀 מורכבות התוכנה</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li>מערכות הפכו מתוחכמות ומורכבות יותר</li>
+                            <li>מעבר ל-<strong>Microservices</strong> - הרבה חלקים נעים חלקית-עצמאיים</li>
+                            <li>קודי בסיס (codebase) הפכו מורכבים</li>
+                            <li><strong>ניהול גרסאות, תלויות ותאימות</strong> הפך קריטי</li>
+                        </ul>
+                    </div>
+
+                    <h3>📊 Git והמהפכה המבוזרת</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>Git</strong> הציג דרך סקלבילית וזריזה לפתח תוכנה</li>
+                            <li>מודל ה-branching המבוזר מאפשר פיתוח סימולטני</li>
+                            <li>מיזוג קוד ל-mainline הפך לאירוע תכוף</li>
+                            <li><strong>האתגר:</strong> ניהול ותיאום החלקים</li>
+                            <li><strong>קוד ה-mainline חייב להישאר יציב</strong> - באג בו מחייב החזרה וא restart תהליך הבדיקה</li>
+                        </ul>
+                    </div>
+
+                    <h3>👥 ארגוני R&D</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>📈 צמיחה</h4>
+                            <p>גידול במספר המפתחים והצוותים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏃 Agile</h4>
+                            <p>מתודולוגיות חדשות (Scrum)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💎 ערך</h4>
+                            <p>התמקדות בערך וגמישות</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 מחזורים קצרים</h4>
+                            <p>פיתוח → בדיקה → שחרור</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Containers -->
+                <section class="section" id="containers">
+                    <h2>🐳 Containers & Microservices</h2>
+
+                    <div class="info-box">
+                        <h3>Containers מספקים דרכים חדשות להפוך את ה-SDLC לחזק:</h3>
+                        <ul>
+                            <li><strong>סביבות פיתוח ובדיקה מאוחדות</strong> - כולם עובדים באותה סביבה</li>
+                            <li><strong>הפקת חבילה (bundling) פשוטה</strong> - הכל ארוז ב-container</li>
+                            <li><strong>הפחתת חיכוך בפריסה</strong> - פחות תלות בסביבת ההרצה</li>
+                            <li><strong>Microservices הפכה לפופולרית</strong> - פירוק האפליקציה לחלקים עצמאיים רבים עם releases נפרדים אך מתואמים</li>
+                        </ul>
+                    </div>
+
+                    <h3>יתרונות Containers ב-SDLC</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>📦 אריזה</h4>
+                            <p>כל התלויות בתוך ה-container</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 העתקה</h4>
+                            <p>רץ זהה בכל סביבה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ מהירות</h4>
+                            <p>עליה ופריסה מהירות</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔐 בידוד</h4>
+                            <p>אפליקציות מבודדות</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cloud -->
+                <section class="section" id="cloud">
+                    <h2>☁️ עידן הענן</h2>
+
+                    <h3>המהפכה: "As a Service"</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>IaaS - Infrastructure as a Service</h4>
+                            <p>ניהול קל של תשתית (servers, storage, networking)</p>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>PaaS - Platform as a Service</h4>
+                            <p>פלטפורמת פיתוח והרצה מוכנה</p>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>SaaS - Software as a Service</h4>
+                            <p>תוכנה כשירות - ללא versioning ידני</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>השפעה על SDLC:</h3>
+                        <ul>
+                            <li><strong>SaaS ביטל versioning ו-releasing מסורתיים</strong></li>
+                            <li>תוכנה מתעדכנת ומתוקנת באופן רציף</li>
+                            <li>לקוחות מצפים לעדכונים פרואקטיביים ללא פעולה מצידם</li>
+                            <li>דגש על <strong>continuous delivery</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Kubernetes -->
+                <section class="section" id="kubernetes">
+                    <h2>☸️ Kubernetes (K8s)</h2>
+
+                    <div class="info-box">
+                        <h3>מהו Kubernetes?</h3>
+                        <p><strong>Kubernetes</strong> הוא מערכת לתזמור קונטיינרים (Container Orchestration)</p>
+                        <ul>
+                            <li>שוחרר על ידי Google ב-2014 כפרויקט קוד פתוח</li>
+                            <li>חולל מהפכה בסביבות ההרצה המודרניות</li>
+                        </ul>
+                    </div>
+
+                    <h3>מאפיינים עיקריים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🎯 Orchestration</h4>
+                            <p>הרצת cluster של containers</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📈 Scale</h4>
+                            <p>נבנה להתרחב ולתמוך במשאבים דינמיים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>☁️ כל הענן</h4>
+                            <p>כל ספק ענן מספק K8s מנוהל</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🌍 סטנדרט</h4>
+                            <p>כל סביבת הרצה היא K8s cluster</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 התוצאה:</strong> K8s הפך לסטנדרט בתעשייה לניהול אפליקציות containerized בסביבות production</p>
+                    </div>
+                </section>
+
+                <!-- סקירת CI/CD -->
+                <section class="section" id="cicd-overview">
+                    <h2>🔄 סקירת CI/CD</h2>
+
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>🔄 Continuous Integration</h4>
+                            <ul>
+                                <li>שילוב רציף של חלקי קוד ו-branches שונים</li>
+                                <li>בנייה ובדיקה אוטומטית של הקוד</li>
+                                <li>זיהוי מוקדם של בעיות</li>
+                                <li>שמירה על mainline יציב</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>🚀 Continuous Deployment</h4>
+                            <ul>
+                                <li>גרסאות חדשות ארוזות ונבדקות אוטומטית</li>
+                                <li>פרסום תיקונים ושיפורים ברגע שהם מוכנים</li>
+                                <li>פריסה לסביבות שונות באוטומציה</li>
+                                <li>מעקב וניטור אחר deployments</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>תהליך CI/CD טיפוסי:</h3>
+                        <ol style="padding-right: 25px;">
+                            <li><strong>Code</strong> - המפתח כותב קוד</li>
+                            <li><strong>Commit</strong> - העלאה ל-Git</li>
+                            <li><strong>Build</strong> - בנייה אוטומטית</li>
+                            <li><strong>Test</strong> - הרצת בדיקות</li>
+                            <li><strong>Package</strong> - יצירת artifact (Docker image)</li>
+                            <li><strong>Deploy</strong> - פריסה לסביבה</li>
+                            <li><strong>Monitor</strong> - ניטור ומעקב</li>
+                        </ol>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>🎯 המטרה:</strong> מחזור קצר ככל האפשר מקוד לייצור, עם אוטומציה מקסימלית ואמינות גבוהה</p>
+                    </div>
+                </section>
+
+                <!-- Jenkins -->
+                <section class="section" id="jenkins">
+                    <h2>🔧 Jenkins</h2>
+
+                    <div class="info-box">
+                        <h3>מהו Jenkins?</h3>
+                        <ul>
+                            <li>פלטפורמת אוטומציה לתהליכי CI/CD</li>
+                            <li>הוצג ב-2011</li>
+                            <li><strong>קוד פתוח</strong> (Open-Source)</li>
+                            <li>ניתן להתאמה אישית והרחבה רחבה</li>
+                            <li>שוק של plugins חינמיים</li>
+                        </ul>
+                    </div>
+
+                    <h3>מאפיינים מרכזיים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>⚙️ Job Runner</h4>
+                            <p>הגדרת jobs לטסקים שונים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🌳 היררכיה</h4>
+                            <p>מבנה jobs היררכי</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔐 הרשאות</h4>
+                            <p>ניהול משתמשים וקבוצות</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 Triggers</h4>
+                            <p>הפעלה אוטומטית (git push, merge)</p>
+                        </div>
+                    </div>
+
+                    <h3>ארכיטקטורה מבוזרת</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>Master-Slave Architecture</strong></li>
+                            <li>אחד או יותר Jenkins masters מנהלים את ה-jobs</li>
+                            <li>Jobs רצים על slaves שונים (servers)</li>
+                            <li>שיפור ביצועים ומהירות לפרויקטים גדולים</li>
+                            <li>סקלביליות של מערכת ה-CI/CD</li>
+                        </ul>
+                    </div>
+
+                    <h3>Jenkinsfile</h3>
+                    <div class="code-block">pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'make test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make deploy'
+            }
+        }
+    }
+}</div>
+
+                    <div class="pros-cons-container">
+                        <div class="pros-box">
+                            <h4>✅ יתרונות Jenkins</h4>
+                            <ul>
+                                <li>קוד פתוח וקהילתי</li>
+                                <li>רב-תכליתי</li>
+                                <li>ניתן להתאמה אישית רבה</li>
+                                <li>ניתן להרחבה</li>
+                                <li>חלוץ - לא היה משהו טוב יותר בזמנו</li>
+                            </ul>
+                        </div>
+                        <div class="cons-box">
+                            <h4>❌ חסרונות Jenkins</h4>
+                            <ul>
+                                <li>התקנה ותחזוקה מורכבות</li>
+                                <li>מיושן (לא חלק כמו CI/CD מודרני)</li>
+                                <li>שפת Groovy (שנאויה)</li>
+                                <li>בעיות אבטחה ב-platform וב-plugins</li>
+                                <li>over-customizable - כל ארגון ממציא את הגלגל</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- מערכות CI/CD -->
+                <section class="section" id="cicd-systems">
+                    <h2>🛠️ מערכות CI/CD</h2>
+
+                    <div class="info-box">
+                        <p>לצד ואחרי Jenkins, פותחו מערכות אחרות שמתמקדות ספציפית ב-CI/CD</p>
+                    </div>
+
+                    <h3>מערכות CI/CD פופולריות</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔄 Travis CI</h4>
+                            <p>פופולרי בקוד פתוח</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⭕ Circle CI</h4>
+                            <p>מהיר וגמיש</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏢 TeamCity</h4>
+                            <p>מ-JetBrains</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🚀 GoCD</h4>
+                            <p>מתמקד ב-CD</p>
+                        </div>
+                    </div>
+
+                    <h3>☁️ CI/CD מגובה ענן</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>AWS</h4>
+                            <ul>
+                                <li>AWS CodeBuild</li>
+                                <li>AWS CodePipeline</li>
+                                <li>AWS CodeDeploy</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>GCP</h4>
+                            <ul>
+                                <li>Google Cloud Build</li>
+                                <li>Google Cloud Run</li>
+                                <li>Cloud Deploy</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>Azure</h4>
+                            <ul>
+                                <li>Azure Pipelines</li>
+                                <li>Azure DevOps</li>
+                                <li>Azure Container Registry</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>📦 VCS-Backed CI/CD</h3>
+                    <div class="success-box">
+                        <p>מערכות ניהול גרסאות פיתחו מערכות CI/CD משלהן:</p>
+                        <ul>
+                            <li><strong>GitHub Actions</strong> - אינטגרציה מלאה עם GitHub</li>
+                            <li><strong>GitLab CI/Pipelines</strong> - חלק מ-GitLab</li>
+                            <li><strong>BitBucket Pipelines</strong> - מאת Atlassian</li>
+                        </ul>
+                        <p><strong>💡 יתרון:</strong> קישור טבעי בין ניהול קוד ל-CI/CD - מערכת אחת לכל ה-SDLC</p>
+                    </div>
+                </section>
+
+                <!-- Infrastructure as Code -->
+                <section class="section" id="iac">
+                    <h2>📝 Infrastructure as Code (IaC)</h2>
+
+                    <div class="info-box">
+                        <h3>מהו IaC?</h3>
+                        <p><strong>Infrastructure as Code</strong> הוא הקונספט של ניהול התשתית דרך קוד</p>
+                        <ul>
+                            <li>מניפסטים מתארים את דרישות ה-provisioning</li>
+                            <li>Stack של IaC שומר את המצב הנוכחי של משאבים</li>
+                            <li>שינויים במניפסטים מובילים ל-delta של דרישות</li>
+                            <li>משאבים מוחלפים אוטומטית כדי לשקף את הדרישות החדשות</li>
+                        </ul>
+                    </div>
+
+                    <h3>טכנולוגיות IaC מובילות</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>🌍 Terraform</h4>
+                            <p><strong>Stateful provisioning</strong> של תשתית (cross-)cloud</p>
+                            <div class="code-block" style="margin-top: 15px;">resource "aws_instance" "web" {
+  ami           = "ami-12345678"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "WebServer"
+  }
+}</div>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>⎈ Helm</h4>
+                            <p>ניהול (define, install, upgrade) אפליקציות K8s</p>
+                            <div class="code-block" style="margin-top: 15px;">helm install my-app ./my-chart
+helm upgrade my-app ./my-chart
+helm rollback my-app</div>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>🔧 Cloud SDKs</h4>
+                            <p>AWS CDK, Go CDK - SDKs לענן</p>
+                            <ul style="margin-top: 10px;">
+                                <li>Templates לשלד הכללי</li>
+                                <li>Values/Variables לפרטים ספציפיים</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 שימוש ב-CD:</strong> jobs של CD משתמשים ב-IaC לניהול התשתית והפריסה</p>
+                    </div>
+                </section>
+
+                <!-- DevOps -->
+                <section class="section" id="devops">
+                    <h2>👥 עליית DevOps</h2>
+
+                    <div class="info-box">
+                        <h3>מהו DevOps?</h3>
+                        <p><strong>DevOps = Development + Operations</strong></p>
+                        <p>מתודולוגיה: סט של עקרונות ופרקטיקות</p>
+                        <ul>
+                            <li>שילוב ואוטומציה של עבודת פיתוח תוכנה ו-IT</li>
+                            <li>ניהול ופיתוח באמצעות הכלים שתוארו קודם</li>
+                        </ul>
+                    </div>
+
+                    <h3>תפקידי מהנדסי DevOps</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔄 CI Management</h4>
+                            <p>ניהול ופיתוח אוטומציית אינטגרציה רציפה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🚀 Deployment</h4>
+                            <p>פריסה לסביבות (tests, production)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏗️ Infrastructure</h4>
+                            <p>ניהול תשתית עם IaC</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Monitoring</h4>
+                            <p>ניטור ו-observability</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 שיתוף פעולה:</strong> מהנדסי R&D מסתמכים ומתקשרים באופן תכוף עם תשתית DevOps</p>
+                    </div>
+                </section>
+
+                <!-- GitHub Actions -->
+                <section class="section" id="github-actions">
+                    <h2>🎬 GitHub Actions</h2>
+
+                    <div class="info-box">
+                        <h3>למה GitHub Actions?</h3>
+                        <ul>
+                            <li>המקום המוביל לאירוח פרויקטי קוד פתוח</li>
+                            <li>מגוון פרויקטים מציע טווח רחב של דוגמאות CI/CD</li>
+                            <li>פרויקטים ציבוריים נהנים מ-features מתקדמים בחינם</li>
+                            <li>תמיכה נרחבת ב-actions ו-workflows של צד שלישי</li>
+                            <li>framework יחסית פשוט וישיר</li>
+                        </ul>
+                    </div>
+
+                    <h3>מושגים מרכזיים</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>📅 Events</h4>
+                            <p>אירועים שמפעילים workflows:</p>
+                            <ul>
+                                <li>Push לענף</li>
+                                <li>Pull Request</li>
+                                <li>Timer (schedule)</li>
+                                <li>ועוד...</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>📋 Workflows</h4>
+                            <p>תהליכים אוטומטיים:</p>
+                            <ul>
+                                <li>מוגדרים בקבצי YAML</li>
+                                <li>נמצאים ב-.github/workflows</li>
+                                <li>מכילים job אחד או יותר</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>⚙️ Jobs & Steps</h4>
+                            <p>יחידות ביצוע:</p>
+                            <ul>
+                                <li>Job רץ על container ייעודי</li>
+                                <li>Steps מבצעים פעולות</li>
+                                <li>רצים ברצף או במקביל</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>מבנה ארכיטקטורה</h3>
+                    <div class="code-block">Workflow
+├── Event (trigger)
+├── Job 1
+│   ├── runs-on: ubuntu-latest
+│   ├── Step 1: Checkout code
+│   ├── Step 2: Setup Node
+│   └── Step 3: Run tests
+└── Job 2
+    ├── needs: Job 1
+    ├── Step 1: Build
+    └── Step 2: Deploy</div>
+                </section>
+
+                <!-- Workflows -->
+                <section class="section" id="workflows">
+                    <h2>📋 Workflows ב-GitHub Actions</h2>
+
+                    <div class="info-box">
+                        <h3>הגדרת Workflow</h3>
+                        <ul>
+                            <li>כל workflow מוגדר בקובץ YAML</li>
+                            <li>קבצים נמצאים תחת <code>.github/workflows</code></li>
+                            <li>Workflow חייב להגדיר:
+                                <ul style="margin-top: 10px;">
+                                    <li>איזה events מפעילים אותו</li>
+                                    <li>Job אחד או יותר</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3>Jobs</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li>כל job רץ על container ייעודי בתוך מכונה וירטואלית</li>
+                            <li>Job חייב להגדיר:
+                                <ul style="margin-top: 10px;">
+                                    <li>את ה-container image לשימוש</li>
+                                    <li>Step אחד או יותר לביצוע</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3>Steps</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>Script Steps</h4>
+                            <p>Steps שמריצים script חייבים להגדיר את ה-script</p>
+                            <div class="code-block" style="margin-top: 10px;">- name: Run tests
+  run: npm test</div>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>Action Steps</h4>
+                            <p>Steps שמשתמשים ב-actions קיימים חייבים להגדיר:</p>
+                            <ul style="margin-top: 10px;">
+                                <li>נתיב מלא וגרסה</li>
+                                <li>כל הארגומנטים הנדרשים</li>
+                            </ul>
+                            <div class="code-block" style="margin-top: 10px;">- uses: actions/checkout@v3
+  with:
+    ref: main</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- דוגמה -->
+                <section class="section" id="example">
+                    <h2>💡 דוגמה מעשית</h2>
+
+                    <div class="info-box">
+                        <h3>Workflow פשוט שרץ על כל push:</h3>
+                    </div>
+
+                    <div class="code-block">name: learn-github-actions
+on: [push]
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: |
+          echo "testing bats version:"
+          bats -v</div>
+
+                    <h3>הסבר שלב אחר שלב</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>name: learn-github-actions</h4>
+                            <p>שם ה-workflow שיוצג ב-UI</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>on: [push]</h4>
+                            <p>הפעלה על כל push לכל ענף</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>jobs: check-bats-version</h4>
+                            <p>job בודד בשם check-bats-version</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>runs-on: ubuntu-latest</h4>
+                            <p>שימוש ב-container image של Ubuntu</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>actions/checkout@v3</h4>
+                            <p>git checkout של הקוד (ברירת מחדל: main)</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>actions/setup-node@v3</h4>
+                            <p>התקנת Node.js גרסה 14</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>run: npm install -g bats</h4>
+                            <p>הרצת script שמתקין את חבילת bats</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>run: | (multiline)</h4>
+                            <p>הדפסת הודעה והצגת גרסת bats</p>
+                        </div>
+                    </div>
+
+                    <h3>🔍 צפייה ב-Actions</h3>
+                    <div class="success-box">
+                        <ol style="padding-right: 25px;">
+                            <li>עבור לטאב <strong>Actions</strong> ב-repository שלך ב-GitHub</li>
+                            <li>לחץ על workflow בפאנל הצדדי השמאלי</li>
+                            <li>לחץ על הרצת workflow מהרשימה</li>
+                            <li>בחר job מהגרף</li>
+                            <li>בחר step</li>
+                            <li>ראה את ה-console output של ה-step הספציפי</li>
+                        </ol>
+                    </div>
+
+                    <h3>דוגמאות נוספות</h3>
+
+                    <h4>CI למהנדסי נתונים - Python</h4>
+                    <div class="code-block">name: Python CI
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: pytest --cov=./ --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3</div>
+
+                    <h4>Docker Build & Push</h4>
+                    <div class="code-block">name: Docker Build
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: myusername/myapp:latest</div>
+
+                    <h3>📚 משאבים נוספים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><a href="https://docs.github.com/en/actions" target="_blank">GitHub Actions - תיעוד מלא</a></li>
+                            <li><a href="https://docs.github.com/en/actions/learn-github-actions" target="_blank">Learn GitHub Actions</a></li>
+                            <li><a href="https://docs.github.com/en/actions/quickstart" target="_blank">Quickstart</a></li>
+                            <li><a href="https://github.com/marketplace?type=actions" target="_blank">GitHub Actions Marketplace</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+            </main>
+        </div>
     </div>
 
-    <div class="presentation-container">
-        <div class="header">
-            <h1>CI/CD למהנדסי נתונים</h1>
-            <div class="logo">
-                <div class="infinity-logo">
-                    <svg viewBox="0 0 100 50">
-                        <path d="M25 25 Q5 5, 25 25 T50 25 Q70 5, 50 25 T75 25" 
-                              stroke="#667eea" stroke-width="3" fill="none"/>
-                        <path d="M25 25 Q5 45, 25 25 T50 25 Q70 45, 50 25 T75 25" 
-                              stroke="#764ba2" stroke-width="3" fill="none"/>
-                    </svg>
-                </div>
-                <span style="color: #4a5568; font-weight: 600;">NAYA College</span>
-            </div>
-        </div>
-
-        <div class="navigation">
-            <button class="nav-btn active" onclick="showSlide(0)">סקירה כללית</button>
-            <button class="nav-btn" onclick="showSlide(1)">SDLC היסטורי</button>
-            <button class="nav-btn" onclick="showSlide(2)">התפתחות התוכנה</button>
-            <button class="nav-btn" onclick="showSlide(3)">CI/CD מודרני</button>
-            <button class="nav-btn" onclick="showSlide(4)">Jenkins</button>
-            <button class="nav-btn" onclick="showSlide(5)">מערכות CI/CD</button>
-            <button class="nav-btn" onclick="showSlide(6)">ענן ו-IaC</button>
-            <button class="nav-btn" onclick="showSlide(7)">DevOps</button>
-            <button class="nav-btn" onclick="showSlide(8)">GitHub Actions</button>
-        </div>
-
-        <!-- Slide 0: Overview & Agenda -->
-        <div class="slide active">
-            <h2>סקירת הקורס וסדר היום</h2>
-            <p style="margin-bottom: 30px; color: #718096;">ברוכים הבאים לקורס המקיף על שיטות CI/CD למהנדסי נתונים. נחקור את ההתפתחות של שיטות פיתוח תוכנה וטכניקות אוטומציה מודרניות.</p>
-            
-            <h3>מה נלמד בקורס:</h3>
-            <ul>
-                <li>היסטוריה של SDLC <span class="english-term">(Software Development Lifecycle)</span></li>
-                <li>ה-SDLC המודרני</li>
-                <li>מהו CI/CD
-                    <ul>
-                        <li>אינטגרציה רציפה <span class="english-term">(Continuous Integration)</span></li>
-                        <li>פריסה רציפה <span class="english-term">(Continuous Deployment)</span></li>
-                    </ul>
-                </li>
-                <li>דוגמאות מעשיות וניסיון מעשי</li>
-            </ul>
-            
-            <div style="margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 15px;">
-                <h3>יעדי הלמידה</h3>
-                <p style="color: #4a5568; line-height: 1.8;">בסוף הקורס, תבינו את המושגים הבסיסיים של CI/CD, תכירו כלים ופלטפורמות פופולריות, ותוכלו ליישם צינורות CI/CD עבור פרויקטים של הנדסת נתונים.</p>
-            </div>
-        </div>
-
-        <!-- Slide 1: Historical SDLC -->
-        <div class="slide">
-            <h2>SDLC היסטורי</h2>
-            <p style="margin-bottom: 30px; color: #718096;">הבנת המקום ממנו באנו עוזרת לנו להעריך את השיטות המודרניות.</p>
-            
-            <h3>מאפייני פיתוח תוכנה מסורתי:</h3>
-            <ul>
-                <li>פיתוח תוכנה מנוהל באמצעות מערכות בקרת גרסאות מרכזיות</li>
-                <li>כל גרסה עוברת מחזורים ארוכים (פיתוח, בדיקה, תיקון, חזרה)</li>
-                <li>יצירת גרסה חדשה אינה אירוע תדיר</li>
-                <li>תוכנה משוחררת בחבילות ממוספרות: חבילות, דיסקים וכו'</li>
-                <li>לקוחות מעדכנים באופן אקטיבי את הגרסה של התוכנה שלהם</li>
-            </ul>
-            
-            <h3>החסרונות:</h3>
-            <ul>
-                <li>תיקוני באגים לוקחים זמן רב להגיע (רק בגרסאות הבאות)</li>
-                <li>שיפורים מתרחשים בצעדים לא הדרגתיים</li>
-                <li>יצירת גרסה חדשה מופעלת באופן ידני</li>
-            </ul>
-        </div>
-
-        <!-- Slide 2: Software Evolution -->
-        <div class="slide">
-            <h2>התפתחות התוכנה</h2>
-            <p style="margin-bottom: 30px; color: #718096;">התפתחויות משמעותיות בתוכנה בשנים האחרונות שינו את ה-SDLC.</p>
-            
-            <h3>גורמי התפתחות מרכזיים:</h3>
-            
-            <h4>מורכבות התוכנה</h4>
-            <ul>
-                <li>מערכות הופכות מתוחכמות ומורכבות יותר</li>
-                <li>מעבר למיקרו-שירותים - הרבה חלקים נעים חלקית עצמאיים</li>
-                <li>בסיסי קוד הופכים מורכבים</li>
-                <li>ניהול גרסאות, תלויות ותאימות הופך קריטי</li>
-            </ul>
-            
-            <h4>מורכבות קוד ו-Git</h4>
-            <ul>
-                <li>Git מציג דרך ניתנת להרחבה וזריזה לפתח תוכנה</li>
-                <li>מודל הסתעפות מבוזר מאפשר פיתוח בו-זמני</li>
-                <li>מיזוג קוד לענף הראשי הופך לאירוע תדיר</li>
-                <li>האתגר הופך לניהול ותיאום החלקים</li>
-                <li>קוד הענף הראשי חייב להיות יציב: באג בענף הראשי מאלץ להחזיר את הקוד אחורה ולהתחיל מחדש את תהליך הבדיקה</li>
-            </ul>
-        </div>
-
-        <!-- Slide 3: Modern CI/CD -->
-        <div class="slide">
-            <h2>מהפכת ה-CI/CD המודרנית</h2>
-            
-            <h3>ארגוני מו"פ מסתגלים</h3>
-            <ul>
-                <li>ארגוני מו"פ מתאימים את עצמם לשינויים במאפייני התוכנה</li>
-                <li>הגדלת מספר האנשים והצוותים המעורבים בתוכנה מסוימת</li>
-                <li>מתודולוגיות חדשות מונעות זריזות (כמו סקראם) צוברות פופולריות
-                    <ul>
-                        <li>התמקדות בערך וגמישות</li>
-                        <li>הסתמכות על מחזורים קצרים מקצה לקצה (פיתוח, בדיקה, שחרור)</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <h3>קונטיינרים ומיקרו-שירותים</h3>
-            <ul>
-                <li>קונטיינרים מספקים דרכים חדשות להפוך את ה-SDLC לחסין:
-                    <ul>
-                        <li>סביבות פיתוח ובדיקה מאוחדות</li>
-                        <li>יצירת חבילות הופכת פשוטה</li>
-                        <li>חיכוך הפריסה מופחת (פחות תלות בסביבת ההרצה)</li>
-                    </ul>
-                </li>
-                <li>מיקרו-שירותים הופכים לגישה פופולרית: פירוק האפליקציה להרבה חלקים עצמאיים עם שחרורים נפרדים אך מתואמים</li>
-            </ul>
-            
-            <h3>עידן הענן</h3>
-            <ul>
-                <li>מהפכת הענן הציגה את מודל "כשירות"
-                    <ul>
-                        <li>IaaS, PaaS: הקצאה וניהול קלים של תשתית ופלטפורמה</li>
-                    </ul>
-                </li>
-                <li>SaaS
-                    <ul>
-                        <li>תוכנה כשירות מבטלת ניהול גרסאות ושחרורים</li>
-                        <li>תוכנה מתעדכנת ומתוקנת באופן רציף</li>
-                        <li>לקוחות מצפים לעדכונים פרואקטיביים ללא נקיטת פעולות</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Slide 4: Jenkins -->
-        <div class="slide">
-            <h2>Jenkins - חלוץ האוטומציה</h2>
-            
-            <div style="text-align: center; margin-bottom: 30px;">
-                <div style="display: inline-block; width: 120px; height: 120px; background: #D24939; border-radius: 50%; position: relative;">
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 60px;">🎩</div>
-                </div>
-            </div>
-            
-            <h3>מהו Jenkins?</h3>
-            <ul>
-                <li>פלטפורמת אוטומציה</li>
-                <li>הוצג ב-2011</li>
-                <li>קוד פתוח</li>
-                <li>ניתן להתאמה אישית והרחבה גבוהה
-                    <ul>
-                        <li>שוק של תוספים חינמיים להרחבת הפונקציונליות</li>
-                        <li>כמעט כל דבר בפלטפורמה ניתן לשינוי</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <h3>Jenkins כמריץ משימות</h3>
-            <ul>
-                <li>הגדרת משימות שונות למשימות שונות</li>
-                <li>מבנה משימות בקבוצות היררכיות</li>
-                <li>הקצאת קבוצות משתמשים והרשאות למשימות</li>
-                <li>הפעלת משימות אוטומטית על אירועים (git push, merge)</li>
-                <li>מעקב ובדיקה של הרצות משימות</li>
-            </ul>
-            
-            <h3>בנייה מבוזרת</h3>
-            <ul>
-                <li>ארכיטקטורת מאסטר-סלייב
-                    <ul>
-                        <li>מאסטר אחד או יותר של Jenkins מנהלים את המשימות</li>
-                        <li>משימות רצות על סלייבים שונים (שרתים)</li>
-                    </ul>
-                </li>
-                <li>שיפור ביצועים ומהירות לפרויקטים/משימות גדולים</li>
-                <li>אפשור סקיילביליות של מערכת ה-CI/CD</li>
-            </ul>
-            
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h4>✅ יתרונות</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 5px 0;">קוד פתוח ומונע קהילה</li>
-                        <li style="padding: 5px 0;">רב-תכליתי</li>
-                        <li style="padding: 5px 0;">התאמה אישית גבוהה</li>
-                        <li style="padding: 5px 0;">חלוץ בתחום</li>
-                    </ul>
-                </div>
-                <div class="tech-card">
-                    <h4>❌ חסרונות</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="padding: 5px 0;">הגדרה ותחזוקה מורכבות</li>
-                        <li style="padding: 5px 0;">עיצוב מיושן</li>
-                        <li style="padding: 5px 0;">שפת Groovy</li>
-                        <li style="padding: 5px 0;">בעיות אבטחה</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 5: CI/CD Systems -->
-        <div class="slide">
-            <h2>סקירת מערכות CI/CD</h2>
-            
-            <div style="text-align: center; margin: 30px 0;">
-                <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 15px;">
-                    <h3>זרימת צינור CI/CD</h3>
-                    <p style="font-size: 20px; margin: 20px 0;">
-                        קוד מקור ← <span style="color: #667eea;">אינטגרציה רציפה</span> ← ענף ראשי ← <span style="color: #764ba2;">פריסה רציפה</span> ← ייצור
-                    </p>
-                </div>
-            </div>
-            
-            <h3>התוצאות: CI/CD</h3>
-            <ul>
-                <li><strong>אינטגרציה רציפה</strong>
-                    <ul>
-                        <li>שילוב רציף של חלקי קוד וענפים שונים</li>
-                        <li>בנייה ובדיקה אוטומטית של הקוד שלך</li>
-                    </ul>
-                </li>
-                <li><strong>פריסה רציפה</strong>
-                    <ul>
-                        <li>גרסאות חדשות נארזות ונבדקות אוטומטית</li>
-                        <li>פרסום תיקונים ושיפורים ברגע שהם מוכנים</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <h3>מערכות CI/CD פופולריות</h3>
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h4>CI/CD מסורתי</h4>
-                    <p>Travis CI</p>
-                    <p>Circle CI</p>
-                    <p>TeamCity</p>
-                    <p>GoCD</p>
-                </div>
-                <div class="tech-card">
-                    <h4>CI/CD מבוסס ענן</h4>
-                    <p>AWS CodeBuild & CodePipeline</p>
-                    <p>Google Cloud Build & Run</p>
-                    <p>Azure Pipelines</p>
-                </div>
-                <div class="tech-card">
-                    <h4>CI/CD מבוסס VCS</h4>
-                    <p>GitHub Actions</p>
-                    <p>GitLab CI/Pipelines</p>
-                    <p>BitBucket Pipelines</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Cloud & IaC -->
-        <div class="slide">
-            <h2>פריסת ענן ותשתית כקוד</h2>
-            
-            <h3>Kubernetes (K8s)</h3>
-            <ul>
-                <li>תזמור קונטיינרים: הרצת אשכול של קונטיינרים</li>
-                <li>שוחרר על ידי גוגל ב-2014 כפרויקט קוד פתוח</li>
-                <li>חולל מהפכה בסביבת ההרצה המודרנית:
-                    <ul>
-                        <li>כל סביבת הרצה היא אשכול K8s</li>
-                        <li>בנוי לסקיילביליות ותמיכה במשאבים המוקצים דינמית</li>
-                        <li>כל ספק ענן מספק פתרון K8s מנוהל מוכן לשימוש</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <h3>תהליך פריסת ענן</h3>
-            <ul>
-                <li>פריסה לסביבת ענן מודרנית כוללת:
-                    <ul>
-                        <li>הקצאת המשאבים הדרושים (צמתים, רשת, אחסון וכו')</li>
-                        <li>הכנת גרסאות מעודכנות של מניפסטים של K8s</li>
-                        <li>עדכון האשכול להרצת הגרסאות החדשות</li>
-                    </ul>
-                </li>
-                <li>תשתית כקוד הוצגה כדי להתמודד עם מורכבות התשתית החדשה</li>
-            </ul>
-            
-            <h3>תשתית כקוד (IaC)</h3>
-            <ul>
-                <li>תשתית כקוד (IaC) היא הרעיון של ניהול התשתית באמצעות קוד</li>
-                <li>מניפסטים מתארים את דרישות ההקצאה</li>
-                <li>מחסנית של IaC שומרת את המצב של משאבים שנפרסו כעת</li>
-                <li>פרסום שינויים למניפסטים של IaC גורם לדלתא של דרישות</li>
-                <li>משאבים מוחלפים אוטומטית כדי לשקף את הדרישות החדשות</li>
-            </ul>
-            
-            <h3>טכנולוגיות IaC מובילות</h3>
-            <div class="tech-grid">
-                <div class="tech-card">
-                    <h4>Terraform</h4>
-                    <p>הקצאה עם מצב של תשתית (בין-)ענן</p>
-                </div>
-                <div class="tech-card">
-                    <h4>Helm</h4>
-                    <p>ניהול (הגדרה, התקנה, שדרוג) אפליקציות K8s</p>
-                </div>
-                <div class="tech-card">
-                    <h4>AWS CDK / Go CDK</h4>
-                    <p>ערכות פיתוח תוכנה לענן</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 7: DevOps -->
-        <div class="slide">
-            <h2>עליית ה-DevOps</h2>
-            
-            <h3>DevOps: פיתוח + תפעול</h3>
-            <ul>
-                <li>מתודולוגיה: סט של עקרונות ושיטות עבודה</li>
-                <li>שילוב ואוטומציה של העבודה של פיתוח תוכנה ו-IT</li>
-                <li>ניהול ופיתוח באמצעות הכלים השונים שתוארו קודם</li>
-            </ul>
-            
-            <h3>פרקטיקה של מהנדסי DevOps</h3>
-            <ul>
-                <li>מהנדסי DevOps מיישמים את שני תהליכי ה-CI/CD:
-                    <ul>
-                        <li>ניהול ופיתוח אוטומציית אינטגרציה רציפה</li>
-                        <li>פריסה לסביבת ההרצה (בדיקות, ייצור וכו')</li>
-                    </ul>
-                </li>
-                <li>מהנדסי מו"פ סומכים על תשתית DevOps ומקיימים איתה אינטראקציה תכופה</li>
-            </ul>
-            
-            <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
-                <h3 style="color: white;">עקרונות DevOps מרכזיים</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
-                    <div>
-                        <h4 style="color: white;">🔄 אוטומציה</h4>
-                        <p>אוטומציה של משימות חוזרות</p>
-                    </div>
-                    <div>
-                        <h4 style="color: white;">🤝 שיתוף פעולה</h4>
-                        <p>שבירת מחיצות בין צוותים</p>
-                    </div>
-                    <div>
-                        <h4 style="color: white;">📊 ניטור</h4>
-                        <p>ניטור ומשוב רציפים</p>
-                    </div>
-                    <div>
-                        <h4 style="color: white;">🚀 אספקה רציפה</h4>
-                        <p>אספקת ערך באופן רציף</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 8: GitHub Actions -->
-        <div class="slide">
-            <h2>GitHub Actions</h2>
-            
-            <h3>למה GitHub Actions?</h3>
-            <ul>
-                <li>האירוח המוביל לפרויקטי קוד פתוח</li>
-                <li>מגוון הפרויקטים מציע טווח רחב של דוגמאות CI/CD</li>
-                <li>פרויקטים ציבוריים נהנים מתכונות ארגוניות מתקדמות בחינם</li>
-                <li>תמיכה נרחבת בשימוש בפעולות וזרימות עבודה של צד שלישי</li>
-                <li>מסגרת פשוטה וישירה יחסית</li>
-            </ul>
-            
-            <h3>איך GitHub Actions עובד</h3>
-            <ul>
-                <li>הגדרת זרימת עבודה שתופעל כאשר אירוע מתרחש במאגר שלך</li>
-                <li>זרימת עבודה מכילה משימה אחת או יותר (מבוצעות ברצף או במקביל)</li>
-                <li>משימות מבצעות צעדים ברצף, כל צעד:
-                    <ul>
-                        <li>מריץ סקריפט</li>
-                        <li>קורא לפעולה (הרחבה לשימוש חוזר)</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <h3>אירועים שמפעילים זרימות עבודה</h3>
-            <ul>
-                <li>דחיפת קוד לענף</li>
-                <li>דחיפת תג חדש</li>
-                <li>פתיחה/עדכון/סגירה של pull request</li>
-                <li>טיימר (תזמון זרימות עבודה שגרתיות)</li>
-            </ul>
-            
-            <h3>דוגמה לזרימת עבודה</h3>
-            <div class="code-block">
-                <span class="keyword">name:</span> <span class="string">learn-github-actions</span>
-                <span class="keyword">on:</span> [push]
-                <span class="keyword">jobs:</span>
-                  <span class="keyword">check-bats-version:</span>
-                    <span class="keyword">runs-on:</span> ubuntu-latest
-                    <span class="keyword">steps:</span>
-                      - <span class="keyword">uses:</span> actions/checkout@v3
-                      - <span class="keyword">uses:</span> actions/setup-node@v3
-                        <span class="keyword">with:</span>
-                          <span class="keyword">node-version:</span> <span class="string">'14'</span>
-                      - <span class="keyword">run:</span> npm install -g bats
-                      - <span class="keyword">run:</span> |
-                          echo <span class="string">"testing bats version:"</span>
-                          bats -v
-            </div>
-            
-            <h3>רכיבי זרימת עבודה</h3>
-            <ul>
-                <li>כל זרימת עבודה מוגדרת באמצעות קובץ yaml</li>
-                <li>הניחו קבצי yaml של זרימות עבודה תחת תיקיית .github/workflows במאגר שלכם</li>
-                <li>זרימת עבודה חייבת להגדיר:
-                    <ul>
-                        <li>אילו אירועים מפעילים את זרימת העבודה</li>
-                        <li>משימה אחת או יותר</li>
-                    </ul>
-                </li>
-                <li>כל משימה רצה על קונטיינר ייעודי בתוך מכונה וירטואלית</li>
-                <li>משימה חייבת להגדיר:
-                    <ul>
-                        <li>את תמונת הקונטיינר לשימוש</li>
-                        <li>צעד אחד או יותר לביצוע</li>
-                    </ul>
-                </li>
-            </ul>
-            
-            <h3>משאבים</h3>
-            <ul>
-                <li>תיעוד מלא של GitHub Actions</li>
-                <li>מדריך: לימוד GitHub Actions</li>
-                <li>התחלה מהירה עבור GitHub Actions</li>
-                <li>שוק GitHub Actions (חינם)</li>
-            </ul>
-        </div>
-
-        <div class="controls">
-            <button class="control-btn" id="prevBtn" onclick="previousSlide()">→ הקודם</button>
-            <span id="slideNumber" style="color: white; font-weight: 600; padding: 10px 20px; background: rgba(0,0,0,0.2); border-radius: 20px;">1 / 9</span>
-            <button class="control-btn" id="nextBtn" onclick="nextSlide()">הבא ←</button>
-        </div>
+    <div class="copy-notification" id="copyNotification">
+        ✅ הועתק ללוח!
     </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const navBtns = document.querySelectorAll('.nav-btn');
-        const totalSlides = slides.length;
-
-        function showSlide(index) {
-            // Hide all slides
-            slides.forEach(slide => slide.classList.remove('active'));
-            navBtns.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected slide
-            currentSlide = index;
-            slides[currentSlide].classList.add('active');
-            navBtns[currentSlide].classList.add('active');
-            
-            // Update slide number
-            document.getElementById('slideNumber').textContent = `${currentSlide + 1} / ${totalSlides}`;
-            
-            // Update progress bar
-            const progress = ((currentSlide + 1) / totalSlides) * 100;
-            document.getElementById('progress').style.width = progress + '%';
-            
-            // Update button states
-            document.getElementById('prevBtn').disabled = currentSlide === 0;
-            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-            
-            // Smooth scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function nextSlide() {
-            if (currentSlide < totalSlides - 1) {
-                showSlide(currentSlide + 1);
-            }
-        }
-
-        function previousSlide() {
-            if (currentSlide > 0) {
-                showSlide(currentSlide - 1);
-            }
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') previousSlide(); // Reversed for RTL
-            if (e.key === 'ArrowLeft') nextSlide(); // Reversed for RTL
-            if (e.key >= '1' && e.key <= '9') {
-                const slideIndex = parseInt(e.key) - 1;
-                if (slideIndex < totalSlides) {
-                    showSlide(slideIndex);
-                }
-            }
-        });
-
-        // Touch/swipe support for mobile (reversed for RTL)
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) previousSlide(); // Reversed for RTL
-            if (touchEndX > touchStartX + 50) nextSlide(); // Reversed for RTL
-        }
-
-        // Initialize
-        showSlide(0);
-
-        // Add smooth animations to tech cards
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeIn 0.6s ease-in-out';
-                }
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                item.classList.add('active');
+                const sectionId = item.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
             });
         });
 
-        document.querySelectorAll('.tech-card').forEach(card => {
-            observer.observe(card);
+        // Copy code blocks
+        document.querySelectorAll('.code-block').forEach(code => {
+            code.addEventListener('click', () => {
+                navigator.clipboard.writeText(code.textContent).then(() => {
+                    const notification = document.getElementById('copyNotification');
+                    notification.classList.add('show');
+                    setTimeout(() => notification.classList.remove('show'), 2000);
+                });
+            });
+            code.style.cursor = 'pointer';
+            code.title = 'לחץ להעתקה';
         });
 
-        // Add interactive hover effects
-        document.querySelectorAll('.slide li').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.color = '#2d3748';
-            });
-            item.addEventListener('mouseleave', function() {
-                this.style.color = '#4a5568';
-            });
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const allSections = document.querySelectorAll('.section');
+        const allContent = document.querySelectorAll('.section *');
+
+        const originalContent = new Map();
+        allContent.forEach(el => {
+            originalContent.set(el, el.innerHTML);
         });
 
-        // Add fullscreen capability
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'f' || e.key === 'F') {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            if (searchTerm === '') {
+                allContent.forEach(el => {
+                    el.innerHTML = originalContent.get(el);
+                });
+                allSections.forEach(section => section.classList.remove('active'));
+                document.getElementById('intro').classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelector('.nav-item[data-section="intro"]').classList.add('active');
+                return;
+            }
+
+            let hasResults = false;
+            allSections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.classList.add('active');
+                    hasResults = true;
+
+                    // Highlight
+                    section.querySelectorAll('p, li, h3, h4').forEach(el => {
+                        const original = originalContent.get(el);
+                        if (original && el.textContent.toLowerCase().includes(searchTerm)) {
+                            const regex = new RegExp(`(${searchTerm})`, 'gi');
+                            el.innerHTML = original.replace(regex, '<span class="highlight">$1</span>');
+                        }
+                    });
                 } else {
-                    document.exitFullscreen();
+                    section.classList.remove('active');
                 }
+            });
+
+            if (hasResults) {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
             }
         });
 
-        // Add a helpful tooltip
-        const tooltip = document.createElement('div');
-        tooltip.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 12px;
-            z-index: 1000;
-            max-width: 250px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            direction: rtl;
-        `;
-        tooltip.innerHTML = `
-            <strong>טיפים לניווט:</strong><br>
-            • השתמשו במקשי החצים ← →<br>
-            • לחצו 1-9 לגישה ישירה לשקופית<br>
-            • לחצו F למסך מלא<br>
-            • החליקו במכשירים ניידים
-        `;
-        document.body.appendChild(tooltip);
-
-        // Show tooltip initially, then hide
-        setTimeout(() => {
-            tooltip.style.opacity = '1';
-            setTimeout(() => {
-                tooltip.style.opacity = '0';
-                setTimeout(() => {
-                    tooltip.style.display = 'none';
-                }, 300);
-            }, 5000);
-        }, 1000);
-
-        // Add presentation mode indicator
-        let presentationMode = false;
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'p' || e.key === 'P') {
-                presentationMode = !presentationMode;
-                if (presentationMode) {
-                    document.querySelector('.navigation').style.display = 'none';
-                    document.querySelector('.header').style.display = 'none';
-                    document.querySelector('.controls').style.position = 'fixed';
-                    document.querySelector('.controls').style.bottom = '20px';
-                    document.querySelector('.controls').style.left = '50%';
-                    document.querySelector('.controls').style.transform = 'translateX(-50%)';
-                    document.querySelector('.controls').style.background = 'rgba(0,0,0,0.5)';
-                    document.querySelector('.controls').style.padding = '10px';
-                    document.querySelector('.controls').style.borderRadius = '10px';
-                } else {
-                    document.querySelector('.navigation').style.display = 'flex';
-                    document.querySelector('.header').style.display = 'block';
-                    document.querySelector('.controls').style.position = 'static';
-                    document.querySelector('.controls').style.transform = 'none';
-                    document.querySelector('.controls').style.background = 'none';
-                    document.querySelector('.controls').style.padding = '0';
-                }
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
             }
-        });
-
-        // Add slide transition effects
-        let isTransitioning = false;
-        const originalShowSlide = showSlide;
-        showSlide = function(index) {
-            if (isTransitioning) return;
-            isTransitioning = true;
-            originalShowSlide(index);
-            setTimeout(() => {
-                isTransitioning = false;
-            }, 600);
-        };
-
-        // Add loading animation
-        window.addEventListener('load', () => {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-
-        // Print information
-        console.log('%c🚀 CI/CD למהנדסי נתונים - מצגת אינטראקטיבית', 'color: #667eea; font-size: 16px; font-weight: bold;');
-        console.log('%cלחצו H לעזרה עם קיצורי מקלדת', 'color: #764ba2; font-size: 12px;');
-        
-        // Help modal
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'h' || e.key === 'H') {
-                const helpModal = document.createElement('div');
-                helpModal.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: white;
-                    padding: 30px;
-                    border-radius: 20px;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                    z-index: 2000;
-                    max-width: 500px;
-                    direction: rtl;
-                `;
-                helpModal.innerHTML = `
-                    <h2 style="color: #2d3748; margin-bottom: 20px;">קיצורי מקלדת</h2>
-                    <ul style="list-style: none; padding: 0; color: #4a5568;">
-                        <li style="padding: 5px 0;"><strong>←/→</strong> - ניווט בין שקופיות</li>
-                        <li style="padding: 5px 0;"><strong>1-9</strong> - קפיצה לשקופית</li>
-                        <li style="padding: 5px 0;"><strong>F</strong> - מעבר למסך מלא</li>
-                        <li style="padding: 5px 0;"><strong>P</strong> - מצב מצגת</li>
-                        <li style="padding: 5px 0;"><strong>H</strong> - הצגת עזרה זו</li>
-                        <li style="padding: 5px 0;"><strong>ESC</strong> - סגירת חלונות</li>
-                    </ul>
-                    <button onclick="this.parentElement.remove()" style="margin-top: 20px; padding: 10px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; cursor: pointer;">סגור</button>
-                `;
-                document.body.appendChild(helpModal);
-                
-                // Close on ESC
-                const closeHelp = (e) => {
-                    if (e.key === 'Escape') {
-                        helpModal.remove();
-                        document.removeEventListener('keydown', closeHelp);
-                    }
-                };
-                document.addEventListener('keydown', closeHelp);
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
             }
         });
     </script>
