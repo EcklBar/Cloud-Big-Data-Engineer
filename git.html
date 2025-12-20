@@ -140,9 +140,8 @@
             text-align: left;
             border-left: 5px solid #3b82f6;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            overflow-x: auto;
-            line-height: 2.4;
-            min-width: 100%;
+            overflow: visible;
+            line-height: 2.2;
         }
 
         /* Custom scrollbar for code boxes */
@@ -167,16 +166,60 @@
         .command-box code {
             font-family: 'Fira Code', monospace;
             color: #e2e8f0;
-            display: inline-block;
-            white-space: nowrap;
+            display: inline;
             margin-right: 8px;
         }
 
-        .command-box > * {
-            display: block;
+        .command-line {
+            display: flex;
+            align-items: flex-start;
             margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+            position: relative;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            gap: 10px;
+        }
+
+        .command-line:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .command-line-content {
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .command-line .copy-line-btn {
+            opacity: 0;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #60a5fa;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: all 0.2s;
             white-space: nowrap;
-            overflow-x: auto;
+            flex-shrink: 0;
+        }
+
+        .command-line:hover .copy-line-btn {
+            opacity: 1;
+        }
+
+        .command-line .copy-line-btn:hover {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: #60a5fa;
+        }
+
+        .command-line .copy-line-btn.copied {
+            background: rgba(34, 197, 94, 0.3);
+            border-color: #22c55e;
+            color: #22c55e;
         }
 
         .cmd {
@@ -202,11 +245,22 @@
 
         .copy-btn {
             position: absolute; top: 10px; right: 10px;
-            background: rgba(255,255,255,0.1); border: none; color: white;
-            padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8em;
-            transition: background 0.2s;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #60a5fa;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            transition: all 0.2s;
+            z-index: 10;
         }
-        .copy-btn:hover { background: rgba(255,255,255,0.3); }
+        .copy-btn:hover {
+            background: rgba(59, 130, 246, 0.4);
+            border-color: #60a5fa;
+            transform: translateY(-1px);
+        }
 
         /* --- DIAGRAMS --- */
         .diagram-container {
@@ -466,12 +520,37 @@
             <p>The essential toolkit every Data Engineer needs to know.</p>
 
             <div class="command-box">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <div><span class="cmd">git init</span> <span class="comment"># Initialize a new repository in the current directory</span></div>
-                <div><span class="cmd">git clone</span> <span class="arg">&lt;repo_url&gt;</span> <span class="comment"># Download a full copy of an existing remote repository</span></div>
-                <div><span class="cmd">git status</span> <span class="comment"># Check file status (what changed? what is staged?)</span></div>
-                <div><span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Move file to Staging Area (prepare for commit)</span></div>
-                <div><span class="cmd">git commit</span> <span class="arg">-m "message"</span> <span class="comment"># Save changes to the local repository history</span></div>
+                <button class="copy-btn" onclick="copyCode(this)">Copy All</button>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git init</span> <span class="comment"># Initialize a new repository in the current directory</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git clone</span> <span class="arg">&lt;repo_url&gt;</span> <span class="comment"># Download a full copy of an existing remote repository</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git status</span> <span class="comment"># Check file status (what changed? what is staged?)</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Move file to Staging Area (prepare for commit)</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git commit</span> <span class="arg">-m "message"</span> <span class="comment"># Save changes to the local repository history</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
             </div>
 
             <div class="info-card" style="background-color: #e3f2fd; border-color: #2196f3;">
@@ -531,15 +610,51 @@
             <p>Git's superpower. Work on features in parallel without breaking the main code.</p>
 
             <div class="command-box">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <div><span class="comment"># Create and switch to a new branch</span></div>
-                <div><span class="cmd">git checkout</span> <span class="arg">-b feature_branch</span></div>
-                <div><span class="comment"># List all branches</span></div>
-                <div><span class="cmd">git branch</span> <span class="arg">-a</span></div>
-                <div><span class="comment"># Switch back to main branch</span></div>
-                <div><span class="cmd">git checkout</span> <span class="arg">main</span></div>
-                <div><span class="comment"># Merge side branch into main</span></div>
-                <div><span class="cmd">git merge</span> <span class="arg">feature_branch</span></div>
+                <button class="copy-btn" onclick="copyCode(this)">Copy All</button>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Create and switch to a new branch</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git checkout</span> <span class="arg">-b feature_branch</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># List all branches</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git branch</span> <span class="arg">-a</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Switch back to main branch</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git checkout</span> <span class="arg">main</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Merge side branch into main</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git merge</span> <span class="arg">feature_branch</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                </div>
             </div>
 
             <h3>Merge Strategies</h3>
@@ -616,13 +731,41 @@
 
             <h3>Identifying a Conflict</h3>
             <div class="command-box" style="border-left-color: var(--danger);">
-                <div><span style="color: #e74c3c;"><<<<<<< HEAD</span></div>
-                <div><span class="comment"># Code currently in Main</span></div>
-                <div><span style="color: #60a5fa;">print("Hello World")</span></div>
-                <div><span style="color: #94a3b8;">=======</span></div>
-                <div><span class="comment"># Code from side branch</span></div>
-                <div><span style="color: #fbbf24;">print("Hello Git")</span></div>
-                <div><span style="color: #e74c3c;">>>>>>>> side_branch</span></div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span style="color: #e74c3c;"><<<<<<< HEAD</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Code currently in Main</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span style="color: #60a5fa;">print("Hello World")</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span style="color: #94a3b8;">=======</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Code from side branch</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span style="color: #fbbf24;">print("Hello Git")</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span style="color: #e74c3c;">>>>>>>> side_branch</span>
+                    </div>
+                </div>
             </div>
 
             <div class="info-card" style="background: #fff3e0;">
@@ -933,30 +1076,141 @@
             evt.currentTarget.className += " active";
         }
 
-        // Copy Logic
+        // Copy Logic - Copy all commands in a box
         function copyCode(btn) {
             const codeBlock = btn.parentElement;
             let textToCopy = "";
-            const cmdElements = codeBlock.querySelectorAll('.cmd, .arg');
-            cmdElements.forEach(el => {
-                textToCopy += el.innerText + " ";
-                if(el.nextSibling && el.nextSibling.nodeName === "BR") {
-                   textToCopy += "\n";
-                }
-            });
-            // Fallback
-            if (!textToCopy) textToCopy = codeBlock.innerText.replace("Copy", "").trim();
 
-            navigator.clipboard.writeText(textToCopy).then(() => {
+            // Try to get command-line elements first (new format)
+            const commandLines = codeBlock.querySelectorAll('.command-line-content');
+            if (commandLines.length > 0) {
+                commandLines.forEach(line => {
+                    const cmdSpan = line.querySelector('.cmd');
+                    const argSpans = line.querySelectorAll('.arg');
+
+                    if (cmdSpan) {
+                        let command = cmdSpan.innerText;
+                        argSpans.forEach(arg => {
+                            command += ' ' + arg.innerText;
+                        });
+                        textToCopy += command + '\n';
+                    }
+                });
+            } else {
+                // Fallback for old format
+                const cmdElements = codeBlock.querySelectorAll('.cmd, .arg');
+                cmdElements.forEach(el => {
+                    textToCopy += el.innerText + " ";
+                    if(el.nextSibling && el.nextSibling.nodeName === "BR") {
+                       textToCopy += "\n";
+                    }
+                });
+            }
+
+            // Final fallback
+            if (!textToCopy) {
+                textToCopy = codeBlock.innerText.split('\n')
+                    .map(line => line.split('#')[0].trim())
+                    .filter(line => line && !line.includes('Copy'))
+                    .join('\n');
+            }
+
+            navigator.clipboard.writeText(textToCopy.trim()).then(() => {
                 const originalText = btn.innerText;
-                btn.innerText = "Copied!";
-                btn.style.background = "#2ecc71";
+                const originalBg = btn.style.background;
+                btn.innerText = "Copied ✓";
+                btn.style.background = "rgba(34, 197, 94, 0.3)";
+                btn.style.borderColor = "#22c55e";
+                btn.style.color = "#22c55e";
                 setTimeout(() => {
                     btn.innerText = originalText;
-                    btn.style.background = "rgba(255,255,255,0.1)";
+                    btn.style.background = originalBg;
+                    btn.style.borderColor = "rgba(59, 130, 246, 0.4)";
+                    btn.style.color = "#60a5fa";
                 }, 2000);
             });
         }
+
+        // Copy single line
+        function copyLine(btn) {
+            const commandLine = btn.closest('.command-line');
+            const content = commandLine.querySelector('.command-line-content');
+
+            // Extract only git command (without comments)
+            let textToCopy = '';
+            const cmdSpan = content.querySelector('.cmd');
+            const argSpans = content.querySelectorAll('.arg');
+
+            if (cmdSpan) {
+                textToCopy = cmdSpan.innerText;
+                argSpans.forEach(arg => {
+                    textToCopy += ' ' + arg.innerText;
+                });
+            }
+
+            // Fallback: get all text except comments
+            if (!textToCopy) {
+                textToCopy = content.innerText.split('#')[0].trim();
+            }
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = "✓";
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        // Auto-convert old command boxes to new format with copy buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.command-box').forEach(box => {
+                // Add "Copy All" button if missing
+                if (!box.querySelector('.copy-btn')) {
+                    const copyAllBtn = document.createElement('button');
+                    copyAllBtn.className = 'copy-btn';
+                    copyAllBtn.textContent = 'Copy All';
+                    copyAllBtn.onclick = function() { copyCode(this); };
+                    box.insertBefore(copyAllBtn, box.firstChild);
+                }
+
+                // Skip if already converted (has command-line divs)
+                if (box.querySelector('.command-line')) return;
+
+                // Get all direct child divs (old format)
+                const oldLines = Array.from(box.children).filter(child =>
+                    child.tagName === 'DIV' && !child.classList.contains('copy-btn')
+                );
+
+                oldLines.forEach(oldLine => {
+                    const content = oldLine.innerHTML;
+
+                    // Skip empty lines
+                    if (!content.trim()) return;
+
+                    // Create new command-line structure
+                    const commandLine = document.createElement('div');
+                    commandLine.className = 'command-line';
+
+                    const commandLineContent = document.createElement('div');
+                    commandLineContent.className = 'command-line-content';
+                    commandLineContent.innerHTML = content;
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-line-btn';
+                    copyBtn.textContent = 'Copy';
+                    copyBtn.onclick = function() { copyLine(this); };
+
+                    commandLine.appendChild(commandLineContent);
+                    commandLine.appendChild(copyBtn);
+
+                    // Replace old line with new structure
+                    oldLine.replaceWith(commandLine);
+                });
+            });
+        });
 
         // Merge Visualization Logic
         const mergeVisualizationTypes = {
