@@ -101,6 +101,7 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            padding: var(--space-md);
         }
 
         /* ============================================
@@ -113,8 +114,6 @@
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-xl);
             overflow: hidden;
-            margin-top: var(--space-md);
-            margin-bottom: var(--space-md);
         }
 
         /* ============================================
@@ -182,6 +181,9 @@
             padding: var(--space-lg);
             background: var(--bg-light);
             border-bottom: 1px solid var(--bg-lighter);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .search-box {
@@ -206,12 +208,11 @@
         }
 
         /* ============================================
-           📐 Content Layout
+           📐 Content Layout - NO SCROLL!
            ============================================ */
         .content {
             display: grid;
             grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 300px);
         }
 
         /* ============================================
@@ -221,8 +222,6 @@
             background: var(--bg-light);
             border-left: 1px solid var(--bg-lighter);
             padding: var(--space-md) 0;
-            overflow-y: auto;
-            max-height: calc(100vh - 300px);
         }
 
         .sidebar::-webkit-scrollbar {
@@ -269,29 +268,10 @@
         }
 
         /* ============================================
-           📄 Main Content Area
+           📄 Main Content Area - NO MAX HEIGHT!
            ============================================ */
         .main-content {
             padding: var(--space-xl);
-            overflow-y: auto;
-            max-height: calc(100vh - 300px);
-        }
-
-        .main-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .main-content::-webkit-scrollbar-track {
-            background: var(--bg-light);
-        }
-
-        .main-content::-webkit-scrollbar-thumb {
-            background: var(--bg-lighter);
-            border-radius: 4px;
-        }
-
-        .main-content::-webkit-scrollbar-thumb:hover {
-            background: var(--docker-blue);
         }
 
         .section {
@@ -337,6 +317,12 @@
         @keyframes slideLeft {
             from { width: 0; }
             to { width: 60px; }
+        }
+
+        .section h3 {
+            color: var(--text-secondary);
+            font-size: var(--text-2xl);
+            margin: var(--space-lg) 0 var(--space-md) 0;
         }
 
         /* ============================================
@@ -479,6 +465,46 @@
         }
 
         /* ============================================
+           🎨 Comparison Table
+           ============================================ */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+            margin: var(--space-lg) 0;
+        }
+
+        .comparison-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+            border-top: 4px solid var(--docker-blue);
+        }
+
+        .comparison-box h4 {
+            text-align: center;
+            font-size: var(--text-2xl);
+            margin-bottom: var(--space-lg);
+            color: var(--docker-blue);
+        }
+
+        .stack-item {
+            background: var(--bg-light);
+            padding: var(--space-sm);
+            margin: var(--space-xs) 0;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-weight: 500;
+            transition: transform var(--transition-fast);
+        }
+
+        .stack-item:hover {
+            transform: translateX(-5px);
+            background: var(--bg-lighter);
+        }
+
+        /* ============================================
            📱 Responsive Design
            ============================================ */
         @media (max-width: 768px) {
@@ -489,11 +515,6 @@
             .sidebar {
                 border-left: none;
                 border-bottom: 1px solid var(--bg-lighter);
-                max-height: 300px;
-            }
-
-            .main-content {
-                max-height: none;
             }
 
             .header h1 {
@@ -505,8 +526,12 @@
                 font-size: 2rem;
             }
 
-            .container {
-                margin: var(--space-sm);
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                padding: var(--space-sm);
             }
         }
 
@@ -542,18 +567,70 @@
             font-size: var(--text-base);
             line-height: 1.8;
         }
+
+        .info-box ul {
+            margin-top: var(--space-sm);
+            padding-right: var(--space-lg);
+        }
+
+        .info-box li {
+            margin: var(--space-xs) 0;
+            color: var(--text-secondary);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-right: 4px solid var(--accent-orange);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-right: 4px solid var(--accent-green);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card h4 {
+            color: var(--docker-blue);
+            margin-bottom: var(--space-sm);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <header class="header" role="banner">
-            <div class="header-logo">DATA ENGINEERING HUB</div>
+            <div class="header-logo">NAYA COLLEGE - DATA ENGINEERING</div>
             <h1>
                 <span class="docker-logo">🐳</span>
-                Docker - מדריך מקיף
+                Docker למהנדסי נתונים
             </h1>
-            <p>מדריך אינטראקטיבי לכל פקודות Docker עם חיפוש מתקדם</p>
+            <p>מדריך מקיף ואינטראקטיבי - ללא צורך בגלילה</p>
         </header>
 
         <!-- Search Section -->
@@ -561,7 +638,7 @@
             <input 
                 type="text" 
                 class="search-box" 
-                placeholder="🔍 חפש פקודות, תיאורים או דוגמאות... (Ctrl+F)" 
+                placeholder="🔍 חפש פקודות, הגדרות או נושאים... (Ctrl+F)" 
                 id="searchInput"
                 autocomplete="off"
             >
@@ -571,28 +648,238 @@
         <div class="content">
             <!-- Sidebar Navigation -->
             <nav class="sidebar">
-                <a href="#" class="nav-item active" data-section="definitions">📚 הגדרות</a>
-                <a href="#" class="nav-item" data-section="help">❓ עזרה</a>
+                <a href="#" class="nav-item active" data-section="what-is-docker">🐳 מהו Docker</a>
+                <a href="#" class="nav-item" data-section="docker-vs-vm">⚖️ Docker vs VM</a>
+                <a href="#" class="nav-item" data-section="use-cases">🎯 מקרי שימוש</a>
+                <a href="#" class="nav-item" data-section="architecture">🏗️ ארכיטקטורה</a>
+                <a href="#" class="nav-item" data-section="technology">🔬 טכנולוגיה בסיסית</a>
+                <a href="#" class="nav-item" data-section="definitions">📚 הגדרות</a>
+                <a href="#" class="nav-item" data-section="dockerfile">📝 Dockerfile</a>
+                <a href="#" class="nav-item" data-section="building">🔨 בניית Images</a>
                 <a href="#" class="nav-item" data-section="running">🚀 הרצת קונטיינרים</a>
                 <a href="#" class="nav-item" data-section="inspecting">🔍 בדיקת קונטיינרים</a>
                 <a href="#" class="nav-item" data-section="managing">⚙️ ניהול קונטיינרים</a>
-                <a href="#" class="nav-item" data-section="building">🔨 בניית Images</a>
-                <a href="#" class="nav-item" data-section="registries">📦 עבודה עם Registries</a>
+                <a href="#" class="nav-item" data-section="volumes">💾 Volumes</a>
+                <a href="#" class="nav-item" data-section="networking">🌐 רשתות</a>
+                <a href="#" class="nav-item" data-section="layers">🗂️ מערכת Layers</a>
+                <a href="#" class="nav-item" data-section="cmd-vs-entrypoint">🎭 CMD vs ENTRYPOINT</a>
+                <a href="#" class="nav-item" data-section="copy-vs-add">📄 COPY vs ADD</a>
+                <a href="#" class="nav-item" data-section="registries">📦 Registry</a>
                 <a href="#" class="nav-item" data-section="images">🖼️ ניהול Images</a>
                 <a href="#" class="nav-item" data-section="containers">📋 ניהול מתקדם</a>
-                <a href="#" class="nav-item" data-section="volumes">💾 ניהול Volumes</a>
                 <a href="#" class="nav-item" data-section="compose">🎼 Docker Compose</a>
-                <a href="#" class="nav-item" data-section="dockerfile">📝 הוראות Dockerfile</a>
                 <a href="#" class="nav-item" data-section="practices">✨ Best Practices</a>
-                <a href="#" class="nav-item" data-section="networking">🌐 רשתות</a>
                 <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
+                <a href="#" class="nav-item" data-section="help">❓ עזרה</a>
                 <a href="#" class="nav-item" data-section="linux">🐧 פקודות Linux</a>
             </nav>
 
             <!-- Main Content Area -->
             <main class="main-content">
+                <!-- What is Docker Section -->
+                <section class="section active" id="what-is-docker">
+                    <h2>🐳 מהו Docker?</h2>
+                    
+                    <div class="info-box">
+                        <p><strong>Docker הוא המימוש הפופולרי ביותר של טכנולוגיית Containers</strong></p>
+                    </div>
+
+                    <h3>הגדרה</h3>
+                    <div class="definition-card">
+                        <div class="definition-text">
+                            <ul>
+                                <li>פלטפורמה למפתחים ומנהלי מערכות</li>
+                                <li>בנייה, שיתוף והרצה של אפליקציות בצורה ניידת</li>
+                                <li>מנגנון בידוד (Isolation)</li>
+                                <li>גמיש, קל משקל, מאובטח וסקלבילי</li>
+                                <li><strong>תהליך מפואר (OS Process + Namespaces)</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>מאפיינים עיקריים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔐 Secure</h4>
+                            <p>בידוד מלא בין קונטיינרים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Lightweight</h4>
+                            <p>משאבים מינימליים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 Portable</h4>
+                            <p>רץ בכל מקום</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📈 Scalable</h4>
+                            <p>הגדלה קלה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 Flexible</h4>
+                            <p>תומך בכל סביבה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🚀 Fast</h4>
+                            <p>הפעלה מהירה</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Docker vs VM Section -->
+                <section class="section" id="docker-vs-vm">
+                    <h2>⚖️ Docker vs Virtual Machine</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>🐳 CONTAINER</h4>
+                            <div class="stack-item">App A</div>
+                            <div class="stack-item">App B</div>
+                            <div class="stack-item">Bins/Libs</div>
+                            <div class="stack-item" style="background: var(--docker-blue); color: white;">Docker Engine</div>
+                            <div class="stack-item">Host OS</div>
+                            <div class="stack-item">Infrastructure</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>💻 VIRTUAL MACHINE</h4>
+                            <div class="stack-item">App A</div>
+                            <div class="stack-item">App B</div>
+                            <div class="stack-item">Bins/Libs</div>
+                            <div class="stack-item">Guest OS</div>
+                            <div class="stack-item">Guest OS</div>
+                            <div class="stack-item" style="background: var(--accent-orange); color: white;">Hypervisor</div>
+                            <div class="stack-item">Host OS</div>
+                            <div class="stack-item">Infrastructure</div>
+                        </div>
+                    </div>
+
+                    <h3>יתרונות Containers על פני VMs</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>קלים יותר</strong> - אין צורך במערכת הפעלה מלאה לכל אפליקציה</li>
+                            <li><strong>מהירים יותר</strong> - זמן אתחול של שניות במקום דקות</li>
+                            <li><strong>יעילים יותר</strong> - משאבים משותפים עם ה-Host</li>
+                            <li><strong>ניידים יותר</strong> - אותו קונטיינר רץ בכל מקום</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Use Cases Section -->
+                <section class="section" id="use-cases">
+                    <h2>🎯 מקרי שימוש ב-Docker</h2>
+                    
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">🏗️ ארכיטקטורת Microservices</div>
+                            <div class="definition-text">כל שירות רץ בקונטיינר נפרד, בידוד מלא ועצמאות</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🎨 אפליקציות Multi-tier</div>
+                            <div class="definition-text">Front End, Mid Tier, Data Tier - כל אחד בקונטיינר משלו</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">👥 סביבת עבודה משותפת</div>
+                            <div class="definition-text">כל המפתחים עובדים באותה סביבה זהה</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🔄 CI/CD Pipelines</div>
+                            <div class="definition-text">בנייה ופריסה אוטומטית של אפליקציות</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🧪 סביבות Sandbox</div>
+                            <div class="definition-text">בדיקות ופיתוח בסביבה מבודדת ובטוחה</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">📊 Data Engineering</div>
+                            <div class="definition-text">הרצת כלי עיבוד נתונים (Spark, Kafka, Airflow) בקונטיינרים</div>
+                        </div>
+                    </div>
+
+                    <h3>Modern Deployment</h3>
+                    <div class="info-box">
+                        <p><strong>קונטיינרים מניעים את ארכיטקטורת הפריסה המודרנית:</strong></p>
+                        <ul>
+                            <li>מספקים אפליקציה עצמאית (self-contained)</li>
+                            <li>מפחיתים תלות בסביבת ההרצה</li>
+                            <li>מפחיתים מאמץ תפעולי (עלויות)</li>
+                            <li>תזמור מרובה קונטיינרים עם Kubernetes</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Architecture Section -->
+                <section class="section" id="architecture">
+                    <h2>🏗️ ארכיטקטורת Docker</h2>
+                    
+                    <h3>Docker Engine</h3>
+                    <div class="comparison-container">
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Client</div>
+                            <div class="definition-text">ממשק שורת הפקודה (CLI) שדרכו משתמשים מתקשרים עם Docker</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Daemon</div>
+                            <div class="definition-text">תהליך רקע המנהל containers, images, networks ו-volumes</div>
+                        </div>
+                    </div>
+
+                    <h3>רכיבי המערכת</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">📦 Docker Images</div>
+                            <div class="definition-text">תבניות read-only ליצירת קונטיינרים</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🔄 Docker Containers</div>
+                            <div class="definition-text">מופעים פעילים של images</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🌐 Docker Networks</div>
+                            <div class="definition-text">רשתות לתקשורת בין קונטיינרים</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">💾 Docker Volumes</div>
+                            <div class="definition-text">אחסון מתמיד לנתונים</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">📚 Docker Registry</div>
+                            <div class="definition-text">מאגר לאחסון ושיתוף images (Docker Hub)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Underlying Technology Section -->
+                <section class="section" id="technology">
+                    <h2>🔬 הטכנולוגיה מאחורי Docker</h2>
+                    
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <div class="definition-term">🔄 Processes</div>
+                            <div class="definition-text">קונטיינרים הם תהליכי מערכת הפעלה רגילים (OS Processes)</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">🔐 Namespaces</div>
+                            <div class="definition-text">סביבות מבודדות (PID, Mount, Network, UTS, IPC, User). כל קונטיינר רואה רק את התהליכים והמשאבים שלו</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">⚙️ Control Groups (cgroups)</div>
+                            <div class="definition-text">הגבלת משאבים ושליטה (RAM, CPU, Disk I/O). מונעים מקונטיינר אחד לצרוך את כל משאבי המערכת</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">📁 Overlay FileSystem</div>
+                            <div class="definition-text">שימוש בשכבות filesystem לבניית סביבת הקונטיינר. כל שכבה מוסיפה או משנה שכבות קודמות</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>💡 למה זה חשוב?</strong></p>
+                        <p>הבנת הטכנולוגיה הבסיסית עוזרת לפתור בעיות, לייעל ביצועים ולהבין את המגבלות של Docker.</p>
+                    </div>
+                </section>
+
                 <!-- Definitions Section -->
-                <section class="section active" id="definitions">
+                <section class="section" id="definitions">
                     <h2>📚 הגדרות Docker</h2>
                     <div class="definitions-grid">
                         <div class="definition-card">
@@ -605,7 +892,7 @@
                         </div>
                         <div class="definition-card">
                             <div class="definition-term">Dockerfile</div>
-                            <div class="definition-text">סקריפט המכיל הוראות ליצירת image. קובץ טקסט עם פקודות המגדירות כיצד לבנות את ה-image.</div>
+                            <div class="definition-text">סקריפט המכיל הוראות ליצירת image. קובץ טקסט עם פקודות המגדירות כיצד לבנות את ה-image (מעין מתכון).</div>
                         </div>
                         <div class="definition-card">
                             <div class="definition-term">Docker Registry</div>
@@ -630,73 +917,222 @@
                     </div>
                 </section>
 
-                <!-- Getting Help Section -->
-                <section class="section" id="help">
-                    <h2>❓ קבלת עזרה</h2>
+                <!-- Dockerfile Section -->
+                <section class="section" id="dockerfile">
+                    <h2>📝 Dockerfile - מושגים ופקודות</h2>
+                    
+                    <h3>מהו Dockerfile?</h3>
+                    <div class="info-box">
+                        <p><strong>Dockerfile הוא קובץ טקסט המכיל הוראות לבניית Docker image</strong></p>
+                        <p>זהו למעשה "מתכון" שמגדיר מה יהיה בתוך ה-image שלנו</p>
+                    </div>
+
+                    <h3>פקודות Dockerfile עיקריות</h3>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">הצג גרסת Docker</div>
-                            <div class="command-code">docker --version</div>
+                            <div class="command-usage">FROM - בסיס ה-Image</div>
+                            <div class="command-code">FROM ubuntu:22.04</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר את ה-image הבסיסי שעליו נבנה</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">ARG - משתנה זמן בנייה</div>
+                            <div class="command-code">ARG VERSION=1.0</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר משתנה שזמין רק בזמן הבנייה</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">ENV - משתנה סביבה</div>
+                            <div class="command-code">ENV APP_HOME=/app</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר משתנה סביבה זמין בזמן בנייה והרצה</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">WORKDIR - תיקיית עבודה</div>
+                            <div class="command-code">WORKDIR /app</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר את תיקיית העבודה בתוך ה-container</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">RUN - הרצת פקודה</div>
+                            <div class="command-code">RUN apt-get update && apt-get install -y python3</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מריץ פקודת shell בזמן הבנייה</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">COPY - העתקת קבצים</div>
+                            <div class="command-code">COPY app.py /app/</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מעתיק קבצים מהמחשב המקומי ל-image</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">ADD - הוספת קבצים מתקדמת</div>
+                            <div class="command-code">ADD archive.tar.gz /app/</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">כמו COPY אבל תומך בחילוץ ארכיונים והורדה מ-URL</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">EXPOSE - חשיפת פורט</div>
+                            <div class="command-code">EXPOSE 8080</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מודיע שה-container מאזין על פורט מסוים (רמז בלבד!)</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">VOLUME - יצירת נקודת עיגון</div>
+                            <div class="command-code">VOLUME ["/data"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">יוצר volume אנונימי לשמירת נתונים</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">CMD - פקודת ברירת מחדל</div>
+                            <div class="command-code">CMD ["python3", "app.py"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">הפקודה שתרוץ כשה-container יתחיל</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">ENTRYPOINT - נקודת כניסה</div>
+                            <div class="command-code">ENTRYPOINT ["python3", "app.py"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">כמו CMD אבל לא ניתן לדרוס</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">USER - שינוי משתמש</div>
+                            <div class="command-code">USER appuser</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מחליף למשתמש אחר (עדיף לא root)</p>
+                        </div>
+                    </div>
+
+                    <h3>דוגמת Dockerfile מלאה</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;">FROM python:3.9-slim
+
+# משתני סביבה
+ENV PYTHONUNBUFFERED=1 \
+    APP_HOME=/app
+
+# תיקיית עבודה
+WORKDIR ${APP_HOME}
+
+# התקנת תלויות
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# העתקת הקוד
+COPY . .
+
+# משתמש לא-root
+RUN useradd -m appuser && chown -R appuser:appuser ${APP_HOME}
+USER appuser
+
+# חשיפת פורט
+EXPOSE 8000
+
+# פקודת הפעלה
+CMD ["python", "app.py"]</div>
+                </section>
+
+                <!-- Building Images Section -->
+                <section class="section" id="building">
+                    <h2>🔨 בניית Docker Images</h2>
+                    
+                    <h3>פקודת docker build</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">בנה image מהתיקייה הנוכחית</div>
+                            <div class="command-code">docker build .</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הצג מידע על מערכת Docker</div>
-                            <div class="command-code">docker info</div>
+                            <div class="command-usage">בנה image עם שם ותג</div>
+                            <div class="command-code">docker build -t myapp:v1.0 .</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">קבל עזרה על Docker</div>
-                            <div class="command-code">docker --help</div>
+                            <div class="command-usage">בנה מקובץ Dockerfile ספציפי</div>
+                            <div class="command-code">docker build -f Dockerfile.prod -t myapp:prod .</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">קבל עזרה על פקודת Docker ספציפית</div>
-                            <div class="command-code">docker [command] --help</div>
+                            <div class="command-usage">בנה ללא cache</div>
+                            <div class="command-code">docker build --no-cache -t myapp:latest .</div>
                         </div>
+                        <div class="command-card">
+                            <div class="command-usage">העבר ARG לזמן בנייה</div>
+                            <div class="command-code">docker build --build-arg VERSION=2.0 -t myapp:v2 .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה עם target ספציפי (multi-stage)</div>
+                            <div class="command-code">docker build --target production -t myapp:prod .</div>
+                        </div>
+                    </div>
+
+                    <h3>דגלים חשובים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><code>-t, --tag</code> - שם ותג ל-image</li>
+                            <li><code>-f, --file</code> - נתיב ל-Dockerfile</li>
+                            <li><code>--no-cache</code> - בנה מחדש ללא שימוש ב-cache</li>
+                            <li><code>--build-arg</code> - העבר משתני ARG</li>
+                            <li><code>--target</code> - בחר שלב ב-multi-stage build</li>
+                        </ul>
                     </div>
                 </section>
 
                 <!-- Running Containers Section -->
                 <section class="section" id="running">
-                    <h2>🚀 הרצת קונטיינרים</h2>
+                    <h2>🚀 הרצת Docker Containers</h2>
+                    
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר</div>
-                            <div class="command-code">docker run [image]</div>
+                            <div class="command-usage">הרץ קונטיינר בסיסי</div>
+                            <div class="command-code">docker run ubuntu</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר בדיקה לוודא שההתקנה עובדת</div>
-                            <div class="command-code">docker run hello-world</div>
+                            <div class="command-usage">הרץ עם שם מוגדר</div>
+                            <div class="command-code">docker run --name my-container nginx</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר ולאחר מכן השתמש בו להרצת פקודה</div>
-                            <div class="command-code">docker run [image] [command]</div>
+                            <div class="command-usage">הרץ ברקע (detached)</div>
+                            <div class="command-code">docker run -d nginx</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ Python באופן אינטראקטיבי</div>
-                            <div class="command-code">docker run python -c "print('Python is Docker')"</div>
+                            <div class="command-usage">הרץ אינטראקטיבי</div>
+                            <div class="command-code">docker run -it ubuntu bash</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ R והדפס מודל</div>
-                            <div class="command-code">docker run rocker/r-base r -e "print(lm(dist~speed, cars))"</div>
+                            <div class="command-usage">הרץ והסר אוטומטית</div>
+                            <div class="command-code">docker run --rm alpine echo "hello"</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר במצב אינטראקטיבי</div>
-                            <div class="command-code">docker run --interactive --tty rocker/r-base</div>
+                            <div class="command-usage">הרץ עם מיפוי פורט</div>
+                            <div class="command-code">docker run -p 8080:80 nginx</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר והסר אותו כשסיימת</div>
-                            <div class="command-code">docker run --rm my_mysql</div>
+                            <div class="command-usage">הרץ עם volume</div>
+                            <div class="command-code">docker run -v /host/path:/container/path nginx</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ image ברקע (detached mode)</div>
-                            <div class="command-code">docker run --detach postgres</div>
+                            <div class="command-usage">הרץ עם משתני סביבה</div>
+                            <div class="command-code">docker run -e DB_HOST=localhost -e DB_PORT=5432 myapp</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ image עם שם מוגדר</div>
-                            <div class="command-code">docker run --name [name] redis</div>
+                            <div class="command-usage">הרץ עם הגבלת משאבים</div>
+                            <div class="command-code">docker run --memory=512m --cpus=1 myapp</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ image כמשתמש ספציפי</div>
-                            <div class="command-code">docker run --user doctordocker mongo</div>
+                            <div class="command-usage">הרץ עם restart policy</div>
+                            <div class="command-code">docker run --restart=unless-stopped nginx</div>
                         </div>
+                    </div>
+
+                    <h3>דגלים נפוצים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><code>-d, --detach</code> - הרץ ברקע</li>
+                            <li><code>-it</code> - אינטראקטיבי + terminal</li>
+                            <li><code>--rm</code> - הסר אוטומטית בסיום</li>
+                            <li><code>--name</code> - תן שם לקונטיינר</li>
+                            <li><code>-p, --publish</code> - פרסם פורטים</li>
+                            <li><code>-v, --volume</code> - עגן volumes</li>
+                            <li><code>-e, --env</code> - משתני סביבה</li>
+                            <li><code>--network</code> - חבר לרשת</li>
+                        </ul>
                     </div>
                 </section>
 
@@ -705,28 +1141,36 @@
                     <h2>🔍 בדיקת קונטיינרים</h2>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">הצג את כל הקונטיינרים הפועלים</div>
+                            <div class="command-usage">הצג קונטיינרים פועלים</div>
                             <div class="command-code">docker ps</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הצג את כל הקונטיינרים (כולל לא פעילים)</div>
-                            <div class="command-code">docker ps --all</div>
+                            <div class="command-usage">הצג את כל הקונטיינרים</div>
+                            <div class="command-code">docker ps -a</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">סנן קונטיינר פועל לפי שם</div>
-                            <div class="command-code">docker ps -f "name=[container-name]"</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג לוגים קיימים של קונטיינר</div>
+                            <div class="command-usage">הצג לוגים</div>
                             <div class="command-code">docker logs [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הצג לוגים חיים של קונטיינר (מעקב בזמן אמת)</div>
+                            <div class="command-usage">הצג לוגים בזמן אמת</div>
                             <div class="command-code">docker logs -f [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הצג לוג עם חותמות זמן</div>
-                            <div class="command-code">docker logs --timestamps --follow [container-id]</div>
+                            <div class="command-usage">בדוק פרטים מלאים</div>
+                            <div class="command-code">docker inspect [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג סטטיסטיקות</div>
+                            <div class="command-code">docker stats</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים</div>
+                            <div class="command-code">docker top [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג פורטים</div>
+                            <div class="command-code">docker port [container-id]</div>
                         </div>
                     </div>
                 </section>
@@ -736,263 +1180,491 @@
                     <h2>⚙️ ניהול קונטיינרים</h2>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">צור קונטיינר מ-image</div>
-                            <div class="command-code">docker create [image]</div>
+                            <div class="command-usage">עצור קונטיינר</div>
+                            <div class="command-code">docker stop [container-id]</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">הפעל קונטיינר</div>
-                            <div class="command-code">docker start [container]</div>
+                            <div class="command-code">docker start [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">צור קונטיינר עם shell אינטראקטיבי</div>
-                            <div class="command-code">docker create --name py --interactive --tty python</div>
+                            <div class="command-usage">הפעל מחדש</div>
+                            <div class="command-code">docker restart [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">צור image חדש מקונטיינר</div>
-                            <div class="command-code">docker container commit [container]</div>
+                            <div class="command-usage">השהה קונטיינר</div>
+                            <div class="command-code">docker pause [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">עצור קונטיינר</div>
-                            <div class="command-code">docker stop [container]</div>
+                            <div class="command-usage">בטל השהיה</div>
+                            <div class="command-code">docker unpause [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">השהה קונטיינר (pause)</div>
-                            <div class="command-code">docker pause [container]</div>
+                            <div class="command-usage">הרוג קונטיינר</div>
+                            <div class="command-code">docker kill [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בטל השהיה (unpause)</div>
-                            <div class="command-code">docker unpause [container]</div>
+                            <div class="command-usage">הסר קונטיינר</div>
+                            <div class="command-code">docker rm [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרוג קונטיינר (kill)</div>
-                            <div class="command-code">docker kill [container]</div>
+                            <div class="command-usage">הסר בכוח</div>
+                            <div class="command-code">docker rm -f [container-id]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרוג והסר קונטיינר בפקודה אחת</div>
-                            <div class="command-code">docker rm --force [container]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר קונטיינר שהופסק</div>
-                            <div class="command-code">docker rm [container]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר קונטיינר (תחביר מודרני)</div>
-                            <div class="command-code">docker container rm [container]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסרה בכוח (תחביר מודרני)</div>
-                            <div class="command-code">docker container rm --force [container]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">עצור והסר בפקודה אחת</div>
-                            <div class="command-code">docker rm -f [container]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">עצור ואז הפעל מחדש קונטיינר</div>
-                            <div class="command-code">docker restart [container]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">מחק את כל הקונטיינרים שהופסקו</div>
+                            <div class="command-usage">הסר קונטיינרים שהופסקו</div>
                             <div class="command-code">docker container prune</div>
                         </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ פקודה בקונטיינר פעיל</div>
+                            <div class="command-code">docker exec -it [container] bash</div>
+                        </div>
                     </div>
                 </section>
 
-                <!-- Building Images Section -->
-                <section class="section" id="building">
-                    <h2>🔨 בניית Images</h2>
+                <!-- Volumes Section -->
+                <section class="section" id="volumes">
+                    <h2>💾 Docker Volumes</h2>
+                    
+                    <h3>מהם Volumes?</h3>
+                    <div class="info-box">
+                        <p><strong>Volumes הם מנגנון לשמירת נתונים מחוץ לקונטיינר</strong></p>
+                        <ul>
+                            <li><strong>Volumes</strong> - מנוהלים על ידי Docker</li>
+                            <li><strong>Bind mounts</strong> - תיקיות מהמארח</li>
+                            <li><strong>tmpfs mounts</strong> - זיכרון בלבד (אבוד בסגירה)</li>
+                        </ul>
+                    </div>
+
+                    <h3>ניהול Volumes</h3>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">בנה image</div>
-                            <div class="command-code">docker build [path]</div>
+                            <div class="command-usage">צור volume</div>
+                            <div class="command-code">docker volume create my-volume</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בנה image מהתיקייה הנוכחית</div>
-                            <div class="command-code">docker build .</div>
+                            <div class="command-usage">הצג volumes</div>
+                            <div class="command-code">docker volume ls</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בחר שם בעת בניית image</div>
-                            <div class="command-code">docker build -t first_image .</div>
+                            <div class="command-usage">בדוק volume</div>
+                            <div class="command-code">docker volume inspect my-volume</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בנה image עם tag</div>
-                            <div class="command-code">docker build --tag [name:tag] [path]</div>
+                            <div class="command-usage">הסר volume</div>
+                            <div class="command-code">docker volume rm my-volume</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בנה image עם גרסה ספציפית</div>
-                            <div class="command-code">docker build --tag myimage:2023-edition .</div>
+                            <div class="command-usage">הסר volumes לא בשימוש</div>
+                            <div class="command-code">docker volume prune</div>
+                        </div>
+                    </div>
+
+                    <h3>שימוש ב-Volumes</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">עגן volume</div>
+                            <div class="command-code">docker run -v my-volume:/data nginx</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בנה image ללא שימוש ב-cache</div>
-                            <div class="command-code">docker build --no-cache [path]</div>
+                            <div class="command-usage">Bind mount</div>
+                            <div class="command-code">docker run -v /host/path:/container/path nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Read-only volume</div>
+                            <div class="command-code">docker run -v my-volume:/data:ro nginx</div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Working with Registries Section -->
+                <!-- Networking Section -->
+                <section class="section" id="networking">
+                    <h2>🌐 Docker Networking</h2>
+                    
+                    <h3>ניהול רשתות</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג רשתות</div>
+                            <div class="command-code">docker network ls</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור רשת</div>
+                            <div class="command-code">docker network create my-network</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק רשת</div>
+                            <div class="command-code">docker network inspect my-network</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חבר קונטיינר לרשת</div>
+                            <div class="command-code">docker network connect my-network [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נתק מרשת</div>
+                            <div class="command-code">docker network disconnect my-network [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר רשת</div>
+                            <div class="command-code">docker network rm my-network</div>
+                        </div>
+                    </div>
+
+                    <h3>מיפוי פורטים</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">פרסם פורט ספציפי</div>
+                            <div class="command-code">docker run -p 8080:80 nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פרסם את כל הפורטים</div>
+                            <div class="command-code">docker run -P nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פרסם ל-IP ספציפי</div>
+                            <div class="command-code">docker run -p 127.0.0.1:8080:80 nginx</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Layers Section -->
+                <section class="section" id="layers">
+                    <h2>🗂️ מערכת Layers של Docker</h2>
+                    
+                    <div class="info-box">
+                        <p><strong>Docker בנוי משכבות (layers) של filesystem</strong></p>
+                        <ul>
+                            <li>כל הוראה ב-Dockerfile יוצרת שכבה חדשה</li>
+                            <li>שכבות הן read-only</li>
+                            <li>רק השכבה העליונה של הקונטיינר היא writable</li>
+                            <li>שכבות משותפות בין images חוסכות מקום</li>
+                        </ul>
+                    </div>
+
+                    <h3>Overlay FileSystem</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>שכבות Image</h4>
+                            <div class="stack-item">Layer 5: CMD</div>
+                            <div class="stack-item">Layer 4: COPY app/</div>
+                            <div class="stack-item">Layer 3: RUN pip install</div>
+                            <div class="stack-item">Layer 2: COPY requirements.txt</div>
+                            <div class="stack-item">Layer 1: FROM python:3.9</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>שכבת Container</h4>
+                            <div class="stack-item" style="background: var(--accent-green); color: white;">Writable Layer</div>
+                            <div class="stack-item">Read-only Image Layers</div>
+                            <p style="margin-top: var(--space-md); text-align: center; color: var(--text-muted);">
+                                כל השינויים בקונטיינר נשמרים רק בשכבה הכתיבה
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3>בדיקת Layers</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג היסטוריית layers</div>
+                            <div class="command-code">docker history [image-name]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג גודל layers</div>
+                            <div class="command-code">docker history --human --no-trunc [image-name]</div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>⚠️ טיפ חשוב:</strong> כל הוראה RUN יוצרת שכבה חדשה. לכן מומלץ לשלב פקודות:</p>
+                        <div class="command-code" style="background: white; color: #e74c3c; margin-top: 10px;">❌ לא טוב:
+RUN apt-get update
+RUN apt-get install -y python3
+RUN apt-get clean
+
+✅ טוב יותר:
+RUN apt-get update && \
+    apt-get install -y python3 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*</div>
+                    </div>
+                </section>
+
+                <!-- CMD vs ENTRYPOINT Section -->
+                <section class="section" id="cmd-vs-entrypoint">
+                    <h2>🎭 CMD vs ENTRYPOINT</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>CMD</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li><strong>ניתן לדרוס</strong> בזמן docker run</li>
+                                    <li>מספק ברירת מחדל לפקודה</li>
+                                    <li>נועד לפקודות שעשויות להשתנות</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;">FROM ubuntu
+CMD ["echo", "Hello"]
+
+# להרצה:
+docker run myimage
+# פלט: Hello
+
+docker run myimage echo "Bye"
+# פלט: Bye (CMD דרוס!)</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>ENTRYPOINT</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li><strong>לא ניתן לדרוס</strong> בקלות</li>
+                                    <li>מגדיר את התפקיד העיקרי של הקונטיינר</li>
+                                    <li>נועד לקונטיינרים עם מטרה קבועה</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;">FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello"]
+
+# להרצה:
+docker run myimage
+# פלט: Hello
+
+docker run myimage "Bye"
+# פלט: Bye (CMD דרוס, ENTRYPOINT נשאר!)</div>
+                        </div>
+                    </div>
+
+                    <h3>שילוב CMD + ENTRYPOINT</h3>
+                    <div class="success-box">
+                        <p><strong>💡 שימוש מומלץ:</strong> השתמש ב-ENTRYPOINT לפקודה הקבועה וב-CMD לפרמטרים של ברירת מחדל</p>
+                        <div class="command-code" style="background: white; color: var(--text-primary); margin-top: 10px;">FROM python:3.9
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+
+# docker run myimage → מריץ python app.py
+# docker run myimage test.py → מריץ python test.py</div>
+                    </div>
+
+                    <h3>תחביר Shell vs Exec</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">Shell Form</div>
+                            <div class="command-code">CMD echo "Hello World"</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מופעל דרך /bin/sh -c</p>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Exec Form (מומלץ)</div>
+                            <div class="command-code">CMD ["echo", "Hello World"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מופעל ישירות, ללא shell</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COPY vs ADD Section -->
+                <section class="section" id="copy-vs-add">
+                    <h2>📄 COPY vs ADD</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>COPY</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li>פשוט וברור</li>
+                                    <li>מעתיק קבצים/תיקיות מקומיים בלבד</li>
+                                    <li><strong>מומלץ לשימוש רגיל</strong></li>
+                                    <li>תמיכה ב-wildcards</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;"># העתק קובץ בודד
+COPY app.py /app/
+
+# העתק תיקייה
+COPY src/ /app/src/
+
+# wildcard
+COPY *.py /app/</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>ADD</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li>מתקדם יותר</li>
+                                    <li>תומך בכל מה ש-COPY תומך</li>
+                                    <li><strong>מחלץ ארכיונים אוטומטית</strong></li>
+                                    <li>יכול להוריד מ-URLs</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;"># חילוץ אוטומטי
+ADD archive.tar.gz /app/
+
+# הורדה מ-URL
+ADD https://example.com/file.zip /tmp/
+
+# כמו COPY
+ADD app.py /app/</div>
+                        </div>
+                    </div>
+
+                    <h3>מתי להשתמש במה?</h3>
+                    <div class="info-box">
+                        <p><strong>✅ השתמש ב-COPY:</strong></p>
+                        <ul>
+                            <li>ברוב המקרים (ברירת המחדל)</li>
+                            <li>כשאתה רק מעתיק קבצים מקומיים</li>
+                            <li>כשאתה רוצה שהכוונה תהיה ברורה</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>⚠️ השתמש ב-ADD רק כאשר:</strong></p>
+                        <ul>
+                            <li>אתה צריך לחלץ ארכיון tar/zip</li>
+                            <li>אתה צריך להוריד קובץ מ-URL (לא מומלץ בפרודקשן!)</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 Best Practice:</strong> השתמש ב-COPY אלא אם כן אתה צריך באופן ספציפי את היכולות המתקדמות של ADD</p>
+                    </div>
+                </section>
+
+                <!-- Registry Section -->
                 <section class="section" id="registries">
-                    <h2>📦 עבודה עם Registries</h2>
+                    <h2>📦 Docker Registry</h2>
+                    
+                    <h3>מהו Registry?</h3>
+                    <div class="info-box">
+                        <p><strong>Docker Registry הוא מערכת אחסון והפצה עבור Docker images</strong></p>
+                        <ul>
+                            <li><strong>Docker Hub</strong> - Registry הציבורי של Docker (ברירת מחדל)</li>
+                            <li><strong>Private Registries</strong> - AWS ECR, Google GCR, Azure ACR</li>
+                            <li><strong>Self-hosted</strong> - Harbor, Registry</li>
+                        </ul>
+                    </div>
+
+                    <h3>עבודה עם Registry</h3>
                     <div class="command-grid">
                         <div class="command-card">
                             <div class="command-usage">התחבר ל-Docker Hub</div>
-                            <div class="command-code">docker login --username doctordocker</div>
+                            <div class="command-code">docker login</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">משוך image מ-registry</div>
-                            <div class="command-code">docker pull julia</div>
+                            <div class="command-usage">התחבר ל-registry פרטי</div>
+                            <div class="command-code">docker login registry.example.com</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">משוך גרסה ספציפית של image</div>
-                            <div class="command-code">docker pull julia:1.8.5-bullseye</div>
+                            <div class="command-usage">משוך image</div>
+                            <div class="command-code">docker pull nginx:latest</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">תייג image למאגר</div>
-                            <div class="command-code">docker tag python doctordocker/myrepo</div>
+                            <div class="command-code">docker tag myapp:v1 username/myapp:v1</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">דחוף image ל-registry</div>
-                            <div class="command-code">docker push doctordocker/myrepo</div>
+                            <div class="command-usage">דחוף image</div>
+                            <div class="command-code">docker push username/myapp:v1</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">חפש image</div>
-                            <div class="command-code">docker search "image-search-text"</div>
+                            <div class="command-usage">חפש images</div>
+                            <div class="command-code">docker search nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">התנתק</div>
+                            <div class="command-code">docker logout</div>
                         </div>
                     </div>
+
+                    <h3>תיוג Images</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># פורמט כללי
+[registry]/[username]/[image]:[tag]
+
+# דוגמאות:
+nginx:latest                          # Docker Hub
+docker.io/library/nginx:1.21          # Docker Hub מפורש
+gcr.io/my-project/myapp:v1           # Google Container Registry
+123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:latest  # AWS ECR</div>
                 </section>
 
-                <!-- Image Management Section -->
+                <!-- Images Management Section -->
                 <section class="section" id="images">
                     <h2>🖼️ ניהול Images</h2>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">משוך image</div>
-                            <div class="command-code">docker pull &lt;image-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">משוך גרסה ספציפית</div>
-                            <div class="command-code">docker pull &lt;image-name&gt;:&lt;image-version&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">משוך image ממאגר פרטי</div>
-                            <div class="command-code">docker pull &lt;private-registry-url&gt;/&lt;image-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג את כל ה-images המקומיים</div>
+                            <div class="command-usage">הצג images מקומיים</div>
                             <div class="command-code">docker images</div>
                         </div>
                         <div class="command-card">
+                            <div class="command-usage">הצג עם פורמט מותאם</div>
+                            <div class="command-code">docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"</div>
+                        </div>
+                        <div class="command-card">
                             <div class="command-usage">הסר image</div>
-                            <div class="command-code">docker image rm &lt;image-name&gt;</div>
+                            <div class="command-code">docker rmi [image-name]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר images לא בשימוש</div>
+                            <div class="command-code">docker image prune</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">הסר את כל ה-images</div>
                             <div class="command-code">docker image prune -a</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">דחוף image למאגר פרטי</div>
-                            <div class="command-code">docker push &lt;private-registry-url&gt;/&lt;image-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">תן שם חדש ל-image</div>
-                            <div class="command-code">docker tag &lt;old-name&gt; &lt;new-name&gt;</div>
-                        </div>
-                        <div class="command-card">
                             <div class="command-usage">שמור image לקובץ</div>
-                            <div class="command-code">docker save -o &lt;file-name&gt; &lt;image-name&gt;</div>
+                            <div class="command-code">docker save -o myimage.tar myapp:v1</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">טען image מקובץ</div>
-                            <div class="command-code">docker load -i &lt;file-name&gt;</div>
+                            <div class="command-code">docker load -i myimage.tar</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">ראה את ההוראות שנוצרו ליצירת image</div>
-                            <div class="command-code">docker history &lt;image-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג שימוש בדיסק של Docker</div>
+                            <div class="command-usage">הצג שימוש בדיסק</div>
                             <div class="command-code">docker system df</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הסר image (תחביר קצר)</div>
-                            <div class="command-code">docker rmi [image-name]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">רשימת images (תחביר מודרני)</div>
-                            <div class="command-code">docker image ls</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר images שאינם בשימוש</div>
-                            <div class="command-code">docker image prune</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר build cache</div>
-                            <div class="command-code">docker builder prune</div>
+                            <div class="command-usage">הצג היסטוריית image</div>
+                            <div class="command-code">docker history [image-name]</div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Container Management Section -->
+                <!-- Containers Advanced Section -->
                 <section class="section" id="containers">
                     <h2>📋 ניהול מתקדם של קונטיינרים</h2>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">הפעל קונטיינר</div>
-                            <div class="command-code">docker run &lt;image-name&gt;</div>
+                            <div class="command-usage">צור image מקונטיינר</div>
+                            <div class="command-code">docker commit [container] myapp:v2</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הפעל קונטיינר אינטראקטיבי</div>
-                            <div class="command-code">docker run -it &lt;image-name&gt;</div>
+                            <div class="command-usage">העתק קבצים מקונטיינר</div>
+                            <div class="command-code">docker cp [container]:/path/file.txt ./local/</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הפעל קונטיינר ברקע (detached)</div>
-                            <div class="command-code">docker run -d &lt;image-name&gt;</div>
+                            <div class="command-usage">העתק קבצים לקונטיינר</div>
+                            <div class="command-code">docker cp ./local/file.txt [container]:/path/</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הפעל קונטיינר עם שם</div>
-                            <div class="command-code">docker run --name &lt;container-name&gt; &lt;image-name&gt;</div>
+                            <div class="command-usage">ייצא קונטיינר</div>
+                            <div class="command-code">docker export [container] > backup.tar</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר והסר אוטומטית בסיום</div>
-                            <div class="command-code">docker run -it --rm &lt;image-name&gt;</div>
+                            <div class="command-usage">ייבא קונטיינר</div>
+                            <div class="command-code">docker import backup.tar myapp:restored</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">עגן volume מהמארח לקונטיינר</div>
-                            <div class="command-code">docker run -v &lt;source&gt;:&lt;destination&gt; &lt;image-name&gt;</div>
+                            <div class="command-usage">עדכן הגדרות קונטיינר</div>
+                            <div class="command-code">docker update --memory=1g --cpus=2 [container]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">דרוס את ה-CMD שהוגדר ב-image</div>
-                            <div class="command-code">docker run &lt;image&gt; &lt;shell-command&gt;</div>
+                            <div class="command-usage">המתן לקונטיינר</div>
+                            <div class="command-code">docker wait [container]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">דרוס משתנה סביבה ב-docker run</div>
-                            <div class="command-code">docker run --env &lt;name&gt;=&lt;value&gt; &lt;image-name&gt;</div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Volume Management Section -->
-                <section class="section" id="volumes">
-                    <h2>💾 ניהול Volumes</h2>
-                    <div class="command-grid">
-                        <div class="command-card">
-                            <div class="command-usage">צור volume עם שם</div>
-                            <div class="command-code">docker volume create &lt;volumename&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג את כל ה-volumes</div>
-                            <div class="command-code">docker volume ls</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג מידע מפורט על volume</div>
-                            <div class="command-code">docker volume inspect &lt;volumename&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר volume</div>
-                            <div class="command-code">docker volume rm &lt;volumename&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר volumes שאינם בשימוש</div>
-                            <div class="command-code">docker volume prune</div>
+                            <div class="command-usage">הצג שינויים בקונטיינר</div>
+                            <div class="command-code">docker diff [container]</div>
                         </div>
                     </div>
                 </section>
@@ -1000,29 +1672,21 @@
                 <!-- Docker Compose Section -->
                 <section class="section" id="compose">
                     <h2>🎼 Docker Compose</h2>
+                    
+                    <h3>מהו Docker Compose?</h3>
+                    <div class="info-box">
+                        <p><strong>כלי להגדרה והרצה של אפליקציות מרובות קונטיינרים</strong></p>
+                        <ul>
+                            <li>קובץ YAML אחד מגדיר את כל השירותים</li>
+                            <li>הפעלה והורדה בפקודה אחת</li>
+                            <li>אידיאלי לסביבות פיתוח</li>
+                        </ul>
+                    </div>
+
+                    <h3>פקודות Compose</h3>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">הפעל שירותים מוגדרים ב-docker-compose.yml</div>
-                            <div class="command-code">docker-compose start</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">עצור שירותים</div>
-                            <div class="command-code">docker-compose stop</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">השהה שירותים</div>
-                            <div class="command-code">docker-compose pause</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">בטל השהיה</div>
-                            <div class="command-code">docker-compose unpause</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג קונטיינרים עבור השירותים</div>
-                            <div class="command-code">docker-compose ps</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">צור והפעל קונטיינרים</div>
+                            <div class="command-usage">הפעל את כל השירותים</div>
                             <div class="command-code">docker-compose up</div>
                         </div>
                         <div class="command-card">
@@ -1030,328 +1694,419 @@
                             <div class="command-code">docker-compose up -d</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">עצור והסר קונטיינרים, רשתות, volumes</div>
+                            <div class="command-usage">עצור ו להסיר</div>
                             <div class="command-code">docker-compose down</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הצג לוגים של כל השירותים</div>
-                            <div class="command-code">docker-compose logs</div>
+                            <div class="command-usage">הצג סטטוס</div>
+                            <div class="command-code">docker-compose ps</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">בנה מחדש את ה-images</div>
+                            <div class="command-usage">הצג לוגים</div>
+                            <div class="command-code">docker-compose logs -f</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה מחדש</div>
                             <div class="command-code">docker-compose build</div>
                         </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל פקודה בשירות</div>
+                            <div class="command-code">docker-compose exec [service] bash</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור שירותים</div>
+                            <div class="command-code">docker-compose stop</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל מחדש</div>
+                            <div class="command-code">docker-compose restart</div>
+                        </div>
                     </div>
-                </section>
 
-                <!-- Dockerfile Instructions Section -->
-                <section class="section" id="dockerfile">
-                    <h2>📝 הוראות Dockerfile</h2>
-                    <div class="command-grid">
-                        <div class="command-card">
-                            <div class="command-usage">התחל Dockerfile מ-image</div>
-                            <div class="command-code">FROM &lt;image-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הגדר משתנה סביבה לבנייה ולהרצה</div>
-                            <div class="command-code">ENV [name]=[value]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הגדר משתנה זמן בנייה</div>
-                            <div class="command-code">ARG [name]=[default_value]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הגדר את תיקיית העבודה</div>
-                            <div class="command-code">WORKDIR [path]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">עבור למשתמש</div>
-                            <div class="command-code">USER [username]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">העתק קובץ מקומי ל-image</div>
-                            <div class="command-code">COPY [existing path] [image path]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הוסף פקודת shell ל-image</div>
-                            <div class="command-code">RUN &lt;valid-shell-command&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">התקנה ללא אינטראקציה</div>
-                            <div class="command-code">RUN apt-get install -y python3</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הרץ פקודה בעת השקת הקונטיינר</div>
-                            <div class="command-code">CMD ["executable", "param1"]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">העתק קבצים מהמארח ל-image</div>
-                            <div class="command-code">COPY &lt;src-path-on-host&gt; &lt;dest-path-on-image&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">העתק תיקייה</div>
-                            <div class="command-code">COPY &lt;src-folder&gt; &lt;dest-folder&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הגדר פקודת ברירת מחדל</div>
-                            <div class="command-code">CMD &lt;shell-command&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">שנה משתמש נוכחי</div>
-                            <div class="command-code">USER &lt;user-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">צור משתנה זמן בנייה בלבד</div>
-                            <div class="command-code">ARG &lt;name&gt;=&lt;value&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">צור משתנה סביבה</div>
-                            <div class="command-code">ENV &lt;name&gt;=&lt;value&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">בנה image מ-Dockerfile</div>
-                            <div class="command-code">docker build /location/to/Dockerfile</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">בנה מהתיקייה הנוכחית</div>
-                            <div class="command-code">docker build .</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">דרוס ARG בזמן build</div>
-                            <div class="command-code">docker build --build-arg &lt;name&gt;=&lt;value&gt; .</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">חשוף פורט</div>
-                            <div class="command-code">EXPOSE &lt;port&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הגדר נקודת כניסה</div>
-                            <div class="command-code">ENTRYPOINT ["executable", "param1"]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הוסף metadata ל-image</div>
-                            <div class="command-code">LABEL key="value"</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">צור נקודת עיגון</div>
-                            <div class="command-code">VOLUME ["/data"]</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הוסף קבצים וחלץ ארכיונים</div>
-                            <div class="command-code">ADD &lt;src&gt; &lt;dest&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הגדר בדיקת בריאות</div>
-                            <div class="command-code">HEALTHCHECK --interval=30s CMD curl -f http://localhost/ || exit 1</div>
-                        </div>
-                    </div>
+                    <h3>דוגמת docker-compose.yml</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;">version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    environment:
+      - DEBUG=1
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:</div>
                 </section>
 
                 <!-- Best Practices Section -->
                 <section class="section" id="practices">
-                    <h2>✨ שיטות עבודה מומלצות</h2>
+                    <h2>✨ Best Practices ל-Docker</h2>
+                    
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">שמור על images קטנים - הורד, חלץ ונקה בהוראת RUN אחת</div>
-                            <div class="command-code">RUN curl &lt;file_url&gt; -o &lt;dest&gt; \
-    && unzip &lt;dest&gt;/&lt;file&gt;.zip -d &lt;dir&gt; \
-    && rm &lt;dest&gt;/&lt;file&gt;.zip</div>
+                            <div class="command-usage">🔒 אל תשתמש ב-root</div>
+                            <div class="command-code">RUN useradd -m myuser
+USER myuser</div>
                         </div>
+
                         <div class="command-card">
-                            <div class="command-usage">השתמש ב-multi-stage builds</div>
-                            <div class="command-code">FROM node:14 AS build
+                            <div class="command-usage">📦 שמור על images קטנים</div>
+                            <div class="command-code">FROM python:3.9-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apt-get purge -y gcc && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🎯 השתמש ב-multi-stage builds</div>
+                            <div class="command-code">FROM node:14 AS builder
 WORKDIR /app
+COPY package*.json ./
+RUN npm install
 COPY . .
-RUN npm install && npm run build
+RUN npm run build
 
 FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html</div>
+COPY --from=builder /app/dist /usr/share/nginx/html</div>
                         </div>
+
                         <div class="command-card">
-                            <div class="command-usage">השתמש ב-.dockerignore</div>
+                            <div class="command-usage">📄 השתמש ב-.dockerignore</div>
                             <div class="command-code"># .dockerignore
 node_modules
 .git
-*.log
-.env</div>
+*.md
+.env
+.vscode
+__pycache__
+*.pyc</div>
                         </div>
+
                         <div class="command-card">
-                            <div class="command-usage">הפעל כמשתמש לא-root</div>
-                            <div class="command-code">RUN adduser -D myuser
-USER myuser</div>
+                            <div class="command-usage">🏷️ תייג images בצורה משמעותית</div>
+                            <div class="command-code"># לא טוב
+myapp:latest
+
+# טוב
+myapp:1.2.3
+myapp:1.2.3-alpine
+myapp:v1.2.3-2024-01-15</div>
                         </div>
+
                         <div class="command-card">
-                            <div class="command-usage">צא מתצוגת לוגים חיים</div>
-                            <div class="command-code">CTRL+C</div>
+                            <div class="command-usage">📊 סדר הוראות לפי תדירות שינוי</div>
+                            <div class="command-code">FROM python:3.9
+WORKDIR /app
+
+# משתנה לעיתים רחוקות
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# משתנה לעיתים קרובות
+COPY . .</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🔐 אל תשמור סודות</div>
+                            <div class="command-code"># ❌ לא לעשות
+ENV DB_PASSWORD=secret123
+
+# ✅ עדיף
+# העבר דרך -e בזמן הרצה או השתמש ב-secrets</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">💊 הגדר health checks</div>
+                            <div class="command-code">HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost/ || exit 1</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🔍 השתמש ב-LABEL למטאדטה</div>
+                            <div class="command-code">LABEL version="1.0" \
+      maintainer="team@example.com" \
+      description="My Application"</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🧹 נקה קבצים זמניים</div>
+                            <div class="command-code">RUN apt-get update && \
+    apt-get install -y package && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">⚡ השתמש ב-alpine images</div>
+                            <div class="command-code"># במקום:
+FROM python:3.9  # ~900MB
+
+# השתמש ב:
+FROM python:3.9-alpine  # ~50MB</div>
                         </div>
                     </div>
 
-                    <div class="info-box" style="margin-top: var(--space-lg);">
-                        <p><strong>💡 טיפים חשובים:</strong></p>
-                        <ul style="margin-top: var(--space-sm); padding-right: var(--space-lg);">
-                            <li style="margin: var(--space-sm) 0;">השתמש ב-images רשמיים כבסיס</li>
-                            <li style="margin: var(--space-sm) 0;">מזער את מספר השכבות (layers)</li>
-                            <li style="margin: var(--space-sm) 0;">סדר את ההוראות מהכי פחות משתנות לכי יותר משתנות</li>
-                            <li style="margin: var(--space-sm) 0;">אל תשמור סודות ב-images</li>
-                            <li style="margin: var(--space-sm) 0;">השתמש ב-health checks</li>
-                        </ul>
-                    </div>
-                </section>
+                    <h3>דוגמה: Dockerfile אופטימלי</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># ============================================
+# Stage 1: Build
+# ============================================
+FROM python:3.9-slim AS builder
 
-                <!-- Networking Section -->
-                <section class="section" id="networking">
-                    <h2>🌐 רשתות Docker</h2>
-                    <div class="command-grid">
-                        <div class="command-card">
-                            <div class="command-usage">הצג את כל הרשתות</div>
-                            <div class="command-code">docker network ls</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">צור רשת חדשה</div>
-                            <div class="command-code">docker network create &lt;network-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">חבר קונטיינר לרשת</div>
-                            <div class="command-code">docker network connect &lt;network-name&gt; &lt;container-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">נתק קונטיינר מרשת</div>
-                            <div class="command-code">docker network disconnect &lt;network-name&gt; &lt;container-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">בדוק רשת</div>
-                            <div class="command-code">docker network inspect &lt;network-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר רשת</div>
-                            <div class="command-code">docker network rm &lt;network-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הסר רשתות שאינן בשימוש</div>
-                            <div class="command-code">docker network prune</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר עם רשת ספציפית</div>
-                            <div class="command-code">docker run --network=&lt;network-name&gt; &lt;image&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">פרסם פורט קונטיינר למארח</div>
-                            <div class="command-code">docker run -p &lt;host-port&gt;:&lt;container-port&gt; &lt;image&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">פרסם את כל הפורטים החשופים</div>
-                            <div class="command-code">docker run -P &lt;image&gt;</div>
-                        </div>
-                    </div>
+WORKDIR /app
+
+# התקן תלויות בנייה
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# העתק והתקן dependencies
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# ============================================
+# Stage 2: Runtime
+# ============================================
+FROM python:3.9-slim
+
+# הגדר משתני סביבה
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH=/home/appuser/.local/bin:$PATH
+
+WORKDIR /app
+
+# צור משתמש לא-privileged
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+# העתק dependencies מה-builder stage
+COPY --from=builder --chown=appuser:appuser /root/.local /home/appuser/.local
+
+# העתק הקוד
+COPY --chown=appuser:appuser . .
+
+# החלף למשתמש
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health')"
+
+# חשוף פורט
+EXPOSE 8000
+
+# הגדר metadata
+LABEL version="1.0.0" \
+      maintainer="dev@example.com" \
+      description="Production-ready Python app"
+
+# הפעל את האפליקציה
+CMD ["python", "app.py"]</div>
                 </section>
 
                 <!-- Troubleshooting Section -->
                 <section class="section" id="troubleshooting">
-                    <h2>🔧 פתרון בעיות ופקודות מתקדמות</h2>
+                    <h2>🔧 פתרון בעיות נפוצות</h2>
+                    
+                    <h3>פקודות ניקוי ותחזוקה</h3>
                     <div class="command-grid">
                         <div class="command-card">
-                            <div class="command-usage">הרץ פקודה בקונטיינר פועל</div>
-                            <div class="command-code">docker exec -it &lt;container&gt; &lt;command&gt;</div>
+                            <div class="command-usage">הצג שימוש בדיסק</div>
+                            <div class="command-code">docker system df</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">פתח bash shell בקונטיינר פועל</div>
-                            <div class="command-code">docker exec -it &lt;container&gt; /bin/bash</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">העתק קבצים מקונטיינר למארח</div>
-                            <div class="command-code">docker cp &lt;container&gt;:&lt;src-path&gt; &lt;dest-path&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">העתק קבצים ממארח לקונטיינר</div>
-                            <div class="command-code">docker cp &lt;src-path&gt; &lt;container&gt;:&lt;dest-path&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">בדוק פרטי קונטיינר</div>
-                            <div class="command-code">docker inspect &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג שימוש במשאבים</div>
-                            <div class="command-code">docker stats</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג שימוש במשאבים לקונטיינר ספציפי</div>
-                            <div class="command-code">docker stats &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג תהליכים בקונטיינר</div>
-                            <div class="command-code">docker top &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג מיפוי פורטים</div>
-                            <div class="command-code">docker port &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג שינויים בקונטיינר</div>
-                            <div class="command-code">docker diff &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">המתן ליציאת קונטיינר והצג קוד יציאה</div>
-                            <div class="command-code">docker wait &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">עדכן תצורת קונטיינר</div>
-                            <div class="command-code">docker update --restart=unless-stopped &lt;container&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">נקה הכל (קונטיינרים, images, רשתות, volumes)</div>
+                            <div class="command-usage">נקה הכל (זהירות!)</div>
                             <div class="command-code">docker system prune -a --volumes</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">ייצא קונטיינר כארכיון tar</div>
-                            <div class="command-code">docker export &lt;container&gt; &gt; &lt;file&gt;.tar</div>
+                            <div class="command-usage">נקה containers שנעצרו</div>
+                            <div class="command-code">docker container prune</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">ייבא ארכיון tar כ-image</div>
-                            <div class="command-code">docker import &lt;file&gt;.tar &lt;image-name&gt;</div>
+                            <div class="command-usage">נקה images לא בשימוש</div>
+                            <div class="command-code">docker image prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה volumes לא בשימוש</div>
+                            <div class="command-code">docker volume prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה networks לא בשימוש</div>
+                            <div class="command-code">docker network prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה build cache</div>
+                            <div class="command-code">docker builder prune</div>
+                        </div>
+                    </div>
+
+                    <h3>דיבאג וניתוח</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">בדוק קונטיינר מפורט</div>
+                            <div class="command-code">docker inspect [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים בקונטיינר</div>
+                            <div class="command-code">docker top [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שינויים בקונטיינר</div>
+                            <div class="command-code">docker diff [container]</div>
                         </div>
                         <div class="command-card">
                             <div class="command-usage">התחבר לקונטיינר פועל</div>
-                            <div class="command-code">docker attach &lt;container&gt;</div>
+                            <div class="command-code">docker attach [container]</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הרץ קונטיינר עם הגבלות משאבים</div>
-                            <div class="command-code">docker run --memory=512m --cpus=1.5 &lt;image&gt;</div>
+                            <div class="command-usage">הרץ bash בקונטיינר</div>
+                            <div class="command-code">docker exec -it [container] /bin/bash</div>
                         </div>
                         <div class="command-card">
-                            <div class="command-usage">הגדר מדיניות הפעלה מחדש</div>
-                            <div class="command-code">docker run --restart=always &lt;image&gt;</div>
+                            <div class="command-usage">הרץ sh בקונטיינר (alpine)</div>
+                            <div class="command-code">docker exec -it [container] /bin/sh</div>
                         </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק סטטיסטיקות משאבים</div>
+                            <div class="command-code">docker stats [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק לוגים עם timestamps</div>
+                            <div class="command-code">docker logs --timestamps [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק 100 שורות אחרונות</div>
+                            <div class="command-code">docker logs --tail 100 [container]</div>
+                        </div>
+                    </div>
+
+                    <h3>בעיות נפוצות ופתרונות</h3>
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <div class="definition-term">❌ "Cannot connect to Docker daemon"</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># הפעל את Docker daemon
+sudo systemctl start docker
+
+# בדוק סטטוס
+sudo systemctl status docker
+
+# הוסף משתמש לקבוצה
+sudo usermod -aG docker $USER</div>
+                            </div>
+                        </div>
+
+                        <div class="definition-card">
+                            <div class="definition-term">❌ "Port already in use"</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># מצא תהליך שתופס את הפורט
+sudo lsof -i :8080
+
+# או שנה את הפורט
+docker run -p 8081:80 nginx</div>
+                            </div>
+                        </div>
+
+                        <div class="definition-card">
+                            <div class="definition-term">❌ "No space left on device"</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># נקה הכל
+docker system prune -a --volumes
+
+# בדוק שימוש
+docker system df</div>
+                            </div>
+                        </div>
+
+                        <div class="definition-card">
+                            <div class="definition-term">❌ Container מסתיים מיד</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># בדוק לוגים
+docker logs [container]
+
+# בדוק exit code
+docker inspect [container] --format='{{.State.ExitCode}}'
+
+# הרץ interactively לדיבאג
+docker run -it [image] /bin/bash</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Help Section -->
+                <section class="section" id="help">
+                    <h2>❓ קבלת עזרה</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג גרסת Docker</div>
+                            <div class="command-code">docker --version</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג מידע מפורט על המערכת</div>
+                            <div class="command-code">docker info</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עזרה כללית</div>
+                            <div class="command-code">docker --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עזרה על פקודה ספציפית</div>
+                            <div class="command-code">docker [command] --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דוגמאות לפקודת run</div>
+                            <div class="command-code">docker run --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דוגמאות לפקודת build</div>
+                            <div class="command-code">docker build --help</div>
+                        </div>
+                    </div>
+
+                    <h3>משאבים מומלצים</h3>
+                    <div class="info-box">
+                        <p><strong>🌐 קישורים שימושיים:</strong></p>
+                        <ul>
+                            <li><strong>Docker Docs:</strong> docs.docker.com</li>
+                            <li><strong>Docker Hub:</strong> hub.docker.com</li>
+                            <li><strong>Dockerfile Reference:</strong> docs.docker.com/engine/reference/builder</li>
+                            <li><strong>Best Practices:</strong> docs.docker.com/develop/dev-best-practices</li>
+                            <li><strong>Docker Compose:</strong> docs.docker.com/compose</li>
+                        </ul>
                     </div>
                 </section>
 
                 <!-- Linux Commands Section -->
                 <section class="section" id="linux">
-                    <h2>🐧 פקודות Linux בסיסיות (דרישות מוקדמות)</h2>
+                    <h2>🐧 פקודות Linux בסיסיות</h2>
+                    
+                    <h3>מדוע חשוב ללמוד Linux?</h3>
+                    <div class="info-box">
+                        <p><strong>רוב ה-Docker containers מבוססים על Linux!</strong></p>
+                        <p>הבנה בסיסית של פקודות Linux חיונית לעבודה יעילה עם Docker</p>
+                    </div>
+
+                    <h3>פקודות בסיסיות</h3>
                     <div class="command-grid">
-                        <div class="command-card">
-                            <div class="command-usage">פתח קובץ בעורך nano</div>
-                            <div class="command-code">nano &lt;file-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">צור קובץ ריק</div>
-                            <div class="command-code">touch &lt;file-name&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הדפס טקסט לקונסול</div>
-                            <div class="command-code">echo "&lt;text&gt;"</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הוסף פלט לסוף קובץ</div>
-                            <div class="command-code">&lt;command&gt; &gt;&gt; &lt;file&gt;</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">אשר אוטומטית את כל השאלות</div>
-                            <div class="command-code">&lt;command&gt; -y</div>
-                        </div>
-                        <div class="command-card">
-                            <div class="command-usage">הצג תוכן קובץ</div>
-                            <div class="command-code">cat &lt;file-name&gt;</div>
-                        </div>
                         <div class="command-card">
                             <div class="command-usage">הצג תיקייה נוכחית</div>
                             <div class="command-code">pwd</div>
@@ -1360,8 +2115,122 @@ USER myuser</div>
                             <div class="command-usage">רשימת קבצים</div>
                             <div class="command-code">ls -la</div>
                         </div>
+                        <div class="command-card">
+                            <div class="command-usage">עבור לתיקייה</div>
+                            <div class="command-code">cd /path/to/directory</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור תיקייה</div>
+                            <div class="command-code">mkdir my-directory</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תוכן קובץ</div>
+                            <div class="command-code">cat file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ערוך קובץ (nano)</div>
+                            <div class="command-code">nano file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור קובץ ריק</div>
+                            <div class="command-code">touch newfile.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קובץ</div>
+                            <div class="command-code">cp source.txt destination.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העבר/שנה שם</div>
+                            <div class="command-code">mv oldname.txt newname.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">מחק קובץ</div>
+                            <div class="command-code">rm file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">מחק תיקייה</div>
+                            <div class="command-code">rm -rf directory/</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חפש טקסט בקובץ</div>
+                            <div class="command-code">grep "search-term" file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים</div>
+                            <div class="command-code">ps aux</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרוג תהליך</div>
+                            <div class="command-code">kill -9 [PID]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הורד קובץ</div>
+                            <div class="command-code">wget https://example.com/file.zip</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חלץ tar.gz</div>
+                            <div class="command-code">tar -xzvf archive.tar.gz</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש בדיסק</div>
+                            <div class="command-code">df -h</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג גודל תיקייה</div>
+                            <div class="command-code">du -sh /path/to/dir</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג משתני סביבה</div>
+                            <div class="command-code">env</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הדפס טקסט</div>
+                            <div class="command-code">echo "Hello World"</div>
+                        </div>
+                    </div>
+
+                    <h3>Pipes וניתוב</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">העבר פלט לפקודה אחרת</div>
+                            <div class="command-code">ls -la | grep "docker"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שמור פלט לקובץ</div>
+                            <div class="command-code">echo "text" > file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הוסף לקובץ קיים</div>
+                            <div class="command-code">echo "more text" >> file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפנה שגיאות</div>
+                            <div class="command-code">command 2> error.log</div>
+                        </div>
+                    </div>
+
+                    <h3>הרשאות קבצים</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">שנה הרשאות</div>
+                            <div class="command-code">chmod 755 script.sh</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפוך לקובץ הפעלה</div>
+                            <div class="command-code">chmod +x script.sh</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שנה בעלות</div>
+                            <div class="command-code">chown user:group file.txt</div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 טיפ למהנדסי נתונים:</strong></p>
+                        <p>פקודות אלו יהיו שימושיות כאשר תצטרך להיכנס לקונטיינרים ולבצע דיבאג או תחזוקה!</p>
                     </div>
                 </section>
+
             </main>
         </div>
     </div>
@@ -1391,7 +2260,7 @@ USER myuser</div>
                 document.getElementById(sectionId).classList.add('active');
                 
                 // Scroll to top of main content
-                document.querySelector('.main-content').scrollTop = 0;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
@@ -1421,7 +2290,7 @@ USER myuser</div>
         // Search functionality
         // ============================================
         const searchInput = document.getElementById('searchInput');
-        const allCards = document.querySelectorAll('.command-card, .definition-card');
+        const allCards = document.querySelectorAll('.command-card, .definition-card, .feature-card');
         const allSections = document.querySelectorAll('.section');
 
         // Store original HTML
@@ -1439,9 +2308,9 @@ USER myuser</div>
                     card.innerHTML = card.originalHTML;
                 });
                 allSections.forEach(section => section.classList.remove('active'));
-                document.getElementById('definitions').classList.add('active');
+                document.getElementById('what-is-docker').classList.add('active');
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                document.querySelector('.nav-item[data-section="definitions"]').classList.add('active');
+                document.querySelector('.nav-item[data-section="what-is-docker"]').classList.add('active');
                 return;
             }
 
@@ -1493,34 +2362,11 @@ USER myuser</div>
         });
 
         // ============================================
-        // Smooth scroll for sidebar
-        // ============================================
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                document.querySelector('.main-content').scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // ============================================
-        // Add animation on card hover
-        // ============================================
-        document.querySelectorAll('.command-card, .definition-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
-
-        // ============================================
         // Initialize
         // ============================================
-        console.log('🐳 Docker Interactive Guide loaded successfully!');
+        console.log('🐳 Docker Guide for Data Engineers - Loaded Successfully!');
         console.log('💡 Tip: Press Ctrl+F to search for commands');
+        console.log('📚 Created for Naya College - Data Engineering');
     </script>
 </body>
 </html>
