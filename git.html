@@ -68,17 +68,18 @@
         .nav-scroller {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 18px;
             overflow-x: auto;
-            padding: 5px 20px;
+            padding: 8px 30px;
         }
 
         .nav-btn {
             background: transparent;
             border: 2px solid transparent;
-            padding: 8px 20px;
+            padding: 10px 24px;
             border-radius: 30px;
             font-weight: 700;
+            font-size: 0.95em;
             color: var(--secondary);
             cursor: pointer;
             transition: all 0.3s;
@@ -127,7 +128,7 @@
 
         .info-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
 
-        .icon-box { font-size: 2.5em; margin-bottom: 15px; color: var(--primary); }
+        .icon-box { font-size: 3em; margin-bottom: 18px; color: var(--primary); }
 
         /* --- CODE BLOCKS --- */
         .command-box {
@@ -283,14 +284,14 @@
         .arrow { font-size: 2em; color: #cbd5e0; }
 
         /* --- INTERACTIVE TABS --- */
-        .tab-container { margin-top: 30px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-container { margin-top: 35px; }
+        .tabs { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
         .tab-btn {
-            background: #eee; border: none; padding: 10px 20px; border-radius: 8px;
-            cursor: pointer; font-weight: bold; transition: 0.3s;
+            background: #eee; border: none; padding: 12px 24px; border-radius: 8px;
+            cursor: pointer; font-weight: bold; font-size: 1em; transition: 0.3s;
         }
         .tab-btn.active { background: var(--secondary); color: white; }
-        .tab-content { display: none; background: #f8f9fa; padding: 20px; border-radius: 10px; border: 1px solid #eee; }
+        .tab-content { display: none; background: #f8f9fa; padding: 25px; border-radius: 10px; border: 1px solid #eee; font-size: 1.1em; line-height: 1.8; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
 
         /* --- MERGE VISUALIZATION --- */
@@ -298,12 +299,13 @@
             background: white;
             color: var(--secondary);
             border: 2px solid var(--secondary);
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 1em;
             font-weight: 700;
             transition: all 0.3s ease;
+            margin: 8px;
         }
 
         .merge-btn:hover {
@@ -334,7 +336,7 @@
 
         #merge-description {
             margin-top: 30px;
-            padding: 25px;
+            padding: 30px;
             background: #f8f9fa;
             border-radius: 10px;
             border-left: 4px solid var(--primary);
@@ -343,24 +345,25 @@
         .legend {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
+            gap: 35px;
+            margin: 25px 0;
             flex-wrap: wrap;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
+            gap: 12px;
+            padding: 12px 20px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 1.05em;
         }
 
         .legend-dot {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
         }
 
@@ -383,8 +386,12 @@
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5em; }
-            .section { padding: 25px; }
+            .section { padding: 30px; }
             .arrow { transform: rotate(90deg); margin: 10px 0; }
+            .container { padding: 0 20px; }
+            .grid { grid-template-columns: 1fr; gap: 20px; }
+            .info-card { padding: 20px; }
+            .command-box { padding: 20px 25px; }
         }
     </style>
 </head>
