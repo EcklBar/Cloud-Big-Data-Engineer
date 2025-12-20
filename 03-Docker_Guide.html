@@ -3,1966 +3,2734 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docker למהנדסי נתונים - מדריך אינטראקטיבי</title>
+    <meta name="description" content="מדריך מקיף ואינטראקטיבי לפקודות Docker עם חיפוש מתקדם">
+    <title>Docker | מדריך מקצועי למהנדסי נתונים</title>
+
     <style>
+        /* ============================================
+           🎨 Design System - Color Palette & Variables
+           ============================================ */
+        :root {
+            /* Primary Brand Colors */
+            --primary-gradient-start: #667eea;
+            --primary-gradient-end: #764ba2;
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+
+            /* Docker Colors */
+            --docker-blue: #2496ed;
+            --docker-dark: #0c2340;
+
+            /* Neutral Colors */
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --text-muted: #555;
+            --text-light: #666;
+
+            /* Background Colors */
+            --bg-white: #ffffff;
+            --bg-light: #f8f9fa;
+            --bg-lighter: #e9ecef;
+            --bg-card: rgba(255, 255, 255, 0.95);
+
+            /* Accent Colors */
+            --accent-green: #2ecc71;
+            --accent-blue: #3498db;
+            --accent-orange: #e67e22;
+            --accent-red: #e74c3c;
+
+            /* Spacing System */
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 20px;
+            --space-lg: 30px;
+            --space-xl: 40px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 25px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+
+            /* Typography */
+            --font-primary: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            --font-display: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-mono: 'Courier New', 'Monaco', 'Consolas', monospace;
+
+            /* Font Sizes */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 2rem;
+            --text-4xl: 2.5rem;
+            --text-5xl: 3rem;
+
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-base: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ============================================
+           🔧 Base Styles & Reset
+           ============================================ */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
             min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: var(--space-md);
         }
 
+        /* ============================================
+           📦 Layout Components
+           ============================================ */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
         }
 
+        /* ============================================
+           🎯 Header Section
+           ============================================ */
         .header {
-            text-align: center;
-            margin-bottom: 40px;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            color: #4a90e2;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .docker-logo {
-            font-size: 4em;
-            margin: 20px 0;
-        }
-
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-            background: white;
-            border-radius: 15px;
-            padding: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            flex-wrap: wrap;
-        }
-
-        .nav-tab {
-            background: #f8f9fa;
-            border: none;
-            padding: 15px 25px;
-            margin: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .nav-tab:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
-        }
-
-        .nav-tab.active {
-            background: #4a90e2;
+            background: linear-gradient(135deg, var(--docker-dark) 0%, var(--docker-blue) 100%);
             color: white;
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
-        }
-
-        .content-section {
-            display: none;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            color: #4a90e2;
-            font-size: 2em;
-            margin-bottom: 25px;
-            border-bottom: 3px solid #4a90e2;
-            padding-bottom: 10px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .feature-card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            border-right: 5px solid #4a90e2;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            background: #e3f2fd;
-        }
-
-        .feature-card h3 {
-            color: #2c5aa0;
-            margin-bottom: 15px;
-            font-size: 1.3em;
-        }
-
-        .comparison-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin: 30px 0;
-        }
-
-        .comparison-box {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
+            padding: var(--space-xl) var(--space-lg);
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .comparison-box::before {
+        .header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #4a90e2, #764ba2);
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
         }
 
-        .comparison-title {
-            font-size: 1.5em;
-            color: #2c5aa0;
-            margin-bottom: 20px;
+        .header-logo {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-sm);
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .stack-diagram {
-            background: #2c3e50;
-            color: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .stack-app {
-            background: #3498db;
-            margin: 5px;
-            padding: 10px;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 2px;
-        }
-
-        .interactive-demo {
-            background: #e8f5e8;
-            padding: 25px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 2px dashed #4caf50;
-        }
-
-        .demo-button {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .demo-button:hover {
-            background: #45a049;
-            transform: scale(1.05);
-        }
-
-        .code-block {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            overflow-x: auto;
-            margin: 15px 0;
-            position: relative;
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #4a90e2;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .highlight {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 8px;
-            border-right: 5px solid #ffc107;
-            margin: 15px 0;
-        }
-
-        .progress-bar {
-            background: #e9ecef;
-            border-radius: 10px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: linear-gradient(90deg, #4a90e2, #764ba2);
-            height: 20px;
-            border-radius: 10px;
-            transition: width 1s ease;
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            font-family: var(--font-display);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
+            gap: var(--space-md);
         }
 
-        .quiz-container {
-            background: #fff8e1;
-            padding: 25px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 2px solid #ff9800;
+        .header p {
+            font-size: var(--text-xl);
+            opacity: 0.9;
         }
 
-        .quiz-question {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #e65100;
+        .docker-logo {
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
         }
 
-        .quiz-options {
-            display: grid;
-            gap: 10px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
-        .quiz-option {
+        /* ============================================
+           🔍 Search Section
+           ============================================ */
+        .search-container {
+            padding: var(--space-lg);
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--bg-lighter);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: var(--text-lg);
+            border: 2px solid var(--bg-lighter);
+            border-radius: 50px;
+            outline: none;
+            transition: all var(--transition-base);
             background: white;
-            padding: 15px;
-            border-radius: 8px;
+            font-family: var(--font-primary);
+        }
+
+        .search-box:focus {
+            border-color: var(--docker-blue);
+            box-shadow: 0 0 20px rgba(36, 150, 237, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: var(--text-light);
+        }
+
+        /* ============================================
+           📐 Content Layout - NO SCROLL!
+           ============================================ */
+        .content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+        }
+
+        /* ============================================
+           🧭 Sidebar Navigation
+           ============================================ */
+        .sidebar {
+            background: var(--bg-light);
+            border-left: 1px solid var(--bg-lighter);
+            padding: var(--space-md) 0;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--bg-lighter);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--bg-lighter);
+            transition: all var(--transition-base);
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            font-weight: 500;
+            font-size: var(--text-base);
         }
 
-        .quiz-option:hover {
-            background: #ffe0b3;
-            border-color: #ff9800;
+        .nav-item:hover {
+            background: var(--docker-blue);
+            color: white;
+            transform: translateX(-5px);
+            padding-right: 25px;
         }
 
-        .quiz-option.correct {
-            background: #c8e6c9;
-            border-color: #4caf50;
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            color: white;
+            border-right: 4px solid var(--secondary-color);
+            padding-right: 16px;
         }
 
-        .quiz-option.incorrect {
-            background: #ffcdd2;
-            border-color: #f44336;
+        /* ============================================
+           📄 Main Content Area - NO MAX HEIGHT!
+           ============================================ */
+        .main-content {
+            padding: var(--space-xl);
         }
 
+        .section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h2 {
+            color: var(--text-primary);
+            font-size: var(--text-3xl);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 3px solid var(--docker-blue);
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            right: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            animation: slideLeft 0.6s ease;
+        }
+
+        @keyframes slideLeft {
+            from { width: 0; }
+            to { width: 60px; }
+        }
+
+        .section h3 {
+            color: var(--text-secondary);
+            font-size: var(--text-2xl);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+        }
+
+        /* ============================================
+           🎴 Command Cards
+           ============================================ */
+        .command-grid {
+            display: grid;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .command-card {
+            background: white;
+            border: 1px solid var(--bg-lighter);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            border-right: 4px solid var(--docker-blue);
+        }
+
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-right-color: var(--primary-color);
+        }
+
+        .command-usage {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            font-size: var(--text-lg);
+        }
+
+        .command-code {
+            background: linear-gradient(135deg, #263238 0%, #37474f 100%);
+            padding: 12px 15px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: var(--text-base);
+            color: #aed581;
+            border-right: 3px solid #ffeb3b;
+            margin-top: var(--space-sm);
+            word-break: break-word;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+            white-space: pre-wrap;
+        }
+
+        .command-code::before {
+            content: '📋';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .command-code:hover {
+            background: linear-gradient(135deg, #37474f 0%, #455a64 100%);
+            padding-right: 35px;
+        }
+
+        .command-code:hover::before {
+            opacity: 1;
+        }
+
+        /* ============================================
+           📚 Definition Cards
+           ============================================ */
+        .definitions-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .definition-card {
+            background: white;
+            border: 1px solid var(--bg-lighter);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-sm);
+            border-right: 4px solid #9b59b6;
+            transition: all var(--transition-base);
+        }
+
+        .definition-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .definition-term {
+            font-weight: bold;
+            color: #9b59b6;
+            font-size: var(--text-xl);
+            margin-bottom: var(--space-sm);
+        }
+
+        .definition-text {
+            color: var(--text-muted);
+            line-height: 1.8;
+            font-size: var(--text-base);
+        }
+
+        /* ============================================
+           🔔 Copy Notification
+           ============================================ */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--accent-green);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--radius-md);
+            transform: translateX(-400px);
+            transition: transform var(--transition-base);
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        /* ============================================
+           🎨 Highlight Effect
+           ============================================ */
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           🎨 Comparison Table
+           ============================================ */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+            margin: var(--space-lg) 0;
+        }
+
+        .comparison-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-md);
+            border-top: 4px solid var(--docker-blue);
+        }
+
+        .comparison-box h4 {
+            text-align: center;
+            font-size: var(--text-2xl);
+            margin-bottom: var(--space-lg);
+            color: var(--docker-blue);
+        }
+
+        .stack-item {
+            background: var(--bg-light);
+            padding: var(--space-sm);
+            margin: var(--space-xs) 0;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-weight: 500;
+            transition: transform var(--transition-fast);
+        }
+
+        .stack-item:hover {
+            transform: translateX(-5px);
+            background: var(--bg-lighter);
+        }
+
+        /* ============================================
+           📱 Responsive Design
+           ============================================ */
         @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-left: none;
+                border-bottom: 1px solid var(--bg-lighter);
+            }
+
+            .header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+            }
+
+            .docker-logo {
+                font-size: 2rem;
+            }
+
             .comparison-container {
                 grid-template-columns: 1fr;
             }
-            
-            .nav-tabs {
-                flex-direction: column;
+
+            body {
+                padding: var(--space-sm);
             }
-            
-            .content-section {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
+        }
+
+        /* ============================================
+           🎯 Utility Classes
+           ============================================ */
+        .text-center {
+            text-align: center;
+        }
+
+        code {
+            background: var(--bg-lighter);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            color: var(--docker-blue);
+        }
+
+        /* ============================================
+           ✨ Special Effects
+           ============================================ */
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-right: 4px solid var(--accent-blue);
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: var(--text-base);
+            line-height: 1.8;
+        }
+
+        .info-box ul {
+            margin-top: var(--space-sm);
+            padding-right: var(--space-lg);
+        }
+
+        .info-box li {
+            margin: var(--space-xs) 0;
+            color: var(--text-secondary);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-right: 4px solid var(--accent-orange);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            border-right: 4px solid var(--accent-green);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card h4 {
+            color: var(--docker-blue);
+            margin-bottom: var(--space-sm);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="docker-logo">🐋</div>
-            <h1>Docker למהנדסי נתונים</h1>
-            <p>מדריך מקיף ואינטראקטיבי לשימוש ב-Docker בעולם הנתונים</p>
+        <!-- Header -->
+        <header class="header" role="banner">
+            <div class="header-logo">DATA ENGINEERING HUB</div>
+            <h1>
+                <span class="docker-logo">🐳</span>
+                Docker - מדריך מקיף
+            </h1>
+            <p>מדריך אינטראקטיבי לכל פקודות Docker עם חיפוש מתקדם</p>
+        </header>
+
+        <!-- Search Section -->
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-box" 
+                placeholder="🔍 חפש פקודות, הגדרות או נושאים... (Ctrl+F)" 
+                id="searchInput"
+                autocomplete="off"
+            >
         </div>
 
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('what-is-docker')">מהו Docker?</button>
-            <button class="nav-tab" onclick="showSection('docker-vs-vm')">Docker מול VM</button>
-            <button class="nav-tab" onclick="showSection('use-cases')">שימושי Docker</button>
-            <button class="nav-tab" onclick="showSection('architecture')">ארכיטקטורה</button>
-            <button class="nav-tab" onclick="showSection('creating-images')">יצירת Images</button>
-            <button class="nav-tab" onclick="showSection('dockerfile-guide')">מדריך Dockerfile</button>
-            <button class="nav-tab" onclick="showSection('exercises')">תרגילים מעשיים</button>
-            <button class="nav-tab" onclick="showSection('networking')">רשתות וכרכים</button>
-            <button class="nav-tab" onclick="showSection('registry')">Docker Registry</button>
-            <button class="nav-tab" onclick="showSection('containers')">שימוש בקונטיינרים</button>
-            <button class="nav-tab" onclick="showSection('quiz')">בדיקת ידע</button>
-        </div>
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <a href="#" class="nav-item active" data-section="what-is-docker">🐳 מהו Docker</a>
+                <a href="#" class="nav-item" data-section="docker-vs-vm">⚖️ Docker vs VM</a>
+                <a href="#" class="nav-item" data-section="use-cases">🎯 מקרי שימוש</a>
+                <a href="#" class="nav-item" data-section="architecture">🏗️ ארכיטקטורה</a>
+                <a href="#" class="nav-item" data-section="technology">🔬 טכנולוגיה בסיסית</a>
+                <a href="#" class="nav-item" data-section="definitions">📚 הגדרות</a>
+                <a href="#" class="nav-item" data-section="dockerfile">📝 Dockerfile</a>
+                <a href="#" class="nav-item" data-section="building">🔨 בניית Images</a>
+                <a href="#" class="nav-item" data-section="running">🚀 הרצת קונטיינרים</a>
+                <a href="#" class="nav-item" data-section="inspecting">🔍 בדיקת קונטיינרים</a>
+                <a href="#" class="nav-item" data-section="managing">⚙️ ניהול קונטיינרים</a>
+                <a href="#" class="nav-item" data-section="volumes">💾 Volumes</a>
+                <a href="#" class="nav-item" data-section="networking">🌐 רשתות</a>
+                <a href="#" class="nav-item" data-section="layers">🗂️ מערכת Layers</a>
+                <a href="#" class="nav-item" data-section="cmd-vs-entrypoint">🎭 CMD vs ENTRYPOINT</a>
+                <a href="#" class="nav-item" data-section="copy-vs-add">📄 COPY vs ADD</a>
+                <a href="#" class="nav-item" data-section="signals">🎯 Signal Handling</a>
+                <a href="#" class="nav-item" data-section="dockerignore">📄 .dockerignore</a>
+                <a href="#" class="nav-item" data-section="arg-vs-env">🔀 ARG vs ENV</a>
+                <a href="#" class="nav-item" data-section="registries">📦 Registry</a>
+                <a href="#" class="nav-item" data-section="images">🖼️ ניהול Images</a>
+                <a href="#" class="nav-item" data-section="containers">📋 ניהול מתקדם</a>
+                <a href="#" class="nav-item" data-section="compose">🎼 Docker Compose</a>
+                <a href="#" class="nav-item" data-section="practices">✨ Best Practices</a>
+                <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
+                <a href="#" class="nav-item" data-section="help">❓ עזרה</a>
+                <a href="#" class="nav-item" data-section="linux">🐧 פקודות Linux</a>
+            </nav>
 
-        <!-- What is Docker Section -->
-        <div id="what-is-docker" class="content-section active">
-            <h2 class="section-title">🐋 מהו Docker?</h2>
-            
-            <div class="highlight">
-                <strong>Docker</strong> הוא פלטפורמה פופולרית ליצירה, פריסה והרצה של אפליקציות בקונטיינרים
-            </div>
-
-            <div class="feature-grid">
-                <div class="feature-card" onclick="toggleDetails('container-impl')">
-                    <h3>📦 מימוש קונטיינרים</h3>
-                    <p>Docker הוא המימוש הפופולרי ביותר של טכנולוגיית הקונטיינרים</p>
-                    <div id="container-impl" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        הקונטיינרים מאפשרים אריזה של אפליקציות עם כל התלויות שלהן בחבילה אחת ניידת
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('platform')">
-                    <h3>🛠️ פלטפורמה למפתחים</h3>
-                    <p>כלי מתקדם למפתחים ומנהלי מערכות</p>
-                    <div id="platform" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        מאפשר פיתוח, בדיקה ופריסה של אפליקציות בצורה עקבית בכל הסביבות
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('portable')">
-                    <h3>🚀 נייד ונגיש</h3>
-                    <p>בנה, שתף והרץ אפליקציות באופן נייד</p>
-                    <div id="portable" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        "Build once, run anywhere" - בנה פעם אחת, הרץ בכל מקום
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('isolation')">
-                    <h3>🔒 מנגנון בידוד</h3>
-                    <p>בידוד בטוח בין אפליקציות</p>
-                    <div id="isolation" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        כל קונטיינר פועל בבידוד מוחלט, מה שמבטיח אבטחה ויציבות
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('lightweight')">
-                    <h3>⚡ גמיש וקל משקל</h3>
-                    <p>גמיש, קל משקל, בטוח וניתן להרחבה</p>
-                    <div id="lightweight" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        צורך משאבי מערכת מינימליים בהשוואה למכונות וירטואליות
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('process')">
-                    <h3>🎯 תהליך מתקדם</h3>
-                    <p>תהליך משופר (תהליך OS + Namespaces)</p>
-                    <div id="process" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        משתמש ב-Linux namespaces וב-cgroups ליצירת סביבה מבודדת
-                    </div>
-                </div>
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🎮 הדגמה אינטראקטיבית</h3>
-                <p>לחץ על הכפתור כדי לראות איך Docker פועל:</p>
-                <button class="demo-button" onclick="runDockerDemo()">הרץ דוגמה</button>
-                <div id="docker-demo-output" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Docker vs VM Section -->
-        <div id="docker-vs-vm" class="content-section">
-            <h2 class="section-title">⚖️ Docker מול מכונה וירטואלית</h2>
-            
-            <div class="comparison-container">
-                <div class="comparison-box">
-                    <h3 class="comparison-title">🐋 Docker Container</h3>
-                    <div class="stack-diagram">Infrastructure</div>
-                    <div class="stack-diagram">Host OS</div>
-                    <div class="stack-diagram">Docker</div>
-                    <div class="stack-diagram">
-                        <div class="stack-app">App A</div>
-                        <div class="stack-app">App B</div>
-                        <div class="stack-app">App C</div>
-                    </div>
-                    <div class="stack-diagram">Bins/Libs</div>
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- What is Docker Section -->
+                <section class="section active" id="what-is-docker">
+                    <h2>🐳 מהו Docker?</h2>
                     
-                    <div style="margin-top:20px;">
-                        <h4>יתרונות:</h4>
-                        <ul style="text-align:right; margin-top:10px;">
-                            <li>✅ קל משקל וזריז</li>
-                            <li>✅ זמן התחלה מהיר</li>
-                            <li>✅ שימוש יעיל במשאבים</li>
-                            <li>✅ ניידות גבוהה</li>
-                            <li>✅ קל לניהול</li>
+                    <div class="info-box">
+                        <p><strong>Docker הוא המימוש הפופולרי ביותר של טכנולוגיית Containers</strong></p>
+                    </div>
+
+                    <h3>הגדרה</h3>
+                    <div class="definition-card">
+                        <div class="definition-text">
+                            <ul>
+                                <li>פלטפורמה למפתחים ומנהלי מערכות</li>
+                                <li>בנייה, שיתוף והרצה של אפליקציות בצורה ניידת</li>
+                                <li>מנגנון בידוד (Isolation)</li>
+                                <li>גמיש, קל משקל, מאובטח וסקלבילי</li>
+                                <li><strong>תהליך מפואר (OS Process + Namespaces)</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>מאפיינים עיקריים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔐 Secure</h4>
+                            <p>בידוד מלא בין קונטיינרים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Lightweight</h4>
+                            <p>משאבים מינימליים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 Portable</h4>
+                            <p>רץ בכל מקום</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📈 Scalable</h4>
+                            <p>הגדלה קלה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🎯 Flexible</h4>
+                            <p>תומך בכל סביבה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🚀 Fast</h4>
+                            <p>הפעלה מהירה</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Docker vs VM Section -->
+                <section class="section" id="docker-vs-vm">
+                    <h2>⚖️ Docker vs Virtual Machine</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>🐳 CONTAINER</h4>
+                            <div class="stack-item">App A</div>
+                            <div class="stack-item">App B</div>
+                            <div class="stack-item">Bins/Libs</div>
+                            <div class="stack-item" style="background: var(--docker-blue); color: white;">Docker Engine</div>
+                            <div class="stack-item">Host OS</div>
+                            <div class="stack-item">Infrastructure</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>💻 VIRTUAL MACHINE</h4>
+                            <div class="stack-item">App A</div>
+                            <div class="stack-item">App B</div>
+                            <div class="stack-item">Bins/Libs</div>
+                            <div class="stack-item">Guest OS</div>
+                            <div class="stack-item">Guest OS</div>
+                            <div class="stack-item" style="background: var(--accent-orange); color: white;">Hypervisor</div>
+                            <div class="stack-item">Host OS</div>
+                            <div class="stack-item">Infrastructure</div>
+                        </div>
+                    </div>
+
+                    <h3>יתרונות Containers על פני VMs</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>קלים יותר</strong> - אין צורך במערכת הפעלה מלאה לכל אפליקציה</li>
+                            <li><strong>מהירים יותר</strong> - זמן אתחול של שניות במקום דקות</li>
+                            <li><strong>יעילים יותר</strong> - משאבים משותפים עם ה-Host</li>
+                            <li><strong>ניידים יותר</strong> - אותו קונטיינר רץ בכל מקום</li>
                         </ul>
                     </div>
-                </div>
+                </section>
 
-                <div class="comparison-box">
-                    <h3 class="comparison-title">💻 Virtual Machine</h3>
-                    <div class="stack-diagram">Infrastructure</div>
-                    <div class="stack-diagram">Hypervisor</div>
-                    <div class="stack-diagram">
-                        <div class="stack-app">Guest OS</div>
-                        <div class="stack-app">Guest OS</div>
-                        <div class="stack-app">Guest OS</div>
-                    </div>
-                    <div class="stack-diagram">Bins/Libs</div>
-                    <div class="stack-diagram">
-                        <div class="stack-app">App A</div>
-                        <div class="stack-app">App B</div>
-                        <div class="stack-app">App C</div>
-                    </div>
+                <!-- Use Cases Section -->
+                <section class="section" id="use-cases">
+                    <h2>🎯 מקרי שימוש ב-Docker</h2>
                     
-                    <div style="margin-top:20px;">
-                        <h4>יתרונות:</h4>
-                        <ul style="text-align:right; margin-top:10px;">
-                            <li>✅ בידוד מוחלט</li>
-                            <li>✅ אבטחה גבוהה</li>
-                            <li>✅ תמיכה במספר OS</li>
-                            <li>❌ כבד במשאבים</li>
-                            <li>❌ איטי בהפעלה</li>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">🏗️ ארכיטקטורת Microservices</div>
+                            <div class="definition-text">כל שירות רץ בקונטיינר נפרד, בידוד מלא ועצמאות</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🎨 אפליקציות Multi-tier</div>
+                            <div class="definition-text">Front End, Mid Tier, Data Tier - כל אחד בקונטיינר משלו</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">👥 סביבת עבודה משותפת</div>
+                            <div class="definition-text">כל המפתחים עובדים באותה סביבה זהה</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🔄 CI/CD Pipelines</div>
+                            <div class="definition-text">בנייה ופריסה אוטומטית של אפליקציות</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🧪 סביבות Sandbox</div>
+                            <div class="definition-text">בדיקות ופיתוח בסביבה מבודדת ובטוחה</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">📊 Data Engineering</div>
+                            <div class="definition-text">הרצת כלי עיבוד נתונים (Spark, Kafka, Airflow) בקונטיינרים</div>
+                        </div>
+                    </div>
+
+                    <h3>Modern Deployment</h3>
+                    <div class="info-box">
+                        <p><strong>קונטיינרים מניעים את ארכיטקטורת הפריסה המודרנית:</strong></p>
+                        <ul>
+                            <li>מספקים אפליקציה עצמאית (self-contained)</li>
+                            <li>מפחיתים תלות בסביבת ההרצה</li>
+                            <li>מפחיתים מאמץ תפעולי (עלויות)</li>
+                            <li>תזמור מרובה קונטיינרים עם Kubernetes</li>
                         </ul>
                     </div>
-                </div>
-            </div>
+                </section>
 
-            <div class="interactive-demo">
-                <h3>📊 השוואת ביצועים</h3>
-                <button class="demo-button" onclick="comparePerformance()">השווה ביצועים</button>
-                <div id="performance-comparison" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Use Cases Section -->
-        <div id="use-cases" class="content-section">
-            <h2 class="section-title">🎯 שימושי Docker</h2>
-            
-            <div class="highlight">
-                Docker מהפך את דרך הפיתוח והפריסה המודרנית של אפליקציות
-            </div>
-
-            <h3>🏗️ תחומי שימוש עיקריים</h3>
-            <div class="feature-grid">
-                <div class="feature-card" onclick="toggleDetails('microservices')">
-                    <h3>🔗 ארכיטקטורת Microservices</h3>
-                    <p>פיצול אפליקציות מונוליטיות לשירותים קטנים ועצמאיים</p>
-                    <div id="microservices" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        כל microservice רץ בקונטיינר נפרד, מה שמאפשר פיתוח עצמאי, scaling נפרד, ואמינות גבוהה יותר
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('multi-tier')">
-                    <h3>🏢 אפליקציות רב-שכבתיות</h3>
-                    <p>הפרדה בין Front End, Mid Tier ו-Data Tier</p>
-                    <div id="multi-tier" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        כל שכבה רצה בקונטיינר נפרד: React/Angular בחזית, Node.js/Python באמצע, ומסד נתונים בקונטיינר נפרד
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('shared-workspace')">
-                    <h3>👥 סביבת עבודה משותפת</h3>
-                    <p>סביבת פיתוח אחידה לכל הצוות</p>
-                    <div id="shared-workspace" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        "זה עובד אצלי" - כבר לא! עם Docker כל המפתחים עובדים באותה סביבה זהה
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('cicd')">
-                    <h3>🚀 תהליכי CI/CD</h3>
-                    <p>אוטומציה של בנייה ופריסה</p>
-                    <div id="cicd" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        Docker מאפשר בנייה אוטומטית, בדיקות בסביבה מבודדת, ופריסה עקבית לכל הסביבות
-                    </div>
-                </div>
-
-                <div class="feature-card" onclick="toggleDetails('sandbox')">
-                    <h3>🏖️ סביבת Sandbox</h3>
-                    <p>בדיקות ונסיונות בסביבה מבודדת</p>
-                    <div id="sandbox" style="display:none; margin-top:15px; padding:15px; background:white; border-radius:5px;">
-                        הרצת קוד חדש, בדיקת חבילות, או ניסיון טכנולוגיות חדשות ללא פגיעה במערכת המארחת
-                    </div>
-                </div>
-            </div>
-
-            <h3>🌟 יתרונות הפריסה המודרנית</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🎯 מניע ארכיטקטורה מודרנית</h3>
-                    <p>קונטיינרים מובילים את המהפכה בפריסת אפליקציות</p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📦 אפליקציה עצמאית</h3>
-                    <p>כל מה שנדרש לאפליקציה נארז יחד בקונטיינר</p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🔄 הפחתת תלות בסביבה</h3>
-                    <p>פחות תלויות בסביבת ההרצה הספציפית</p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>💰 הפחתת עלויות תפעול</h3>
-                    <p>פחות זמן ניהול, יותר זמן לפיתוח</p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🎼 תזמור מרובה קונטיינרים</h3>
-                    <p>ניהול אפליקציות מורכבות עם Kubernetes</p>
-                </div>
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🎮 דמוי תרחיש Microservices</h3>
-                <button class="demo-button" onclick="simulateMicroservices()">הרץ ארכיטקטורה</button>
-                <div id="microservices-demo" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Architecture Section -->
-        <div id="architecture" class="content-section">
-            <h2 class="section-title">🏗️ ארכיטקטורת Docker</h2>
-            
-            <h3>🎯 Docker Engine</h3>
-            <div class="highlight">
-                Docker Engine הוא הליבה של המערכת - תוכנת שרת שמנהלת קונטיינרים, images, רשתות וכרכים
-            </div>
-
-            <div style="text-align:center; margin:30px 0;">
-                <div style="display:inline-block; position:relative; background:#f0f8ff; padding:40px; border-radius:20px; border:3px solid #4a90e2;">
-                    <div style="background:#4a90e2; color:white; padding:20px; border-radius:50%; width:200px; height:200px; display:flex; align-items:center; justify-content:center; margin:0 auto; position:relative;">
-                        <div style="text-align:center;">
-                            <div style="font-size:2em;">🐋</div>
-                            <div><strong>Docker Daemon</strong></div>
-                            <div style="font-size:0.9em;">REST API Server</div>
-                        </div>
-                    </div>
+                <!-- Architecture Section -->
+                <section class="section" id="architecture">
+                    <h2>🏗️ ארכיטקטורת Docker</h2>
                     
-                    <!-- Connected elements -->
-                    <div style="position:absolute; top:10px; right:30px; background:white; padding:15px; border-radius:10px; border:2px solid #4a90e2;">
-                        <strong>📦 Container</strong><br>manages
+                    <h3>Docker Engine</h3>
+                    <div class="comparison-container">
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Client</div>
+                            <div class="definition-text">ממשק שורת הפקודה (CLI) שדרכו משתמשים מתקשרים עם Docker</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Daemon</div>
+                            <div class="definition-text">תהליך רקע המנהל containers, images, networks ו-volumes</div>
+                        </div>
                     </div>
+
+                    <h3>רכיבי המערכת</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">📦 Docker Images</div>
+                            <div class="definition-text">תבניות read-only ליצירת קונטיינרים</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🔄 Docker Containers</div>
+                            <div class="definition-text">מופעים פעילים של images</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">🌐 Docker Networks</div>
+                            <div class="definition-text">רשתות לתקשורת בין קונטיינרים</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">💾 Docker Volumes</div>
+                            <div class="definition-text">אחסון מתמיד לנתונים</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">📚 Docker Registry</div>
+                            <div class="definition-text">מאגר לאחסון ושיתוף images (Docker Hub)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Underlying Technology Section -->
+                <section class="section" id="technology">
+                    <h2>🔬 הטכנולוגיה מאחורי Docker</h2>
                     
-                    <div style="position:absolute; top:10px; left:30px; background:white; padding:15px; border-radius:10px; border:2px solid #4a90e2;">
-                        <strong>💿 Images</strong><br>manages
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <div class="definition-term">🔄 Processes</div>
+                            <div class="definition-text">קונטיינרים הם תהליכי מערכת הפעלה רגילים (OS Processes)</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">🔐 Namespaces</div>
+                            <div class="definition-text">סביבות מבודדות (PID, Mount, Network, UTS, IPC, User). כל קונטיינר רואה רק את התהליכים והמשאבים שלו</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">⚙️ Control Groups (cgroups)</div>
+                            <div class="definition-text">הגבלת משאבים ושליטה (RAM, CPU, Disk I/O). מונעים מקונטיינר אחד לצרוך את כל משאבי המערכת</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">📁 Overlay FileSystem</div>
+                            <div class="definition-text">שימוש בשכבות filesystem לבניית סביבת הקונטיינר. כל שכבה מוסיפה או משנה שכבות קודמות</div>
+                        </div>
                     </div>
+
+                    <div class="info-box">
+                        <p><strong>💡 למה זה חשוב?</strong></p>
+                        <p>הבנת הטכנולוגיה הבסיסית עוזרת לפתור בעיות, לייעל ביצועים ולהבין את המגבלות של Docker.</p>
+                    </div>
+                </section>
+
+                <!-- Definitions Section -->
+                <section class="section" id="definitions">
+                    <h2>📚 הגדרות Docker</h2>
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Image</div>
+                            <div class="definition-text">תבנית לקריאה בלבד (read-only) המכילה את כל הקבצים, הספריות והתלויות הנדרשות להרצת אפליקציה בקונטיינר Docker.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Container</div>
+                            <div class="definition-text">מופע פועל (running instance) של image. כלומר, חבילה הניתנת להרצה הכוללת את הקוד, הספריות והתלויות הנדרשות להרצת האפליקציה.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Dockerfile</div>
+                            <div class="definition-text">סקריפט המכיל הוראות ליצירת image. קובץ טקסט עם פקודות המגדירות כיצד לבנות את ה-image (מעין מתכון).</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Registry</div>
+                            <div class="definition-text">מאגר לאחסון, שיתוף וניהול Docker images. כולל Docker Hub, Amazon ECR, Azure Container Registry ו-Google Cloud Container Registry.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Engine</div>
+                            <div class="definition-text">אפליקציה לניהול Docker containers. כוללת שרת (Docker daemon), כלי שורת פקודה (Docker client) ו-API לאינטראקציה עם ה-daemon.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Client</div>
+                            <div class="definition-text">כלי שורת פקודה לאינטראקציה עם Docker Engine לניהול images וקונטיינרים.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Daemon</div>
+                            <div class="definition-text">תהליך רקע (background process) המנהל Docker images וקונטיינרים בהתאם לפקודות שנשלחות מה-Docker client.</div>
+                        </div>
+                        <div class="definition-card">
+                            <div class="definition-term">Docker Compose</div>
+                            <div class="definition-text">כלי להגדרה והרצה של אפליקציות Docker מרובות קונטיינרים באמצעות קובץ YAML לתצורת השירותים.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dockerfile Section -->
+                <section class="section" id="dockerfile">
+                    <h2>📝 Dockerfile - מושגים ופקודות</h2>
                     
-                    <div style="position:absolute; bottom:10px; right:30px; background:white; padding:15px; border-radius:10px; border:2px solid #4a90e2;">
-                        <strong>💾 Data Volumes</strong><br>manages
+                    <h3>מהו Dockerfile?</h3>
+                    <div class="info-box">
+                        <p><strong>Dockerfile הוא קובץ טקסט המכיל הוראות לבניית Docker image</strong></p>
+                        <p>זהו למעשה "מתכון" שמגדיר מה יהיה בתוך ה-image שלנו</p>
                     </div>
-                    
-                    <div style="position:absolute; bottom:10px; left:30px; background:white; padding:15px; border-radius:10px; border:2px solid #4a90e2;">
-                        <strong>🌐 Network</strong><br>manages
-                    </div>
-                </div>
-            </div>
 
-            <h3>🔧 ארכיטקטורה מלאה</h3>
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin:30px 0;">
-                <div style="background:#e3f2fd; padding:20px; border-radius:10px; text-align:center;">
-                    <h4 style="color:#1976d2;">🖥️ Docker Client</h4>
-                    <div style="margin:15px 0; font-family:monospace; background:white; padding:10px; border-radius:5px;">
-                        docker build<br>
-                        docker pull<br>
-                        docker run
-                    </div>
-                    <p>ממשק המשתמש לפקודות Docker</p>
-                </div>
-
-                <div style="background:#e8f5e8; padding:20px; border-radius:10px; text-align:center;">
-                    <h4 style="color:#388e3c;">🏠 Docker Host</h4>
-                    <div style="margin:15px 0;">
-                        <div style="background:#4caf50; color:white; padding:8px; margin:5px; border-radius:5px;">Docker Daemon</div>
-                        <div style="display:flex; gap:5px; justify-content:center;">
-                            <div style="background:#81c784; padding:5px; border-radius:3px; font-size:0.8em;">Container</div>
-                            <div style="background:#81c784; padding:5px; border-radius:3px; font-size:0.8em;">Container</div>
+                    <h3>פקודות Dockerfile עיקריות</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">FROM - בסיס ה-Image</div>
+                            <div class="command-code">FROM ubuntu:22.04</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר את ה-image הבסיסי שעליו נבנה</p>
                         </div>
-                        <div style="background:#a5d6a7; padding:8px; margin:5px; border-radius:5px;">Images</div>
-                    </div>
-                </div>
 
-                <div style="background:#fff3e0; padding:20px; border-radius:10px; text-align:center;">
-                    <h4 style="color:#f57c00;">🏪 Registry</h4>
-                    <div style="margin:15px 0;">
-                        <div style="font-size:2em;">🐙</div>
-                        <div style="font-size:2em;">🏗️</div>
-                        <div style="font-size:2em;">🐍</div>
-                    </div>
-                    <p>אחסון ושיתוף Images</p>
-                </div>
-            </div>
-
-            <h3>⚙️ הטכנולוגיות הבסיסיות</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🔄 Processes</h3>
-                    <p>קונטיינרים הם תהליכי OS רגילים</p>
-                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
-                        ps aux | grep container
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🏠 Namespaces</h3>
-                    <p>סביבות מבודדות (PID, Mount, Network, וכו')</p>
-                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
-                        unshare --pid --net --mount
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📊 Control Groups (cgroups)</h3>
-                    <p>הגבלת משאבים (RAM, CPU, וכו')</p>
-                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
-                        --memory=512m --cpus=1.0
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📁 Overlay FS</h3>
-                    <p>שימוש בשכבות למערכת הקבצים</p>
-                    <div style="font-family:monospace; background:#f5f5f5; padding:10px; margin-top:10px; border-radius:5px;">
-                        overlay2 driver
-                    </div>
-                </div>
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🔍 בדיקת ארכיטקטורה</h3>
-                <button class="demo-button" onclick="exploreArchitecture()">חקור ארכיטקטורה</button>
-                <div id="architecture-demo" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Dockerfile Guide Section -->
-        <div id="dockerfile-guide" class="content-section">
-            <h2 class="section-title">📋 מדריך מקיף ל-Dockerfile</h2>
-            
-            <div class="highlight">
-                <strong>Dockerfile</strong> הוא קובץ מניפסט המתאר איך לבנות Docker Image - המתכון לקונטיינר שלך!
-            </div>
-
-            <h3>🎯 מטרות Dockerfile</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🏗️ יצירת מערכת קבצים</h3>
-                    <p>העתקת קבצים מהתיקייה המקומית</p>
-                </div>
-                <div class="feature-card">
-                    <h3>⚙️ הכנת הקוד</h3>
-                    <p>בנייה והכנה של האפליקציה</p>
-                </div>
-                <div class="feature-card">
-                    <h3>📦 הורדת כלים</h3>
-                    <p>התקנת חבילות ותוכנות נדרשות</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🔗 הגדרת מיפויים</h3>
-                    <p>Volumes (מערכת קבצים) ו-Ports (רשת)</p>
-                </div>
-            </div>
-
-            <h3>📝 פקודות Dockerfile עיקריות</h3>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>FROM</h3>
-                    <p>יבוא image בסיס לשימוש כבסיס</p>
-                    <div class="code-block">
-FROM python:3.9-slim
-FROM ubuntu:22.04
-FROM node:16-alpine
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>ARG</h3>
-                    <p>הגדרת פרמטר לבנייה</p>
-                    <div class="code-block">
-ARG VERSION=latest
-ARG BUILD_ENV=production
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>RUN</h3>
-                    <p>הרצת פקודת shell (התקנה, הורדה, יצירה)</p>
-                    <div class="code-block">
-RUN apt-get update && apt-get install -y curl
-RUN pip install -r requirements.txt
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>WORKDIR</h3>
-                    <p>הגדרת תיקיית עבודה בתוך ה-image</p>
-                    <div class="code-block">
-WORKDIR /app
-WORKDIR /workspace
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>COPY</h3>
-                    <p>העתקת קבצים מהתיקייה המקומית</p>
-                    <div class="code-block">
-COPY . .
-COPY requirements.txt /app/
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>ADD</h3>
-                    <p>הוספת קבצים (ממקור מקומי/מרוחק)</p>
-                    <div class="code-block">
-ADD https://example.com/file.tar.gz /tmp/
-ADD archive.tar.gz /app/
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>CMD / ENTRYPOINT</h3>
-                    <p>פקודת ברירת המחדל להרצה</p>
-                    <div class="code-block">
-CMD ["python", "app.py"]
-ENTRYPOINT ["/app/script.sh"]
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>EXPOSE</h3>
-                    <p>הודעה שהקונטיינר מאזין לפורט</p>
-                    <div class="code-block">
-EXPOSE 8080
-EXPOSE 3000 5432
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>VOLUME</h3>
-                    <p>יצירת כרך אנונימי</p>
-                    <div class="code-block">
-VOLUME ["/data"]
-VOLUME /var/log
-                    </div>
-                </div>
-            </div>
-
-            <h3>💡 דוגמאות מעשיות</h3>
-
-            <div class="feature-card" style="grid-column: 1/-1;">
-                <h3>🐍 דוגמה פשוטה - Hello World</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# שימוש ב-Ubuntu כבסיס
-FROM ubuntu:22.04
-
-# הרצת פקודה פשוטה
-CMD ["echo", "hello world"]
-                </div>
-            </div>
-
-            <div class="feature-card" style="grid-column: 1/-1;">
-                <h3>🔧 דוגמה מתקדמת - הרצת Script</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# שימוש ב-Ubuntu כבסיס
-FROM ubuntu:22.04
-
-# הגדרת תיקיית עבודה
-WORKDIR /app
-
-# העתקת הסקריפט
-COPY script.sh .
-
-# הפיכת הסקריפט לניתן להרצה
-RUN chmod +x script.sh
-
-# הגדרת הסקריפט כנקודת כניסה
-ENTRYPOINT ["/app/script.sh"]
-                </div>
-            </div>
-
-            <h3>📋 תהליך העבודה עם Dockerfile</h3>
-            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:15px; margin:20px 0;">
-                <div style="background:#e3f2fd; padding:20px; border-radius:10px; text-align:center;">
-                    <div style="font-size:2em;">📝</div>
-                    <h4>1. כתיבת Dockerfile</h4>
-                    <p>יצירת קובץ המניפסט</p>
-                    <p>Build Arguments</p>
-                    <p>Content (filesystem layers)</p>
-                    <p>Mappings (ports, volumes)</p>
-                </div>
-                <div style="background:#e8f5e8; padding:20px; border-radius:10px; text-align:center;">
-                    <div style="font-size:2em;">🔨</div>
-                    <h4>2. Build</h4>
-                    <p>בנייה של ה-image</p>
-                    <p>docker build -t image-name .</p>
-                </div>
-                <div style="background:#fff3e0; padding:20px; border-radius:10px; text-align:center;">
-                    <div style="font-size:2em;">🏷️</div>
-                    <h4>3. Tag/Push/Pull</h4>
-                    <p>תיוג והעלאה/הורדה</p>
-                    <p>docker push/pull image-name</p>
-                </div>
-                <div style="background:#fce4ec; padding:20px; border-radius:10px; text-align:center;">
-                    <div style="font-size:2em;">🚀</div>
-                    <h4>4. Run</h4>
-                    <p>הרצת ה-image כקונטיינר</p>
-                    <p>docker run image-name</p>
-                </div>
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🎮 מעבדת Dockerfile</h3>
-                <button class="demo-button" onclick="dockerfileLab()">נסה לבנות Dockerfile</button>
-                <div id="dockerfile-lab" style="margin-top:15px;"></div>
-            </div>
-
-            <h3>🔨 בניית קונטיינרים - Docker Build</h3>
-            <div class="highlight">
-                פקודת <code>docker build</code> בונה קונטיינר מתוך Dockerfile
-            </div>
-
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🏷️ דגלי Build עיקריים</h3>
-                    <div class="code-block">
-# דגל -f לציון קובץ Dockerfile ספציפי
-docker build -f dockerfile_example .
-
-# דגל -t לתיוג ה-image
-docker build -t image-name:tag .
-
-# שימוש בתיקייה הנוכחית
-docker build .
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📝 דוגמאות בנייה</h3>
-                    <div class="code-block">
-# בנייה עם תג "latest" (ברירת מחדל)
-docker build -t hello-world .
-
-# בנייה עם קובץ Dockerfile אחר
-docker build -t my-app:from-script -f dockerfile_example2 .
-
-# בנייה עם תג מותאם אישית
-docker build -t name-printer:john .
-                    </div>
-                </div>
-            </div>
-
-            <h3>🚀 הרצת קונטיינרים - Docker Run</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🖥️ דגלי Run עיקריים</h3>
-                    <ul style="text-align:right; margin-top:10px;">
-                        <li><strong>-t</strong>: מקצה TTY terminal</li>
-                        <li><strong>-i</strong>: הרצה אינטראקטיבית</li>
-                        <li><strong>--rm</strong>: מחיקה אוטומטית בסיום</li>
-                        <li><strong>-d</strong>: הרצה בפרטי (background)</li>
-                        <li><strong>--name</strong>: מתן שם לקונטיינר</li>
-                    </ul>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📋 דוגמאות הרצה</h3>
-                    <div class="code-block">
-# הרצה פשוטה עם מחיקה אוטומטית
-docker run --rm -t hello-world
-
-# הרצה עם שם מותאם אישית
-docker run --rm -t --name my-container my-app:from-script
-
-# הרצה אינטראקטיבית
-docker run -it ubuntu bash
-                    </div>
-                </div>
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🛠️ סימולטור Build & Run</h3>
-                <button class="demo-button" onclick="simulateBuildRun()">בנה והרץ קונטיינר</button>
-                <div id="build-run-demo" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Practical Exercises Section -->
-        <div id="exercises" class="content-section">
-            <h2 class="section-title">💻 תרגילים מעשיים</h2>
-            
-            <div class="highlight">
-                כאן תוכל להתרגל על יצירת Dockerfile ובנייה של קונטיינרים בצורה מעשית
-            </div>
-
-            <h3>📝 תרגיל #1: יוצר שמות</h3>
-            <div class="feature-card" style="grid-column: 1/-1;">
-                <h3>🎯 המטלה</h3>
-                <div style="background:#f0f8ff; padding:20px; border-radius:8px; margin:15px 0;">
-                    <ol style="text-align:right; line-height:1.8;">
-                        <li>כתוב את השם שלך לקובץ טקסט</li>
-                        <li>צור Dockerfile שמשתמש ב-Ubuntu:latest כ-base image</li>
-                        <li>הוסף את הקובץ עם השם לתיקייה "/name-app/my-name.txt" בקונטיינר</li>
-                        <li>הגדר שהקונטיינר יציג את תוכן הקובץ כשהוא רץ (טיפ: פקודת cat)</li>
-                    </ol>
-                </div>
-
-                <div class="interactive-demo">
-                    <h4>💡 פתרון מושלם:</h4>
-                    <button class="demo-button" onclick="showExerciseSolution(1)">הצג פתרון</button>
-                    <div id="exercise-1-solution" style="display:none; margin-top:15px;">
-                        <div class="code-block">
-                            <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# קובץ my-name.txt
-היי! השם שלי הוא יוסי כהן
-
-# Dockerfile
-FROM ubuntu:latest
-
-# יצירת התיקייה
-RUN mkdir -p /name-app
-
-# העתקת קובץ השם
-COPY my-name.txt /name-app/
-
-# הצגת התוכן כשהקונטיינר רץ
-CMD ["cat", "/name-app/my-name.txt"]
+                        <div class="command-card">
+                            <div class="command-usage">ARG - משתנה זמן בנייה</div>
+                            <div class="command-code">ARG VERSION=1.0</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר משתנה שזמין רק בזמן הבנייה</p>
                         </div>
-                        
-                        <div style="margin-top:15px;">
-                            <h4>🔨 פקודות בנייה והרצה:</h4>
-                            <div class="code-block">
-# בנייה עם השם שלך כתג
-docker build -t name-printer:yossi .
 
-# הרצה
-docker run --rm name-printer:yossi
-                            </div>
+                        <div class="command-card">
+                            <div class="command-usage">ENV - משתנה סביבה</div>
+                            <div class="command-code">ENV APP_HOME=/app</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר משתנה סביבה זמין בזמן בנייה והרצה</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">WORKDIR - תיקיית עבודה</div>
+                            <div class="command-code">WORKDIR /app</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מגדיר את תיקיית העבודה בתוך ה-container</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">RUN - הרצת פקודה</div>
+                            <div class="command-code">RUN apt-get update && apt-get install -y python3</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מריץ פקודת shell בזמן הבנייה</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">COPY - העתקת קבצים</div>
+                            <div class="command-code">COPY app.py /app/</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מעתיק קבצים מהמחשב המקומי ל-image</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">ADD - הוספת קבצים מתקדמת</div>
+                            <div class="command-code">ADD archive.tar.gz /app/</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">כמו COPY אבל תומך בחילוץ ארכיונים והורדה מ-URL</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">EXPOSE - חשיפת פורט</div>
+                            <div class="command-code">EXPOSE 8080</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מודיע שה-container מאזין על פורט מסוים (רמז בלבד!)</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">VOLUME - יצירת נקודת עיגון</div>
+                            <div class="command-code">VOLUME ["/data"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">יוצר volume אנונימי לשמירת נתונים</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">CMD - פקודת ברירת מחדל</div>
+                            <div class="command-code">CMD ["python3", "app.py"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">הפקודה שתרוץ כשה-container יתחיל</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">ENTRYPOINT - נקודת כניסה</div>
+                            <div class="command-code">ENTRYPOINT ["python3", "app.py"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">כמו CMD אבל לא ניתן לדרוס</p>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">USER - שינוי משתמש</div>
+                            <div class="command-code">USER appuser</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מחליף למשתמש אחר (עדיף לא root)</p>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <h3>🌟 תרגיל #2: שרת Python פשוט</h3>
-            <div class="feature-card" style="grid-column: 1/-1;">
-                <h3>🎯 המטלה המתקדמת</h3>
-                <div style="background:#f0f8ff; padding:20px; border-radius:8px; margin:15px 0;">
-                    <ol style="text-align:right; line-height:1.8;">
-                        <li>צור קובץ Python פשוט שמציג "Hello from Docker!"</li>
-                        <li>צור Dockerfile עם Python:3.9-slim כבסיס</li>
-                        <li>העתק את קובץ ה-Python לקונטיינר</li>
-                        <li>הגדר את הקונטיינר להריץ את הסקריפט</li>
-                    </ol>
-                </div>
+                    <h3>דוגמת Dockerfile מלאה</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;">FROM python:3.9-slim
 
-                <div class="interactive-demo">
-                    <h4>💡 פתרון מקצועי:</h4>
-                    <button class="demo-button" onclick="showExerciseSolution(2)">הצג פתרון</button>
-                    <div id="exercise-2-solution" style="display:none; margin-top:15px;">
-                        <div class="code-block">
-                            <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# קובץ app.py
-#!/usr/bin/env python3
-print("🐋 Hello from Docker!")
-print("Python version:", __import__('sys').version)
+# משתני סביבה
+ENV PYTHONUNBUFFERED=1 \
+    APP_HOME=/app
 
-# Dockerfile
-FROM python:3.9-slim
+# תיקיית עבודה
+WORKDIR ${APP_HOME}
 
-WORKDIR /app
-
-COPY app.py .
-
-CMD ["python", "app.py"]
-                        </div>
-                        
-                        <div style="margin-top:15px;">
-                            <h4>🔨 פקודות בנייה והרצה:</h4>
-                            <div class="code-block">
-# בנייה
-docker build -t python-hello .
-
-# הרצה
-docker run --rm python-hello
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h3>🏆 תרגיל #3: אפליקציית נתונים</h3>
-            <div class="feature-card" style="grid-column: 1/-1;">
-                <h3>🎯 המטלה למהנדסי נתונים</h3>
-                <div style="background:#f0f8ff; padding:20px; border-radius:8px; margin:15px 0;">
-                    <ol style="text-align:right; line-height:1.8;">
-                        <li>צור קובץ Python שקורא CSV ומציג סטטיסטיקות בסיסיות</li>
-                        <li>צור קובץ requirements.txt עם pandas</li>
-                        <li>צור Dockerfile שמתקין את התלויות</li>
-                        <li>הרץ ניתוח על קובץ נתונים דמה</li>
-                    </ol>
-                </div>
-
-                <div class="interactive-demo">
-                    <h4>💡 פתרון מקצועי למהנדסי נתונים:</h4>
-                    <button class="demo-button" onclick="showExerciseSolution(3)">הצג פתרון</button>
-                    <div id="exercise-3-solution" style="display:none; margin-top:15px;">
-                        <div class="code-block">
-                            <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# requirements.txt
-pandas==1.5.3
-numpy==1.24.3
-
-# data_analyzer.py
-import pandas as pd
-import numpy as np
-
-# יצירת נתונים לדוגמה
-data = {
-    'name': ['Alice', 'Bob', 'Charlie', 'Diana'],
-    'age': [25, 30, 35, 28],
-    'salary': [50000, 60000, 70000, 55000]
-}
-
-df = pd.DataFrame(data)
-
-print("🔍 ניתוח נתונים עם Docker:")
-print("="*40)
-print("📊 הנתונים:")
-print(df)
-print("\n📈 סטטיסטיקות:")
-print(f"ממוצע גיל: {df['age'].mean():.1f}")
-print(f"ממוצע שכר: ${df['salary'].mean():,.0f}")
-print(f"מספר רשומות: {len(df)}")
-
-# Dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-
+# התקנת תלויות
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY data_analyzer.py .
-
-CMD ["python", "data_analyzer.py"]
-                        </div>
-                        
-                        <div style="margin-top:15px;">
-                            <h4>🔨 פקודות בנייה והרצה:</h4>
-                            <div class="code-block">
-# בנייה
-docker build -t data-analyzer .
-
-# הרצה
-docker run --rm data-analyzer
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🎮 מדמה תרגילים</h3>
-                <button class="demo-button" onclick="runExerciseSimulator()">הרץ סימולציה</button>
-                <div id="exercise-simulator" style="margin-top:15px;"></div>
-            </div>
-        </div>" onclick="comparePerformance()">השווה ביצועים</button>
-                <div id="performance-comparison" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Creating Images Section -->
-        <div id="creating-images" class="content-section">
-            <h2 class="section-title">🏗️ יצירת Docker Images</h2>
-            
-            <div class="highlight">
-                <strong>Docker Image</strong> הוא תבנית לקריאה בלבד המכילה הוראות ליצירת קונטיינר
-            </div>
-
-            <h3>📝 קובץ Dockerfile</h3>
-            <p>קובץ הטקסט המכיל את כל ההוראות לבניית Image:</p>
-
-            <div class="code-block">
-                <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# שימוש ב-Python כבסיס
-FROM python:3.9-slim
-
-# הגדרת תיקיית עבודה
-WORKDIR /app
-
-# העתקת קבצי requirements
-COPY requirements.txt .
-
-# התקנת חבילות
-RUN pip install -r requirements.txt
-
-# העתקת קוד האפליקציה
+# העתקת הקוד
 COPY . .
+
+# משתמש לא-root
+RUN useradd -m appuser && chown -R appuser:appuser ${APP_HOME}
+USER appuser
 
 # חשיפת פורט
 EXPOSE 8000
 
-# הרצת האפליקציה
+# פקודת הפעלה
+CMD ["python", "app.py"]</div>
+                </section>
+
+                <!-- Building Images Section -->
+                <section class="section" id="building">
+                    <h2>🔨 בניית Docker Images</h2>
+                    
+                    <h3>פקודת docker build</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">בנה image מהתיקייה הנוכחית</div>
+                            <div class="command-code">docker build .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה image עם שם ותג</div>
+                            <div class="command-code">docker build -t myapp:v1.0 .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה מקובץ Dockerfile ספציפי</div>
+                            <div class="command-code">docker build -f Dockerfile.prod -t myapp:prod .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה ללא cache</div>
+                            <div class="command-code">docker build --no-cache -t myapp:latest .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העבר ARG לזמן בנייה</div>
+                            <div class="command-code">docker build --build-arg VERSION=2.0 -t myapp:v2 .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה עם target ספציפי (multi-stage)</div>
+                            <div class="command-code">docker build --target production -t myapp:prod .</div>
+                        </div>
+                    </div>
+
+                    <h3>דגלים חשובים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><code>-t, --tag</code> - שם ותג ל-image</li>
+                            <li><code>-f, --file</code> - נתיב ל-Dockerfile</li>
+                            <li><code>--no-cache</code> - בנה מחדש ללא שימוש ב-cache</li>
+                            <li><code>--build-arg</code> - העבר משתני ARG</li>
+                            <li><code>--target</code> - בחר שלב ב-multi-stage build</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Running Containers Section -->
+                <section class="section" id="running">
+                    <h2>🚀 הרצת Docker Containers</h2>
+                    
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הרץ קונטיינר בסיסי</div>
+                            <div class="command-code">docker run ubuntu</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ עם שם מוגדר</div>
+                            <div class="command-code">docker run --name my-container nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ ברקע (detached)</div>
+                            <div class="command-code">docker run -d nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ אינטראקטיבי</div>
+                            <div class="command-code">docker run -it ubuntu bash</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ והסר אוטומטית</div>
+                            <div class="command-code">docker run --rm alpine echo "hello"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ עם מיפוי פורט</div>
+                            <div class="command-code">docker run -p 8080:80 nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ עם volume</div>
+                            <div class="command-code">docker run -v /host/path:/container/path nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ עם משתני סביבה</div>
+                            <div class="command-code">docker run -e DB_HOST=localhost -e DB_PORT=5432 myapp</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ עם הגבלת משאבים</div>
+                            <div class="command-code">docker run --memory=512m --cpus=1 myapp</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ עם restart policy</div>
+                            <div class="command-code">docker run --restart=unless-stopped nginx</div>
+                        </div>
+                    </div>
+
+                    <h3>דגלים נפוצים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><code>-d, --detach</code> - הרץ ברקע</li>
+                            <li><code>-it</code> - אינטראקטיבי + terminal</li>
+                            <li><code>--rm</code> - הסר אוטומטית בסיום</li>
+                            <li><code>--name</code> - תן שם לקונטיינר</li>
+                            <li><code>-p, --publish</code> - פרסם פורטים</li>
+                            <li><code>-v, --volume</code> - עגן volumes</li>
+                            <li><code>-e, --env</code> - משתני סביבה</li>
+                            <li><code>--network</code> - חבר לרשת</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Inspecting Containers Section -->
+                <section class="section" id="inspecting">
+                    <h2>🔍 בדיקת קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג קונטיינרים פועלים</div>
+                            <div class="command-code">docker ps</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג את כל הקונטיינרים</div>
+                            <div class="command-code">docker ps -a</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוגים</div>
+                            <div class="command-code">docker logs [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוגים בזמן אמת</div>
+                            <div class="command-code">docker logs -f [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק פרטים מלאים</div>
+                            <div class="command-code">docker inspect [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג סטטיסטיקות</div>
+                            <div class="command-code">docker stats</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים</div>
+                            <div class="command-code">docker top [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג פורטים</div>
+                            <div class="command-code">docker port [container-id]</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Managing Containers Section -->
+                <section class="section" id="managing">
+                    <h2>⚙️ ניהול קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">עצור קונטיינר</div>
+                            <div class="command-code">docker stop [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל קונטיינר</div>
+                            <div class="command-code">docker start [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל מחדש</div>
+                            <div class="command-code">docker restart [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">השהה קונטיינר</div>
+                            <div class="command-code">docker pause [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בטל השהיה</div>
+                            <div class="command-code">docker unpause [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרוג קונטיינר</div>
+                            <div class="command-code">docker kill [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר קונטיינר</div>
+                            <div class="command-code">docker rm [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר בכוח</div>
+                            <div class="command-code">docker rm -f [container-id]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר קונטיינרים שהופסקו</div>
+                            <div class="command-code">docker container prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ פקודה בקונטיינר פעיל</div>
+                            <div class="command-code">docker exec -it [container] bash</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Volumes Section -->
+                <section class="section" id="volumes">
+                    <h2>💾 Docker Volumes</h2>
+                    
+                    <h3>מהם Volumes?</h3>
+                    <div class="info-box">
+                        <p><strong>Volumes הם מנגנון לשמירת נתונים מחוץ לקונטיינר</strong></p>
+                        <ul>
+                            <li><strong>Volumes</strong> - מנוהלים על ידי Docker</li>
+                            <li><strong>Bind mounts</strong> - תיקיות מהמארח</li>
+                            <li><strong>tmpfs mounts</strong> - זיכרון בלבד (אבוד בסגירה)</li>
+                        </ul>
+                    </div>
+
+                    <h3>ניהול Volumes</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">צור volume</div>
+                            <div class="command-code">docker volume create my-volume</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג volumes</div>
+                            <div class="command-code">docker volume ls</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק volume</div>
+                            <div class="command-code">docker volume inspect my-volume</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר volume</div>
+                            <div class="command-code">docker volume rm my-volume</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר volumes לא בשימוש</div>
+                            <div class="command-code">docker volume prune</div>
+                        </div>
+                    </div>
+
+                    <h3>שימוש ב-Volumes</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">עגן volume</div>
+                            <div class="command-code">docker run -v my-volume:/data nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Bind mount</div>
+                            <div class="command-code">docker run -v /host/path:/container/path nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Read-only volume</div>
+                            <div class="command-code">docker run -v my-volume:/data:ro nginx</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Networking Section -->
+                <section class="section" id="networking">
+                    <h2>🌐 Docker Networking</h2>
+                    
+                    <h3>ניהול רשתות</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג רשתות</div>
+                            <div class="command-code">docker network ls</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור רשת</div>
+                            <div class="command-code">docker network create my-network</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק רשת</div>
+                            <div class="command-code">docker network inspect my-network</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חבר קונטיינר לרשת</div>
+                            <div class="command-code">docker network connect my-network [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נתק מרשת</div>
+                            <div class="command-code">docker network disconnect my-network [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר רשת</div>
+                            <div class="command-code">docker network rm my-network</div>
+                        </div>
+                    </div>
+
+                    <h3>מיפוי פורטים</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">פרסם פורט ספציפי</div>
+                            <div class="command-code">docker run -p 8080:80 nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פרסם את כל הפורטים</div>
+                            <div class="command-code">docker run -P nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">פרסם ל-IP ספציפי</div>
+                            <div class="command-code">docker run -p 127.0.0.1:8080:80 nginx</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Layers Section -->
+                <section class="section" id="layers">
+                    <h2>🗂️ מערכת Layers של Docker</h2>
+                    
+                    <div class="info-box">
+                        <p><strong>Docker בנוי משכבות (layers) של filesystem</strong></p>
+                        <ul>
+                            <li>כל הוראה ב-Dockerfile יוצרת שכבה חדשה</li>
+                            <li>שכבות הן read-only</li>
+                            <li>רק השכבה העליונה של הקונטיינר היא writable</li>
+                            <li>שכבות משותפות בין images חוסכות מקום</li>
+                        </ul>
+                    </div>
+
+                    <h3>Overlay FileSystem</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>שכבות Image</h4>
+                            <div class="stack-item">Layer 5: CMD</div>
+                            <div class="stack-item">Layer 4: COPY app/</div>
+                            <div class="stack-item">Layer 3: RUN pip install</div>
+                            <div class="stack-item">Layer 2: COPY requirements.txt</div>
+                            <div class="stack-item">Layer 1: FROM python:3.9</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>שכבת Container</h4>
+                            <div class="stack-item" style="background: var(--accent-green); color: white;">Writable Layer</div>
+                            <div class="stack-item">Read-only Image Layers</div>
+                            <p style="margin-top: var(--space-md); text-align: center; color: var(--text-muted);">
+                                כל השינויים בקונטיינר נשמרים רק בשכבה הכתיבה
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3>בדיקת Layers</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג היסטוריית layers</div>
+                            <div class="command-code">docker history [image-name]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג גודל layers</div>
+                            <div class="command-code">docker history --human --no-trunc [image-name]</div>
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>⚠️ טיפ חשוב:</strong> כל הוראה RUN יוצרת שכבה חדשה. לכן מומלץ לשלב פקודות:</p>
+                        <div class="command-code" style="background: white; color: #e74c3c; margin-top: 10px;">❌ לא טוב:
+RUN apt-get update
+RUN apt-get install -y python3
+RUN apt-get clean
+
+✅ טוב יותר:
+RUN apt-get update && \
+    apt-get install -y python3 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*</div>
+                    </div>
+                </section>
+
+                <!-- CMD vs ENTRYPOINT Section -->
+                <section class="section" id="cmd-vs-entrypoint">
+                    <h2>🎭 CMD vs ENTRYPOINT</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>CMD</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li><strong>ניתן לדרוס</strong> בזמן docker run</li>
+                                    <li>מספק ברירת מחדל לפקודה</li>
+                                    <li>נועד לפקודות שעשויות להשתנות</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;">FROM ubuntu
+CMD ["echo", "Hello"]
+
+# להרצה:
+docker run myimage
+# פלט: Hello
+
+docker run myimage echo "Bye"
+# פלט: Bye (CMD דרוס!)</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>ENTRYPOINT</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li><strong>לא ניתן לדרוס</strong> בקלות</li>
+                                    <li>מגדיר את התפקיד העיקרי של הקונטיינר</li>
+                                    <li>נועד לקונטיינרים עם מטרה קבועה</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;">FROM ubuntu
+ENTRYPOINT ["echo"]
+CMD ["Hello"]
+
+# להרצה:
+docker run myimage
+# פלט: Hello
+
+docker run myimage "Bye"
+# פלט: Bye (CMD דרוס, ENTRYPOINT נשאר!)</div>
+                        </div>
+                    </div>
+
+                    <h3>שילוב CMD + ENTRYPOINT</h3>
+                    <div class="success-box">
+                        <p><strong>💡 שימוש מומלץ:</strong> השתמש ב-ENTRYPOINT לפקודה הקבועה וב-CMD לפרמטרים של ברירת מחדל</p>
+                        <div class="command-code" style="background: white; color: var(--text-primary); margin-top: 10px;">FROM python:3.9
+ENTRYPOINT ["python"]
+CMD ["app.py"]
+
+# docker run myimage → מריץ python app.py
+# docker run myimage test.py → מריץ python test.py</div>
+                    </div>
+
+                    <h3>תחביר Shell vs Exec</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">Shell Form</div>
+                            <div class="command-code">CMD echo "Hello World"</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מופעל דרך /bin/sh -c</p>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Exec Form (מומלץ)</div>
+                            <div class="command-code">CMD ["echo", "Hello World"]</div>
+                            <p style="margin-top: 10px; color: var(--text-muted);">מופעל ישירות, ללא shell</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COPY vs ADD Section -->
+                <section class="section" id="copy-vs-add">
+                    <h2>📄 COPY vs ADD</h2>
+                    
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>COPY</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li>פשוט וברור</li>
+                                    <li>מעתיק קבצים/תיקיות מקומיים בלבד</li>
+                                    <li><strong>מומלץ לשימוש רגיל</strong></li>
+                                    <li>תמיכה ב-wildcards</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;"># העתק קובץ בודד
+COPY app.py /app/
+
+# העתק תיקייה
+COPY src/ /app/src/
+
+# wildcard
+COPY *.py /app/</div>
+                        </div>
+
+                        <div class="comparison-box">
+                            <h4>ADD</h4>
+                            <div class="definition-text">
+                                <ul>
+                                    <li>מתקדם יותר</li>
+                                    <li>תומך בכל מה ש-COPY תומך</li>
+                                    <li><strong>מחלץ ארכיונים אוטומטית</strong></li>
+                                    <li>יכול להוריד מ-URLs</li>
+                                </ul>
+                            </div>
+                            <div class="command-code" style="margin-top: 15px;"># חילוץ אוטומטי
+ADD archive.tar.gz /app/
+
+# הורדה מ-URL
+ADD https://example.com/file.zip /tmp/
+
+# כמו COPY
+ADD app.py /app/</div>
+                        </div>
+                    </div>
+
+                    <h3>מתי להשתמש במה?</h3>
+                    <div class="info-box">
+                        <p><strong>✅ השתמש ב-COPY:</strong></p>
+                        <ul>
+                            <li>ברוב המקרים (ברירת המחדל)</li>
+                            <li>כשאתה רק מעתיק קבצים מקומיים</li>
+                            <li>כשאתה רוצה שהכוונה תהיה ברורה</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <p><strong>⚠️ השתמש ב-ADD רק כאשר:</strong></p>
+                        <ul>
+                            <li>אתה צריך לחלץ ארכיון tar/zip</li>
+                            <li>אתה צריך להוריד קובץ מ-URL (לא מומלץ בפרודקשן!)</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 Best Practice:</strong> השתמש ב-COPY אלא אם כן אתה צריך באופן ספציפי את היכולות המתקדמות של ADD</p>
+                </div>
+            </section>
+
+            <!-- Signal Handling & PID 1 Section -->
+            <section class="section" id="signals">
+                <h2>🎯 Signal Handling & PID 1 Problem</h2>
+                
+                <h3>מהי בעיית PID 1?</h3>
+                <div class="warning-box">
+                    <p><strong>⚠️ בעיה קריטית:</strong> התהליך הראשון בקונטיינר (PID 1) מקבל טיפול מיוחד מה-kernel של Linux. אם הוא לא מטפל נכון ב-signals, הקונטיינר לא יכבה בצורה נכונה!</p>
+                </div>
+
+                <h3>Shell Form vs Exec Form</h3>
+                <div class="comparison-container">
+                    <div class="comparison-box">
+                        <h4>❌ Shell Form (בעיה)</h4>
+                        <div class="command-code" style="background: rgba(218, 54, 51, 0.15); color: #ff7b72;">CMD python app.py
+# או
+ENTRYPOINT python app.py</div>
+                        <div class="definition-text" style="margin-top: 15px;">
+                            <p><strong>מה קורה:</strong></p>
+                            <ul>
+                                <li>Docker מריץ: <code>/bin/sh -c "python app.py"</code></li>
+                                <li><code>/bin/sh</code> הוא PID 1 (לא Python!)</li>
+                                <li>ה-shell לא מעביר signals לתהליך הבן</li>
+                                <li><code>docker stop</code> ימתין 10 שניות ואז יהרוג בכוח (SIGKILL)</li>
+                                <li>❌ Graceful shutdown לא עובד</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="comparison-box">
+                        <h4>✅ Exec Form (נכון)</h4>
+                        <div class="command-code" style="background: rgba(35, 134, 54, 0.15); color: #7ee787;">CMD ["python", "app.py"]
+# או
+ENTRYPOINT ["python", "app.py"]</div>
+                        <div class="definition-text" style="margin-top: 15px;">
+                            <p><strong>מה קורה:</strong></p>
+                            <ul>
+                                <li>Python רץ ישירות כ-PID 1</li>
+                                <li>מקבל SIGTERM ישירות מ-Docker</li>
+                                <li>יכול לסגור connections, לשמור מצב, וכו'</li>
+                                <li>✅ Graceful shutdown עובד!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>בדיקה: מי PID 1?</h3>
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-usage">בדוק מי PID 1 בקונטיינר שלך</div>
+                        <div class="command-code">docker exec [container] ps aux</div>
+                        <p style="margin-top: 10px; color: var(--text-muted);">השורה הראשונה תראה מי PID 1</p>
+                    </div>
+                </div>
+
+                <h3>פתרון למצבים מיוחדים: tini</h3>
+                <div class="info-box">
+                    <p><strong>💡 כאשר אתה צריך shell script או entrypoint מורכב:</strong></p>
+                    <p>השתמש ב-<code>tini</code> - init system זעיר שמטפל נכון ב-signals</p>
+                </div>
+
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;">FROM python:3.9-slim
+
+# התקן tini
+RUN apt-get update && \
+    apt-get install -y tini && \
+    rm -rf /var/lib/apt/lists/*
+
+# הגדר tini כ-entrypoint
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+# עכשיו אפשר להשתמש ב-shell script
+CMD ["./start.sh"]</div>
+
+                <h3>דוגמה מעשית: Flask App</h3>
+                <div class="comparison-container">
+                    <div class="comparison-box">
+                        <h4>❌ לא יעבוד טוב</h4>
+                        <div class="command-code" style="background: rgba(218, 54, 51, 0.15);">FROM python:3.9
+COPY app.py .
+CMD python app.py
+# docker stop ייקח 10 שניות!</div>
+                    </div>
+
+                    <div class="comparison-box">
+                        <h4>✅ עובד מצוין</h4>
+                        <div class="command-code" style="background: rgba(35, 134, 54, 0.15);">FROM python:3.9
+COPY app.py .
 CMD ["python", "app.py"]
-            </div>
-
-            <h3>🔨 פקודות בנייה בסיסיות</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>בניית Image</h3>
-                    <div class="code-block">
-docker build -t my-app:latest .
+# docker stop יהיה מיידי</div>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>הצגת Images</h3>
-                    <div class="code-block">
-docker images
+                <div class="warning-box">
+                    <p><strong>🎯 כלל אצבע:</strong></p>
+                    <ul>
+                        <li>תמיד השתמש ב-<strong>Exec Form</strong> (JSON array) למעט אם אתה באמת צריך shell features (pipes, variables, etc.)</li>
+                        <li>אם אתה צריך shell, הוסף <code>tini</code> או <code>dumb-init</code></li>
+                        <li>בדוק ש-<code>docker stop</code> לא לוקח 10+ שניות</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- .dockerignore Section -->
+            <section class="section" id="dockerignore">
+                <h2>📄 .dockerignore - חובה!</h2>
+
+                <div class="info-box">
+                    <p><strong>מהו .dockerignore?</strong></p>
+                    <p>כמו .gitignore אבל ל-Docker - מונע העתקה של קבצים מיותרים לבניית ה-image</p>
+                </div>
+
+                <h3>למה זה חשוב?</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>⚡ Build מהיר יותר</h4>
+                        <p>פחות קבצים להעתיק</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📦 Image קטן יותר</h4>
+                        <p>רק מה שצריך</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 יותר מאובטח</h4>
+                        <p>סודות לא נכנסים</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💾 פחות cache invalidation</h4>
+                        <p>שינויים לא רלוונטיים לא משפיעים</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>מחיקת Image</h3>
-                    <div class="code-block">
-docker rmi image-name
+                <h3>דוגמת .dockerignore מושלמת</h3>
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+*.log
+logs/
+
+# Documentation
+*.md
+README*
+docs/
+LICENSE
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+tests/
+test/
+*.test.js
+*.spec.js</div>
+
+                <h3>טיפים לשימוש</h3>
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-usage">✅ התחל עם הכל, פתח ספציפית</div>
+                        <div class="command-code"># חסום הכל
+*
+
+# פתח רק את הנדרש
+!src/
+!requirements.txt
+!package.json</div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-usage">🔍 בדוק מה נכנס ל-build context</div>
+                        <div class="command-code">docker build -t test . --progress=plain 2>&1 | grep "COPY"</div>
+                        <p style="margin-top: 10px; color: var(--text-muted);">תראה אילו קבצים מועתקים</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>תיוג Image</h3>
-                    <div class="code-block">
-docker tag my-app:latest my-app:v1.0
+                <div class="success-box">
+                    <p><strong>💡 טיפ מקצועי:</strong> .dockerignore טוב יכול להקטין את ה-build context ב-90%+ ולהאיץ build פי 10!</p>
+                </div>
+            </section>
+
+            <!-- ARG vs ENV Detailed Section -->
+            <section class="section" id="arg-vs-env">
+                <h2>🔀 ARG vs ENV - מתי להשתמש במה?</h2>
+
+                <div class="comparison-container">
+                    <div class="comparison-box">
+                        <h4>ARG - זמן בנייה בלבד</h4>
+                        <div class="command-code">ARG PYTHON_VERSION=3.9
+FROM python:${PYTHON_VERSION}
+
+ARG BUILD_DATE
+RUN echo "Built on ${BUILD_DATE}"</div>
+                        
+                        <h5 style="margin-top: 20px; color: var(--accent-blue);">מאפיינים:</h5>
+                        <ul>
+                            <li>✅ זמין רק בזמן <code>docker build</code></li>
+                            <li>❌ לא זמין בקונטיינר רץ</li>
+                            <li>✅ ניתן לדרוס: <code>--build-arg</code></li>
+                            <li>❌ לא מופיע ב-<code>docker inspect</code></li>
+                        </ul>
+
+                        <h5 style="margin-top: 15px; color: var(--accent-green);">שימושים:</h5>
+                        <ul>
+                            <li>גרסאות base images</li>
+                            <li>build flags</li>
+                            <li>paths זמניים</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
 
-            <div class="interactive-demo">
-                <h3>🏗️ סימולטור בניית Image</h3>
-                <button class="demo-button" onclick="simulateBuild()">בנה Image</button>
-                <div class="progress-bar">
-                    <div id="build-progress" class="progress-fill" style="width:0%;">0%</div>
-                </div>
-                <div id="build-output"></div>
-            </div>
-        </div>
+                    <div class="comparison-box">
+                        <h4>ENV - בנייה + runtime</h4>
+                        <div class="command-code">ENV PORT=8000
+ENV NODE_ENV=production
+ENV DATABASE_URL=postgres://...</div>
+                        
+                        <h5 style="margin-top: 20px; color: var(--accent-blue);">מאפיינים:</h5>
+                        <ul>
+                            <li>✅ זמין בזמן build</li>
+                            <li>✅ זמין בקונטיינר רץ</li>
+                            <li>✅ ניתן לדרוס: <code>docker run -e</code></li>
+                            <li>✅ מופיע ב-<code>docker inspect</code></li>
+                        </ul>
 
-        <!-- Networking & Volumes Section -->
-        <div id="networking" class="content-section">
-            <h2 class="section-title">🌐 רשתות וכרכים ב-Docker</h2>
-            
-            <h3>🔗 רשתות Docker</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Bridge Network</h3>
-                    <p>רשת ברירת המחדל לקונטיינרים על אותו Host</p>
-                    <div class="code-block">
-docker network create my-bridge
-docker run --network my-bridge nginx
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>Host Network</h3>
-                    <p>שימוש ישיר ברשת של ה-Host</p>
-                    <div class="code-block">
-docker run --network host nginx
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>None Network</h3>
-                    <p>בידוד מוחלט ללא גישה לרשת</p>
-                    <div class="code-block">
-docker run --network none alpine
-                    </div>
-                </div>
-            </div>
-
-            <h3>💾 Docker Volumes</h3>
-            <div class="highlight">
-                Volumes מאפשרים שמירת נתונים מחוץ לקונטיינר ושיתוף נתונים בין קונטיינרים
-            </div>
-
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Named Volume</h3>
-                    <div class="code-block">
-docker volume create my-data
-docker run -v my-data:/data nginx
+                        <h5 style="margin-top: 15px; color: var(--accent-green);">שימושים:</h5>
+                        <ul>
+                            <li>הגדרות אפליקציה</li>
+                            <li>paths קבועים</li>
+                            <li>feature flags</li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>Bind Mount</h3>
-                    <div class="code-block">
-docker run -v /host/path:/container/path nginx
+                <h3>שילוב ARG + ENV</h3>
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># קבל ערך בזמן build
+ARG APP_VERSION=1.0.0
+
+# שמור אותו כ-ENV לזמן runtime
+ENV VERSION=${APP_VERSION}
+
+# Build:
+docker build --build-arg APP_VERSION=2.0.0 -t myapp .
+
+# Runtime - הגרסה תהיה זמינה:
+docker run myapp printenv VERSION
+# Output: 2.0.0</div>
+
+                <h3>השוואה מעשית</h3>
+                <div class="command-grid">
+                    <div class="command-card">
+                        <div class="command-usage">דוגמה: ARG לבחירת base image</div>
+                        <div class="command-code">ARG PYTHON_VERSION=3.9
+FROM python:${PYTHON_VERSION}-slim
+
+# Build different versions:
+# docker build --build-arg PYTHON_VERSION=3.10 -t app:py310 .
+# docker build --build-arg PYTHON_VERSION=3.11 -t app:py311 .</div>
+                    </div>
+
+                    <div class="command-card">
+                        <div class="command-usage">דוגמה: ENV להגדרות אפליקציה</div>
+                        <div class="command-code">ENV FLASK_APP=app.py
+ENV FLASK_ENV=production
+
+# Override בזמן run:
+# docker run -e FLASK_ENV=development myapp</div>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <h3>Anonymous Volume</h3>
-                    <div class="code-block">
-docker run -v /data nginx
+                <div class="warning-box">
+                    <p><strong>⚠️ אזהרת אבטחה קריטית!</strong></p>
+                    <p>גם ARG וגם ENV נשארים בהיסטוריה של ה-image! <strong>אל תשים בהם סודות!</strong></p>
+                    <div class="command-code" style="margin-top: 10px; background: rgba(218, 54, 51, 0.15);">❌ אל תעשה:
+ARG DB_PASSWORD=secret123
+ENV API_KEY=supersecret
+
+# כל אחד יכול לראות:
+docker history myimage</div>
+                </div>
+
+                <h3>BuildKit Secrets - הפתרון המודרני</h3>
+                <div class="success-box">
+                    <p><strong>✅ השתמש ב-BuildKit secrets עבור מידע רגיש:</strong></p>
+                </div>
+
+                <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># Dockerfile
+RUN --mount=type=secret,id=db_password \
+    DB_PASS=$(cat /run/secrets/db_password) \
+    ./install-with-secret.sh
+
+# Build command
+export DOCKER_BUILDKIT=1
+docker build \
+    --secret id=db_password,src=./secrets/db.txt \
+    -t myapp .
+
+# הסוד לא נשאר ב-image!</div>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <p><strong>💡 יתרונות BuildKit Secrets:</strong></p>
+                    <ul>
+                        <li>✅ הסוד לא נשמר ב-image layers</li>
+                        <li>✅ לא מופיע ב-<code>docker history</code></li>
+                        <li>✅ נמחק אחרי הבנייה</li>
+                        <li>✅ לא נגיש מחוץ ל-RUN שמשתמש בו</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Registry Section -->
+            <section class="section" id="registries">
+                <h2>📦 Docker Registry</h2>
+                    
+                    <h3>מהו Registry?</h3>
+                    <div class="info-box">
+                        <p><strong>Docker Registry הוא מערכת אחסון והפצה עבור Docker images</strong></p>
+                        <ul>
+                            <li><strong>Docker Hub</strong> - Registry הציבורי של Docker (ברירת מחדל)</li>
+                            <li><strong>Private Registries</strong> - AWS ECR, Google GCR, Azure ACR</li>
+                            <li><strong>Self-hosted</strong> - Harbor, Registry</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
 
-            <div class="interactive-demo">
-                <h3>🌐 בדיקת קישוריות רשת</h3>
-                <button class="demo-button" onclick="testNetworking()">בדוק רשת</button>
-                <div id="network-test-result"></div>
-            </div>
-        </div>
-
-        <!-- Docker Registry Section -->
-        <div id="registry" class="content-section">
-            <h2 class="section-title">🏪 Docker Registry</h2>
-            
-            <div class="highlight">
-                <strong>Docker Registry</strong> הוא שירות לאחסון ושיתוף Docker Images
-            </div>
-
-            <h3>📦 סוגי Registry עיקריים</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🐙 Docker Hub</h3>
-                    <p>השירות הציבורי הגדול ביותר</p>
-                    <div class="code-block">
-docker pull nginx:latest
-docker push username/my-app:v1.0
+                    <h3>עבודה עם Registry</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">התחבר ל-Docker Hub</div>
+                            <div class="command-code">docker login</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">התחבר ל-registry פרטי</div>
+                            <div class="command-code">docker login registry.example.com</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">משוך image</div>
+                            <div class="command-code">docker pull nginx:latest</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">תייג image למאגר</div>
+                            <div class="command-code">docker tag myapp:v1 username/myapp:v1</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דחוף image</div>
+                            <div class="command-code">docker push username/myapp:v1</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חפש images</div>
+                            <div class="command-code">docker search nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">התנתק</div>
+                            <div class="command-code">docker logout</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-card">
-                    <h3>☁️ Cloud Registries</h3>
-                    <p>AWS ECR, Google GCR, Azure ACR</p>
-                    <div class="code-block">
-# AWS ECR דוגמה
-aws ecr get-login-password | docker login
-docker push aws-account.dkr.ecr.region.amazonaws.com/my-app
+                    <h3>תיוג Images</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># פורמט כללי
+[registry]/[username]/[image]:[tag]
+
+# דוגמאות:
+nginx:latest                          # Docker Hub
+docker.io/library/nginx:1.21          # Docker Hub מפורש
+gcr.io/my-project/myapp:v1           # Google Container Registry
+123456789.dkr.ecr.us-east-1.amazonaws.com/myapp:latest  # AWS ECR</div>
+                </section>
+
+                <!-- Images Management Section -->
+                <section class="section" id="images">
+                    <h2>🖼️ ניהול Images</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג images מקומיים</div>
+                            <div class="command-code">docker images</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג עם פורמט מותאם</div>
+                            <div class="command-code">docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר image</div>
+                            <div class="command-code">docker rmi [image-name]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר images לא בשימוש</div>
+                            <div class="command-code">docker image prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הסר את כל ה-images</div>
+                            <div class="command-code">docker image prune -a</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שמור image לקובץ</div>
+                            <div class="command-code">docker save -o myimage.tar myapp:v1</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">טען image מקובץ</div>
+                            <div class="command-code">docker load -i myimage.tar</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש בדיסק</div>
+                            <div class="command-code">docker system df</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג היסטוריית image</div>
+                            <div class="command-code">docker history [image-name]</div>
+                        </div>
                     </div>
-                </div>
+                </section>
 
-                <div class="feature-card">
-                    <h3>🏠 Private Registry</h3>
-                    <p>Registry פרטי בארגון</p>
-                    <div class="code-block">
-docker run -d -p 5000:5000 registry:2
-docker tag my-app localhost:5000/my-app
-docker push localhost:5000/my-app
+                <!-- Containers Advanced Section -->
+                <section class="section" id="containers">
+                    <h2>📋 ניהול מתקדם של קונטיינרים</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">צור image מקונטיינר</div>
+                            <div class="command-code">docker commit [container] myapp:v2</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קבצים מקונטיינר</div>
+                            <div class="command-code">docker cp [container]:/path/file.txt ./local/</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קבצים לקונטיינר</div>
+                            <div class="command-code">docker cp ./local/file.txt [container]:/path/</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ייצא קונטיינר</div>
+                            <div class="command-code">docker export [container] > backup.tar</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ייבא קונטיינר</div>
+                            <div class="command-code">docker import backup.tar myapp:restored</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עדכן הגדרות קונטיינר</div>
+                            <div class="command-code">docker update --memory=1g --cpus=2 [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">המתן לקונטיינר</div>
+                            <div class="command-code">docker wait [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שינויים בקונטיינר</div>
+                            <div class="command-code">docker diff [container]</div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </section>
 
-            <h3>🔄 פקודות Registry בסיסיות</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>📤 Docker Push</h3>
-                    <p>העלאת images ל-registry</p>
-                    <div class="code-block">docker push username/image-name:tag</div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📥 Docker Pull</h3>
-                    <p>הורדת images מה-registry (docker run מוריד אוטומטית)</p>
-                    <div class="code-block">docker pull username/image-name:tag</div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🏷️ Image Tagging</h3>
-                    <p>Image ללא registry spec נדחף ל-Docker Hub</p>
-                    <div class="code-block">hello-world:v1 → docker.io/username/hello-world:v1</div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🔍 חיפוש ומידע</h3>
-                    <p>חיפוש והצגת מידע על images</p>
-                    <div class="code-block">
-docker search nginx
-docker inspect nginx:latest
+                <!-- Docker Compose Section -->
+                <section class="section" id="compose">
+                    <h2>🎼 Docker Compose</h2>
+                    
+                    <h3>מהו Docker Compose?</h3>
+                    <div class="info-box">
+                        <p><strong>כלי להגדרה והרצה של אפליקציות מרובות קונטיינרים</strong></p>
+                        <ul>
+                            <li>קובץ YAML אחד מגדיר את כל השירותים</li>
+                            <li>הפעלה והורדה בפקודה אחת</li>
+                            <li>אידיאלי לסביבות פיתוח</li>
+                        </ul>
                     </div>
-                </div>
-            </div>
 
-            <div class="code-block">
-                <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# התחברות ל-Registry
-docker login
-
-# תיוג images
-docker tag hello-world:v1 hello-world:june2023
-docker tag hello-world:v1 registry.com/hello-world-app:june2023
-
-# העלאה והורדה
-docker push username/repository:tag
-docker pull username/repository:tag
-
-# חיפוש והצגת מידע
-docker search nginx
-docker inspect nginx:latest
-            </div>
-
-            <div class="interactive-demo">
-                <h3>🔍 חיפוש ב-Docker Hub</h3>
-                <input type="text" id="search-input" placeholder="חפש Image..." style="padding:10px; border-radius:5px; border:1px solid #ddd; width:200px; margin-left:10px;">
-                <button class="demo-button" onclick="searchDockerHub()">חפש</button>
-                <div id="search-results"></div>
-            </div>
-        </div>
-
-        <!-- Using Containers Section -->
-        <div id="containers" class="content-section">
-            <h2 class="section-title">🚀 שימוש בקונטיינרים</h2>
-            
-            <h3>⚡ פקודות בסיסיות</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>הרצת קונטיינר</h3>
-                    <div class="code-block">
-# הרצה רגילה
-docker run nginx
-
-# הרצה ברקע
-docker run -d nginx
-
-# הרצה עם port mapping
-docker run -p 8080:80 nginx
+                    <h3>פקודות Compose</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הפעל את כל השירותים</div>
+                            <div class="command-code">docker-compose up</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל ברקע</div>
+                            <div class="command-code">docker-compose up -d</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור ו להסיר</div>
+                            <div class="command-code">docker-compose down</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג סטטוס</div>
+                            <div class="command-code">docker-compose ps</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג לוגים</div>
+                            <div class="command-code">docker-compose logs -f</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בנה מחדש</div>
+                            <div class="command-code">docker-compose build</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל פקודה בשירות</div>
+                            <div class="command-code">docker-compose exec [service] bash</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עצור שירותים</div>
+                            <div class="command-code">docker-compose stop</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפעל מחדש</div>
+                            <div class="command-code">docker-compose restart</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-card">
-                    <h3>ניהול קונטיינרים</h3>
-                    <div class="code-block">
-# הצגת קונטיינרים פעילים
-docker ps
+                    <h3>דוגמת docker-compose.yml</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;">version: '3.8'
 
-# הצגת כל הקונטיינרים
-docker ps -a
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    environment:
+      - DEBUG=1
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-# עצירת קונטיינר
-docker stop container-name
+volumes:
+  postgres_data:</div>
+                </section>
+
+                <!-- Best Practices Section -->
+                <section class="section" id="practices">
+                    <h2>✨ Best Practices ל-Docker</h2>
+                    
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">🔒 אל תשתמש ב-root</div>
+                            <div class="command-code">RUN useradd -m myuser
+USER myuser</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">📦 שמור על images קטנים</div>
+                            <div class="command-code">FROM python:3.9-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    pip install --no-cache-dir -r requirements.txt && \
+    apt-get purge -y gcc && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🎯 השתמש ב-multi-stage builds</div>
+                            <div class="command-code">FROM node:14 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">📄 השתמש ב-.dockerignore</div>
+                            <div class="command-code"># .dockerignore
+node_modules
+.git
+*.md
+.env
+.vscode
+__pycache__
+*.pyc</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🏷️ תייג images בצורה משמעותית</div>
+                            <div class="command-code"># לא טוב
+myapp:latest
+
+# טוב
+myapp:1.2.3
+myapp:1.2.3-alpine
+myapp:v1.2.3-2024-01-15</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">📊 סדר הוראות לפי תדירות שינוי</div>
+                            <div class="command-code">FROM python:3.9
+WORKDIR /app
+
+# משתנה לעיתים רחוקות
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# משתנה לעיתים קרובות
+COPY . .</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🔐 אל תשמור סודות</div>
+                            <div class="command-code"># ❌ לא לעשות
+ENV DB_PASSWORD=secret123
+
+# ✅ עדיף
+# העבר דרך -e בזמן הרצה או השתמש ב-secrets</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">💊 הגדר health checks</div>
+                            <div class="command-code">HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost/ || exit 1</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🔍 השתמש ב-LABEL למטאדטה</div>
+                            <div class="command-code">LABEL version="1.0" \
+      maintainer="team@example.com" \
+      description="My Application"</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">🧹 נקה קבצים זמניים</div>
+                            <div class="command-code">RUN apt-get update && \
+    apt-get install -y package && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*</div>
+                        </div>
+
+                        <div class="command-card">
+                            <div class="command-usage">⚡ השתמש ב-alpine images</div>
+                            <div class="command-code"># במקום:
+FROM python:3.9  # ~900MB
+
+# השתמש ב:
+FROM python:3.9-alpine  # ~50MB</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-card">
-                    <h3>כניסה לקונטיינר</h3>
-                    <div class="code-block">
-# הרצה אינטראקטיבית
-docker run -it ubuntu bash
+                    <h3>דוגמה: Dockerfile אופטימלי</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># ============================================
+# Stage 1: Build
+# ============================================
+FROM python:3.9-slim AS builder
 
-# כניסה לקונטיינר פעיל
-docker exec -it container-name bash
+WORKDIR /app
+
+# התקן תלויות בנייה
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# העתק והתקן dependencies
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# ============================================
+# Stage 2: Runtime
+# ============================================
+FROM python:3.9-slim
+
+# הגדר משתני סביבה
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH=/home/appuser/.local/bin:$PATH
+
+WORKDIR /app
+
+# צור משתמש לא-privileged
+RUN useradd -m -u 1000 appuser && \
+    chown -R appuser:appuser /app
+
+# העתק dependencies מה-builder stage
+COPY --from=builder --chown=appuser:appuser /root/.local /home/appuser/.local
+
+# העתק הקוד
+COPY --chown=appuser:appuser . .
+
+# החלף למשתמש
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:8000/health')"
+
+# חשוף פורט
+EXPOSE 8000
+
+# הגדר metadata
+LABEL version="1.0.0" \
+      maintainer="dev@example.com" \
+      description="Production-ready Python app"
+
+# הפעל את האפליקציה
+CMD ["python", "app.py"]</div>
+                </section>
+
+                <!-- Troubleshooting Section -->
+                <section class="section" id="troubleshooting">
+                    <h2>🔧 פתרון בעיות נפוצות</h2>
+                    
+                    <h3>פקודות ניקוי ותחזוקה</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש בדיסק</div>
+                            <div class="command-code">docker system df</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה הכל (זהירות!)</div>
+                            <div class="command-code">docker system prune -a --volumes</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה containers שנעצרו</div>
+                            <div class="command-code">docker container prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה images לא בשימוש</div>
+                            <div class="command-code">docker image prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה volumes לא בשימוש</div>
+                            <div class="command-code">docker volume prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה networks לא בשימוש</div>
+                            <div class="command-code">docker network prune</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">נקה build cache</div>
+                            <div class="command-code">docker builder prune</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-card">
-                    <h3>מעקב ולוגים</h3>
-                    <div class="code-block">
-# צפייה בלוגים
-docker logs container-name
-
-# מעקב בזמן אמת
-docker logs -f container-name
-
-# סטטיסטיקות
-docker stats
+                    <h3>דיבאג וניתוח</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">בדוק קונטיינר מפורט</div>
+                            <div class="command-code">docker inspect [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים בקונטיינר</div>
+                            <div class="command-code">docker top [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שינויים בקונטיינר</div>
+                            <div class="command-code">docker diff [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">התחבר לקונטיינר פועל</div>
+                            <div class="command-code">docker attach [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ bash בקונטיינר</div>
+                            <div class="command-code">docker exec -it [container] /bin/bash</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרץ sh בקונטיינר (alpine)</div>
+                            <div class="command-code">docker exec -it [container] /bin/sh</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק סטטיסטיקות משאבים</div>
+                            <div class="command-code">docker stats [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק לוגים עם timestamps</div>
+                            <div class="command-code">docker logs --timestamps [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">בדוק 100 שורות אחרונות</div>
+                            <div class="command-code">docker logs --tail 100 [container]</div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <h3>🔧 דוגמאות מתקדמות למהנדסי נתונים</h3>
-            
-            <div class="feature-card">
-                <h3>🐍 Python Data Science Environment</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# Dockerfile למדעי נתונים
-FROM python:3.9
+                    <h3>בעיות נפוצות ופתרונות</h3>
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <div class="definition-term">❌ "Cannot connect to Docker daemon"</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># הפעל את Docker daemon
+sudo systemctl start docker
 
-RUN pip install pandas numpy matplotlib jupyter scikit-learn
+# בדוק סטטוס
+sudo systemctl status docker
 
-WORKDIR /workspace
+# הוסף משתמש לקבוצה
+sudo usermod -aG docker $USER</div>
+                            </div>
+                        </div>
 
-EXPOSE 8888
+                        <div class="definition-card">
+                            <div class="definition-term">❌ "Port already in use"</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># מצא תהליך שתופס את הפורט
+sudo lsof -i :8080
 
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--allow-root"]
-                </div>
-            </div>
+# או שנה את הפורט
+docker run -p 8081:80 nginx</div>
+                            </div>
+                        </div>
 
-            <div class="feature-card">
-                <h3>🗄️ Database Container</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">העתק</button>
-# הרצת PostgreSQL
-docker run -d \
-  --name postgres-db \
-  -e POSTGRES_PASSWORD=mypassword \
-  -e POSTGRES_DB=datawarehouse \
-  -v postgres-data:/var/lib/postgresql/data \
-  -p 5432:5432 \
-  postgres:13
-                </div>
-            </div>
+                        <div class="definition-card">
+                            <div class="definition-term">❌ "No space left on device"</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># נקה הכל
+docker system prune -a --volumes
 
-            <div class="interactive-demo">
-                <h3>🎮 מדמה קונטיינר</h3>
-                <button class="demo-button" onclick="startContainer()">הפעל קונטיינר</button>
-                <button class="demo-button" onclick="stopContainer()">עצור קונטיינר</button>
-                <button class="demo-button" onclick="viewLogs()">צפה בלוגים</button>
-                <div id="container-status" style="margin-top:15px;"></div>
-            </div>
-        </div>
+# בדוק שימוש
+docker system df</div>
+                            </div>
+                        </div>
 
-        <!-- Quiz Section -->
-        <div id="quiz" class="content-section">
-            <h2 class="section-title">🧠 בדיקת ידע - Docker Quiz</h2>
-            
-            <div class="quiz-container">
-                <div class="quiz-question">שאלה 1: מה ההבדל העיקרי בין Docker לבין Virtual Machine?</div>
-                <div class="quiz-options">
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">Docker דורש יותר משאבי מערכת</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, true)">Docker משתמש בקרנל של ה-Host OS</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">Docker איטי יותר בהפעלה</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">Docker פחות בטוח</div>
-                </div>
-            </div>
+                        <div class="definition-card">
+                            <div class="definition-term">❌ Container מסתיים מיד</div>
+                            <div class="definition-text">
+                                <strong>פתרון:</strong>
+                                <div class="command-code" style="margin-top: 10px;"># בדוק לוגים
+docker logs [container]
 
-            <div class="quiz-container">
-                <div class="quiz-question">שאלה 2: איזה קובץ משמש לבניית Docker Image?</div>
-                <div class="quiz-options">
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker-compose.yml</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, true)">Dockerfile</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">config.json</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">package.json</div>
-                </div>
-            </div>
+# בדוק exit code
+docker inspect [container] --format='{{.State.ExitCode}}'
 
-            <div class="quiz-container">
-                <div class="quiz-question">שאלה 3: איך מפעילים קונטיינר ברקע?</div>
-                <div class="quiz-options">
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker run -b image-name</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, true)">docker run -d image-name</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker run --background image-name</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker start -d image-name</div>
-                </div>
-            </div>
+# הרץ interactively לדיבאג
+docker run -it [image] /bin/bash</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-            <div class="quiz-container">
-                <div class="quiz-question">שאלה 4: מה זה Docker Registry?</div>
-                <div class="quiz-options">
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">כלי לניהול קונטיינרים</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, true)">שירות לאחסון ושיתוף Docker Images</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">סוג של Docker Network</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">כלי לבניית Images</div>
-                </div>
-            </div>
+                <!-- Help Section -->
+                <section class="section" id="help">
+                    <h2>❓ קבלת עזרה</h2>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג גרסת Docker</div>
+                            <div class="command-code">docker --version</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג מידע מפורט על המערכת</div>
+                            <div class="command-code">docker info</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עזרה כללית</div>
+                            <div class="command-code">docker --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עזרה על פקודה ספציפית</div>
+                            <div class="command-code">docker [command] --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דוגמאות לפקודת run</div>
+                            <div class="command-code">docker run --help</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">דוגמאות לפקודת build</div>
+                            <div class="command-code">docker build --help</div>
+                        </div>
+                    </div>
 
-            <div class="quiz-container">
-                <div class="quiz-question">שאלה 5: איזו פקודה מציגה את כל הקונטיינרים (כולל לא פעילים)?</div>
-                <div class="quiz-options">
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker ps</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, true)">docker ps -a</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker containers</div>
-                    <div class="quiz-option" onclick="selectAnswer(this, false)">docker list all</div>
-                </div>
-            </div>
+                    <h3>משאבים מומלצים</h3>
+                    <div class="info-box">
+                        <p><strong>🌐 קישורים שימושיים:</strong></p>
+                        <ul>
+                            <li><strong>Docker Docs:</strong> docs.docker.com</li>
+                            <li><strong>Docker Hub:</strong> hub.docker.com</li>
+                            <li><strong>Dockerfile Reference:</strong> docs.docker.com/engine/reference/builder</li>
+                            <li><strong>Best Practices:</strong> docs.docker.com/develop/dev-best-practices</li>
+                            <li><strong>Docker Compose:</strong> docs.docker.com/compose</li>
+                        </ul>
+                    </div>
+                </section>
 
-            <div style="text-align:center; margin-top:30px;">
-                <button class="demo-button" onclick="calculateScore()">חשב ציון</button>
-                <div id="quiz-score" style="margin-top:15px; font-size:1.2em; font-weight:bold;"></div>
-            </div>
+                <!-- Linux Commands Section -->
+                <section class="section" id="linux">
+                    <h2>🐧 פקודות Linux בסיסיות</h2>
+                    
+                    <h3>מדוע חשוב ללמוד Linux?</h3>
+                    <div class="info-box">
+                        <p><strong>רוב ה-Docker containers מבוססים על Linux!</strong></p>
+                        <p>הבנה בסיסית של פקודות Linux חיונית לעבודה יעילה עם Docker</p>
+                    </div>
+
+                    <h3>פקודות בסיסיות</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">הצג תיקייה נוכחית</div>
+                            <div class="command-code">pwd</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">רשימת קבצים</div>
+                            <div class="command-code">ls -la</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">עבור לתיקייה</div>
+                            <div class="command-code">cd /path/to/directory</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור תיקייה</div>
+                            <div class="command-code">mkdir my-directory</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תוכן קובץ</div>
+                            <div class="command-code">cat file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">ערוך קובץ (nano)</div>
+                            <div class="command-code">nano file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">צור קובץ ריק</div>
+                            <div class="command-code">touch newfile.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העתק קובץ</div>
+                            <div class="command-code">cp source.txt destination.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">העבר/שנה שם</div>
+                            <div class="command-code">mv oldname.txt newname.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">מחק קובץ</div>
+                            <div class="command-code">rm file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">מחק תיקייה</div>
+                            <div class="command-code">rm -rf directory/</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חפש טקסט בקובץ</div>
+                            <div class="command-code">grep "search-term" file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג תהליכים</div>
+                            <div class="command-code">ps aux</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הרוג תהליך</div>
+                            <div class="command-code">kill -9 [PID]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הורד קובץ</div>
+                            <div class="command-code">wget https://example.com/file.zip</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">חלץ tar.gz</div>
+                            <div class="command-code">tar -xzvf archive.tar.gz</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג שימוש בדיסק</div>
+                            <div class="command-code">df -h</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג גודל תיקייה</div>
+                            <div class="command-code">du -sh /path/to/dir</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הצג משתני סביבה</div>
+                            <div class="command-code">env</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הדפס טקסט</div>
+                            <div class="command-code">echo "Hello World"</div>
+                        </div>
+                    </div>
+
+                    <h3>Pipes וניתוב</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">העבר פלט לפקודה אחרת</div>
+                            <div class="command-code">ls -la | grep "docker"</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שמור פלט לקובץ</div>
+                            <div class="command-code">echo "text" > file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הוסף לקובץ קיים</div>
+                            <div class="command-code">echo "more text" >> file.txt</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפנה שגיאות</div>
+                            <div class="command-code">command 2> error.log</div>
+                        </div>
+                    </div>
+
+                    <h3>הרשאות קבצים</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">שנה הרשאות</div>
+                            <div class="command-code">chmod 755 script.sh</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">הפוך לקובץ הפעלה</div>
+                            <div class="command-code">chmod +x script.sh</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">שנה בעלות</div>
+                            <div class="command-code">chown user:group file.txt</div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 טיפ למהנדסי נתונים:</strong></p>
+                        <p>פקודות אלו יהיו שימושיות כאשר תצטרך להיכנס לקונטיינרים ולבצע דיבאג או תחזוקה!</p>
+                    </div>
+                </section>
+
+            </main>
         </div>
     </div>
 
+    <!-- Copy Notification -->
+    <div class="copy-notification" id="copyNotification">
+        ✅ הפקודה הועתקה ללוח!
+    </div>
+
     <script>
-        let currentSection = 'what-is-docker';
-        let containerRunning = false;
-        let correctAnswers = 0;
-        let totalAnswers = 0;
+        // ============================================
+        // Navigation functionality
+        // ============================================
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all nav items and sections
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked nav item
+                item.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = item.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+                
+                // Scroll to top of main content
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
 
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => section.classList.remove('active'));
-            
-            // Remove active class from all tabs
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
-            
-            currentSection = sectionId;
+        // ============================================
+        // Copy to clipboard functionality
+        // ============================================
+        document.querySelectorAll('.command-code').forEach(code => {
+            code.addEventListener('click', () => {
+                const text = code.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyNotification();
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+
+        function showCopyNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
         }
 
-        function toggleDetails(elementId) {
-            const element = document.getElementById(elementId);
-            if (element.style.display === 'none') {
-                element.style.display = 'block';
-            } else {
-                element.style.display = 'none';
-            }
-        }
+        // ============================================
+        // Search functionality
+        // ============================================
+        const searchInput = document.getElementById('searchInput');
+        const allCards = document.querySelectorAll('.command-card, .definition-card, .feature-card');
+        const allSections = document.querySelectorAll('.section');
 
-        function runDockerDemo() {
-            const output = document.getElementById('docker-demo-output');
-            output.innerHTML = `
-                <div style="background:#2d3748; color:#e2e8f0; padding:15px; border-radius:8px; font-family:monospace;">
-                    <div>$ docker run hello-world</div>
-                    <div style="color:#4ade80; margin-top:10px;">
-                        Hello from Docker!<br>
-                        This message shows that your installation appears to be working correctly.<br><br>
-                        ✅ Docker Engine פועל<br>
-                        ✅ Image נמשך בהצלחה<br>
-                        ✅ קונטיינר הופעל<br>
-                        ✅ הודעה הוצגה<br>
-                        ✅ קונטיינר הופסק
-                    </div>
-                </div>
-            `;
-        }
+        // Store original HTML
+        allCards.forEach(card => {
+            card.originalHTML = card.innerHTML;
+        });
 
-        function comparePerformance() {
-            const comparison = document.getElementById('performance-comparison');
-            comparison.innerHTML = `
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:15px;">
-                    <div style="background:#e3f2fd; padding:20px; border-radius:8px;">
-                        <h4>🐋 Docker</h4>
-                        <div style="margin:10px 0;">
-                            <div>זמן הפעלה: <strong>2-5 שניות</strong></div>
-                            <div>זיכרון: <strong>100-200MB</strong></div>
-                            <div>מעבד: <strong>זניח</strong></div>
-                            <div>דיסק: <strong>100-500MB</strong></div>
-                        </div>
-                    </div>
-                    <div style="background:#fff3e0; padding:20px; border-radius:8px;">
-                        <h4>💻 Virtual Machine</h4>
-                        <div style="margin:10px 0;">
-                            <div>זמן הפעלה: <strong>30-60 שניות</strong></div>
-                            <div>זיכרון: <strong>1-4GB</strong></div>
-                            <div>מעבד: <strong>גבוה</strong></div>
-                            <div>דיסק: <strong>2-10GB</strong></div>
-                        </div>
-                    </div>
-                </div>
-                <div style="text-align:center; margin-top:20px; padding:15px; background:#c8e6c9; border-radius:8px;">
-                    <strong>מסקנה: Docker יעיל פי 10-20 יותר במשאבי מערכת!</strong>
-                </div>
-            `;
-        }
-
-        function simulateBuild() {
-            const progressBar = document.getElementById('build-progress');
-            const output = document.getElementById('build-output');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
             
-            output.innerHTML = '';
-            
-            const steps = [
-                'Step 1/7: FROM python:3.9-slim',
-                'Step 2/7: WORKDIR /app',
-                'Step 3/7: COPY requirements.txt .',
-                'Step 4/7: RUN pip install -r requirements.txt',
-                'Step 5/7: COPY . .',
-                'Step 6/7: EXPOSE 8000',
-                'Step 7/7: CMD ["python", "app.py"]'
-            ];
-            
-            let currentStep = 0;
-            
-            const interval = setInterval(() => {
-                if (currentStep < steps.length) {
-                    const progress = ((currentStep + 1) / steps.length) * 100;
-                    progressBar.style.width = progress + '%';
-                    progressBar.textContent = Math.round(progress) + '%';
-                    
-                    output.innerHTML += `<div style="color:#4ade80; font-family:monospace;">${steps[currentStep]}</div>`;
-                    currentStep++;
-                } else {
-                    clearInterval(interval);
-                    output.innerHTML += `<div style="color:#4ade80; font-family:monospace; margin-top:10px;"><strong>✅ בנייה הושלמה בהצלחה!</strong></div>`;
-                }
-            }, 800);
-        }
-
-        function testNetworking() {
-            const result = document.getElementById('network-test-result');
-            result.innerHTML = `
-                <div style="background:#2d3748; color:#e2e8f0; padding:15px; border-radius:8px; font-family:monospace; margin-top:15px;">
-                    <div>🔍 בודק קישוריות רשת...</div>
-                    <div style="color:#4ade80; margin-top:10px;">
-                        ✅ Bridge network: פעיל<br>
-                        ✅ Host network: זמין<br>
-                        ✅ DNS resolution: עובד<br>
-                        ✅ Port mapping: 8080:80 פתוח<br>
-                        ✅ Internet connectivity: זמין
-                    </div>
-                    <div style="margin-top:15px; color:#fbbf24;">
-                        📊 Network interfaces:
-                        <div style="margin-right:20px;">
-                            • docker0: 172.17.0.1/16<br>
-                            • eth0: קישור לאינטרנט<br>
-                            • lo: 127.0.0.1 (loopback)
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function searchDockerHub() {
-            const searchTerm = document.getElementById('search-input').value;
-            const results = document.getElementById('search-results');
-            
-            if (!searchTerm) {
-                results.innerHTML = '<div style="color:#f44336; margin-top:10px;">אנא הכנס מילת חיפוש</div>';
+            if (searchTerm === '') {
+                // Reset view
+                allCards.forEach(card => {
+                    card.style.display = 'block';
+                    card.innerHTML = card.originalHTML;
+                });
+                allSections.forEach(section => section.classList.remove('active'));
+                document.getElementById('what-is-docker').classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelector('.nav-item[data-section="what-is-docker"]').classList.add('active');
                 return;
             }
-            
-            // Simulate search results
-            const mockResults = [
-                { name: `${searchTerm}`, description: `Official ${searchTerm} image`, stars: '1000+' },
-                { name: `${searchTerm}-alpine`, description: `Lightweight ${searchTerm} based on Alpine`, stars: '500+' },
-                { name: `${searchTerm}-ubuntu`, description: `${searchTerm} on Ubuntu base`, stars: '300+' }
-            ];
-            
-            results.innerHTML = `
-                <div style="margin-top:15px;">
-                    <h4>🔍 תוצאות חיפוש עבור "${searchTerm}":</h4>
-                    ${mockResults.map(result => `
-                        <div style="background:#f8f9fa; padding:15px; margin:10px 0; border-radius:8px; border-right:4px solid #4a90e2;">
-                            <div style="font-weight:bold; color:#2c5aa0;">${result.name}</div>
-                            <div style="margin:5px 0;">${result.description}</div>
-                            <div style="color:#666;">⭐ ${result.stars} כוכבים</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
 
-        function startContainer() {
-            const status = document.getElementById('container-status');
-            containerRunning = true;
+            let hasResults = false;
             
-            status.innerHTML = `
-                <div style="background:#c8e6c9; color:#2e7d32; padding:15px; border-radius:8px; margin-top:15px;">
-                    <div style="font-weight:bold;">🟢 קונטיינר פעיל</div>
-                    <div style="font-family:monospace; margin-top:10px;">
-                        Container ID: abc123def456<br>
-                        Image: nginx:latest<br>
-                        Status: Running<br>
-                        Ports: 8080:80<br>
-                        Started: ${new Date().toLocaleTimeString('he-IL')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function stopContainer() {
-            const status = document.getElementById('container-status');
-            containerRunning = false;
-            
-            status.innerHTML = `
-                <div style="background:#ffcdd2; color:#c62828; padding:15px; border-radius:8px; margin-top:15px;">
-                    <div style="font-weight:bold;">🔴 קונטיינר מופסק</div>
-                    <div style="font-family:monospace; margin-top:10px;">
-                        Container ID: abc123def456<br>
-                        Status: Exited (0)<br>
-                        Stopped: ${new Date().toLocaleTimeString('he-IL')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function viewLogs() {
-            const status = document.getElementById('container-status');
-            
-            status.innerHTML = `
-                <div style="background:#2d3748; color:#e2e8f0; padding:15px; border-radius:8px; margin-top:15px; font-family:monospace;">
-                    <div style="color:#4ade80; font-weight:bold;">📋 Container Logs:</div>
-                    <div style="margin-top:10px; line-height:1.4;">
-                        2025-07-30 10:30:15 [INFO] Starting nginx server<br>
-                        2025-07-30 10:30:15 [INFO] Listening on port 80<br>
-                        2025-07-30 10:30:16 [INFO] Server ready to accept connections<br>
-                        2025-07-30 10:30:20 [INFO] GET / HTTP/1.1 200<br>
-                        2025-07-30 10:30:22 [INFO] GET /health HTTP/1.1 200<br>
-                        <span style="color:#fbbf24;">2025-07-30 10:30:25 [WARN] High memory usage detected</span><br>
-                        2025-07-30 10:30:30 [INFO] Memory usage normalized
-                    </div>
-                </div>
-            `;
-        }
-
-        function selectAnswer(element, isCorrect) {
-            // Remove previous selections in this quiz
-            const parent = element.parentElement;
-            const options = parent.querySelectorAll('.quiz-option');
-            options.forEach(option => {
-                option.classList.remove('correct', 'incorrect');
-            });
-            
-            // Mark the selected answer
-            if (isCorrect) {
-                element.classList.add('correct');
-                if (!element.dataset.answered) {
-                    correctAnswers++;
+            allCards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                if (cardText.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    hasResults = true;
+                    
+                    // Highlight search term
+                    const regex = new RegExp(`(${searchTerm})`, 'gi');
+                    card.innerHTML = card.originalHTML.replace(regex, '<span class="highlight">$1</span>');
+                } else {
+                    card.style.display = 'none';
                 }
-            } else {
-                element.classList.add('incorrect');
-                // Show the correct answer
-                options.forEach(option => {
-                    if (option.onclick.toString().includes('true')) {
-                        option.classList.add('correct');
-                    }
-                });
-            }
-            
-            // Mark as answered
-            if (!element.dataset.answered) {
-                totalAnswers++;
-                element.dataset.answered = 'true';
-            }
-        }
-
-        function simulateMicroservices() {
-            const demo = document.getElementById('microservices-demo');
-            demo.innerHTML = `
-                <div style="background:#2d3748; color:#e2e8f0; padding:20px; border-radius:10px; font-family:monospace;">
-                    <div style="color:#4ade80; font-weight:bold;">🎯 הפעלת ארכיטקטורת Microservices:</div>
-                    <div style="margin:15px 0; line-height:1.6;">
-                        <div>🌐 Frontend Service (React): Port 3000 ✅</div>
-                        <div>⚙️ API Gateway (Node.js): Port 8080 ✅</div>
-                        <div>📊 User Service (Python): Port 5001 ✅</div>
-                        <div>🛒 Order Service (Java): Port 8081 ✅</div>
-                        <div>💳 Payment Service (Go): Port 9000 ✅</div>
-                        <div>🗄️ Database (PostgreSQL): Port 5432 ✅</div>
-                    </div>
-                    <div style="color:#fbbf24; margin-top:15px;">
-                        📈 Health Check: כל השירותים פעילים ותקינים<br>
-                        🔄 Load: CPU 15%, Memory 2.1GB<br>
-                        ⚡ Response Time: ממוצע 45ms
-                    </div>
-                </div>
-            `;
-        }
-
-        function exploreArchitecture() {
-            const demo = document.getElementById('architecture-demo');
-            demo.innerHTML = `
-                <div style="background:#f8f9fa; padding:20px; border-radius:10px;">
-                    <h4>🔍 סקירת מערכת Docker:</h4>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:15px 0;">
-                        <div>
-                            <div style="background:#e3f2fd; padding:15px; border-radius:8px; margin:10px 0;">
-                                <strong>🐳 Docker Version:</strong> 24.0.5<br>
-                                <strong>🏗️ API Version:</strong> 1.43<br>
-                                <strong>⚙️ Storage Driver:</strong> overlay2
-                            </div>
-                            <div style="background:#e8f5e8; padding:15px; border-radius:8px; margin:10px 0;">
-                                <strong>📦 Running Containers:</strong> 5<br>
-                                <strong>💿 Images:</strong> 12<br>
-                                <strong>🌐 Networks:</strong> 3
-                            </div>
-                        </div>
-                        <div>
-                            <div style="background:#fff3e0; padding:15px; border-radius:8px; margin:10px 0;">
-                                <strong>🖥️ System Info:</strong><br>
-                                CPUs: 8<br>
-                                Memory: 16GB<br>
-                                OS: Linux Ubuntu 22.04
-                            </div>
-                            <div style="background:#fce4ec; padding:15px; border-radius:8px; margin:10px 0;">
-                                <strong>📊 Resource Usage:</strong><br>
-                                CPU: 25%<br>
-                                Memory: 4.2GB / 16GB
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function simulateBuildRun() {
-            const demo = document.getElementById('build-run-demo');
-            demo.innerHTML = `
-                <div style="background:#2d3748; color:#e2e8f0; padding:20px; border-radius:10px; font-family:monospace;">
-                    <div style="color:#4ade80; font-weight:bold; margin-bottom:15px;">🔨 בנייה והרצה מלאה:</div>
-                    
-                    <div style="background:#1a202c; padding:15px; border-radius:8px; margin:10px 0;">
-                        <div style="color:#68d391;">$ docker build -t hello-world:latest .</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">Sending build context to Docker daemon</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">Step 1/2: FROM ubuntu:22.04</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">Step 2/2: CMD ["echo", "hello world"]</div>
-                        <div style="margin:5px 0 5px 20px; color:#68d391;">Successfully built abc123def456</div>
-                        <div style="margin:5px 0 5px 20px; color:#68d391;">Successfully tagged hello-world:latest</div>
-                    </div>
-                    
-                    <div style="background:#1a202c; padding:15px; border-radius:8px; margin:10px 0;">
-                        <div style="color:#68d391;">$ docker run --rm -t hello-world</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">hello world</div>
-                    </div>
-                    
-                    <div style="background:#1a202c; padding:15px; border-radius:8px; margin:10px 0;">
-                        <div style="color:#68d391;">$ docker build -t my-app:from-script -f dockerfile_example2 .</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">Successfully built def456ghi789</div>
-                        <div style="color:#68d391;">$ docker run --rm -t my-app:from-script</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">running as existing script</div>
-                    </div>
-                    
-                    <div style="color:#4ade80; margin-top:15px;">
-                        ✅ בנייה והרצה הושלמו בהצלחה!<br>
-                        📦 2 images נוצרו<br>
-                        🚀 2 containers הורצו ונמחקו אוטומטית
-                    </div>
-                </div>
-            `;
-        }
-
-        function showExerciseSolution(exerciseNum) {
-            const solutionElement = document.getElementById(`exercise-${exerciseNum}-solution`);
-            if (solutionElement.style.display === 'none') {
-                solutionElement.style.display = 'block';
-            } else {
-                solutionElement.style.display = 'none';
-            }
-        }
-
-        function runExerciseSimulator() {
-            const simulator = document.getElementById('exercise-simulator');
-            
-            simulator.innerHTML = `
-                <div style="background:#2d3748; color:#e2e8f0; padding:20px; border-radius:10px; font-family:monospace;">
-                    <div style="color:#4ade80; font-weight:bold; margin-bottom:15px;">🎯 הרצת כל התרגילים:</div>
-                    
-                    <div style="background:#1a202c; padding:15px; border-radius:8px; margin:10px 0;">
-                        <div style="color:#68d391;">📝 תרגיל #1 - יוצר שמות:</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">$ docker build -t name-printer:yossi .</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">$ docker run --rm name-printer:yossi</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">היי! השם שלי הוא יוסי כהן</div>
-                        <div style="margin:5px 0 5px 20px; color:#4ade80;">✅ הושלם בהצלחה</div>
-                    </div>
-                    
-                    <div style="background:#1a202c; padding:15px; border-radius:8px; margin:10px 0;">
-                        <div style="color:#68d391;">🐍 תרגיל #2 - שרת Python:</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">$ docker build -t python-hello .</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">$ docker run --rm python-hello</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">🐋 Hello from Docker!</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">Python version: 3.9.16</div>
-                        <div style="margin:5px 0 5px 20px; color:#4ade80;">✅ הושלם בהצלחה</div>
-                    </div>
-                    
-                    <div style="background:#1a202c; padding:15px; border-radius:8px; margin:10px 0;">
-                        <div style="color:#68d391;">📊 תרגיל #3 - אפליקציית נתונים:</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">$ docker build -t data-analyzer .</div>
-                        <div style="margin:5px 0 5px 20px; color:#a0aec0;">$ docker run --rm data-analyzer</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">🔍 ניתוח נתונים עם Docker:</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">ממוצע גיל: 29.5</div>
-                        <div style="margin:5px 0 5px 20px; color:#fbbf24;">ממוצע שכר: $58,750</div>
-                        <div style="margin:5px 0 5px 20px; color:#4ade80;">✅ הושלם בהצלחה</div>
-                    </div>
-                    
-                    <div style="color:#4ade80; font-weight:bold; margin-top:20px;">
-                        🏆 כל התרגילים הושלמו בהצלחה!<br>
-                        📚 אתה מוכן לעבוד עם Docker בצורה מקצועית<br>
-                        🚀 זמן לעבור לפרויקטים אמיתיים!
-                    </div>
-                </div>
-            `;
-        }
-
-        function calculateScore() {
-            const scoreElement = document.getElementById('quiz-score');
-            const percentage = totalAnswers > 0 ? Math.round((correctAnswers / 5) * 100) : 0;
-            
-            let message = '';
-            let color = '';
-            
-            if (percentage >= 80) {
-                message = 'מצוין! אתה מבין Docker מעולה! 🏆';
-                color = '#4caf50';
-            } else if (percentage >= 60) {
-                message = 'טוב! יש לך בסיס חזק ב-Docker 👍';
-                color = '#ff9800';
-            } else {
-                message = 'כדאי לחזור על החומר ולנסות שוב 📚';
-                color = '#f44336';
-            }
-            
-            scoreElement.innerHTML = `
-                <div style="background:white; padding:20px; border-radius:10px; border:3px solid ${color};">
-                    <div style="font-size:2em;">${correctAnswers}/5</div>
-                    <div style="font-size:1.5em; color:${color};">${percentage}%</div>
-                    <div style="margin-top:10px; color:${color};">${message}</div>
-                </div>
-            `;
-        }
-
-        function copyCode(button) {
-            const codeBlock = button.parentElement;
-            const code = codeBlock.textContent.replace('העתק', '').trim();
-            
-            navigator.clipboard.writeText(code).then(() => {
-                button.textContent = 'הועתק!';
-                button.style.background = '#4caf50';
-                
-                setTimeout(() => {
-                    button.textContent = 'העתק';
-                    button.style.background = '#4a90e2';
-                }, 2000);
             });
-        }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            showSection('what-is-docker');
+            // Show all sections when searching
+            if (hasResults) {
+                allSections.forEach(section => section.classList.add('active'));
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            }
         });
+
+        // ============================================
+        // Keyboard shortcuts
+        // ============================================
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+F or Cmd+F to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+                searchInput.blur();
+            }
+        });
+
+        // ============================================
+        // Add tooltips
+        // ============================================
+        document.querySelectorAll('.command-code').forEach(code => {
+            code.title = 'לחץ להעתקה ללוח';
+        });
+
+        // ============================================
+        // Initialize
+        // ============================================
+        console.log('🐳 Docker Guide for Data Engineers - Loaded Successfully!');
+        console.log('💡 Tip: Press Ctrl+F to search for commands');
+        console.log('📚 Created for Naya College - Data Engineering');
     </script>
 </body>
 </html>
