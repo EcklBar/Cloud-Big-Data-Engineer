@@ -131,18 +131,30 @@
         }
 
         .main-content {
-            padding: 30px 40px;
-            overflow-y: auto;
+            padding: 20px;
+            overflow-y: hidden;
             max-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .section {
             display: none;
             animation: fadeIn 0.5s ease;
+            height: 100%;
+            overflow: hidden;
         }
 
         .section.active {
-            display: block;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 15px;
+            align-content: start;
+        }
+
+        /* כל ה-children של section יהיו ברשת */
+        .section.active > * {
+            margin: 0 !important;
         }
 
         @keyframes fadeIn {
@@ -152,24 +164,32 @@
 
         .section h2 {
             color: var(--primary-dark);
-            font-size: 2rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 3px solid var(--primary-blue);
+            grid-column: 1 / -1;
         }
 
         .section h3 {
             color: var(--text-primary);
-            font-size: 1.5rem;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            margin-bottom: 8px;
         }
 
         .info-box, .warning-box, .success-box {
-            padding: 20px;
+            padding: 12px;
             border-radius: var(--radius-md);
-            margin: 20px 0;
+            margin: 0;
             border-right: 4px solid;
+            font-size: 0.9rem;
+        }
+
+        .info-box h3, .warning-box h3, .success-box h3 {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 8px;
         }
 
         .info-box {
