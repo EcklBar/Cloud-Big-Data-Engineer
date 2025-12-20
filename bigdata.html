@@ -31,8 +31,6 @@
             background: linear-gradient(135deg, var(--primary-purple) 0%, #764ba2 100%);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow: hidden;
-            height: 100vh;
         }
 
         .container {
@@ -42,17 +40,13 @@
             border-radius: 20px;
             box-shadow: var(--shadow-md);
             overflow: hidden;
-            height: calc(100vh - 40px);
-            display: flex;
-            flex-direction: column;
         }
 
         .header {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
             color: white;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
-            flex-shrink: 0;
         }
 
         .header h1 {
@@ -75,10 +69,11 @@
         }
 
         .search-container {
-            padding: 20px 30px;
+            padding: 30px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
+            position: sticky;
+            top: 0;
             z-index: 100;
         }
 
@@ -100,9 +95,7 @@
         .content {
             display: grid;
             grid-template-columns: 280px 1fr;
-            flex: 1;
-            overflow: hidden;
-            min-height: 0;
+            min-height: 600px;
         }
 
         .sidebar {
@@ -110,7 +103,6 @@
             border-left: 1px solid var(--border-color);
             padding: 20px 0;
             overflow-y: auto;
-            max-height: 100%;
         }
 
         .nav-item {
@@ -131,30 +123,17 @@
         }
 
         .main-content {
-            padding: 20px;
-            overflow-y: hidden;
-            max-height: 100%;
-            display: flex;
-            flex-direction: column;
+            padding: 40px;
+            overflow-y: auto;
         }
 
         .section {
             display: none;
             animation: fadeIn 0.5s ease;
-            height: 100%;
-            overflow: hidden;
         }
 
         .section.active {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 15px;
-            align-content: start;
-        }
-
-        /* כל ה-children של section יהיו ברשת */
-        .section.active > * {
-            margin: 0 !important;
+            display: block;
         }
 
         @keyframes fadeIn {
@@ -164,32 +143,24 @@
 
         .section h2 {
             color: var(--primary-dark);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
             border-bottom: 3px solid var(--primary-blue);
-            grid-column: 1 / -1;
         }
 
         .section h3 {
             color: var(--text-primary);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            margin-bottom: 8px;
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
         }
 
         .info-box, .warning-box, .success-box {
-            padding: 12px;
+            padding: 20px;
             border-radius: var(--radius-md);
-            margin: 0;
+            margin: 20px 0;
             border-right: 4px solid;
-            font-size: 0.9rem;
-        }
-
-        .info-box h3, .warning-box h3, .success-box h3 {
-            font-size: 1rem;
-            margin-top: 0;
-            margin-bottom: 8px;
         }
 
         .info-box {
