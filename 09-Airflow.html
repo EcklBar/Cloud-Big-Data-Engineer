@@ -648,6 +648,7 @@
 
     <div class="nav-tabs">
         <div class="nav-item active" onclick="switchView('theory', this)">📚 תיאוריה</div>
+        <div class="nav-item" onclick="switchView('installation', this)">🚀 התקנה</div>
         <div class="nav-item" onclick="switchView('architecture', this)">🏗️ ארכיטקטורה</div>
         <div class="nav-item" onclick="switchView('ui', this)">🖥️ ממשק משתמש</div>
     </div>
@@ -1997,6 +1998,158 @@ airflow celery flower
                 </div>
 
             </main>
+        </div>
+    </div>
+
+    
+    <!-- INSTALLATION VIEW - הטאב החדש! -->
+    <div id="view-installation" class="view-section">
+        <div class="theory-content" style="max-width: 1200px; margin: 0 auto;">
+            <h1>🚀 התקנת Apache Airflow עם Docker Compose</h1>
+
+            <div class="info-card">
+                <h3>למה Docker Compose?</h3>
+                <p>Docker Compose מאפשר להקים את Airflow עם כל הרכיבים הנדרשים (scheduler, webserver, database, redis) בקלות ובמהירות.</p>
+                <p>זהו הדרך המומלצת להתקנה מקומית ולפיתוח.</p>
+            </div>
+
+            <h2 style="font-size: 1.8rem; margin: 40px 0 25px 0; color: var(--airflow-primary);">שיטה 1: שימוש ב-CDE Docker Compose (מומלץ)</h2>
+
+            <div class="step-card">
+                <h3><span class="step-number">1</span>הרצת Docker Compose</h3>
+                <p>הרץ את הפקודה הבאה בתיקיית הפרויקט:</p>
+                <div class="code-block">docker compose up -d</div>
+                <p><strong>הערה:</strong> אם כבר הרצת את הפקודה בשיעורים קודמים, אין צורך להריץ שוב.</p>
+            </div>
+
+            <div class="step-card">
+                <h3><span class="step-number">2</span>בדיקה ש-Airflow רץ</h3>
+                <p>פתח את <strong>Docker Desktop</strong> וחפש את הקונטיינרים הבאים:</p>
+                <ul style="padding-right: 30px; margin: 15px 0;">
+                    <li><code>airflow_scheduler</code> - המתזמן שמריץ tasks</li>
+                    <li><code>airflow_webserver</code> - ממשק המשתמש</li>
+                </ul>
+                <p>בנוסף, בדוק שנוצרו 2 תיקיות חדשות בפרויקט:</p>
+                <ul style="padding-right: 30px; margin: 15px 0;">
+                    <li><code>airflow-data</code> - נתוני Airflow</li>
+                    <li><code>dags</code> - כאן תשים את קבצי ה-DAG שלך</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <h3><span class="step-number">3</span>גישה לממשק המשתמש</h3>
+                <p>פתח דפדפן וגש לכתובת:</p>
+                <div class="code-block">http://localhost:8080</div>
+                <p>התחבר עם הפרטים הבאים:</p>
+                <ul style="padding-right: 30px; margin: 15px 0;">
+                    <li><strong>שם משתמש:</strong> <code>airflow</code></li>
+                    <li><strong>סיסמה:</strong> <code>airflow</code></li>
+                </ul>
+            </div>
+
+            <div class="success-card">
+                <h4 style="margin: 0 0 12px 0;">✅ סיימת! Airflow רץ במערכת שלך</h4>
+                <p style="margin: 0;">אתה יכול עכשיו להתחיל ליצור DAGs בתיקייה <code>./dags</code></p>
+            </div>
+
+            <h2 style="font-size: 1.8rem; margin: 40px 0 25px 0; color: var(--airflow-primary);">שיטה 2: התקנה ידנית מלאה</h2>
+
+            <div class="step-card">
+                <h3><span class="step-number">1</span>הגדרת תיקיות וסביבה</h3>
+                <p>צור את התיקיות הנדרשות והגדר את UID:</p>
+                <div class="code-block">mkdir -p ./dags ./logs ./plugins ./config
+echo -e "AIRFLOW_UID=$(id -u)" > .env</div>
+            </div>
+
+            <div class="step-card">
+                <h3><span class="step-number">2</span>אתחול Airflow</h3>
+                <p>הרץ את תהליך האתחול שיוצר את בסיס הנתונים ומשתמש Admin:</p>
+                <div class="code-block">docker compose up airflow-init</div>
+                <p>המתן עד שתראה הודעה דומה ל:</p>
+                <div class="code-block">airflow-init_1       | Upgrades done
+airflow-init_1       | Admin user airflow created
+airflow-init_1       | 2.9.2
+start airflow-init_1 | exited with code 0</div>
+            </div>
+
+            <div class="step-card">
+                <h3><span class="step-number">3</span>הפעלת כל הServices</h3>
+                <p>הפעל את כל רכיבי Airflow:</p>
+                <div class="code-block">docker compose up -d</div>
+            </div>
+
+            <div class="step-card">
+                <h3><span class="step-number">4</span>אימות Containers רצים</h3>
+                <p>בדוק שכל הקונטיינרים רצים:</p>
+                <div class="code-block">docker ps</div>
+                <p>אמור לראות:</p>
+                <ul style="padding-right: 30px; margin: 15px 0;">
+                    <li><code>airflow-webserver</code> - port 8080</li>
+                    <li><code>airflow-scheduler</code></li>
+                    <li><code>airflow-worker</code></li>
+                    <li><code>postgres</code> - port 5432</li>
+                    <li><code>redis</code> - port 6379</li>
+                </ul>
+            </div>
+
+            <div class="step-card">
+                <h3><span class="step-number">5</span>גישה ל-UI</h3>
+                <p>פתח דפדפן וגש לכתובת:</p>
+                <div class="code-block">http://localhost:8080</div>
+                <p>התחבר עם: <strong>airflow / airflow</strong></p>
+            </div>
+
+            <div class="success-card">
+                <h4 style="margin: 0 0 12px 0;">🎉 התקנה הושלמה בהצלחה!</h4>
+                <p style="margin: 0;">כל הרכיבים של Airflow רצים במערכת שלך עם CeleryExecutor מלא.</p>
+            </div>
+
+            <h2 style="font-size: 1.8rem; margin: 40px 0 25px 0; color: var(--airflow-primary);">🛠️ פקודות שימושיות</h2>
+            <div class="code-block"># עצור את Airflow
+docker compose down
+
+# עצור ומחק volumes (נתונים)
+docker compose down --volumes
+
+# הצג לוגים של service מסוים
+docker compose logs webserver
+docker compose logs scheduler
+
+# הרץ פקודת Airflow CLI
+docker compose run airflow-worker airflow dags list
+
+# כניסה לקונטיינר
+docker exec -it &lt;container-id&gt; bash</div>
+
+            <div class="warning-card">
+                <h4 style="margin: 0 0 12px 0;">⚠️ שים לב:</h4>
+                <ul style="padding-right: 30px; margin: 15px 0;">
+                    <li>ה-setup הזה משתמש ב-<strong>CeleryExecutor</strong> - מתאים לפרודקשן</li>
+                    <li>דורש לפחות <strong>4GB RAM</strong> פנויים</li>
+                    <li>וודא ש-Docker Desktop רץ לפני ההתקנה</li>
+                    <li>בפעם הראשונה הinit יכול לקחת מספר דקות</li>
+                </ul>
+            </div>
+
+            <h2 style="font-size: 1.8rem; margin: 40px 0 25px 0; color: var(--airflow-primary);">🔍 פתרון בעיות נפוצות</h2>
+
+            <h3 style="font-size: 1.3rem; margin: 30px 0 18px 0; color: var(--airflow-secondary);">Port 8080 תפוס</h3>
+            <p>אם ה-port תפוס, שנה ב-<code>docker-compose.yaml</code>:</p>
+            <div class="code-block">ports:
+  - "8081:8080"  # שנה ל-8081 או כל port פנוי אחר</div>
+
+            <h3 style="font-size: 1.3rem; margin: 30px 0 18px 0; color: var(--airflow-secondary);">Containers לא עולים</h3>
+            <p>בדוק לוגים:</p>
+            <div class="code-block">docker compose logs</div>
+
+            <h3 style="font-size: 1.3rem; margin: 30px 0 18px 0; color: var(--airflow-secondary);">אין הרשאות לתיקיות</h3>
+            <p>הרץ:</p>
+            <div class="code-block">sudo chown -R $(id -u):$(id -g) ./dags ./logs ./plugins</div>
+
+            <div class="info-card">
+                <h4 style="margin: 0 0 12px 0;">📚 צעד הבא</h4>
+                <p style="margin: 0;">עכשיו שAirflow מותקן, עבור לטאב <strong>תיאוריה</strong> כדי ללמוד איך ליצור DAGs!</p>
+            </div>
         </div>
     </div>
 
