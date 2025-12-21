@@ -1,532 +1,2198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apache Kafka Master Guide</title>
+    <title>Apache Kafka - המדריך האינטראקטיבי המקיף</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS STYLING --- */
         :root {
-            /* Kafka Brand Colors */
-            --primary-color: #2563eb; 
-            --secondary-color: #1e40af; 
-            --accent-blue: #0077b6; 
-            --bg-color: #f8fafc;
-            --text-color: #334155;
-            --sidebar-width: 280px;
-            --border-radius: 8px;
-            --code-bg: #2d2d2d; /* Terminal Black */
-            --code-text: #a5d6ff; /* Terminal Blue/White */
+            --kafka-primary: #000000;
+            --kafka-accent: #ff6b6b;
+            --kafka-green: #51cf66;
+            --kafka-blue: #339af0;
+            --kafka-orange: #ff922b;
+            --kafka-purple: #9775fa;
+
+            --bg-body: #f8f9fa;
+            --bg-surface: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-tertiary: #868e96;
+            --border-color: #dee2e6;
+
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
+
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            display: flex;
-            height: 100vh;
+            font-family: 'Heebo', 'Inter', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
             overflow: hidden;
-        }
-
-        /* --- SIDEBAR --- */
-        nav {
-            width: var(--sidebar-width);
-            background-color: #ffffff;
-            border-right: 1px solid #e0e0e0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            flex-shrink: 0;
-            z-index: 10;
         }
 
-        .nav-header {
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-color), #4a4a4a);
+        /* === HEADER === */
+        .header {
+            background: linear-gradient(135deg, #000000, #2d3436);
+            padding: 0 40px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .kafka-logo {
+            width: 55px;
+            height: 55px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            font-weight: 900;
+        }
+
+        .brand-text h1 {
+            font-size: 1.6rem;
+            margin: 0;
+            font-weight: 800;
             color: white;
-            text-align: center;
-            border-bottom: 4px solid var(--secondary-color);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .nav-header h1 { font-size: 1.4rem; margin-bottom: 5px; font-weight: 700; letter-spacing: 1px; }
-        .nav-header small { color: #ffd180; font-weight: 500; }
-
-        .search-box { padding: 15px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
-        #searchInput {
-            width: 100%; padding: 10px;
-            border: 1px solid #ccc; border-radius: 6px;
-            font-size: 0.9rem; outline: none; transition: border 0.3s;
-        }
-        #searchInput:focus { border-color: var(--secondary-color); }
-
-        .nav-list { list-style: none; overflow-y: auto; flex-grow: 1; }
-        .nav-btn {
-            width: 100%; text-align: left; padding: 14px 20px;
-            background: none; border: none; border-bottom: 1px solid #f0f0f0;
-            cursor: pointer; font-size: 0.95rem; color: var(--text-color);
-            transition: all 0.2s; font-weight: 500;
-        }
-        .nav-btn:hover { background-color: #fff3e0; color: var(--secondary-color); }
-        .nav-btn.active {
-            background-color: #ffe0b2; color: #bf360c;
-            border-left: 5px solid var(--secondary-color); font-weight: 700;
+        .brand-text p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+            margin: 0;
         }
 
-        /* --- MAIN CONTENT --- */
-        main {
-            flex-grow: 1; padding: 40px; overflow-y: auto;
-            max-width: 1200px; margin: 0 auto;
+        /* === TABS === */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
 
-        section { display: none; padding-bottom: 60px; animation: fadeIn 0.3s; }
-        section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-item {
+            padding: 12px 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
 
-        h2 { 
-            font-size: 2.2rem; margin-bottom: 25px; color: var(--primary-color); 
-            border-bottom: 3px solid #e0e0e0; padding-bottom: 10px; 
+        .nav-item:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
         }
-        h3 { font-size: 1.5rem; margin-top: 35px; margin-bottom: 15px; color: var(--secondary-color); border-left: 4px solid var(--secondary-color); padding-left: 10px; }
-        p { margin-bottom: 20px; color: #555; font-size: 1.05rem; }
 
-        /* --- COMMAND CARDS --- */
-        .commands-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px;
+        .nav-item.active {
+            background: white;
+            color: var(--kafka-primary);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
         }
-        .command-card {
-            background: white; border: 1px solid #e0e0e0; border-radius: var(--border-radius);
-            padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex; flex-direction: column;
-        }
-        .command-card:hover {
-            transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-top: 3px solid var(--secondary-color);
-        }
-        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .cmd-title { font-family: 'Consolas', monospace; color: var(--primary-color); font-weight: bold; font-size: 1.2rem; }
-        .card-desc { font-size: 0.95rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
 
-        /* --- CLI / CODE BLOCKS --- */
-        .example-block {
-            background-color: var(--code-bg); 
-            color: var(--code-text);
-            border-radius: 6px; 
-            padding: 15px; 
-            margin-top: 10px;
-            font-family: 'Consolas', 'Monaco', monospace; 
-            font-size: 0.95rem; 
-            cursor: pointer; 
-            position: relative; 
+        /* === MAIN LAYOUT === */
+        .main-wrapper {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .view-section {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow-y: auto;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* === THEORY LAYOUT === */
+        .theory-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .theory-sidebar {
+            background: white;
+            border-left: 1px solid var(--border-color);
+            padding: 25px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-header {
+            padding: 12px 25px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            letter-spacing: 1px;
+        }
+
+        .theory-nav-item {
+            padding: 14px 25px;
+            color: var(--text-secondary);
+            cursor: pointer;
             transition: all 0.2s;
-            word-break: break-all; 
-            line-height: 1.5;
-            border-left: 4px solid #555;
-        }
-        .example-block:hover { 
-            border-left-color: var(--secondary-color);
-            background-color: #383838;
-        }
-        .example-block::after {
-            content: '📋 Copy'; position: absolute; right: 10px; top: 10px;
-            opacity: 0; font-size: 0.75rem;
-            background: rgba(255,255,255,0.2); color: white; padding: 4px 8px; 
-            border-radius: 4px; transition: opacity 0.2s;
-        }
-        .example-block:hover::after { opacity: 1; }
-        
-        .comment { color: #6a9955; font-style: italic; display: block; margin-top: 5px; font-size: 0.85rem; }
-        
-        /* --- DIAGRAM PLACEHOLDERS --- */
-        .diagram-box {
-            background: white; border: 2px dashed #ccc; border-radius: 8px;
-            padding: 30px; text-align: center; color: #888; margin: 20px 0;
+            font-size: 0.92rem;
             font-weight: 500;
+            border-right: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* --- INFO BOX --- */
-        .info-box {
-            background: #fff8e1; border-left: 5px solid #ff6f00; padding: 20px;
-            border-radius: 4px; margin-top: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        .theory-nav-item:hover {
+            background: #f8f9fa;
+            color: var(--text-primary);
         }
-        .info-box h4 { color: #e65100; margin-bottom: 10px; font-size: 1.1rem; }
 
-        /* --- NAV FOOTER --- */
-        .page-nav {
-            display: flex; justify-content: space-between; margin-top: 60px;
-            padding-top: 25px; border-top: 1px solid #e0e0e0;
+        .theory-nav-item.active {
+            background: linear-gradient(to left, #fff5f5, white);
+            color: var(--kafka-accent);
+            border-right-color: var(--kafka-accent);
+            font-weight: 600;
         }
-        .nav-control {
-            background: white; border: 1px solid #ccc; padding: 12px 25px;
-            border-radius: 30px; cursor: pointer; color: #555;
-            transition: all 0.2s; font-weight: 600; font-size: 0.95rem;
-        }
-        .nav-control:hover { 
-            border-color: var(--secondary-color); color: var(--secondary-color); 
-            background: #fff3e0;
-        }
-        .nav-control:disabled { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; border-color: #ccc; color: #999; }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
-            nav { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #ccc; }
-            .nav-list { display: none; }
-            main { padding: 20px; }
-            .commands-grid { grid-template-columns: 1fr; }
+        .theory-content {
+            padding: 50px 60px;
+            overflow-y: auto;
+            background: var(--bg-body);
+        }
+
+        .theory-section {
+            display: none;
+            animation: fadeIn 0.4s;
+            max-width: 1100px;
+        }
+
+        .theory-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .theory-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .theory-section h2 {
+            font-size: 1.8rem;
+            margin: 40px 0 25px 0;
+            color: var(--kafka-primary);
+            font-weight: 700;
+        }
+
+        .theory-section h3 {
+            font-size: 1.3rem;
+            margin: 30px 0 18px 0;
+            color: var(--kafka-accent);
+            font-weight: 600;
+        }
+
+        .theory-section p, .theory-section li {
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        .theory-section ul, .theory-section ol {
+            padding-right: 30px;
+            margin-bottom: 25px;
+        }
+
+        .theory-section li {
+            margin-bottom: 12px;
+        }
+
+        /* === CARDS === */
+        .info-card {
+            background: linear-gradient(135deg, #fff5f5, #ffe9e9);
+            border: 2px solid var(--kafka-accent);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-card h3, .info-card h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--kafka-primary);
+        }
+
+        .concept-card {
+            background: white;
+            border-right: 5px solid var(--kafka-blue);
+            border-radius: var(--radius-md);
+            padding: 25px 30px;
+            margin: 25px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .concept-card h4 {
+            margin: 0 0 12px 0;
+            color: var(--kafka-blue);
+            font-size: 1.15rem;
+        }
+
+        .warning-card {
+            background: linear-gradient(135deg, #fff9db, #fff3bf);
+            border: 2px solid var(--kafka-orange);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .success-card {
+            background: linear-gradient(135deg, #ebfbee, #d3f9d8);
+            border: 2px solid var(--kafka-green);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        /* === COMPARISON GRID === */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .comparison-card:hover {
+            border-color: var(--kafka-accent);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .comparison-card h4 {
+            margin: 0 0 18px 0;
+            color: var(--kafka-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-card ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        .comparison-card li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* === ARCHITECTURE DIAGRAM === */
+        .architecture-diagram {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin: 35px 0;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .diagram-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .diagram-box {
+            background: linear-gradient(135deg, #f8f9fa, white);
+            border: 3px solid var(--kafka-primary);
+            border-radius: 12px;
+            padding: 25px 35px;
+            min-width: 150px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .diagram-box:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .diagram-box.producer {
+            border-color: var(--kafka-green);
+            background: linear-gradient(135deg, #ebfbee, white);
+        }
+
+        .diagram-box.broker {
+            border-color: var(--kafka-accent);
+            background: linear-gradient(135deg, #fff5f5, white);
+            padding: 35px 45px;
+            font-size: 1.3rem;
+        }
+
+        .diagram-box.consumer {
+            border-color: var(--kafka-blue);
+            background: linear-gradient(135deg, #e7f5ff, white);
+        }
+
+        .diagram-arrow {
+            font-size: 2.5rem;
+            color: var(--text-tertiary);
+        }
+
+        /* === CODE BLOCKS === */
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 25px 30px;
+            border-radius: var(--radius-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin: 25px 0;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .code-comment {
+            color: #6c7086;
+        }
+
+        .code-command {
+            color: #89dceb;
+        }
+
+        .code-string {
+            color: #a6e3a1;
+        }
+
+        .code-number {
+            color: #fab387;
+        }
+
+        /* === USE CASE CARDS === */
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 35px 0;
+        }
+
+        .usecase-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 0;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+        }
+
+        .usecase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .usecase-header {
+            background: linear-gradient(135deg, var(--kafka-primary), #2d3436);
+            color: white;
+            padding: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .usecase-body {
+            padding: 28px;
+        }
+
+        .usecase-body h4 {
+            margin: 0 0 15px 0;
+            color: var(--kafka-accent);
+            font-size: 1.2rem;
+        }
+
+        .usecase-body p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* === COMPANIES GRID === */
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .company-badge {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .company-badge:hover {
+            border-color: var(--kafka-accent);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* === SCROLLBAR === */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f3f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #adb5bd;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #868e96;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .theory-layout {
+                grid-template-columns: 1fr;
+            }
+            .theory-sidebar {
+                display: none;
+            }
+            .header {
+                flex-direction: column;
+                height: auto;
+                padding: 20px;
+                gap: 15px;
+            }
+            .nav-tabs {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="nav-header">
-        <h1>Apache Kafka</h1>
-        <small>Master Guide</small>
+<header class="header">
+    <div class="brand">
+        <div class="kafka-logo">K</div>
+        <div class="brand-text">
+            <h1>Apache Kafka</h1>
+            <p>המדריך האינטראקטיבי המקיף - Data Streaming Platform</p>
+        </div>
     </div>
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search topics (e.g. topic, consumer)...">
+
+    <div class="nav-tabs">
+        <div class="nav-item active" onclick="switchView('theory', this)">📚 תיאוריה</div>
+        <div class="nav-item" onclick="switchView('architecture', this)">🏗️ ארכיטקטורה</div>
+        <div class="nav-item" onclick="switchView('commands', this)">⚙️ פקודות</div>
     </div>
-    <ul class="nav-list" id="navList"></ul>
-</nav>
 
-<main id="contentArea">
+    <div style="width: 80px;"></div>
+</header>
 
-    <section id="topic0" class="active">
-        <h2>🚀 Intro & Concepts</h2>
-        <p>Apache Kafka is a distributed streaming platform based on the publish-subscribe model. It is designed to be fast, scalable, and fault-tolerant.</p>
-        
-        <div class="info-box">
-            <h4>ETL vs. Data Streaming</h4>
-            <p><strong>Old World (ETL):</strong> Batch processing, slow, resource-intensive, runs on schedule (not real-time).</p>
-            <p><strong>New World (Streaming):</strong> Real-time processing, low latency, fault-tolerant, scalable, handles continuous event streams.</p>
+<div class="main-wrapper">
+
+    <!-- === THEORY VIEW === -->
+    <div id="view-theory" class="view-section active">
+        <div class="theory-layout">
+            <aside class="theory-sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-header">יסודות</div>
+                    <div class="theory-nav-item active" onclick="showSection('intro', this)">
+                        <span>🎯</span> מבוא ל-Kafka
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('etl-vs-streaming', this)">
+                        <span>⚡</span> ETL vs Streaming
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('what-is-kafka', this)">
+                        <span>🔍</span> מהו Apache Kafka?
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">ארכיטקטורה</div>
+                    <div class="theory-nav-item" onclick="showSection('architecture', this)">
+                        <span>🏗️</span> ארכיטקטורת Kafka
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('components', this)">
+                        <span>🔧</span> רכיבים עיקריים
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('topics-partitions', this)">
+                        <span>📂</span> Topics & Partitions
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('brokers-clusters', this)">
+                        <span>🖥️</span> Brokers & Clusters
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">שימושים ויישומים</div>
+                    <div class="theory-nav-item" onclick="showSection('use-cases', this)">
+                        <span>🎯</span> מקרי שימוש
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('real-world', this)">
+                        <span>🌍</span> חברות שמשתמשות
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('streaming', this)">
+                        <span>🌊</span> Data Streaming
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">מתקדם</div>
+                    <div class="theory-nav-item" onclick="showSection('producers', this)">
+                        <span>📤</span> Producers
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('consumers', this)">
+                        <span>📥</span> Consumers
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('kafka-connect', this)">
+                        <span>🔌</span> Kafka Connect
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('monitoring', this)">
+                        <span>📊</span> Monitoring
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('best-practices', this)">
+                        <span>✨</span> Best Practices
+                    </div>
+                </div>
+            </aside>
+
+            <main class="theory-content">
+
+                <!-- מבוא -->
+                <div id="section-intro" class="theory-section active">
+                    <h1>🎯 מבוא ל-Apache Kafka</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Apache Kafka?</h3>
+                        <p><strong>Apache Kafka</strong> הוא פלטפורמה מבוזרת לסטרימינג נתונים המבוססת על מודל pub-sub (publish-subscribe).</p>
+                        <p>Kafka הוא <strong>מהיר להפליא, סקלבילי, עמיד לתקלות</strong> ויכול לשמש כפלטפורמת נתונים מרכזית.</p>
+                    </div>
+
+                    <h2>למה Kafka?</h2>
+                    <p>בעידן המודרני, ארגונים צריכים לעבד נתונים בזמן אמת:</p>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>⚡ Real-Time</h4>
+                            <p>עיבוד נתונים ברגע שהם נוצרים, לא בבאצ'ים</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📈 סקלביליות</h4>
+                            <p>התמודדות עם מיליוני events בשנייה</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔒 Fault Tolerance</h4>
+                            <p>המערכת ממשיכה לעבוד גם בתקלות</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🌐 מבוזר</h4>
+                            <p>חלוקת עומס על מספר שרתים</p>
+                        </div>
+                    </div>
+
+                    <h2>הבעיה שKafka פותר</h2>
+                    <div class="concept-card">
+                        <h4>🔄 מערכות ישנות (ETL)</h4>
+                        <ul>
+                            <li>רצות בזמנים מוגדרים (לא real-time)</li>
+                            <li>מורכבות בהתמודדות עם נתונים רבים</li>
+                            <li>קשות לסקלביליות</li>
+                            <li>עלויות תפעול גבוהות</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-card">
+                        <h4>✨ הפתרון: Data Streaming עם Kafka</h4>
+                        <ul>
+                            <li><strong>מערכת עצבים מרכזית</strong> לכל הנתונים בארגון</li>
+                            <li><strong>Message bus סקלבילי</strong> בזמן אמת</li>
+                            <li><strong>Source of Truth</strong> - מקור אמת יחיד לכל הנתונים</li>
+                            <li>מזין מערכות: Databases, Data Warehouses, Hadoop, NoSQL ועוד</li>
+                        </ul>
+                    </div>
+
+                    <h2>מי משתמש ב-Kafka?</h2>
+                    <div class="companies-grid">
+                        <div class="company-badge">Netflix</div>
+                        <div class="company-badge">Uber</div>
+                        <div class="company-badge">LinkedIn</div>
+                        <div class="company-badge">Airbnb</div>
+                        <div class="company-badge">PayPal</div>
+                        <div class="company-badge">Walmart</div>
+                        <div class="company-badge">Spotify</div>
+                        <div class="company-badge">Twitter</div>
+                        <div class="company-badge">Pinterest</div>
+                        <div class="company-badge">Goldman Sachs</div>
+                        <div class="company-badge">Cisco</div>
+                        <div class="company-badge">eBay</div>
+                    </div>
+                </div>
+
+                <!-- ETL vs Streaming -->
+                <div id="section-etl-vs-streaming" class="theory-section">
+                    <h1>⚡ ETL vs Data Streaming</h1>
+
+                    <h2>ETL - העולם הישן</h2>
+                    <div class="warning-card">
+                        <h4>⚠️ מגבלות ETL מסורתי:</h4>
+                        <ul>
+                            <li>התפתח בשנות ה-90, בעיקר לניתוח נתונים</li>
+                            <li><strong>רץ בזמנים מוגדרים</strong> - לא בזמן אמת</li>
+                            <li>מורכב ב-incremental capturing</li>
+                            <li>רץ על databases יחידים (Operational / DWH)</li>
+                            <li>מתאים בעיקר ל-<strong>schematic data</strong></li>
+                            <li>קשה מאוד לסקלביליות בעומסים גבוהים</li>
+                            <li>עלות תפעולית גבוהה - איטי ודורש משאבים</li>
+                            <li>תמיכה מוגבלת או אפסית ב-real-time</li>
+                        </ul>
+                    </div>
+
+                    <h2>Data Streaming - העולם החדש</h2>
+                    <div class="success-card">
+                        <h4>✅ דרישות של העידן המודרני:</h4>
+                        <ul>
+                            <li><strong>Fault Tolerance</strong> - עמידות בפני תקלות</li>
+                            <li><strong>Parallel Processing</strong> - עיבוד מקבילי</li>
+                            <li><strong>Low Latency</strong> - זמן תגובה נמוך | Real-Time</li>
+                            <li>תמיכה בנתונים schematic ו-non-schematic</li>
+                            <li>קל לתפעול וניטור</li>
+                            <li>פתרון reusable מלא ולא רק כלי בודד</li>
+                        </ul>
+                    </div>
+
+                    <h2>פלטפורמת Streaming מרכזית</h2>
+                    <div class="architecture-diagram">
+                        <h3 style="margin-bottom: 30px;">תפקידי הפלטפורמה</h3>
+                        <div style="text-align: right; max-width: 800px; margin: 0 auto;">
+                            <div class="concept-card" style="margin-bottom: 20px;">
+                                <h4>🧠 מערכת עצבים מרכזית</h4>
+                                <p>נקודת מעבר אחת לכל הנתונים בארגון</p>
+                            </div>
+                            <div class="concept-card" style="margin-bottom: 20px;">
+                                <h4>📨 Message Bus</h4>
+                                <p>אפיק הודעות סקלבילי בזמן אמת ממקורות מרובים</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4>🎯 Source of Truth</h4>
+                                <p>Pipeline ייחוס לכל יעדי עיבוד הנתונים:<br>
+                                RDBMs, DWH, Hadoop, NoSQL, מערכות ניטור ועוד</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What is Kafka -->
+                <div id="section-what-is-kafka" class="theory-section">
+                    <h1>🔍 מהו Apache Kafka?</h1>
+
+                    <div class="info-card">
+                        <p style="font-size: 1.15rem; margin: 0;"><strong>Apache Kafka</strong> הוא מערכת הודעות מבוזרת המבוססת על עקרון pub-sub (publish-subscribe).</p>
+                    </div>
+
+                    <h2>מאפיינים מרכזיים</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>⚡ מהיר להפליא</h4>
+                            <p>מסוגל לעבד מיליוני messages בשנייה עם latency של מילישניות</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📈 Highly Scalable</h4>
+                            <p>ניתן להרחבה אופקית - הוספת brokers ללא הפסקת שירות</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔒 Fault-Tolerant</h4>
+                            <p>עמיד לתקלות באמצעות replication ו-distributed architecture</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>💾 יכול לשמש כאחסון</h4>
+                            <p>אחסון זרם של records לפרקי זמן מוגדרים</p>
+                        </div>
+                    </div>
+
+                    <h2>Kafka כפלטפורמת Streaming</h2>
+                    <div class="concept-card">
+                        <h4>🌊 יכולות מרכזיות:</h4>
+                        <ul>
+                            <li><strong>הפלטפורמה הפופולרית ביותר</strong> לsטרימינג נתונים</li>
+                            <li>מספקת <strong>messaging backbone סקלבילי</strong> לאינטגרציית נתונים</li>
+                            <li>מאפשרת בניית <strong>data pipelines</strong> לסטרימינג</li>
+                            <li>מספקת לוגיקה לעיבוד וטרנספורמציה של נתונים</li>
+                            <li><strong>Event/Message handler</strong> - מטפל בשינויי נתונים בטבלאות, לוגים ועוד</li>
+                        </ul>
+                    </div>
+
+                    <h3>חיבורים למקורות נתונים</h3>
+                    <ul>
+                        <li>מספק <strong>APIs לחיבור</strong> למקורות נתונים מרובים (Apps, DBs)</li>
+                        <li>מטפל ב-<strong>high-volume</strong> ו-<strong>high-diversity</strong> של נתונים</li>
+                        <li><strong>Event-Centric Thinking</strong> - עיבוד אירועים ברגע שהם מתרחשים</li>
+                    </ul>
+
+                    <div class="success-card">
+                        <h4>💡 דוגמה: אפליקציית מכירות</h4>
+                        <p><strong>אירוע:</strong> מוצר נצפה באתר</p>
+                        <p><strong>Kafka יכול לספק:</strong> צבירת צפיות במוצר ב<strong>זמן אמת</strong></p>
+                    </div>
+                </div>
+
+                <!-- ארכיטקטורה -->
+                <div id="section-architecture" class="theory-section">
+                    <h1>🏗️ ארכיטקטורת Apache Kafka</h1>
+
+                    <h2>מודל עבודה</h2>
+                    <p>שיטות הingest מסורתיות כללו העברת נתונים ל-DWH לפני עיבוד אנליטי. סביבות מודרניות עשויות להשתמש ב-Hadoop/Hive כ-DWH או כ-staging area לבאצ'ים.</p>
+
+                    <div class="info-card">
+                        <h4>Kafka משתמשת ב-Streaming במקום Batch Processing</h4>
+                        <p>הנתונים נכנסים לפלטפורמה <strong>ברגע שהם נוצרים</strong> - real-time!</p>
+                    </div>
+
+                    <h2>רכיבים בארכיטקטורה</h2>
+                    <div class="architecture-diagram">
+                        <h3 style="margin-bottom: 30px;">תהליך הסטרימינג</h3>
+
+                        <div class="diagram-row">
+                            <div class="diagram-box producer">
+                                📤<br>PRODUCERS<br>
+                                <span style="font-size: 0.75rem; font-weight: 400;">ספקי הנתונים</span>
+                            </div>
+                            <div class="diagram-arrow">→</div>
+                            <div class="diagram-box broker">
+                                🔥<br>KAFKA<br>BROKER
+                            </div>
+                            <div class="diagram-arrow">→</div>
+                            <div class="diagram-box consumer">
+                                📥<br>CONSUMERS<br>
+                                <span style="font-size: 0.75rem; font-weight: 400;">צרכני הנתונים</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 40px; text-align: right;">
+                            <div class="concept-card">
+                                <ul>
+                                    <li><strong>כל ספקי הנתונים = PRODUCERS</strong></li>
+                                    <li>הנתונים נכתבים ל-streaming platform בזמן אמת</li>
+                                    <li>ניתן לבצע פעולות תוך כדי: ספירות, aggregations, המרות</li>
+                                    <li><strong>לאחר ההכנה → נשלחים ל-CONSUMERS</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>התהליך המלא</h2>
+                    <ol style="font-size: 1.05rem; line-height: 2;">
+                        <li><strong>Producers</strong> שולחים events/messages ל-Kafka topics</li>
+                        <li><strong>Kafka Brokers</strong> מאחסנים ומנהלים את הנתונים</li>
+                        <li>פעולות עיבוד מתבצעות על הנתונים בזרם</li>
+                        <li><strong>Consumers</strong> קוראים את הנתונים המעובדים</li>
+                    </ol>
+                </div>
+
+                <!-- רכיבים -->
+                <div id="section-components" class="theory-section">
+                    <h1>🔧 רכיבים עיקריים ב-Kafka</h1>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📤 Producer</h4>
+                            <p>אפליקציה ששולחת (מפרסמת) messages ל-Kafka topics</p>
+                            <ul>
+                                <li>יכול לבחור ל-איזה partition לשלוח</li>
+                                <li>תומך ב-batching</li>
+                                <li>תומך ב-compression</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📥 Consumer</h4>
+                            <p>אפליקציה שקוראת messages מ-Kafka topics</p>
+                            <ul>
+                                <li>שייכת ל-consumer group</li>
+                                <li>שומרת offset</li>
+                                <li>יכולה לקרוא במקביל</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🖥️ Broker</h4>
+                            <p>שרת Kafka המאחסן ומנהל topics</p>
+                            <ul>
+                                <li>חלק מ-cluster</li>
+                                <li>מנהל partitions</li>
+                                <li>מטפל ב-replication</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🐘 ZooKeeper</h4>
+                            <p>מנהל את מטא-דאטה של ה-cluster</p>
+                            <ul>
+                                <li>בוחר leader לpartitions</li>
+                                <li>שומר קונפיגורציה</li>
+                                <li>(בגרסאות חדשות - Kraft במקום)</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📂 Topic</h4>
+                            <p>קטגוריה/feed name שאליו נשלחים messages</p>
+                            <ul>
+                                <li>מחולק ל-partitions</li>
+                                <li>ניתן ל-replication</li>
+                                <li>כמו "טבלה" במסד נתונים</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🗂️ Partition</h4>
+                            <p>חלוקה פיזית של topic לחלקים</p>
+                            <ul>
+                                <li>ordered, immutable</li>
+                                <li>כל message מקבל offset</li>
+                                <li>מאפשר parallelism</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topics & Partitions -->
+                <div id="section-topics-partitions" class="theory-section">
+                    <h1>📂 Topics & Partitions</h1>
+
+                    <h2>מהו Topic?</h2>
+                    <div class="info-card">
+                        <p><strong>Topic</strong> הוא stream של records. זה category או feed name שאליו נשלחים messages.</p>
+                        <p>כל topic מזוהה על ידי שם ייחודי.</p>
+                    </div>
+
+                    <h3>מאפיינים:</h3>
+                    <ul>
+                        <li>Topics הם <strong>multi-subscriber</strong> - יכולים להיות מספר consumers</li>
+                        <li>Messages נשמרים לפרק זמן מוגדר (retention)</li>
+                        <li>ניתן להגדיר compression (gzip, snappy, lz4)</li>
+                    </ul>
+
+                    <h2>מהו Partition?</h2>
+                    <div class="concept-card">
+                        <h4>🗂️ Partition = חלוקה של Topic</h4>
+                        <p>כל topic מחולק ל-<strong>partitions</strong> (אחד או יותר).</p>
+                        <p>כל partition הוא <strong>ordered, immutable sequence</strong> של records.</p>
+                    </div>
+
+                    <div class="architecture-diagram">
+                        <h3>מבנה Topic עם 3 Partitions</h3>
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color);">
+<strong>Topic: user-events</strong>
+
+Partition 0: [msg0] → [msg3] → [msg6] → [msg9] ...
+Partition 1: [msg1] → [msg4] → [msg7] → [msg10] ...
+Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
+
+כל message מקבל <strong>offset</strong> ייחודי בpartition שלו
+                        </div>
+                    </div>
+
+                    <h2>למה Partitions?</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📈 Scalability</h4>
+                            <p>חלוקת הנתונים על מספר servers</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>⚡ Parallelism</h4>
+                            <p>מספר consumers יכולים לקרוא במקביל</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔒 Ordering</h4>
+                            <p>סדר מובטח <strong>בתוך partition</strong></p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>💾 Distribution</h4>
+                            <p>פיזור העומס והאחסון</p>
+                        </div>
+                    </div>
+
+                    <div class="warning-card">
+                        <h4>⚠️ חשוב לזכור:</h4>
+                        <ul>
+                            <li><strong>Ordering מובטח רק בתוך partition</strong> - לא בין partitions</li>
+                            <li>Producer בוחר ל-איזה partition לשלוח (לפי key או round-robin)</li>
+                            <li>מספר partitions לא ניתן לשינוי בקלות - תכנן מראש!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Brokers & Clusters -->
+                <div id="section-brokers-clusters" class="theory-section">
+                    <h1>🖥️ Brokers & Clusters</h1>
+
+                    <h2>מהו Broker?</h2>
+                    <div class="info-card">
+                        <p><strong>Kafka Broker</strong> הוא שרת Kafka. זה תהליך שרץ על מכונה ומנהל את אחסון ה-messages.</p>
+                    </div>
+
+                    <h3>תפקידי ה-Broker:</h3>
+                    <ul>
+                        <li><strong>מקבל messages</strong> מ-producers</li>
+                        <li><strong>מאחסן messages</strong> על הדיסק</li>
+                        <li><strong>משרת messages</strong> ל-consumers</li>
+                        <li>מנהל <strong>replication</strong> של partitions</li>
+                        <li>מטפל ב-<strong>leader election</strong></li>
+                    </ul>
+
+                    <h2>מהו Cluster?</h2>
+                    <div class="concept-card">
+                        <h4>🌐 Kafka Cluster</h4>
+                        <p>אוסף של <strong>מספר Kafka Brokers</strong> שעובדים יחד כמערכת אחת.</p>
+                        <p>כל broker מזוהה על ידי <strong>broker ID</strong> ייחודי (מספר שלם).</p>
+                    </div>
+
+                    <div class="architecture-diagram">
+                        <h3>Cluster עם 3 Brokers</h3>
+                        <div class="diagram-row" style="flex-direction: column; gap: 15px;">
+                            <div style="display: flex; gap: 25px; justify-content: center; flex-wrap: wrap;">
+                                <div class="diagram-box broker" style="padding: 25px;">
+                                    Broker 0<br>
+                                    <span style="font-size: 0.8rem; font-weight: 400;">Leader: P0, P1<br>Follower: P2</span>
+                                </div>
+                                <div class="diagram-box broker" style="padding: 25px;">
+                                    Broker 1<br>
+                                    <span style="font-size: 0.8rem; font-weight: 400;">Leader: P2<br>Follower: P0</span>
+                                </div>
+                                <div class="diagram-box broker" style="padding: 25px;">
+                                    Broker 2<br>
+                                    <span style="font-size: 0.8rem; font-weight: 400;">Leader: P3<br>Follower: P1</span>
+                                </div>
+                            </div>
+                            <div style="background: #fff5f5; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto;">
+                                <p style="margin: 0; text-align: center;"><strong>כל partition יש לו leader ו-followers<br>אם broker נופל - אחר הופך ל-leader</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Replication</h2>
+                    <div class="success-card">
+                        <h4>🔄 העתקה לגיבוי</h4>
+                        <p>כל partition יכול להיות <strong>replicated</strong> על מספר brokers.</p>
+                        <ul>
+                            <li><strong>Replication Factor</strong> קובע כמה עותקים</li>
+                            <li>יש <strong>leader partition</strong> אחד - מטפל בכל הקריאות והכתיבות</li>
+                            <li>יש <strong>follower partitions</strong> - רק מעתיקים נתונים</li>
+                            <li>אם ה-leader נופל, אחד מה-followers הופך ל-leader</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-card">
+                        <h4>⚙️ Replication Factor מומלץ:</h4>
+                        <p><strong>לפחות 3</strong> בפרודקשן (מאפשר אובדן של עד 2 brokers)</p>
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div id="section-use-cases" class="theory-section">
+                    <h1>🎯 מקרי שימוש ב-Apache Kafka</h1>
+
+                    <div class="usecase-grid">
+                        <div class="usecase-card">
+                            <div class="usecase-header">🌐 Web Analytics</div>
+                            <div class="usecase-body">
+                                <h4>Click-Stream Analysis</h4>
+                                <p>כל קליק שלקוחות מבצעים נשלח ל-Kafka בזמן אמת:</p>
+                                <ul>
+                                    <li>באיזה עמודים הם ביקרו?</li>
+                                    <li>איזה נתיב עברו?</li>
+                                    <li>על אילו מודעות לחצו?</li>
+                                    <li>ניתוח התנהגות לקוחות</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">🏭 IoT & Sensors</div>
+                            <div class="usecase-body">
+                                <h4>ניטור סנסורים תעשייתיים</h4>
+                                <p>חברות תעשייתיות משתמשות ב-Kafka לניטור מכונות:</p>
+                                <ul>
+                                    <li>נתונים מסנסורים בזמן אמת</li>
+                                    <li>הבנת ביצועי קווי ייצור</li>
+                                    <li>חיזוי תקלות לפני שהן קורות (ML)</li>
+                                    <li>דוגמה: רכבים אוטונומיים - 100GB/שעה לרכב!</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">📊 Log Aggregation</div>
+                            <div class="usecase-body">
+                                <h4>ניהול קבצי לוג</h4>
+                                <p>איחוד לוגים מאפליקציות רבות:</p>
+                                <ul>
+                                    <li>לוגים מסוגים שונים</li>
+                                    <li>מפוזרים במיקומים שונים</li>
+                                    <li>Kafka מאחד הכל למנגנון log collection אחד</li>
+                                    <li>ניתוח מרכזי וקל יותר</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">💰 Fraud Detection</div>
+                            <div class="usecase-body">
+                                <h4>זיהוי הונאות בזמן אמת</h4>
+                                <p>חיוני בתעשייה הפיננסית:</p>
+                                <ul>
+                                    <li>ניתוח טרנזקציות בזמן אמת</li>
+                                    <li>זיהוי דפוסים חשודים</li>
+                                    <li>חסימה מיידית של פעולות מפוקפקות</li>
+                                    <li>שימושים: PayPal, בנקים, כרטיסי אשראי</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">📦 Order Processing</div>
+                            <div class="usecase-body">
+                                <h4>עיבוד הזמנות</h4>
+                                <p>חברות קמעונאיות כמו Walmart:</p>
+                                <ul>
+                                    <li>מיליארדי טרנזקציות ביום</li>
+                                    <li>חלק דורש טיפול מיידי</li>
+                                    <li>חלק לאנליטיקה מאוחר יותר</li>
+                                    <li>Kafka מאפשר עיבוד בזמן אמת</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">🚗 Real-Time Location</div>
+                            <div class="usecase-body">
+                                <h4>מעקב מיקום (Uber דוגמה)</h4>
+                                <p>מבוסס לחלוטין על אירועים בזמן אמת:</p>
+                                <ul>
+                                    <li>חיבור בין נוסעים לנהגים</li>
+                                    <li>מי נמצא איפה - real-time</li>
+                                    <li>חישוב מסלולים דינמי</li>
+                                    <li>Kafka Streams לניתוח</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real World -->
+                <div id="section-real-world" class="theory-section">
+                    <h1>🌍 חברות שמשתמשות ב-Kafka</h1>
+
+                    <div class="companies-grid" style="margin-bottom: 50px;">
+                        <div class="company-badge" style="background: #E50914; color: white; border-color: #E50914;">NETFLIX</div>
+                        <div class="company-badge">UBER</div>
+                        <div class="company-badge" style="background: #0077B5; color: white; border-color: #0077B5;">LINKEDIN</div>
+                        <div class="company-badge" style="background: #FF5A5F; color: white; border-color: #FF5A5F;">AIRBNB</div>
+                        <div class="company-badge" style="background: #003087; color: white; border-color: #003087;">PAYPAL</div>
+                        <div class="company-badge" style="background: #0071CE; color: white; border-color: #0071CE;">WALMART</div>
+                        <div class="company-badge" style="background: #1DB954; color: white; border-color: #1DB954;">SPOTIFY</div>
+                        <div class="company-badge" style="background: #1DA1F2; color: white; border-color: #1DA1F2;">TWITTER</div>
+                        <div class="company-badge" style="background: #E60023; color: white; border-color: #E60023;">PINTEREST</div>
+                        <div class="company-badge">GOLDMAN SACHS</div>
+                        <div class="company-badge">CISCO</div>
+                        <div class="company-badge" style="background: #E53238; color: white; border-color: #E53238;">EBAY</div>
+                    </div>
+
+                    <h2>📺 Netflix</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: #E50914;">NETFLIX</div>
+                        <div class="usecase-body">
+                            <p>Netflix משתמשת ב-Kafka לתיעוד אירועים שנוצרים על ידי משתמשים:</p>
+                            <ul>
+                                <li><strong>כל הסרטים שנצפו</strong> - לכל משתמש</li>
+                                <li><strong>מערכת המלצות</strong> - על בסיס צפייה קודמת</li>
+                                <li><strong>"המשך מהנקודה האחרונה"</strong> - שמירת מיקום לכל משתמש בכל סרט/תוכנית</li>
+                            </ul>
+                            <div class="success-card" style="margin-top: 20px;">
+                                <h4>🎯 התוצאה:</h4>
+                                <p>Kafka עוזר ל-Netflix לספק <strong>חוויית משתמש משופרת</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>💳 PayPal</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: #003087;">PAYPAL</div>
+                        <div class="usecase-body">
+                            <p>חברה כמו PayPal מעבדת מיליונים או אפילו מיליארדי טרנזקציות מדי חודש:</p>
+                            <ul>
+                                <li>Kafka מסייעת להבטיח שהטרנזקציות <strong>consistent</strong></li>
+                                <li>הטרנזקציות <strong>מדויקות ובזמן</strong></li>
+                                <li><strong>מניעת הונאות בזמן אמת</strong></li>
+                            </ul>
+                            <div class="warning-card" style="margin-top: 20px;">
+                                <h4>🔒 Real-Time Fraud Detection</h4>
+                                <p>זיהוי הונאות בזמן אמת הוא <strong>קריטי לתעשייה הפיננסית</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>🛒 Walmart</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: #0071CE;">WALMART</div>
+                        <div class="usecase-body">
+                            <p>אפילו חברות קמעונאיות כמו Walmart עושות שימוש ב-Kafka:</p>
+                            <ul>
+                                <li>מעבדים <strong>מיליארדי טרנזקציות מדי יום</strong></li>
+                                <li>חלק מהטרנזקציות צריכות <strong>טיפול מיידי</strong></li>
+                                <li>אחרות משמשות <strong>לאנליטיקה</strong> מאוחר יותר</li>
+                            </ul>
+                            <div class="success-card" style="margin-top: 20px;">
+                                <h4>⚡ עיבוד בזמן אמת</h4>
+                                <p>Kafka מספקת ל-Walmart את היכולת לעבד <strong>עומס גבוה של טרנזקציות בזמן אמת</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>🚗 Uber</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: linear-gradient(135deg, #000000, #276EF1); color: white;">UBER</div>
+                        <div class="usecase-body">
+                            <p>תרחיש השימוש של Uber מבוסס מאוד על אירועים בזמן אמת:</p>
+                            <ul>
+                                <li>צריך <strong>לחבר בין נוסעים לנהגים</strong></li>
+                                <li>צריך לדעת <strong>מי נמצא איפה - real-time</strong></li>
+                                <li>כל העיבוד נעשה דרך <strong>Kafka Streams</strong></li>
+                            </ul>
+                            <div class="info-card" style="margin-top: 20px;">
+                                <h4>💡 תרומה לקוד פתוח</h4>
+                                <p>Uber תרמה לקהילת ה-open-source בפתרונות Kafka שפותחו בפנים</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Streaming -->
+                <div id="section-streaming" class="theory-section">
+                    <h1>🌊 Data Streaming</h1>
+
+                    <h2>מהו Data Streaming?</h2>
+                    <div class="info-card">
+                        <p><strong>Data streaming applications</strong> הם אפליקציות ששולחות נתונים ברגע שהם מגיעים או נוצרים.</p>
+                        <p>הנתונים יכולים להיות מעובדים כדי להפיק ערכים.</p>
+                    </div>
+
+                    <h3>Producer vs Consumer vs Stream Processing</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📤 Producers</h4>
+                            <p>יוצרים records ושולחים אותם ל-Kafka</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📥 Consumers</h4>
+                            <p>קוראים records מ-Kafka</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔄 Stream Processing</h4>
+                            <p>מעבדים ומנתחים את הנתונים בזמן אמת</p>
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>⚠️ חשוב להבין:</h4>
+                        <p>Producers ו-Consumers <strong>רק מעבירים</strong> נתונים - לא מנתחים!</p>
+                        <p>לניתוח צריך <strong>stream applications</strong> כמו:</p>
+                        <ul>
+                            <li><strong>Kafka Streams</strong> - ספריית Java native</li>
+                            <li><strong>Apache Spark</strong> (Java, Scala, Python, PySpark)</li>
+                            <li><strong>Apache Flink</strong></li>
+                        </ul>
+                    </div>
+
+                    <h2>תרחישי שימוש</h2>
+
+                    <h3>📈 מסחר במניות</h3>
+                    <div class="success-card">
+                        <p>כאשר מניות נסחרות בבורסה, מחירי המניות משתנים.</p>
+                        <p>אפליקציית streaming יכולה לקחת את המחירים ולשלוח אותם <strong>בזמן אמת</strong> ללקוחות או לאפליקציות אחרות שמשתמשות בנתונים לעיבוד נוסף.</p>
+                    </div>
+
+                    <h3>🌐 ביקורים באתר & מכירות</h3>
+                    <div class="success-card">
+                        <p>עיבוד streaming יכול לספק פרטים על ביקורי לקוחות ומכירות עם <strong>נתוני השוואה בזמן אמת</strong>:</p>
+                        <ul>
+                            <li>כמה משתמשים באתר כרגע?</li>
+                            <li>מהן המכירות בשעה האחרונה לעומת אתמול?</li>
+                            <li>אילו מוצרים הכי פופולריים עכשיו?</li>
+                        </ul>
+                    </div>
+
+                    <h2>Streaming ברמת ארגון</h2>
+                    <div class="architecture-diagram">
+                        <h3 style="margin-bottom: 25px;">Event Streaming בארגון</h3>
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color); text-align: center;">
+<strong style="font-size: 1.2rem;">🌐 מקורות נתונים</strong>
+    ↓    ↓    ↓    ↓    ↓
+[Apps] [IoT] [DBs] [Logs] [APIs]
+           ↓
+    ┌──────────────┐
+    │ <strong style="color: var(--kafka-accent);">Apache Kafka</strong> │
+    │ Event Streaming │
+    │   Platform    │
+    └──────────────┘
+           ↓
+    ↓    ↓    ↓    ↓    ↓
+[Analytics] [ML] [DWH] [Apps] [Real-time Dashboards]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producers -->
+                <div id="section-producers" class="theory-section">
+                    <h1>📤 Kafka Producers</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Producer?</h3>
+                        <p><strong>Producer</strong> הוא אפליקציה שיוצרת ושולחת (מפרסמת) records ל-Kafka topics.</p>
+                    </div>
+
+                    <h2>איך Producer עובד?</h2>
+                    <ol style="font-size: 1.05rem; line-height: 2;">
+                        <li>Producer יוצר record (key, value, timestamp)</li>
+                        <li>הSerializer ממיר את הkey והvalue ל-bytes</li>
+                        <li>הPartitioner בוחר לאיזה partition לשלוח</li>
+                        <li>Record מתווסף ל-batch</li>
+                        <li>Batch נשלח לBroker</li>
+                        <li>Broker מחזיר אישור (ack)</li>
+                    </ol>
+
+                    <h2>Partitioning Strategy</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🔑 עם Key</h4>
+                            <p>אם record כולל key:</p>
+                            <ul>
+                                <li>Hash של הkey קובע partition</li>
+                                <li>אותו key → תמיד אותו partition</li>
+                                <li>מבטיח ordering לפי key</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🎲 בלי Key</h4>
+                            <p>אם אין key:</p>
+                            <ul>
+                                <li>Round-robin בין partitions</li>
+                                <li>חלוקה שווה של העומס</li>
+                                <li>אין guarantee על ordering</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🎯 Custom Partitioner</h4>
+                            <p>ניתן ליישם לוגיקה משלך:</p>
+                            <ul>
+                                <li>חלוקה לפי ערך בmessage</li>
+                                <li>חלוקה לפי timestamp</li>
+                                <li>חלוקה לפי גיאוגרפיה</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>Acknowledgment Modes</h2>
+                    <div class="concept-card">
+                        <h4>⚙️ הגדרת acks</h4>
+                        <ul>
+                            <li><strong>acks=0</strong> - אין המתנה לאישור (מהיר, לא בטוח)</li>
+                            <li><strong>acks=1</strong> - המתן לאישור מה-leader (ברירת מחדל)</li>
+                            <li><strong>acks=all</strong> - המתן לאישור מכל ה-replicas (הכי בטוח, הכי איטי)</li>
+                        </ul>
+                    </div>
+
+                    <h2>אופטימיזציה של Producer</h2>
+                    <div class="success-card">
+                        <h4>✨ Best Practices:</h4>
+                        <ul>
+                            <li><strong>Batching</strong> - שליחת messages בקבוצות (batch.size, linger.ms)</li>
+                            <li><strong>Compression</strong> - דחיסה (gzip, snappy, lz4, zstd)</li>
+                            <li><strong>Idempotence</strong> - מניעת duplicates (enable.idempotence=true)</li>
+                            <li><strong>Max In-Flight</strong> - כמות בקשות במקביל (max.in.flight.requests.per.connection)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Consumers -->
+                <div id="section-consumers" class="theory-section">
+                    <h1>📥 Kafka Consumers</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Consumer?</h3>
+                        <p><strong>Consumer</strong> הוא אפליקציה שקוראת records מ-Kafka topics.</p>
+                    </div>
+
+                    <h2>Consumer Groups</h2>
+                    <div class="concept-card">
+                        <h4>👥 מהו Consumer Group?</h4>
+                        <p>קבוצה של consumers שעובדים יחד כדי לצרוך topic.</p>
+                        <ul>
+                            <li>כל partition נצרך על ידי <strong>consumer אחד בלבד</strong> בgroup</li>
+                            <li>אם יש יותר consumers מאשר partitions - חלקם יישארו idle</li>
+                            <li>אם consumer נופל - ה-partitions שלו יועברו לאחרים (rebalancing)</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-diagram">
+                        <h3>דוגמה: Topic עם 4 Partitions</h3>
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color);">
+<strong>Consumer Group: analytics-group</strong>
+
+Topic: user-events (4 partitions)
+
+Consumer 1 → Partition 0, Partition 1
+Consumer 2 → Partition 2, Partition 3
+
+<strong style="color: var(--kafka-green);">✓ כל partition נצרך פעם אחת</strong>
+<strong style="color: var(--kafka-blue);">✓ עומס מחולק בין 2 consumers</strong>
+                        </div>
+                    </div>
+
+                    <h2>Offsets</h2>
+                    <div class="success-card">
+                        <h4>🔢 מהו Offset?</h4>
+                        <p><strong>Offset</strong> הוא מספר ייחודי שמזהה כל message ב-partition.</p>
+                        <ul>
+                            <li>Consumer שומר את ה-offset האחרון שקרא</li>
+                            <li>מאפשר לresume מהמקום האחרון</li>
+                            <li>שמור ב-topic מיוחד: <code>__consumer_offsets</code></li>
+                        </ul>
+                    </div>
+
+                    <h3>Commit Strategies</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🔄 Auto Commit</h4>
+                            <p>Kafka מcommit אוטומטית</p>
+                            <ul>
+                                <li>פשוט וקל</li>
+                                <li>יכול לאבד messages</li>
+                                <li>יכול לעבד פעמיים</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>✋ Manual Commit</h4>
+                            <p>אתה מחליט מתי לcommit</p>
+                            <ul>
+                                <li>שליטה מלאה</li>
+                                <li>at-least-once</li>
+                                <li>exactly-once (עם transactions)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>Rebalancing</h2>
+                    <div class="warning-card">
+                        <h4>⚠️ מהו Rebalancing?</h4>
+                        <p>תהליך שבו partitions מחולקים מחדש בין consumers בgroup.</p>
+                        <p><strong>קורה כאשר:</strong></p>
+                        <ul>
+                            <li>Consumer מצטרף לgroup</li>
+                            <li>Consumer יוצא מהgroup (crash או shutdown)</li>
+                            <li>נוספו partitions ל-topic</li>
+                        </ul>
+                        <p><strong>במהלך rebalancing:</strong> הgroup לא יכול לקרוא messages!</p>
+                    </div>
+                </div>
+
+                <!-- Kafka Connect -->
+                <div id="section-kafka-connect" class="theory-section">
+                    <h1>🔌 Kafka Connect</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Kafka Connect?</h3>
+                        <p><strong>Kafka Connect</strong> הוא framework לחיבור Kafka למערכות חיצוניות בצורה סקלבילית ואמינה.</p>
+                    </div>
+
+                    <h2>סוגי Connectors</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📥 Source Connectors</h4>
+                            <p>מייבאים נתונים <strong>לתוך</strong> Kafka</p>
+                            <ul>
+                                <li>Database → Kafka</li>
+                                <li>Files → Kafka</li>
+                                <li>APIs → Kafka</li>
+                                <li>Logs → Kafka</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📤 Sink Connectors</h4>
+                            <p>מייצאים נתונים <strong>מ</strong>-Kafka</p>
+                            <ul>
+                                <li>Kafka → Database</li>
+                                <li>Kafka → HDFS</li>
+                                <li>Kafka → Elasticsearch</li>
+                                <li>Kafka → S3</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>יתרונות Kafka Connect</h2>
+                    <div class="success-card">
+                        <ul>
+                            <li><strong>קל לשימוש</strong> - קונפיגורציה בJSON, ללא קוד</li>
+                            <li><strong>סקלבילי</strong> - מבוזר ואוטומטי</li>
+                            <li><strong>Fault-Tolerant</strong> - עמיד לתקלות</li>
+                            <li><strong>Pluggable</strong> - מאות connectors קיימים</li>
+                            <li><strong>Offset Management</strong> - אוטומטי</li>
+                        </ul>
+                    </div>
+
+                    <h2>Connectors פופולריים</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🗄️ JDBC Source/Sink</h4>
+                            <p>חיבור ל-Databases:</p>
+                            <ul>
+                                <li>MySQL, PostgreSQL</li>
+                                <li>Oracle, SQL Server</li>
+                                <li>Query mode או CDC mode</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📁 HDFS Sink</h4>
+                            <p>שמירה ל-Hadoop:</p>
+                            <ul>
+                                <li>Parquet, Avro, JSON</li>
+                                <li>Partitioning</li>
+                                <li>Hive integration</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🔍 Elasticsearch Sink</h4>
+                            <p>אינדוקס ל-ES:</p>
+                            <ul>
+                                <li>Real-time indexing</li>
+                                <li>Bulk operations</li>
+                                <li>Schema mapping</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>☁️ S3 Sink</h4>
+                            <p>שמירה ל-AWS S3:</p>
+                            <ul>
+                                <li>Time-based partitioning</li>
+                                <li>Multiple formats</li>
+                                <li>Compression</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>REST API</h2>
+                    <div class="concept-card">
+                        <h4>🌐 ניהול דרך API</h4>
+                        <p>Kafka Connect מספק REST API לניהול:</p>
+                        <ul>
+                            <li><code>GET /connectors</code> - רשימת connectors</li>
+                            <li><code>POST /connectors</code> - יצירת connector חדש</li>
+                            <li><code>GET /connectors/{name}/status</code> - סטטוס</li>
+                            <li><code>PUT /connectors/{name}/pause</code> - pause</li>
+                            <li><code>PUT /connectors/{name}/resume</code> - resume</li>
+                            <li><code>DELETE /connectors/{name}</code> - מחיקה</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Monitoring -->
+                <div id="section-monitoring" class="theory-section">
+                    <h1>📊 Kafka Monitoring</h1>
+
+                    <div class="info-card">
+                        <h3>למה Monitoring חשוב?</h3>
+                        <p>Kafka הוא רכיב קריטי בארכיטקטורה. ניטור נכון מאפשר:</p>
+                        <ul>
+                            <li>זיהוי בעיות לפני שהן הופכות לקריטיות</li>
+                            <li>הבנת דפוסי שימוש והתנהגות</li>
+                            <li>אופטימיזציה של ביצועים</li>
+                            <li>תכנון קיבולת (capacity planning)</li>
+                        </ul>
+                    </div>
+
+                    <h2>שיטות Monitoring</h2>
+
+                    <h3>1️⃣ Kafka Built-in Tools</h3>
+                    <div class="concept-card">
+                        <h4>⚙️ Command Line Tools</h4>
+                        <p>Kafka מגיע עם כלים מובנים:</p>
+
+                        <div class="code-block" style="margin-top: 15px;">
+<span class="code-comment"># רשימת consumer groups</span>
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+<span class="code-comment"># בדיקת lag של group</span>
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
+  --group my-group --describe
+
+<span class="code-comment"># תיאור topic</span>
+$ kafka-topics.sh --bootstrap-server localhost:9092 \
+  --describe --topic my-topic
+                        </div>
+                    </div>
+
+                    <h3>2️⃣ Kafka Connect REST API</h3>
+                    <div class="concept-card">
+                        <h4>🌐 ניטור Connectors</h4>
+                        <div class="code-block" style="margin-top: 15px;">
+<span class="code-comment"># רשימת connectors</span>
+$ curl localhost:8083/connectors
+
+<span class="code-comment"># סטטוס connector</span>
+$ curl localhost:8083/connectors/my-connector/status
+
+<span class="code-comment"># tasks של connector</span>
+$ curl localhost:8083/connectors/my-connector/tasks
+                        </div>
+                    </div>
+
+                    <h3>3️⃣ כלי Monitoring צד שלישי</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>Confluent Control Center</h4>
+                            <p>כלי ניטור מלא מ-Confluent (חלק מהגרסה הenterprise)</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Cloudera Manager</h4>
+                            <p>ניטור כחלק מפלטפורמת Cloudera</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Landoop (Lenses)</h4>
+                            <p>UI חזותי לניהול וניטור Kafka</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Kafka Manager (Yahoo)</h4>
+                            <p>כלי open-source לניהול clusters</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Kafdrop</h4>
+                            <p>UI פשוט לצפייה בtopics ומessages</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Burrow (LinkedIn)</h4>
+                            <p>ניטור consumer lag בלבד</p>
+                        </div>
+                    </div>
+
+                    <h2>מטריקות חשובות לניטור</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📊 Broker Metrics</h4>
+                            <ul>
+                                <li><strong>UnderReplicatedPartitions</strong> - בעיות replication</li>
+                                <li><strong>OfflinePartitionsCount</strong> - partitions לא זמינים</li>
+                                <li><strong>BytesIn/BytesOut</strong> - throughput</li>
+                                <li><strong>RequestsPerSecond</strong> - עומס</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>⏱️ Producer Metrics</h4>
+                            <ul>
+                                <li><strong>record-send-rate</strong> - קצב שליחה</li>
+                                <li><strong>record-error-rate</strong> - שגיאות</li>
+                                <li><strong>request-latency</strong> - זמן תגובה</li>
+                                <li><strong>batch-size-avg</strong> - גודל batch ממוצע</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📥 Consumer Metrics</h4>
+                            <ul>
+                                <li><strong>records-lag</strong> - כמה messages מאחור</li>
+                                <li><strong>records-consumed-rate</strong> - קצב צריכה</li>
+                                <li><strong>fetch-latency</strong> - זמן קריאה</li>
+                                <li><strong>commit-latency</strong> - זמן commit</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>💾 System Metrics</h4>
+                            <ul>
+                                <li><strong>CPU Usage</strong></li>
+                                <li><strong>Memory Usage</strong></li>
+                                <li><strong>Disk Usage & I/O</strong></li>
+                                <li><strong>Network Bandwidth</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="warning-card">
+                        <h4>🚨 Alerts חשובים להגדיר:</h4>
+                        <ul>
+                            <li><strong>Consumer Lag גבוה</strong> - consumers לא מספיקים</li>
+                            <li><strong>Under-replicated partitions</strong> - בעיות ב-cluster</li>
+                            <li><strong>Broker Down</strong> - broker לא זמין</li>
+                            <li><strong>Disk Space Low</strong> - מקום אוזל</li>
+                            <li><strong>High Error Rate</strong> - הרבה שגיאות</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Best Practices -->
+                <div id="section-best-practices" class="theory-section">
+                    <h1>✨ Kafka Best Practices</h1>
+
+                    <h2>🏗️ תכנון ועיצוב</h2>
+
+                    <div class="success-card">
+                        <h4>📂 Topics & Partitions</h4>
+                        <ul>
+                            <li><strong>מספר partitions:</strong> התחל עם ~10-30 partitions לפי throughput צפוי</li>
+                            <li><strong>אל תפריז:</strong> יותר מדי partitions = overhead על הcluster</li>
+                            <li><strong>תכנן מראש:</strong> קשה לשנות מספר partitions אחר כך</li>
+                            <li><strong>Key design:</strong> בחר key שמבטיח חלוקה שווה בין partitions</li>
+                            <li><strong>Retention:</strong> הגדר retention policy הגיוני (זמן או גודל)</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>🖥️ Cluster Sizing</h4>
+                        <ul>
+                            <li><strong>מינימום 3 brokers</strong> בפרודקשן (for replication)</li>
+                            <li><strong>Replication factor = 3</strong> (מאפשר אובדן של 2 brokers)</li>
+                            <li><strong>בדוק throughput צפוי:</strong> כמה MB/sec אתה צריך?</li>
+                            <li><strong>דיסק מהיר:</strong> SSD מומלץ לlatency נמוך</li>
+                        </ul>
+                    </div>
+
+                    <h2>📤 Producer Best Practices</h2>
+
+                    <div class="success-card">
+                        <h4>אמינות (Durability)</h4>
+                        <ul>
+                            <li><strong>acks=all</strong> - לדאטה קריטי</li>
+                            <li><strong>enable.idempotence=true</strong> - למניעת duplicates</li>
+                            <li><strong>max.in.flight.requests=1</strong> - אם ordering קריטי</li>
+                            <li><strong>retries > 0</strong> - נסה שוב במקרה של failure</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-card">
+                        <h4>ביצועים (Performance)</h4>
+                        <ul>
+                            <li><strong>batching:</strong> הגדל batch.size ו-linger.ms</li>
+                            <li><strong>compression:</strong> השתמש ב-lz4 או snappy</li>
+                            <li><strong>buffer.memory:</strong> הגדל אם throughput גבוה</li>
+                            <li><strong>partitioning:</strong> השתמש ב-key לbalancing טוב</li>
+                        </ul>
+                    </div>
+
+                    <h2>📥 Consumer Best Practices</h2>
+
+                    <div class="success-card">
+                        <h4>אמינות</h4>
+                        <ul>
+                            <li><strong>Manual commit:</strong> commit רק אחרי עיבוד מוצלח</li>
+                            <li><strong>isolation.level=read_committed</strong> - לexactly-once</li>
+                            <li><strong>Handle rebalancing:</strong> commit לפני rebalance</li>
+                            <li><strong>Error handling:</strong> מה עושים עם message שנכשל?</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-card">
+                        <h4>ביצועים</h4>
+                        <ul>
+                            <li><strong>מספר consumers = מספר partitions</strong> (למקסימום parallelism)</li>
+                            <li><strong>fetch.min.bytes:</strong> הגדל לבאצ'ים גדולים יותר</li>
+                            <li><strong>max.poll.records:</strong> כמה records לפעם</li>
+                            <li><strong>session.timeout.ms:</strong> לא קצר מדי (יגרום לrebalances מיותרים)</li>
+                        </ul>
+                    </div>
+
+                    <h2>🔒 אבטחה (Security)</h2>
+
+                    <div class="warning-card">
+                        <h4>⚠️ אבטחה בפרודקשן</h4>
+                        <ul>
+                            <li><strong>SSL/TLS:</strong> הצפנת תעבורה</li>
+                            <li><strong>SASL:</strong> authentication (Kerberos, SCRAM, OAuth)</li>
+                            <li><strong>ACLs:</strong> authorization - מי יכול לעשות מה</li>
+                            <li><strong>Encryption at rest:</strong> הצפנת דיסק</li>
+                            <li><strong>אל תחשוף את Kafka לאינטרנט ישירות!</strong></li>
+                        </ul>
+                    </div>
+
+                    <h2>📊 ניטור ותחזוקה</h2>
+
+                    <div class="success-card">
+                        <h4>✅ מה לנטר?</h4>
+                        <ul>
+                            <li><strong>Consumer lag</strong> - האם consumers מספיקים?</li>
+                            <li><strong>Under-replicated partitions</strong> - בעיות replication</li>
+                            <li><strong>Disk usage</strong> - מתקרבים למכסה?</li>
+                            <li><strong>CPU & Memory</strong> - bottlenecks?</li>
+                            <li><strong>Error rates</strong> - הרבה שגיאות?</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>🔧 תחזוקה שוטפת</h4>
+                        <ul>
+                            <li><strong>Rolling restarts:</strong> עדכון brokers בזה אחר זה</li>
+                            <li><strong>Backup:</strong> גבה את הקונפיגורציה (לא בהכרח את הדאטה)</li>
+                            <li><strong>Clean up:</strong> מחק topics ישנים שלא בשימוש</li>
+                            <li><strong>Version upgrades:</strong> עקוב אחרי גרסאות חדשות</li>
+                        </ul>
+                    </div>
+
+                    <h2>🎯 כללים זהב</h2>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #fff9db, #fff3bf);">
+                        <ol style="font-size: 1.1rem; line-height: 2; font-weight: 600;">
+                            <li>תמיד תכנן capacity מראש</li>
+                            <li>נטר את הcluster באופן רציף</li>
+                            <li>בדוק שהרשת מהירה (latency נמוך בין brokers)</li>
+                            <li>השתמש ב-replication factor של לפחות 3</li>
+                            <li>בדיקת load לפני פרודקשן</li>
+                            <li>אל תקח סיכונים עם דאטה קריטי - acks=all</li>
+                            <li>הגדר retention מתאים לצרכים שלך</li>
+                            <li>תעד את הconfiguration והprocess</li>
+                        </ol>
+                    </div>
+                </div>
+
+            </main>
         </div>
-
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Broker</span></div>
-                <div class="card-desc">A Kafka server. A cluster is made of multiple brokers.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Topic</span></div>
-                <div class="card-desc">A logical channel for data. Producers write to topics, Consumers read from them.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Partition</span></div>
-                <div class="card-desc">Topics are split into partitions for scalability. Ordering is guaranteed <em>only</em> within a partition.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Offset</span></div>
-                <div class="card-desc">A unique incremental ID assigned to every message in a partition.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Replication</span></div>
-                <div class="card-desc">Copies of data across brokers for High Availability (HA).</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Zookeeper</span></div>
-                <div class="card-desc">Manages brokers, leader election, and cluster membership. Mandatory for Kafka.</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic1">
-        <h2>🏗️ Architecture</h2>
-        <p>Understanding how the components fit together.</p>
-        
-        <div class="diagram-box">
-            [Diagram: Producers -> Brokers (Topics/Partitions) -> Consumers]
-        </div>
-
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Producer</span></div>
-                <div class="card-desc">Writes data to topics. Can choose acknowledgment levels (acks=0, 1, or all).</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Consumer</span></div>
-                <div class="card-desc">Reads data from topics/partitions.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Consumer Group</span></div>
-                <div class="card-desc">A group of consumers working together. Each partition is consumed by only one member of the group for load balancing.</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic2">
-        <h2>💻 CLI Commands</h2>
-        <p>Essential commands for managing your Kafka cluster. (Note: Paths may vary based on installation).</p>
-
-        <h3>1. Service Management</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Start Zookeeper</span></div>
-                <div class="card-desc">Must be started before Kafka.</div>
-                <div class="example-block" onclick="copyText(this)">bin/zookeeper-server-start.sh config/zookeeper.properties</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Start Kafka</span></div>
-                <div class="card-desc">Starts the broker.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-server-start.sh config/server.properties</div>
-            </div>
-        </div>
-
-        <h3>2. Topic Management</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Create Topic</span></div>
-                <div class="card-desc">Create a topic with specific replication and partitions.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic kafka-tst-01</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">List Topics</span></div>
-                <div class="card-desc">Show all available topics in the cluster.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-topics.sh --zookeeper localhost:2181 --list</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Describe Topic</span></div>
-                <div class="card-desc">View details like partition count and leader.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic kafka-tst-01</div>
-            </div>
-        </div>
-
-        <h3>3. Console Clients</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Console Producer</span></div>
-                <div class="card-desc">Open an interactive shell to send messages.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-console-producer.sh --broker-list localhost:9092 --topic kafka-tst-01</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Console Consumer</span></div>
-                <div class="card-desc">Read messages from the beginning of the log.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic kafka-tst-01 --from-beginning</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic3">
-        <h2>🔌 Kafka Connect</h2>
-        <p>A framework to stream data into and out of Kafka without writing custom code.</p>
-
-        <div class="info-box">
-            <h4>Architecture</h4>
-            <ul>
-                <li><strong>Connectors:</strong> The logic (JAR) to connect to systems (HDFS, JDBC, File).</li>
-                <li><strong>Tasks:</strong> The actual execution units moving the data.</li>
-                <li><strong>Workers:</strong> Processes running the connectors and tasks.</li>
-            </ul>
-        </div>
-
-        <h3>Configuration Examples</h3>
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Source Config (File)</span></div>
-                <div class="card-desc">Example properties for reading from a file.</div>
-                <div class="example-block" onclick="copyText(this)">
-name=kafka-file-source-task
-connector.class=FileStreamSource
-tasks.max=1
-file=/tmp/sourceFile.log
-topic=file-source-test</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Sink Config (HDFS)</span></div>
-                <div class="card-desc">Example properties for writing to Hadoop.</div>
-                <div class="example-block" onclick="copyText(this)">
-name=hdfs-sink-task
-connector.class=HdfsSinkConnector
-tasks.max=1
-topics=file-source-test
-hdfs.url=hdfs://localhost:9000</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Run Standalone</span></div>
-                <div class="card-desc">Execute the connector with config files.</div>
-                <div class="example-block" onclick="copyText(this)">bin/connect-standalone.sh config/connect-standalone.properties config/file-source.properties</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic4">
-        <h2>🧩 Core APIs</h2>
-        <p>The 4 main APIs used for development.</p>
-
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">1. Producer API</span></div>
-                <div class="card-desc">Allows applications to send data to Kafka topics.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">2. Consumer API</span></div>
-                <div class="card-desc">Allows applications to read streams of data from topics.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">3. Streams API</span></div>
-                <div class="card-desc">Allows transforming data (filter, map, aggregate) from input topics to output topics.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">4. Connect API</span></div>
-                <div class="card-desc">Reusable source/sink connectors (e.g., DB to Kafka).</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic5">
-        <h2>🌍 Real Use Cases</h2>
-        <p>How giant companies utilize Kafka.</p>
-
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Netflix</span></div>
-                <div class="card-desc">Video viewing activities, recommendation engine inputs, and user behavior tracking.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Uber</span></div>
-                <div class="card-desc">Matching riders and drivers, calculating ETA, and real-time auditing.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">PayPal / Fraud</span></div>
-                <div class="card-desc">Real-time fraud detection. analyzing transaction patterns instantly.</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">IoT / Automotive</span></div>
-                <div class="card-desc">Collecting sensor data from vehicles (speed, engine status, location).</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="topic6">
-        <h2>📊 Monitoring & Admin</h2>
-        <p>Keep your cluster healthy.</p>
-
-        <div class="commands-grid">
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Consumer Groups</span></div>
-                <div class="card-desc">List active groups.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Group Description</span></div>
-                <div class="card-desc">Check offsets and lag.</div>
-                <div class="example-block" onclick="copyText(this)">bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-group</div>
-            </div>
-            <div class="command-card">
-                <div class="code-header"><span class="cmd-title">Monitoring Tools</span></div>
-                <div class="card-desc">Popular 3rd party tools:<br>
-                - Confluent Control Center<br>
-                - Yahoo Kafka Manager<br>
-                - LinkedIn Burrow<br>
-                - KafDrop</div>
-            </div>
-        </div>
-    </section>
-
-    <div class="page-nav">
-        <button id="prevBtn" class="nav-control" disabled>← Previous Topic</button>
-        <button id="nextBtn" class="nav-control">Next Topic →</button>
     </div>
-</main>
+
+    <!-- === ARCHITECTURE VIEW === -->
+    <div id="view-architecture" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;">🏗️ ארכיטקטורת Kafka - מבט עמוק</h1>
+
+            <div style="background: white; padding: 50px; border-radius: 20px; box-shadow: var(--shadow-lg); margin-bottom: 40px;">
+                <h2 style="text-align: center; margin-bottom: 40px; font-size: 2rem;">הזרימה המלאה</h2>
+                <div class="architecture-diagram">
+                    <div class="diagram-row" style="flex-direction: column; gap: 40px;">
+                        <!-- Producers -->
+                        <div>
+                            <h3 style="text-align: center; color: var(--kafka-green); margin-bottom: 20px;">📤 PRODUCERS</h3>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <div class="diagram-box producer">Web App</div>
+                                <div class="diagram-box producer">Mobile App</div>
+                                <div class="diagram-box producer">IoT Device</div>
+                                <div class="diagram-box producer">Database CDC</div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; font-size: 3rem; color: var(--text-tertiary);">↓</div>
+
+                        <!-- Kafka Cluster -->
+                        <div>
+                            <h3 style="text-align: center; color: var(--kafka-accent); margin-bottom: 20px;">🔥 KAFKA CLUSTER</h3>
+                            <div style="background: linear-gradient(135deg, #fff5f5, white); border: 3px solid var(--kafka-accent); border-radius: 16px; padding: 40px;">
+                                <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
+                                    <div class="diagram-box" style="background: linear-gradient(135deg, #fafafa, white);">Broker 1</div>
+                                    <div class="diagram-box" style="background: linear-gradient(135deg, #fafafa, white);">Broker 2</div>
+                                    <div class="diagram-box" style="background: linear-gradient(135deg, #fafafa, white);">Broker 3</div>
+                                </div>
+                                <div style="text-align: center; padding: 20px; background: white; border-radius: 12px;">
+                                    <strong>Topics: </strong>
+                                    <span style="background: #ebfbee; padding: 8px 16px; border-radius: 6px; margin: 0 5px;">user-events</span>
+                                    <span style="background: #e7f5ff; padding: 8px 16px; border-radius: 6px; margin: 0 5px;">orders</span>
+                                    <span style="background: #fff9db; padding: 8px 16px; border-radius: 6px; margin: 0 5px;">logs</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; font-size: 3rem; color: var(--text-tertiary);">↓</div>
+
+                        <!-- Consumers -->
+                        <div>
+                            <h3 style="text-align: center; color: var(--kafka-blue); margin-bottom: 20px;">📥 CONSUMERS</h3>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <div class="diagram-box consumer">Analytics</div>
+                                <div class="diagram-box consumer">Data Lake</div>
+                                <div class="diagram-box consumer">Elasticsearch</div>
+                                <div class="diagram-box consumer">Real-time Dashboard</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional architecture details cards -->
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>📂 Topic Structure</h4>
+                    <div class="code-block" style="font-size: 0.75rem;">
+Topic: user-events
+├── Partition 0
+│   ├── Replica 0 (Leader)
+│   └── Replica 1 (Follower)
+├── Partition 1
+│   ├── Replica 0 (Leader)
+│   └── Replica 1 (Follower)
+└── Partition 2
+    ├── Replica 0 (Leader)
+    └── Replica 1 (Follower)
+                    </div>
+                </div>
+
+                <div class="comparison-card">
+                    <h4>🔄 Message Flow</h4>
+                    <ol style="font-size: 0.9rem; line-height: 1.8;">
+                        <li>Producer שולח message</li>
+                        <li>Broker מקבל ושומר</li>
+                        <li>Message מקבל offset</li>
+                        <li>Replication ל-followers</li>
+                        <li>Consumer קורא message</li>
+                        <li>Consumer מעדכן offset</li>
+                    </ol>
+                </div>
+
+                <div class="comparison-card">
+                    <h4>⚙️ Key Components</h4>
+                    <ul style="font-size: 0.9rem;">
+                        <li><strong>ZooKeeper/KRaft:</strong> Coordination</li>
+                        <li><strong>Brokers:</strong> Storage & serving</li>
+                        <li><strong>Topics:</strong> Logical channels</li>
+                        <li><strong>Partitions:</strong> Physical division</li>
+                        <li><strong>Offsets:</strong> Message position</li>
+                    </ul>
+                </div>
+
+                <div class="comparison-card">
+                    <h4>🎯 Guarantees</h4>
+                    <ul style="font-size: 0.9rem;">
+                        <li><strong>Ordering:</strong> Within partition</li>
+                        <li><strong>Durability:</strong> Configurable</li>
+                        <li><strong>At-least-once:</strong> Default</li>
+                        <li><strong>Exactly-once:</strong> Available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === COMMANDS VIEW === -->
+    <div id="view-commands" class="view-section">
+        <div style="padding: 60px; max-width: 1200px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;">⚙️ פקודות Kafka Essential</h1>
+
+            <div class="info-card">
+                <h3>💡 לפני שמתחילים</h3>
+                <p>כל הפקודות מניחות ש-<code>$KAFKA_HOME</code> מוגדר לתיקיית ההתקנה של Kafka.</p>
+            </div>
+
+            <h2 style="margin-top: 50px;">📂 Topics</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>יצירת Topic</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --create \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --partitions 3 \
+  --replication-factor 2
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>רשימת כל ה-Topics</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --list \
+  --bootstrap-server localhost:9092
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>תיאור Topic</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --describe \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>מחיקת Topic</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --delete \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic
+                </div>
+            </div>
+
+            <h2 style="margin-top: 50px;">📤 Producer</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Console Producer</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic
+
+<span class="code-comment"># Type messages and press Enter</span>
+> Hello Kafka
+> This is a message
+> ^C  <span class="code-comment">(Ctrl+C to exit)</span>
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Producer עם Key</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --property "parse.key=true" \
+  --property "key.separator=:"
+
+<span class="code-comment"># Format: key:value</span>
+> user1:Login event
+> user2:Logout event
+                </div>
+            </div>
+
+            <h2 style="margin-top: 50px;">📥 Consumer</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Console Consumer</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --from-beginning
+
+<span class="code-comment"># Shows all messages from the beginning</span>
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Consumer עם Group</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --group my-consumer-group
+
+<span class="code-comment"># Part of a consumer group</span>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 50px;">👥 Consumer Groups</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>רשימת Consumer Groups</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --list
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>מצב Consumer Group (Offset Status)</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --group my-consumer-group \
+  --describe
+
+<span class="code-comment"># Shows: TOPIC, PARTITION, CURRENT-OFFSET, LOG-END-OFFSET, LAG</span>
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>איפוס Offsets להתחלה</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --group my-consumer-group \
+  --reset-offsets \
+  --to-earliest \
+  --topic my-topic \
+  --execute
+                </div>
+            </div>
+
+            <h2 style="margin-top: 50px;">🔌 Kafka Connect (REST API)</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>רשימת Connectors פעילים</h4>
+                <div class="code-block">
+$ curl localhost:8083/connectors | python -m json.tool
+
+<span class="code-comment"># Output:</span>
+<span class="code-comment"># [</span>
+<span class="code-comment">#   "jdbc-source-connector",</span>
+<span class="code-comment">#   "hdfs-sink-connector"</span>
+<span class="code-comment"># ]</span>
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>סטטוס Connector</h4>
+                <div class="code-block">
+$ curl localhost:8083/connectors/my-connector/status \
+  | python -m json.tool
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Pause/Resume Connector</h4>
+                <div class="code-block">
+<span class="code-comment"># Pause</span>
+$ curl -X PUT localhost:8083/connectors/my-connector/pause
+
+<span class="code-comment"># Resume</span>
+$ curl -X PUT localhost:8083/connectors/my-connector/resume
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Restart Connector</h4>
+                <div class="code-block">
+$ curl -X POST localhost:8083/connectors/my-connector/restart
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>מחיקת Connector</h4>
+                <div class="code-block">
+$ curl -X DELETE localhost:8083/connectors/my-connector
+                </div>
+            </div>
+
+            <div class="warning-card" style="margin-top: 50px;">
+                <h4>⚠️ טיפים חשובים</h4>
+                <ul>
+                    <li>תמיד וודא ש-Kafka Cluster רץ לפני הרצת פקודות</li>
+                    <li>השתמש ב-<code>--bootstrap-server</code> במקום <code>--zookeeper</code> (deprecated)</li>
+                    <li>Consumer Groups שומרים offset - שימושי לresume מאיפה שעצרת</li>
+                    <li>תמיד בדוק LAG של consumer groups לניטור ביצועים</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <script>
-    // --- JAVASCRIPT LOGIC ---
-    const topics = [
-        "Intro & Concepts", "Architecture", "CLI Commands", 
-        "Kafka Connect", "Core APIs", "Real Use Cases", "Monitoring & Admin"
-    ];
+    function switchView(viewId, btn) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('view-' + viewId).classList.add('active');
 
-    let currentTopicIndex = 0;
-    const totalTopics = topics.length;
-
-    const navList = document.getElementById('navList');
-    const sections = document.querySelectorAll('section');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const searchInput = document.getElementById('searchInput');
-
-    function init() {
-        generateSidebar();
-        updateView();
-        
-        prevBtn.addEventListener('click', () => { if(currentTopicIndex > 0) { currentTopicIndex--; updateView(); } });
-        nextBtn.addEventListener('click', () => { if(currentTopicIndex < totalTopics - 1) { currentTopicIndex++; updateView(); } });
-
-        // Search with Debounce
-        let timeout = null;
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                const term = e.target.value.toLowerCase().trim();
-                const cards = document.querySelectorAll('.command-card');
-                
-                // Filter Cards
-                cards.forEach(card => {
-                    const text = card.innerText.toLowerCase();
-                    card.style.display = text.includes(term) ? 'flex' : 'none';
-                });
-
-                if(term.length > 0) {
-                    // Show all sections if searching
-                    sections.forEach(sec => {
-                        sec.style.display = 'block';
-                        sec.classList.remove('active'); 
-                    });
-                } else {
-                    updateView(); // Reset
-                }
-            }, 200);
-        });
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
     }
 
-    function generateSidebar() {
-        navList.innerHTML = '';
-        topics.forEach((topic, index) => {
-            const li = document.createElement('li');
-            li.className = 'nav-item';
-            const btn = document.createElement('button');
-            btn.className = 'nav-btn';
-            btn.innerHTML = `<span>${index + 1}. ${topic}</span>`;
-            btn.onclick = () => { 
-                currentTopicIndex = index; 
-                searchInput.value = ''; // Clear search
-                document.querySelectorAll('.command-card').forEach(c => c.style.display = 'flex');
-                updateView(); 
-            };
-            li.appendChild(btn);
-            navList.appendChild(li);
-        });
+    function showSection(sectionId, btn) {
+        document.querySelectorAll('.theory-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('section-' + sectionId).classList.add('active');
+
+        document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
     }
-
-    function updateView() {
-        sections.forEach((sec, idx) => {
-            sec.style.display = 'none'; sec.classList.remove('active');
-            if(idx === currentTopicIndex) { sec.style.display = 'block'; sec.classList.add('active'); }
-        });
-        document.querySelectorAll('.nav-btn').forEach((btn, idx) => {
-            btn.classList.remove('active');
-            if(idx === currentTopicIndex) btn.classList.add('active');
-        });
-        prevBtn.disabled = currentTopicIndex === 0;
-        nextBtn.disabled = currentTopicIndex === totalTopics - 1;
-        document.getElementById('contentArea').scrollTop = 0;
-    }
-
-    window.copyText = function(element) {
-        const fullText = element.innerText;
-        // Simple logic to get just the code, ignoring 'Copy' pseudo element text (handled by CSS)
-        const textToCopy = fullText.trim();
-        
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            const originalBg = element.style.backgroundColor;
-            element.style.backgroundColor = '#4caf50'; // Green success
-            setTimeout(() => { element.style.backgroundColor = originalBg; }, 300);
-        });
-    };
-
-    init();
 </script>
+
 </body>
 </html>
