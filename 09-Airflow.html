@@ -2016,14 +2016,14 @@ airflow celery flower
             <h2 style="font-size: 1.8rem; margin: 40px 0 25px 0; color: var(--airflow-primary);">שיטה 1: שימוש ב-CDE Docker Compose (מומלץ)</h2>
 
             <div class="step-card">
-                <h3><span class="step-number">1</span>הרצת Docker Compose</h3>
+                <h3><span class="step-number">1.</span>הרצת Docker Compose</h3>
                 <p>הרץ את הפקודה הבאה בתיקיית הפרויקט:</p>
                 <div class="code-block">docker compose up -d</div>
                 <p><strong>הערה:</strong> אם כבר הרצת את הפקודה בשיעורים קודמים, אין צורך להריץ שוב.</p>
             </div>
 
             <div class="step-card">
-                <h3><span class="step-number">2</span>בדיקה ש-Airflow רץ</h3>
+                <h3><span class="step-number">2.</span>בדיקה ש-Airflow רץ</h3>
                 <p>פתח את <strong>Docker Desktop</strong> וחפש את הקונטיינרים הבאים:</p>
                 <ul style="padding-right: 30px; margin: 15px 0;">
                     <li><code>airflow_scheduler</code> - המתזמן שמריץ tasks</li>
@@ -2037,7 +2037,7 @@ airflow celery flower
             </div>
 
             <div class="step-card">
-                <h3><span class="step-number">3</span>גישה לממשק המשתמש</h3>
+                <h3><span class="step-number">3.</span>גישה לממשק המשתמש</h3>
                 <p>פתח דפדפן וגש לכתובת:</p>
                 <div class="code-block">http://localhost:8080</div>
                 <p>התחבר עם הפרטים הבאים:</p>
@@ -2055,14 +2055,14 @@ airflow celery flower
             <h2 style="font-size: 1.8rem; margin: 40px 0 25px 0; color: var(--airflow-primary);">שיטה 2: התקנה ידנית מלאה</h2>
 
             <div class="step-card">
-                <h3><span class="step-number">1</span>הגדרת תיקיות וסביבה</h3>
+                <h3><span class="step-number">1.</span>הגדרת תיקיות וסביבה</h3>
                 <p>צור את התיקיות הנדרשות והגדר את UID:</p>
                 <div class="code-block">mkdir -p ./dags ./logs ./plugins ./config
 echo -e "AIRFLOW_UID=$(id -u)" > .env</div>
             </div>
 
             <div class="step-card">
-                <h3><span class="step-number">2</span>אתחול Airflow</h3>
+                <h3><span class="step-number">2.</span>אתחול Airflow</h3>
                 <p>הרץ את תהליך האתחול שיוצר את בסיס הנתונים ומשתמש Admin:</p>
                 <div class="code-block">docker compose up airflow-init</div>
                 <p>המתן עד שתראה הודעה דומה ל:</p>
@@ -2073,13 +2073,13 @@ start airflow-init_1 | exited with code 0</div>
             </div>
 
             <div class="step-card">
-                <h3><span class="step-number">3</span>הפעלת כל הServices</h3>
+                <h3><span class="step-number">3.</span>הפעלת כל הServices</h3>
                 <p>הפעל את כל רכיבי Airflow:</p>
                 <div class="code-block">docker compose up -d</div>
             </div>
 
             <div class="step-card">
-                <h3><span class="step-number">4</span>אימות Containers רצים</h3>
+                <h3><span class="step-number">4.</span>אימות Containers רצים</h3>
                 <p>בדוק שכל הקונטיינרים רצים:</p>
                 <div class="code-block">docker ps</div>
                 <p>אמור לראות:</p>
@@ -2093,7 +2093,7 @@ start airflow-init_1 | exited with code 0</div>
             </div>
 
             <div class="step-card">
-                <h3><span class="step-number">5</span>גישה ל-UI</h3>
+                <h3><span class="step-number">5.</span>גישה ל-UI</h3>
                 <p>פתח דפדפן וגש לכתובת:</p>
                 <div class="code-block">http://localhost:8080</div>
                 <p>התחבר עם: <strong>airflow / airflow</strong></p>
