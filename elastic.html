@@ -628,6 +628,143 @@
             box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
+        /* === THEORY SIDEBAR === */
+        .theory-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 0;
+            height: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .theory-sidebar {
+            background: white;
+            border-left: 1px solid var(--border-color);
+            padding: 30px 0;
+            overflow-y: auto;
+        }
+
+        .theory-nav-item {
+            padding: 14px 30px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-right: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theory-nav-item:hover {
+            background: #f8fafc;
+            color: var(--text-primary);
+        }
+
+        .theory-nav-item.active {
+            background: #f0f9ff;
+            color: var(--elastic-blue);
+            border-right-color: var(--elastic-blue);
+            font-weight: 600;
+        }
+
+        .theory-content {
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .theory-section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .theory-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .theory-section h1 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+            font-weight: 800;
+        }
+
+        .theory-section h2 {
+            font-size: 1.5rem;
+            margin: 30px 0 20px 0;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .theory-section h3 {
+            font-size: 1.2rem;
+            margin: 25px 0 15px 0;
+            color: var(--elastic-blue);
+            font-weight: 600;
+        }
+
+        .theory-section p, .theory-section li {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .theory-section ul, .theory-section ol {
+            padding-right: 25px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 2px solid var(--elastic-blue);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .concept-highlight {
+            background: white;
+            border-right: 4px solid var(--elastic-yellow);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+
+        .comparison-card:hover {
+            border-color: var(--elastic-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .comparison-card h4 {
+            margin: 0 0 15px 0;
+            color: var(--elastic-blue);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .nav-tabs { flex-wrap: wrap; }
@@ -635,6 +772,8 @@
             .pipeline-stage { width: 100%; margin-bottom: 20px; }
             .kibana-panel { grid-template-columns: 1fr; }
             .cluster-visual { grid-template-columns: 1fr; }
+            .theory-layout { grid-template-columns: 1fr; }
+            .theory-sidebar { display: none; }
         }
 
         /* === SCROLLBAR === */
@@ -657,6 +796,7 @@
 
     <div class="nav-tabs">
         <div class="nav-item active" onclick="switchView('simulator', this)">🎮 סימולטור</div>
+        <div class="nav-item" onclick="switchView('theory', this)">📚 תיאוריה</div>
         <div class="nav-item" onclick="switchView('api', this)">⚙️ API Reference</div>
         <div class="nav-item" onclick="switchView('lab', this)">💪 תרגילים</div>
     </div>
@@ -665,6 +805,674 @@
 </header>
 
 <div class="main-wrapper">
+
+    <!-- === THEORY VIEW === -->
+    <div id="view-theory" class="view-section">
+        <div class="theory-layout">
+            <aside class="theory-sidebar">
+                <div class="theory-nav-item active" onclick="showTheorySection('intro', this)">
+                    <span>🎯</span> מבוא ל-Elastic Stack
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('what-is', this)">
+                    <span>🔍</span> מהו Elasticsearch?
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('elk-stack', this)">
+                    <span>📦</span> ELK Stack
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('architecture', this)">
+                    <span>🏗️</span> ארכיטקטורה
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('sharding', this)">
+                    <span>🗂️</span> Sharding & Replication
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('inverted-index', this)">
+                    <span>⚡</span> Inverted Index
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('documents', this)">
+                    <span>📄</span> Documents & Fields
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('mappings', this)">
+                    <span>🗺️</span> Mappings
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('queries', this)">
+                    <span>🔎</span> סוגי Queries
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('aggregations', this)">
+                    <span>📊</span> Aggregations
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('kibana-deep', this)">
+                    <span>📈</span> Kibana מתקדם
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('beats-types', this)">
+                    <span>🎵</span> סוגי Beats
+                </div>
+                <div class="theory-nav-item" onclick="showTheorySection('best-practices', this)">
+                    <span>✨</span> Best Practices
+                </div>
+            </aside>
+
+            <main class="theory-content">
+
+                <!-- מבוא -->
+                <div id="theory-intro" class="theory-section active">
+                    <h1>🎯 מבוא ל-Elastic Stack</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Elastic Stack?</h3>
+                        <p><strong>Elastic Stack</strong> (המכונה גם ELK Stack) הוא אוסף כלים לניהול, עיבוד, אחסון וניתוח נתונים בזמן אמת.</p>
+                    </div>
+
+                    <h2>הרכיבים העיקריים</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🔍 Elasticsearch</h4>
+                            <p>מנוע חיפוש וניתוח מבוזר המאפשר אחסון, חיפוש וניתוח כמויות גדולות של נתונים בזמן אמת.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📊 Kibana</h4>
+                            <p>ממשק ויזואלי לחיפוש, צפייה וניתוח הנתונים האגורים ב-Elasticsearch.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>⚙️ Logstash</h4>
+                            <p>צינור עיבוד נתונים לאיסוף, עיבוד והעברת נתונים מ מקורות שונים ל-Elasticsearch.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📦 Beats</h4>
+                            <p>סוכנים קלי משקל לשליחת נתונים ממאות או אלפי מכונות ל-Logstash או Elasticsearch.</p>
+                        </div>
+                    </div>
+
+                    <h2>תרחישי שימוש נפוצים</h2>
+                    <ul>
+                        <li><strong>ניתוח לוגים</strong> - ריכוז וניתוח לוגים מכל המערכות בארגון</li>
+                        <li><strong>Application Performance Monitoring (APM)</strong> - מעקב אחר ביצועי אפליקציות</li>
+                        <li><strong>Security Analytics</strong> - זיהוי איומים וניתוח אבטחה</li>
+                        <li><strong>Business Analytics</strong> - ניתוח נתונים עסקיים בזמן אמת</li>
+                        <li><strong>Full-Text Search</strong> - חיפוש טקסט מלא באתרים ואפליקציות</li>
+                    </ul>
+                </div>
+
+                <!-- מהו Elasticsearch -->
+                <div id="theory-what-is" class="theory-section">
+                    <h1>🔍 מהו Elasticsearch?</h1>
+
+                    <div class="info-card">
+                        <p><strong>Elasticsearch</strong> הוא מנוע חיפוש וניתוח מבוזר, בנוי על Apache Lucene, המאפשר אחסון, חיפוש וניתוח נתונים בזמן כמעט-אמיתי (Near Real-Time).</p>
+                    </div>
+
+                    <h2>מאפיינים עיקריים</h2>
+
+                    <h3>🌐 מבוזר (Distributed)</h3>
+                    <p>Elasticsearch בנוי להיות מבוזר מההתחלה. הוא מאפשר להפיץ נתונים על פני מספר servers (nodes) ולהרחיב את המערכת אופקית.</p>
+
+                    <h3>⚡ Near Real-Time (NRT)</h3>
+                    <p>יש זמן השהיה קטן (בדרך כלל שנייה אחת) מרגע שאתה מאנדקס document עד שהוא הופך ניתן לחיפוש.</p>
+
+                    <h3>📝 Schema-Free</h3>
+                    <p>אין צורך להגדיר schema מראש. Elasticsearch יוצר אוטומטית mapping על בסיס המבנה של ה-documents שנשלחים.</p>
+
+                    <h3>🔄 RESTful API</h3>
+                    <p>כל הפעולות מתבצעות דרך REST API פשוט, באמצעות JSON over HTTP.</p>
+
+                    <div class="concept-highlight">
+                        <h4>💡 למה Elasticsearch כל כך מהיר?</h4>
+                        <p>הסוד נמצא במבנה ה-<strong>Inverted Index</strong> שמאפשר חיפוש מהיר ביותר אפילו על מיליארדי documents.</p>
+                    </div>
+                </div>
+
+                <!-- ELK Stack -->
+                <div id="theory-elk-stack" class="theory-section">
+                    <h1>📦 ELK Stack - תהליך עבודה מלא</h1>
+
+                    <h2>1️⃣ Beats - איסוף נתונים</h2>
+                    <div class="concept-highlight">
+                        <h4>🎵 מהם Beats?</h4>
+                        <p>Beats הם data shippers קלים שאתה מתקין כ-agents על השרתים שלך לשליחת נתונים תפעוליים.</p>
+                    </div>
+
+                    <h3>סוגי Beats פופולריים:</h3>
+                    <ul>
+                        <li><strong>Filebeat</strong> - לוגים מקבצים</li>
+                        <li><strong>Metricbeat</strong> - metrics מערכת ושירותים</li>
+                        <li><strong>Packetbeat</strong> - נתוני רשת</li>
+                        <li><strong>Heartbeat</strong> - uptime monitoring</li>
+                        <li><strong>Auditbeat</strong> - audit data</li>
+                    </ul>
+
+                    <h2>2️⃣ Logstash - עיבוד נתונים</h2>
+                    <div class="concept-highlight">
+                        <h4>⚙️ מה עושה Logstash?</h4>
+                        <p>Logstash הוא data processing pipeline שמקבל נתונים, מעבד אותם (parsing, filtering, enrichment) ושולח אותם ל-Elasticsearch.</p>
+                    </div>
+
+                    <h3>שלבי Logstash Pipeline:</h3>
+                    <ul>
+                        <li><strong>Input</strong> - קבלת נתונים ממקורות שונים</li>
+                        <li><strong>Filter</strong> - עיבוד ושינוי הנתונים (grok, mutate, date)</li>
+                        <li><strong>Output</strong> - שליחת הנתונים המעובדים ליעד (Elasticsearch)</li>
+                    </ul>
+
+                    <h2>3️⃣ Elasticsearch - אחסון וחיפוש</h2>
+                    <p>הנתונים המעובדים נשמרים ב-Elasticsearch במבנה אופטימלי לחיפוש מהיר.</p>
+
+                    <h2>4️⃣ Kibana - ויזואליזציה וניתוח</h2>
+                    <div class="concept-highlight">
+                        <h4>📊 יכולות Kibana:</h4>
+                        <ul>
+                            <li><strong>Discover</strong> - חיפוש וסינון נתונים</li>
+                            <li><strong>Visualize</strong> - יצירת תרשימים וגרפים</li>
+                            <li><strong>Dashboard</strong> - צירוף visualizations ל-dashboards</li>
+                            <li><strong>Canvas</strong> - יצירת infographics</li>
+                            <li><strong>Maps</strong> - ויזואליזציה גיאוגרפית</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ארכיטקטורה -->
+                <div id="theory-architecture" class="theory-section">
+                    <h1>🏗️ ארכיטקטורת Elasticsearch</h1>
+
+                    <h2>מבנה Cluster</h2>
+                    <div class="info-card">
+                        <p><strong>Cluster</strong> הוא אוסף של nodes (שרתים) שעובדים יחד ומחזיקים את כל הנתונים שלך.</p>
+                        <p>כל cluster מזוהה על ידי שם ייחודי (ברירת מחדל: "elasticsearch").</p>
+                    </div>
+
+                    <h3>🖥️ סוגי Nodes</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>Master Node</h4>
+                            <p>אחראי על פעולות ניהול ברמת ה-cluster: יצירת/מחיקת indices, מעקב אחר nodes, הקצאת shards.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Data Node</h4>
+                            <p>מחזיק data ומבצע פעולות הקשורות לנתונים: CRUD, search, aggregations.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Ingest Node</h4>
+                            <p>מבצע pre-processing על documents לפני ה-indexing.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Coordinating Node</h4>
+                            <p>מנתב requests, מבצע reduce phase של search, מפזר bulk indexing.</p>
+                        </div>
+                    </div>
+
+                    <h2>Index, Document, Field</h2>
+                    <div class="concept-highlight">
+                        <h4>📊 אנלוגיה למסד נתונים:</h4>
+                        <ul>
+                            <li><strong>Index</strong> ≈ Database</li>
+                            <li><strong>Document</strong> ≈ Row/Record</li>
+                            <li><strong>Field</strong> ≈ Column</li>
+                        </ul>
+                    </div>
+
+                    <h3>Index</h3>
+                    <p>אוסף של documents עם מאפיינים דומים. לדוגמה: index של logs, index של users.</p>
+
+                    <h3>Document</h3>
+                    <p>יחידת המידע הבסיסית שניתן לאנדקס. זה JSON object.</p>
+
+                    <h3>Field</h3>
+                    <p>מפתח-ערך בתוך document. לכל field יש data type.</p>
+                </div>
+
+                <!-- Sharding & Replication -->
+                <div id="theory-sharding" class="theory-section">
+                    <h1>🗂️ Sharding & Replication</h1>
+
+                    <h2>למה צריך Sharding?</h2>
+                    <div class="info-card">
+                        <p>Index יכול להכיל כמות גדולה של נתונים שעלולה לעבור את מגבלות החומרה של node בודד.</p>
+                        <p><strong>Sharding</strong> מאפשר לפצל את ה-index למספר חלקים (shards) שיכולים להיות מאוכסנים על nodes שונים.</p>
+                    </div>
+
+                    <h3>✅ יתרונות Sharding:</h3>
+                    <ul>
+                        <li><strong>Scale horizontally</strong> - הוספת יותר נתונים מעבר ליכולת של node בודד</li>
+                        <li><strong>Parallelism</strong> - פעולות (חיפוש, indexing) יכולות לרוץ במקביל על shards שונים</li>
+                        <li><strong>Performance</strong> - חלוקת העומס על nodes מרובים</li>
+                    </ul>
+
+                    <h2>Primary vs Replica Shards</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>Primary Shard</h4>
+                            <p>כל document שייך ל-primary shard אחד. מספר ה-primary shards נקבע בעת יצירת ה-index.</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Replica Shard</h4>
+                            <p>עותק של primary shard. מספק high availability במקרה של כשל, ומאפשר להגדיל את throughput של queries.</p>
+                        </div>
+                    </div>
+
+                    <h3>🎯 Replica Shards - למה?</h3>
+                    <ul>
+                        <li><strong>High Availability</strong> - אם node נופל, הנתונים עדיין זמינים</li>
+                        <li><strong>Scalability</strong> - search queries יכולים לרוץ על כל הרפליקות במקביל</li>
+                    </ul>
+
+                    <div class="concept-highlight">
+                        <h4>⚠️ כלל חשוב:</h4>
+                        <p>Replica shard לעולם לא יוקצה לאותו node כמו ה-primary shard שלו (למניעת data loss).</p>
+                    </div>
+                </div>
+
+                <!-- Inverted Index -->
+                <div id="theory-inverted-index" class="theory-section">
+                    <h1>⚡ Inverted Index - הקסם מאחורי המהירות</h1>
+
+                    <div class="info-card">
+                        <p><strong>Inverted Index</strong> הוא מבנה הנתונים המרכזי שעושה את Elasticsearch כל כך מהיר.</p>
+                    </div>
+
+                    <h2>איך זה עובד?</h2>
+                    <p>במקום לשמור "document → מילים", Elasticsearch שומר "מילה → documents".</p>
+
+                    <h3>דוגמה:</h3>
+                    <div class="concept-highlight">
+                        <p><strong>Doc 1:</strong> "The quick brown fox"</p>
+                        <p><strong>Doc 2:</strong> "The quick blue rabbit"</p>
+                        <p><strong>Doc 3:</strong> "The slow brown turtle"</p>
+
+                        <h4 style="margin-top: 20px;">Inverted Index:</h4>
+                        <ul style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">
+                            <li>the → [1, 2, 3]</li>
+                            <li>quick → [1, 2]</li>
+                            <li>brown → [1, 3]</li>
+                            <li>fox → [1]</li>
+                            <li>blue → [2]</li>
+                            <li>rabbit → [2]</li>
+                            <li>slow → [3]</li>
+                            <li>turtle → [3]</li>
+                        </ul>
+                    </div>
+
+                    <p>עכשיו כשאתה מחפש "brown", Elasticsearch יודע מיד שזה מופיע ב-documents 1 ו-3 - בלי לעבור על כל ה-documents!</p>
+
+                    <h2>תהליך Indexing</h2>
+                    <ol>
+                        <li><strong>Analysis</strong> - הטקסט מפוצל למילים (tokens)</li>
+                        <li><strong>Normalization</strong> - lowercase, הסרת ניקוד וכו'</li>
+                        <li><strong>Indexing</strong> - יצירת ה-inverted index</li>
+                    </ol>
+                </div>
+
+                <!-- Documents & Fields -->
+                <div id="theory-documents" class="theory-section">
+                    <h1>📄 Documents & Fields</h1>
+
+                    <h2>מהו Document?</h2>
+                    <div class="info-card">
+                        <p>Document הוא יחידת המידע הבסיסית ב-Elasticsearch. זה JSON object שמכיל fields.</p>
+                    </div>
+
+                    <h3>דוגמת Document:</h3>
+                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">{
+  "_index": "users",
+  "_id": "1",
+  "_source": {
+    "name": "Lev Beck",
+    "email": "lev@example.com",
+    "age": 30,
+    "joined": "2024-01-15",
+    "interests": ["data", "elasticsearch", "coding"]
+  }
+}</div>
+
+                    <h2>Metadata Fields</h2>
+                    <ul>
+                        <li><strong>_index</strong> - איזה index ה-document שייך אליו</li>
+                        <li><strong>_id</strong> - מזהה ייחודי של ה-document</li>
+                        <li><strong>_source</strong> - ה-JSON המקורי שנשלח</li>
+                        <li><strong>_score</strong> - relevance score בחיפוש</li>
+                    </ul>
+
+                    <h2>Field Data Types</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>טקסט</h4>
+                            <ul>
+                                <li><strong>text</strong> - full-text search</li>
+                                <li><strong>keyword</strong> - exact values</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>מספרים</h4>
+                            <ul>
+                                <li><strong>long, integer, short, byte</strong></li>
+                                <li><strong>double, float</strong></li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>תאריכים ובוליאנים</h4>
+                            <ul>
+                                <li><strong>date</strong></li>
+                                <li><strong>boolean</strong></li>
+                            </ul>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>מורכבים</h4>
+                            <ul>
+                                <li><strong>object</strong> - JSON object</li>
+                                <li><strong>nested</strong> - array of objects</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mappings -->
+                <div id="theory-mappings" class="theory-section">
+                    <h1>🗺️ Mappings</h1>
+
+                    <div class="info-card">
+                        <p><strong>Mapping</strong> מגדיר איך documents ו-fields שלהם מאוחסנים ומאונדקסים.</p>
+                        <p>זה בערך כמו schema במסד נתונים רלציוני.</p>
+                    </div>
+
+                    <h2>Dynamic Mapping</h2>
+                    <p>Elasticsearch יכול להסיק אוטומטית את ה-mapping על בסיס הנתונים שנשלחים:</p>
+                    <ul>
+                        <li>String → text + keyword</li>
+                        <li>Number → long/double</li>
+                        <li>Boolean → boolean</li>
+                        <li>Date string → date</li>
+                    </ul>
+
+                    <h2>Explicit Mapping</h2>
+                    <p>אתה יכול (ומומלץ בפרודקשן) להגדיר mapping מפורש:</p>
+                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">PUT /my-index
+{
+  "mappings": {
+    "properties": {
+      "title": { "type": "text" },
+      "author": { "type": "keyword" },
+      "pages": { "type": "integer" },
+      "published": { "type": "date" }
+    }
+  }
+}</div>
+
+                    <h3>⚠️ חשוב לדעת:</h3>
+                    <div class="concept-highlight">
+                        <p>לא ניתן לשנות mapping של field קיים! צריך ליצור index חדש ולעשות reindex.</p>
+                    </div>
+                </div>
+
+                <!-- Queries -->
+                <div id="theory-queries" class="theory-section">
+                    <h1>🔎 סוגי Queries ב-Elasticsearch</h1>
+
+                    <h2>Query Context vs Filter Context</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>Query Context</h4>
+                            <p>עונה על: "כמה טוב ה-document מתאים?"</p>
+                            <p>מחשב <strong>relevance score</strong> (_score)</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Filter Context</h4>
+                            <p>עונה על: "האם ה-document מתאים?"</p>
+                            <p>תשובה: כן/לא (בלי score)</p>
+                            <p><strong>מהיר יותר</strong> ו-cacheable</p>
+                        </div>
+                    </div>
+
+                    <h2>Full-Text Queries</h2>
+                    <h3>Match Query</h3>
+                    <p>החיפוש הבסיסי ביותר. מבצע analysis על הטקסט.</p>
+                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">POST /books/_search
+{
+  "query": {
+    "match": {
+      "title": "elasticsearch guide"
+    }
+  }
+}</div>
+
+                    <h3>Multi-Match Query</h3>
+                    <p>חיפוש במספר fields במקביל.</p>
+
+                    <h3>Match Phrase</h3>
+                    <p>חיפוש ביטוי מדויק (המילים בסדר הנכון).</p>
+
+                    <h2>Term-Level Queries</h2>
+                    <p>חיפוש ערכים מדויקים (ללא analysis):</p>
+                    <ul>
+                        <li><strong>Term</strong> - ערך מדויק אחד</li>
+                        <li><strong>Terms</strong> - מספר ערכים (OR)</li>
+                        <li><strong>Range</strong> - טווח (תאריכים, מספרים)</li>
+                        <li><strong>Exists</strong> - בדיקה שה-field קיים</li>
+                        <li><strong>Wildcard</strong> - תווים כללים (* ?)</li>
+                        <li><strong>Regexp</strong> - regular expressions</li>
+                    </ul>
+
+                    <h2>Boolean Query</h2>
+                    <p>שילוב של queries עם לוגיקה בוליאנית:</p>
+                    <ul>
+                        <li><strong>must</strong> - חייב להתאים (AND) + משפיע על ה-score</li>
+                        <li><strong>should</strong> - רצוי (OR) + משפיע על ה-score</li>
+                        <li><strong>must_not</strong> - לא צריך להתאים (NOT)</li>
+                        <li><strong>filter</strong> - חייב להתאים אבל בלי score</li>
+                    </ul>
+                </div>
+
+                <!-- Aggregations -->
+                <div id="theory-aggregations" class="theory-section">
+                    <h1>📊 Aggregations - ניתוח נתונים</h1>
+
+                    <div class="info-card">
+                        <p><strong>Aggregations</strong> מאפשרות לנו לבצע ניתוח על הנתונים - סכומים, ממוצעים, קיבוצים ועוד.</p>
+                    </div>
+
+                    <h2>סוגי Aggregations</h2>
+
+                    <h3>1. Metric Aggregations</h3>
+                    <p>חישובים מתמטיים על ערכים:</p>
+                    <ul>
+                        <li><strong>avg</strong> - ממוצע</li>
+                        <li><strong>sum</strong> - סכום</li>
+                        <li><strong>min / max</strong> - מינימום / מקסימום</li>
+                        <li><strong>stats</strong> - כל הנ"ל ביחד</li>
+                        <li><strong>cardinality</strong> - ספירת ערכים ייחודיים</li>
+                    </ul>
+
+                    <h3>2. Bucket Aggregations</h3>
+                    <p>קיבוץ documents ל-"דליים":</p>
+                    <ul>
+                        <li><strong>terms</strong> - קיבוץ לפי ערכים (top N)</li>
+                        <li><strong>range</strong> - קיבוץ לפי טווחים</li>
+                        <li><strong>date_histogram</strong> - קיבוץ לפי תאריכים</li>
+                        <li><strong>histogram</strong> - קיבוץ לפי מספרים</li>
+                    </ul>
+
+                    <h3>דוגמה - ספירת לוגים לפי רמת חומרה:</h3>
+                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">POST /logs/_search
+{
+  "size": 0,
+  "aggs": {
+    "levels": {
+      "terms": {
+        "field": "level.keyword"
+      }
+    }
+  }
+}</div>
+
+                    <h3>3. Pipeline Aggregations</h3>
+                    <p>aggregations על תוצאות של aggregations אחרים.</p>
+                </div>
+
+                <!-- Kibana מתקדם -->
+                <div id="theory-kibana-deep" class="theory-section">
+                    <h1>📈 Kibana - מעבר ליסודות</h1>
+
+                    <h2>Discover</h2>
+                    <p>חיפוש וסינון נתונים:</p>
+                    <ul>
+                        <li>חיפוש חופשי בטקסט</li>
+                        <li>סינון לפי fields</li>
+                        <li>שמירת searches</li>
+                        <li>ייצוא נתונים</li>
+                    </ul>
+
+                    <h2>Visualize</h2>
+                    <p>יצירת תרשימים ווויזואליזציות:</p>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>Line / Area / Bar</h4>
+                            <p>תרשימי קו, שטח ועמודות לנתונים לאורך זמן</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Pie / Donut</h4>
+                            <p>חלוקה פרופורציונלית של נתונים</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Data Table</h4>
+                            <p>טבלה עם aggregations</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>Metric</h4>
+                            <p>מספר גדול אחד (KPI)</p>
+                        </div>
+                    </div>
+
+                    <h2>Dashboard</h2>
+                    <p>צירוף visualizations לתצוגה מאוחדת:</p>
+                    <ul>
+                        <li>Drag & drop</li>
+                        <li>זמן משותף לכל הפאנלים</li>
+                        <li>פילטרים גלובליים</li>
+                        <li>Refresh אוטומטי</li>
+                    </ul>
+
+                    <h2>Canvas</h2>
+                    <p>יצירת presentations ו-infographics מותאמות אישית עם עיצוב חופשי.</p>
+
+                    <h2>Maps</h2>
+                    <p>ויזואליזציה של נתונים גיאוגרפיים על מפה.</p>
+                </div>
+
+                <!-- סוגי Beats -->
+                <div id="theory-beats-types" class="theory-section">
+                    <h1>🎵 סוגי Beats - Data Shippers</h1>
+
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📄 Filebeat</h4>
+                            <p><strong>מה:</strong> שולח לוגים מקבצים</p>
+                            <p><strong>למה:</strong> logs, application logs, system logs</p>
+                            <p><strong>תכונה:</strong> Modules מוכנים (Apache, Nginx, MySQL...)</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📊 Metricbeat</h4>
+                            <p><strong>מה:</strong> שולח metrics מהמערכת ושירותים</p>
+                            <p><strong>למה:</strong> CPU, RAM, Disk, Network, Docker, Kubernetes</p>
+                            <p><strong>תכונה:</strong> Modules לכל השירותים הפופולריים</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🌐 Packetbeat</h4>
+                            <p><strong>מה:</strong> network packet analyzer</p>
+                            <p><strong>למה:</strong> ניטור תעבורת רשת, protocols (HTTP, MySQL, Redis...)</p>
+                            <p><strong>תכונה:</strong> real-time network monitoring</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>💓 Heartbeat</h4>
+                            <p><strong>מה:</strong> uptime monitoring</p>
+                            <p><strong>למה:</strong> בדיקת זמינות של שירותים</p>
+                            <p><strong>תכונה:</strong> ICMP, TCP, HTTP pings</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🔒 Auditbeat</h4>
+                            <p><strong>מה:</strong> audit framework data</p>
+                            <p><strong>למה:</strong> שינויים בקבצים, פעילות משתמשים</p>
+                            <p><strong>תכונה:</strong> security & compliance</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🐳 Other Beats</h4>
+                            <p><strong>Winlogbeat:</strong> Windows event logs</p>
+                            <p><strong>Functionbeat:</strong> serverless data shipper</p>
+                            <p>ועוד community beats רבים...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Practices -->
+                <div id="theory-best-practices" class="theory-section">
+                    <h1>✨ Best Practices</h1>
+
+                    <h2>🏗️ תכנון Index</h2>
+                    <div class="concept-highlight">
+                        <h4>מספר Shards</h4>
+                        <ul>
+                            <li>יותר מדי shards = overhead</li>
+                            <li>מעט מדי = bottleneck</li>
+                            <li><strong>כלל אצבע:</strong> shard size בין 10GB-50GB</li>
+                            <li>למידע קטן: 1-2 shards מספיק</li>
+                        </ul>
+                    </div>
+
+                    <h3>Replicas</h3>
+                    <ul>
+                        <li><strong>מינימום 1 replica</strong> לפרודקשן (high availability)</li>
+                        <li>יותר replicas = יותר search throughput</li>
+                        <li>אבל: דורש יותר אחסון ויותר indexing overhead</li>
+                    </ul>
+
+                    <h2>📝 Mappings</h2>
+                    <ul>
+                        <li><strong>הגדר mapping מפורש</strong> לפרודקשן (אל תסמוך על dynamic mapping)</li>
+                        <li>השתמש ב-<strong>keyword</strong> לשדות שאתה לא צריך full-text search עליהם</li>
+                        <li>השבת <code>_all</code> field אם לא צריך (מיושן ממילא)</li>
+                        <li>השתמש ב-<strong>index: false</strong> לשדות שלא צריך לחפש בהם</li>
+                    </ul>
+
+                    <h2>🔍 Queries</h2>
+                    <div class="concept-highlight">
+                        <h4>⚡ ביצועים:</h4>
+                        <ul>
+                            <li>השתמש ב-<strong>filter context</strong> כשאין צורך ב-scoring (cacheable!)</li>
+                            <li>הגבל את מספר התוצאות עם <code>size</code></li>
+                            <li>השתמש ב-<code>_source</code> filtering כדי להחזיר רק שדות שצריך</li>
+                            <li>העדף <code>term</code> queries על <code>match</code> כשמחפשים ערכים מדויקים</li>
+                        </ul>
+                    </div>
+
+                    <h2>🗂️ Index Lifecycle</h2>
+                    <p>עבור נתונים time-based (לוגים):</p>
+                    <ul>
+                        <li>צור indices חדשים לפי זמן (daily/weekly)</li>
+                        <li>השתמש ב-<strong>Index Lifecycle Management (ILM)</strong></li>
+                        <li>העבר indices ישנים ל-cold/frozen tier</li>
+                        <li>מחק או ארכב indices ישנים מדי</li>
+                    </ul>
+
+                    <h2>🔐 Security</h2>
+                    <ul>
+                        <li>אל תחשוף Elasticsearch ישירות לאינטרנט</li>
+                        <li>השתמש ב-authentication & authorization</li>
+                        <li>הגדר HTTPS/TLS</li>
+                        <li>גבה (backup) את הנתונים באופן קבוע</li>
+                    </ul>
+
+                    <h2>📊 Monitoring</h2>
+                    <ul>
+                        <li>עקוב אחר <strong>cluster health</strong> (green/yellow/red)</li>
+                        <li>נטר disk space, memory, CPU</li>
+                        <li>בדוק slow queries</li>
+                        <li>השתמש ב-Elastic Stack Monitoring</li>
+                    </ul>
+                </div>
+
+            </main>
+        </div>
+    </div>
 
     <!-- === SIMULATOR VIEW === -->
     <div id="view-simulator" class="view-section active">
@@ -1169,6 +1977,14 @@ POST /bookdb_index/_doc/_bulk
         document.getElementById('view-' + viewId).classList.add('active');
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function showTheorySection(sectionId, btn) {
+        document.querySelectorAll('.theory-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('theory-' + sectionId).classList.add('active');
+
+        document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
     }
 
