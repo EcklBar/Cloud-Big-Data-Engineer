@@ -1332,7 +1332,527 @@ Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
                     </div>
                 </div>
 
-                <!-- More sections to be continued in next parts... -->
+                <!-- Producers -->
+                <div id="section-producers" class="theory-section">
+                    <h1>📤 Kafka Producers</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Producer?</h3>
+                        <p><strong>Producer</strong> הוא אפליקציה שיוצרת ושולחת (מפרסמת) records ל-Kafka topics.</p>
+                    </div>
+
+                    <h2>איך Producer עובד?</h2>
+                    <ol style="font-size: 1.05rem; line-height: 2;">
+                        <li>Producer יוצר record (key, value, timestamp)</li>
+                        <li>הSerializer ממיר את הkey והvalue ל-bytes</li>
+                        <li>הPartitioner בוחר לאיזה partition לשלוח</li>
+                        <li>Record מתווסף ל-batch</li>
+                        <li>Batch נשלח לBroker</li>
+                        <li>Broker מחזיר אישור (ack)</li>
+                    </ol>
+
+                    <h2>Partitioning Strategy</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🔑 עם Key</h4>
+                            <p>אם record כולל key:</p>
+                            <ul>
+                                <li>Hash של הkey קובע partition</li>
+                                <li>אותו key → תמיד אותו partition</li>
+                                <li>מבטיח ordering לפי key</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🎲 בלי Key</h4>
+                            <p>אם אין key:</p>
+                            <ul>
+                                <li>Round-robin בין partitions</li>
+                                <li>חלוקה שווה של העומס</li>
+                                <li>אין guarantee על ordering</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🎯 Custom Partitioner</h4>
+                            <p>ניתן ליישם לוגיקה משלך:</p>
+                            <ul>
+                                <li>חלוקה לפי ערך בmessage</li>
+                                <li>חלוקה לפי timestamp</li>
+                                <li>חלוקה לפי גיאוגרפיה</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>Acknowledgment Modes</h2>
+                    <div class="concept-card">
+                        <h4>⚙️ הגדרת acks</h4>
+                        <ul>
+                            <li><strong>acks=0</strong> - אין המתנה לאישור (מהיר, לא בטוח)</li>
+                            <li><strong>acks=1</strong> - המתן לאישור מה-leader (ברירת מחדל)</li>
+                            <li><strong>acks=all</strong> - המתן לאישור מכל ה-replicas (הכי בטוח, הכי איטי)</li>
+                        </ul>
+                    </div>
+
+                    <h2>אופטימיזציה של Producer</h2>
+                    <div class="success-card">
+                        <h4>✨ Best Practices:</h4>
+                        <ul>
+                            <li><strong>Batching</strong> - שליחת messages בקבוצות (batch.size, linger.ms)</li>
+                            <li><strong>Compression</strong> - דחיסה (gzip, snappy, lz4, zstd)</li>
+                            <li><strong>Idempotence</strong> - מניעת duplicates (enable.idempotence=true)</li>
+                            <li><strong>Max In-Flight</strong> - כמות בקשות במקביל (max.in.flight.requests.per.connection)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Consumers -->
+                <div id="section-consumers" class="theory-section">
+                    <h1>📥 Kafka Consumers</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Consumer?</h3>
+                        <p><strong>Consumer</strong> הוא אפליקציה שקוראת records מ-Kafka topics.</p>
+                    </div>
+
+                    <h2>Consumer Groups</h2>
+                    <div class="concept-card">
+                        <h4>👥 מהו Consumer Group?</h4>
+                        <p>קבוצה של consumers שעובדים יחד כדי לצרוך topic.</p>
+                        <ul>
+                            <li>כל partition נצרך על ידי <strong>consumer אחד בלבד</strong> בgroup</li>
+                            <li>אם יש יותר consumers מאשר partitions - חלקם יישארו idle</li>
+                            <li>אם consumer נופל - ה-partitions שלו יועברו לאחרים (rebalancing)</li>
+                        </ul>
+                    </div>
+
+                    <div class="architecture-diagram">
+                        <h3>דוגמה: Topic עם 4 Partitions</h3>
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color);">
+<strong>Consumer Group: analytics-group</strong>
+
+Topic: user-events (4 partitions)
+
+Consumer 1 → Partition 0, Partition 1
+Consumer 2 → Partition 2, Partition 3
+
+<strong style="color: var(--kafka-green);">✓ כל partition נצרך פעם אחת</strong>
+<strong style="color: var(--kafka-blue);">✓ עומס מחולק בין 2 consumers</strong>
+                        </div>
+                    </div>
+
+                    <h2>Offsets</h2>
+                    <div class="success-card">
+                        <h4>🔢 מהו Offset?</h4>
+                        <p><strong>Offset</strong> הוא מספר ייחודי שמזהה כל message ב-partition.</p>
+                        <ul>
+                            <li>Consumer שומר את ה-offset האחרון שקרא</li>
+                            <li>מאפשר לresume מהמקום האחרון</li>
+                            <li>שמור ב-topic מיוחד: <code>__consumer_offsets</code></li>
+                        </ul>
+                    </div>
+
+                    <h3>Commit Strategies</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🔄 Auto Commit</h4>
+                            <p>Kafka מcommit אוטומטית</p>
+                            <ul>
+                                <li>פשוט וקל</li>
+                                <li>יכול לאבד messages</li>
+                                <li>יכול לעבד פעמיים</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>✋ Manual Commit</h4>
+                            <p>אתה מחליט מתי לcommit</p>
+                            <ul>
+                                <li>שליטה מלאה</li>
+                                <li>at-least-once</li>
+                                <li>exactly-once (עם transactions)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>Rebalancing</h2>
+                    <div class="warning-card">
+                        <h4>⚠️ מהו Rebalancing?</h4>
+                        <p>תהליך שבו partitions מחולקים מחדש בין consumers בgroup.</p>
+                        <p><strong>קורה כאשר:</strong></p>
+                        <ul>
+                            <li>Consumer מצטרף לgroup</li>
+                            <li>Consumer יוצא מהgroup (crash או shutdown)</li>
+                            <li>נוספו partitions ל-topic</li>
+                        </ul>
+                        <p><strong>במהלך rebalancing:</strong> הgroup לא יכול לקרוא messages!</p>
+                    </div>
+                </div>
+
+                <!-- Kafka Connect -->
+                <div id="section-kafka-connect" class="theory-section">
+                    <h1>🔌 Kafka Connect</h1>
+
+                    <div class="info-card">
+                        <h3>מהו Kafka Connect?</h3>
+                        <p><strong>Kafka Connect</strong> הוא framework לחיבור Kafka למערכות חיצוניות בצורה סקלבילית ואמינה.</p>
+                    </div>
+
+                    <h2>סוגי Connectors</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📥 Source Connectors</h4>
+                            <p>מייבאים נתונים <strong>לתוך</strong> Kafka</p>
+                            <ul>
+                                <li>Database → Kafka</li>
+                                <li>Files → Kafka</li>
+                                <li>APIs → Kafka</li>
+                                <li>Logs → Kafka</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📤 Sink Connectors</h4>
+                            <p>מייצאים נתונים <strong>מ</strong>-Kafka</p>
+                            <ul>
+                                <li>Kafka → Database</li>
+                                <li>Kafka → HDFS</li>
+                                <li>Kafka → Elasticsearch</li>
+                                <li>Kafka → S3</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>יתרונות Kafka Connect</h2>
+                    <div class="success-card">
+                        <ul>
+                            <li><strong>קל לשימוש</strong> - קונפיגורציה בJSON, ללא קוד</li>
+                            <li><strong>סקלבילי</strong> - מבוזר ואוטומטי</li>
+                            <li><strong>Fault-Tolerant</strong> - עמיד לתקלות</li>
+                            <li><strong>Pluggable</strong> - מאות connectors קיימים</li>
+                            <li><strong>Offset Management</strong> - אוטומטי</li>
+                        </ul>
+                    </div>
+
+                    <h2>Connectors פופולריים</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🗄️ JDBC Source/Sink</h4>
+                            <p>חיבור ל-Databases:</p>
+                            <ul>
+                                <li>MySQL, PostgreSQL</li>
+                                <li>Oracle, SQL Server</li>
+                                <li>Query mode או CDC mode</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📁 HDFS Sink</h4>
+                            <p>שמירה ל-Hadoop:</p>
+                            <ul>
+                                <li>Parquet, Avro, JSON</li>
+                                <li>Partitioning</li>
+                                <li>Hive integration</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🔍 Elasticsearch Sink</h4>
+                            <p>אינדוקס ל-ES:</p>
+                            <ul>
+                                <li>Real-time indexing</li>
+                                <li>Bulk operations</li>
+                                <li>Schema mapping</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>☁️ S3 Sink</h4>
+                            <p>שמירה ל-AWS S3:</p>
+                            <ul>
+                                <li>Time-based partitioning</li>
+                                <li>Multiple formats</li>
+                                <li>Compression</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2>REST API</h2>
+                    <div class="concept-card">
+                        <h4>🌐 ניהול דרך API</h4>
+                        <p>Kafka Connect מספק REST API לניהול:</p>
+                        <ul>
+                            <li><code>GET /connectors</code> - רשימת connectors</li>
+                            <li><code>POST /connectors</code> - יצירת connector חדש</li>
+                            <li><code>GET /connectors/{name}/status</code> - סטטוס</li>
+                            <li><code>PUT /connectors/{name}/pause</code> - pause</li>
+                            <li><code>PUT /connectors/{name}/resume</code> - resume</li>
+                            <li><code>DELETE /connectors/{name}</code> - מחיקה</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Monitoring -->
+                <div id="section-monitoring" class="theory-section">
+                    <h1>📊 Kafka Monitoring</h1>
+
+                    <div class="info-card">
+                        <h3>למה Monitoring חשוב?</h3>
+                        <p>Kafka הוא רכיב קריטי בארכיטקטורה. ניטור נכון מאפשר:</p>
+                        <ul>
+                            <li>זיהוי בעיות לפני שהן הופכות לקריטיות</li>
+                            <li>הבנת דפוסי שימוש והתנהגות</li>
+                            <li>אופטימיזציה של ביצועים</li>
+                            <li>תכנון קיבולת (capacity planning)</li>
+                        </ul>
+                    </div>
+
+                    <h2>שיטות Monitoring</h2>
+
+                    <h3>1️⃣ Kafka Built-in Tools</h3>
+                    <div class="concept-card">
+                        <h4>⚙️ Command Line Tools</h4>
+                        <p>Kafka מגיע עם כלים מובנים:</p>
+
+                        <div class="code-block" style="margin-top: 15px;">
+<span class="code-comment"># רשימת consumer groups</span>
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+<span class="code-comment"># בדיקת lag של group</span>
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
+  --group my-group --describe
+
+<span class="code-comment"># תיאור topic</span>
+$ kafka-topics.sh --bootstrap-server localhost:9092 \
+  --describe --topic my-topic
+                        </div>
+                    </div>
+
+                    <h3>2️⃣ Kafka Connect REST API</h3>
+                    <div class="concept-card">
+                        <h4>🌐 ניטור Connectors</h4>
+                        <div class="code-block" style="margin-top: 15px;">
+<span class="code-comment"># רשימת connectors</span>
+$ curl localhost:8083/connectors
+
+<span class="code-comment"># סטטוס connector</span>
+$ curl localhost:8083/connectors/my-connector/status
+
+<span class="code-comment"># tasks של connector</span>
+$ curl localhost:8083/connectors/my-connector/tasks
+                        </div>
+                    </div>
+
+                    <h3>3️⃣ כלי Monitoring צד שלישי</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>Confluent Control Center</h4>
+                            <p>כלי ניטור מלא מ-Confluent (חלק מהגרסה הenterprise)</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Cloudera Manager</h4>
+                            <p>ניטור כחלק מפלטפורמת Cloudera</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Landoop (Lenses)</h4>
+                            <p>UI חזותי לניהול וניטור Kafka</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Kafka Manager (Yahoo)</h4>
+                            <p>כלי open-source לניהול clusters</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Kafdrop</h4>
+                            <p>UI פשוט לצפייה בtopics ומessages</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>Burrow (LinkedIn)</h4>
+                            <p>ניטור consumer lag בלבד</p>
+                        </div>
+                    </div>
+
+                    <h2>מטריקות חשובות לניטור</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📊 Broker Metrics</h4>
+                            <ul>
+                                <li><strong>UnderReplicatedPartitions</strong> - בעיות replication</li>
+                                <li><strong>OfflinePartitionsCount</strong> - partitions לא זמינים</li>
+                                <li><strong>BytesIn/BytesOut</strong> - throughput</li>
+                                <li><strong>RequestsPerSecond</strong> - עומס</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>⏱️ Producer Metrics</h4>
+                            <ul>
+                                <li><strong>record-send-rate</strong> - קצב שליחה</li>
+                                <li><strong>record-error-rate</strong> - שגיאות</li>
+                                <li><strong>request-latency</strong> - זמן תגובה</li>
+                                <li><strong>batch-size-avg</strong> - גודל batch ממוצע</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📥 Consumer Metrics</h4>
+                            <ul>
+                                <li><strong>records-lag</strong> - כמה messages מאחור</li>
+                                <li><strong>records-consumed-rate</strong> - קצב צריכה</li>
+                                <li><strong>fetch-latency</strong> - זמן קריאה</li>
+                                <li><strong>commit-latency</strong> - זמן commit</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>💾 System Metrics</h4>
+                            <ul>
+                                <li><strong>CPU Usage</strong></li>
+                                <li><strong>Memory Usage</strong></li>
+                                <li><strong>Disk Usage & I/O</strong></li>
+                                <li><strong>Network Bandwidth</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="warning-card">
+                        <h4>🚨 Alerts חשובים להגדיר:</h4>
+                        <ul>
+                            <li><strong>Consumer Lag גבוה</strong> - consumers לא מספיקים</li>
+                            <li><strong>Under-replicated partitions</strong> - בעיות ב-cluster</li>
+                            <li><strong>Broker Down</strong> - broker לא זמין</li>
+                            <li><strong>Disk Space Low</strong> - מקום אוזל</li>
+                            <li><strong>High Error Rate</strong> - הרבה שגיאות</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Best Practices -->
+                <div id="section-best-practices" class="theory-section">
+                    <h1>✨ Kafka Best Practices</h1>
+
+                    <h2>🏗️ תכנון ועיצוב</h2>
+
+                    <div class="success-card">
+                        <h4>📂 Topics & Partitions</h4>
+                        <ul>
+                            <li><strong>מספר partitions:</strong> התחל עם ~10-30 partitions לפי throughput צפוי</li>
+                            <li><strong>אל תפריז:</strong> יותר מדי partitions = overhead על הcluster</li>
+                            <li><strong>תכנן מראש:</strong> קשה לשנות מספר partitions אחר כך</li>
+                            <li><strong>Key design:</strong> בחר key שמבטיח חלוקה שווה בין partitions</li>
+                            <li><strong>Retention:</strong> הגדר retention policy הגיוני (זמן או גודל)</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>🖥️ Cluster Sizing</h4>
+                        <ul>
+                            <li><strong>מינימום 3 brokers</strong> בפרודקשן (for replication)</li>
+                            <li><strong>Replication factor = 3</strong> (מאפשר אובדן של 2 brokers)</li>
+                            <li><strong>בדוק throughput צפוי:</strong> כמה MB/sec אתה צריך?</li>
+                            <li><strong>דיסק מהיר:</strong> SSD מומלץ לlatency נמוך</li>
+                        </ul>
+                    </div>
+
+                    <h2>📤 Producer Best Practices</h2>
+
+                    <div class="success-card">
+                        <h4>אמינות (Durability)</h4>
+                        <ul>
+                            <li><strong>acks=all</strong> - לדאטה קריטי</li>
+                            <li><strong>enable.idempotence=true</strong> - למניעת duplicates</li>
+                            <li><strong>max.in.flight.requests=1</strong> - אם ordering קריטי</li>
+                            <li><strong>retries > 0</strong> - נסה שוב במקרה של failure</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-card">
+                        <h4>ביצועים (Performance)</h4>
+                        <ul>
+                            <li><strong>batching:</strong> הגדל batch.size ו-linger.ms</li>
+                            <li><strong>compression:</strong> השתמש ב-lz4 או snappy</li>
+                            <li><strong>buffer.memory:</strong> הגדל אם throughput גבוה</li>
+                            <li><strong>partitioning:</strong> השתמש ב-key לbalancing טוב</li>
+                        </ul>
+                    </div>
+
+                    <h2>📥 Consumer Best Practices</h2>
+
+                    <div class="success-card">
+                        <h4>אמינות</h4>
+                        <ul>
+                            <li><strong>Manual commit:</strong> commit רק אחרי עיבוד מוצלח</li>
+                            <li><strong>isolation.level=read_committed</strong> - לexactly-once</li>
+                            <li><strong>Handle rebalancing:</strong> commit לפני rebalance</li>
+                            <li><strong>Error handling:</strong> מה עושים עם message שנכשל?</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-card">
+                        <h4>ביצועים</h4>
+                        <ul>
+                            <li><strong>מספר consumers = מספר partitions</strong> (למקסימום parallelism)</li>
+                            <li><strong>fetch.min.bytes:</strong> הגדל לבאצ'ים גדולים יותר</li>
+                            <li><strong>max.poll.records:</strong> כמה records לפעם</li>
+                            <li><strong>session.timeout.ms:</strong> לא קצר מדי (יגרום לrebalances מיותרים)</li>
+                        </ul>
+                    </div>
+
+                    <h2>🔒 אבטחה (Security)</h2>
+
+                    <div class="warning-card">
+                        <h4>⚠️ אבטחה בפרודקשן</h4>
+                        <ul>
+                            <li><strong>SSL/TLS:</strong> הצפנת תעבורה</li>
+                            <li><strong>SASL:</strong> authentication (Kerberos, SCRAM, OAuth)</li>
+                            <li><strong>ACLs:</strong> authorization - מי יכול לעשות מה</li>
+                            <li><strong>Encryption at rest:</strong> הצפנת דיסק</li>
+                            <li><strong>אל תחשוף את Kafka לאינטרנט ישירות!</strong></li>
+                        </ul>
+                    </div>
+
+                    <h2>📊 ניטור ותחזוקה</h2>
+
+                    <div class="success-card">
+                        <h4>✅ מה לנטר?</h4>
+                        <ul>
+                            <li><strong>Consumer lag</strong> - האם consumers מספיקים?</li>
+                            <li><strong>Under-replicated partitions</strong> - בעיות replication</li>
+                            <li><strong>Disk usage</strong> - מתקרבים למכסה?</li>
+                            <li><strong>CPU & Memory</strong> - bottlenecks?</li>
+                            <li><strong>Error rates</strong> - הרבה שגיאות?</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>🔧 תחזוקה שוטפת</h4>
+                        <ul>
+                            <li><strong>Rolling restarts:</strong> עדכון brokers בזה אחר זה</li>
+                            <li><strong>Backup:</strong> גבה את הקונפיגורציה (לא בהכרח את הדאטה)</li>
+                            <li><strong>Clean up:</strong> מחק topics ישנים שלא בשימוש</li>
+                            <li><strong>Version upgrades:</strong> עקוב אחרי גרסאות חדשות</li>
+                        </ul>
+                    </div>
+
+                    <h2>🎯 כללים זהב</h2>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #fff9db, #fff3bf);">
+                        <ol style="font-size: 1.1rem; line-height: 2; font-weight: 600;">
+                            <li>תמיד תכנן capacity מראש</li>
+                            <li>נטר את הcluster באופן רציף</li>
+                            <li>בדוק שהרשת מהירה (latency נמוך בין brokers)</li>
+                            <li>השתמש ב-replication factor של לפחות 3</li>
+                            <li>בדיקת load לפני פרודקשן</li>
+                            <li>אל תקח סיכונים עם דאטה קריטי - acks=all</li>
+                            <li>הגדר retention מתאים לצרכים שלך</li>
+                            <li>תעד את הconfiguration והprocess</li>
+                        </ol>
+                    </div>
+                </div>
 
             </main>
         </div>
