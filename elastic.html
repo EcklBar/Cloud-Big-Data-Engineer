@@ -3,38 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elastic Stack - המדריך האינטראקטיבי המקיף</title>
+    <title>Apache Kafka - המדריך האינטראקטיבי המקיף</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Elastic Brand Colors */
-            --elastic-yellow: #FEC514;
-            --elastic-green: #00BFB3;
-            --elastic-pink: #F04E98;
-            --elastic-blue: #0077CC;
-            --elastic-accent: #36a2eb;
+            --kafka-primary: #000000;
+            --kafka-accent: #ff6b6b;
+            --kafka-green: #51cf66;
+            --kafka-blue: #339af0;
+            --kafka-orange: #ff922b;
+            --kafka-purple: #9775fa;
 
-            /* UI Colors */
-            --primary-dark: #1a1c20;
-            --bg-body: #f4f6f8;
+            --bg-body: #f8f9fa;
             --bg-surface: #ffffff;
-            --text-primary: #1a202c;
-            --text-secondary: #4a5568;
-            --text-tertiary: #718096;
-            --border-color: #e2e8f0;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-tertiary: #868e96;
+            --border-color: #dee2e6;
 
-            /* Code */
-            --code-bg: #1e293b;
-            --code-text: #e2e8f0;
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
 
-            /* Effects */
             --radius-lg: 16px;
-            --radius-md: 8px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,75 +39,73 @@
             font-family: 'Heebo', 'Inter', sans-serif;
             background: var(--bg-body);
             color: var(--text-primary);
+            overflow: hidden;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         /* === HEADER === */
-        header {
-            background: var(--bg-surface);
-            border-bottom: 2px solid var(--border-color);
+        .header {
+            background: linear-gradient(135deg, #000000, #2d3436);
             padding: 0 40px;
-            height: 80px;
+            height: 90px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-shrink: 0;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 100;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .brand-logo {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--elastic-blue), var(--elastic-green));
+        .kafka-logo {
+            width: 55px;
+            height: 55px;
+            background: white;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 800;
-            font-size: 20px;
-            box-shadow: 0 4px 10px rgba(0, 119, 204, 0.3);
+            font-size: 28px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+            font-weight: 900;
         }
 
         .brand-text h1 {
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             margin: 0;
             font-weight: 800;
-            background: linear-gradient(90deg, var(--elastic-blue), var(--elastic-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         .brand-text p {
-            font-size: 0.8rem;
-            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
             margin: 0;
         }
 
         /* === TABS === */
         .nav-tabs {
             display: flex;
-            gap: 10px;
-            background: #f1f5f9;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
             padding: 6px;
-            border-radius: var(--radius-md);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
 
         .nav-item {
-            padding: 10px 28px;
+            padding: 12px 28px;
             font-size: 0.95rem;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: rgba(255,255,255,0.7);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -119,18 +113,17 @@
         }
 
         .nav-item:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255,255,255,0.15);
+            color: white;
         }
 
         .nav-item.active {
             background: white;
-            color: var(--elastic-blue);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
+            color: var(--kafka-primary);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
         }
 
-        /* === MAIN CONTENT === */
+        /* === MAIN LAYOUT === */
         .main-wrapper {
             flex: 1;
             overflow: hidden;
@@ -141,10 +134,9 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             overflow-y: auto;
-            padding: 40px;
             display: none;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s;
         }
 
         .view-section.active {
@@ -152,505 +144,41 @@
             opacity: 1;
         }
 
-        /* === CARDS === */
-        .content-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            margin-bottom: 30px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .content-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card-header {
-            padding: 24px 30px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to left, #ffffff, #fafafa);
-        }
-
-        .card-header h2 {
-            margin: 0;
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .card-body {
-            padding: 30px;
-        }
-
-        /* === BUTTONS === */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 24px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Heebo', sans-serif;
-        }
-
-        .btn-primary {
-            background: var(--elastic-blue);
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 119, 204, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: #0062a8;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 119, 204, 0.4);
-        }
-
-        .btn-primary:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: white;
-            border: 2px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--elastic-blue);
-            background: #f0f9ff;
-        }
-
-        /* === PIPELINE SIMULATOR === */
-        .pipeline-track {
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            margin: 50px 0;
-            padding: 0 60px;
-            min-height: 200px;
-        }
-
-        .pipeline-line {
-            position: absolute;
-            top: 50%;
-            right: 80px;
-            left: 80px;
-            height: 3px;
-            background: linear-gradient(to left, var(--border-color), var(--elastic-blue), var(--border-color));
-            z-index: 0;
-            border-radius: 10px;
-        }
-
-        .pipeline-stage {
-            position: relative;
-            z-index: 2;
-            background: var(--bg-surface);
-            border: 2px solid var(--border-color);
-            padding: 25px;
-            border-radius: 16px;
-            width: 200px;
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s;
-        }
-
-        .pipeline-stage:hover {
-            transform: translateY(-8px) scale(1.05);
-            border-color: var(--elastic-blue);
-            box-shadow: 0 10px 30px rgba(0, 119, 204, 0.2);
-        }
-
-        .stage-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            display: block;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-
-        .stage-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .stage-desc {
-            font-size: 0.8rem;
-            color: var(--text-tertiary);
-            display: block;
-        }
-
-        .packet {
-            width: 20px;
-            height: 20px;
-            background: var(--elastic-yellow);
-            border: 3px solid white;
-            box-shadow: 0 0 0 2px var(--elastic-blue), 0 4px 10px rgba(254, 197, 20, 0.5);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translate(50%, -50%);
-            z-index: 10;
-            display: none;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: translate(50%, -50%) scale(1); }
-            50% { transform: translate(50%, -50%) scale(1.2); }
-        }
-
-        /* === CLUSTER VISUALIZATION === */
-        .cluster-visual {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .node-box {
-            background: linear-gradient(135deg, #f8fafc, #ffffff);
-            border: 2px dashed var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            min-height: 150px;
-            transition: all 0.3s;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .node-box:hover {
-            border-color: var(--elastic-blue);
-            background: #f0f9ff;
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .node-header {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .shard {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin: 5px;
-            animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            cursor: help;
-            transition: transform 0.2s;
-        }
-
-        .shard:hover {
-            transform: scale(1.15);
-        }
-
-        .shard.primary {
-            background: linear-gradient(135deg, var(--elastic-blue), var(--elastic-accent));
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 119, 204, 0.3);
-        }
-
-        .shard.replica {
-            background: white;
-            border: 2px solid var(--elastic-blue);
-            color: var(--elastic-blue);
-            box-shadow: 0 2px 6px rgba(0, 119, 204, 0.2);
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0) rotate(180deg); opacity: 0; }
-            to { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        /* === INPUT === */
-        .input-field {
-            flex: 1;
-            padding: 14px 20px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            direction: ltr;
-            text-align: left;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--elastic-blue);
-            box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
-        }
-
-        /* === OUTPUT BOX === */
-        .output-box {
-            background: var(--code-bg);
-            border: 1px solid #334155;
-            padding: 20px;
-            border-radius: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--code-text);
-            min-height: 100px;
-            direction: ltr;
-            text-align: left;
-        }
-
-        /* === KIBANA PANEL === */
-        .kibana-panel {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .kibana-discover {
-            height: 180px;
-            overflow-y: auto;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            background: white;
-        }
-
-        .log-entry {
-            padding: 8px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .chart-container {
-            height: 180px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            border-bottom: 3px solid var(--border-color);
-            padding: 0 20px;
-        }
-
-        .chart-bar {
-            width: 60px;
-            background: var(--elastic-blue);
-            height: 0%;
-            transition: height 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            border-radius: 8px 8px 0 0;
-            box-shadow: 0 -2px 10px rgba(0, 119, 204, 0.2);
-            position: relative;
-        }
-
-        .chart-label {
-            display: flex;
-            justify-content: space-around;
-            font-size: 0.75rem;
-            margin-top: 10px;
-            color: var(--text-tertiary);
-            font-weight: 600;
-        }
-
-        /* === EXERCISES === */
-        .exercise-list {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .exercise-card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-        }
-
-        .exercise-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .ex-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 20px;
-        }
-
-        .ex-number {
-            background: linear-gradient(135deg, var(--elastic-blue), var(--elastic-green));
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 6px rgba(0, 119, 204, 0.3);
-        }
-
-        .ex-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            flex: 1;
-        }
-
-        .reveal-btn {
-            background: transparent;
-            border: 2px solid var(--elastic-blue);
-            color: var(--elastic-blue);
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-family: 'Heebo', sans-serif;
-        }
-
-        .reveal-btn:hover {
-            background: var(--elastic-blue);
-            color: white;
-        }
-
-        .solution-box {
-            display: none;
-            background: var(--code-bg);
-            color: var(--code-text);
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 20px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-break: break-word;
-            overflow-x: auto;
-            border-right: 4px solid var(--elastic-yellow);
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
-            direction: ltr;
-            text-align: left;
-        }
-
-        /* === API REFERENCE === */
-        .api-grid {
-            display: grid;
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .api-item {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
-        }
-
-        .api-item:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .api-item-header {
-            padding: 20px 25px;
-            background: #fcfcfc;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .method-badge {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        .badge-get { background: #eff6ff; color: #3b82f6; border: 2px solid #3b82f6; }
-        .badge-post { background: #f0fdf4; color: #22c55e; border: 2px solid #22c55e; }
-        .badge-put { background: #fff7ed; color: #f97316; border: 2px solid #f97316; }
-        .badge-delete { background: #fef2f2; color: #ef4444; border: 2px solid #ef4444; }
-
-        .endpoint {
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .api-item-body {
-            padding: 25px;
-        }
-
-        .code-snippet {
-            background: var(--code-bg);
-            color: var(--code-text);
-            padding: 20px;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            margin-top: 15px;
-            white-space: pre-wrap;
-            direction: ltr;
-            text-align: left;
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        /* === THEORY SIDEBAR === */
+        /* === THEORY LAYOUT === */
         .theory-layout {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 0;
+            grid-template-columns: 300px 1fr;
             height: 100%;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         .theory-sidebar {
             background: white;
             border-left: 1px solid var(--border-color);
-            padding: 30px 0;
+            padding: 25px 0;
             overflow-y: auto;
         }
 
+        .sidebar-section {
+            margin-bottom: 8px;
+        }
+
+        .sidebar-header {
+            padding: 12px 25px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            letter-spacing: 1px;
+        }
+
         .theory-nav-item {
-            padding: 14px 30px;
+            padding: 14px 25px;
             color: var(--text-secondary);
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.95rem;
+            transition: all 0.2s;
+            font-size: 0.92rem;
             font-weight: 500;
             border-right: 3px solid transparent;
             display: flex;
@@ -659,25 +187,27 @@
         }
 
         .theory-nav-item:hover {
-            background: #f8fafc;
+            background: #f8f9fa;
             color: var(--text-primary);
         }
 
         .theory-nav-item.active {
-            background: #f0f9ff;
-            color: var(--elastic-blue);
-            border-right-color: var(--elastic-blue);
+            background: linear-gradient(to left, #fff5f5, white);
+            color: var(--kafka-accent);
+            border-right-color: var(--kafka-accent);
             font-weight: 600;
         }
 
         .theory-content {
-            padding: 40px;
+            padding: 50px 60px;
             overflow-y: auto;
+            background: var(--bg-body);
         }
 
         .theory-section {
             display: none;
-            animation: fadeIn 0.3s;
+            animation: fadeIn 0.4s;
+            max-width: 1100px;
         }
 
         .theory-section.active {
@@ -685,120 +215,364 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .theory-section h1 {
-            font-size: 2rem;
-            margin-bottom: 25px;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
             color: var(--text-primary);
             font-weight: 800;
+            line-height: 1.2;
         }
 
         .theory-section h2 {
-            font-size: 1.5rem;
-            margin: 30px 0 20px 0;
-            color: var(--text-primary);
+            font-size: 1.8rem;
+            margin: 40px 0 25px 0;
+            color: var(--kafka-primary);
             font-weight: 700;
         }
 
         .theory-section h3 {
-            font-size: 1.2rem;
-            margin: 25px 0 15px 0;
-            color: var(--elastic-blue);
+            font-size: 1.3rem;
+            margin: 30px 0 18px 0;
+            color: var(--kafka-accent);
             font-weight: 600;
         }
 
         .theory-section p, .theory-section li {
-            line-height: 1.8;
+            line-height: 1.9;
             color: var(--text-secondary);
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            font-size: 1.05rem;
         }
 
         .theory-section ul, .theory-section ol {
-            padding-right: 25px;
+            padding-right: 30px;
+            margin-bottom: 25px;
         }
 
+        .theory-section li {
+            margin-bottom: 12px;
+        }
+
+        /* === CARDS === */
         .info-card {
-            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-            border: 2px solid var(--elastic-blue);
-            border-radius: 12px;
+            background: linear-gradient(135deg, #fff5f5, #ffe9e9);
+            border: 2px solid var(--kafka-accent);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-card h3, .info-card h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--kafka-primary);
+        }
+
+        .concept-card {
+            background: white;
+            border-right: 5px solid var(--kafka-blue);
+            border-radius: var(--radius-md);
+            padding: 25px 30px;
+            margin: 25px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .concept-card h4 {
+            margin: 0 0 12px 0;
+            color: var(--kafka-blue);
+            font-size: 1.15rem;
+        }
+
+        .warning-card {
+            background: linear-gradient(135deg, #fff9db, #fff3bf);
+            border: 2px solid var(--kafka-orange);
+            border-radius: var(--radius-md);
             padding: 25px;
             margin: 25px 0;
         }
 
-        .concept-highlight {
-            background: white;
-            border-right: 4px solid var(--elastic-yellow);
-            padding: 20px 25px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
+        .success-card {
+            background: linear-gradient(135deg, #ebfbee, #d3f9d8);
+            border: 2px solid var(--kafka-green);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
         }
 
+        /* === COMPARISON GRID === */
         .comparison-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
-            margin: 25px 0;
+            margin: 30px 0;
         }
 
         .comparison-card {
             background: white;
             border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: var(--radius-lg);
+            padding: 28px;
             transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
         }
 
         .comparison-card:hover {
-            border-color: var(--elastic-blue);
-            transform: translateY(-3px);
+            border-color: var(--kafka-accent);
+            transform: translateY(-5px);
             box-shadow: var(--shadow-md);
         }
 
         .comparison-card h4 {
-            margin: 0 0 15px 0;
-            color: var(--elastic-blue);
+            margin: 0 0 18px 0;
+            color: var(--kafka-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-card ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        .comparison-card li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* === ARCHITECTURE DIAGRAM === */
+        .architecture-diagram {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin: 35px 0;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .diagram-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .diagram-box {
+            background: linear-gradient(135deg, #f8f9fa, white);
+            border: 3px solid var(--kafka-primary);
+            border-radius: 12px;
+            padding: 25px 35px;
+            min-width: 150px;
+            font-weight: 700;
             font-size: 1.1rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .diagram-box:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .diagram-box.producer {
+            border-color: var(--kafka-green);
+            background: linear-gradient(135deg, #ebfbee, white);
+        }
+
+        .diagram-box.broker {
+            border-color: var(--kafka-accent);
+            background: linear-gradient(135deg, #fff5f5, white);
+            padding: 35px 45px;
+            font-size: 1.3rem;
+        }
+
+        .diagram-box.consumer {
+            border-color: var(--kafka-blue);
+            background: linear-gradient(135deg, #e7f5ff, white);
+        }
+
+        .diagram-arrow {
+            font-size: 2.5rem;
+            color: var(--text-tertiary);
+        }
+
+        /* === CODE BLOCKS === */
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 25px 30px;
+            border-radius: var(--radius-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin: 25px 0;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        .code-comment {
+            color: #6c7086;
+        }
+
+        .code-command {
+            color: #89dceb;
+        }
+
+        .code-string {
+            color: #a6e3a1;
+        }
+
+        .code-number {
+            color: #fab387;
+        }
+
+        /* === USE CASE CARDS === */
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 35px 0;
+        }
+
+        .usecase-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 0;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s;
+        }
+
+        .usecase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .usecase-header {
+            background: linear-gradient(135deg, var(--kafka-primary), #2d3436);
+            color: white;
+            padding: 25px;
+            font-size: 1.8rem;
+            text-align: center;
             font-weight: 700;
         }
 
-        /* === RESPONSIVE === */
-        @media (max-width: 768px) {
-            .nav-tabs { flex-wrap: wrap; }
-            .pipeline-track { flex-direction: column; padding: 20px; }
-            .pipeline-stage { width: 100%; margin-bottom: 20px; }
-            .kibana-panel { grid-template-columns: 1fr; }
-            .cluster-visual { grid-template-columns: 1fr; }
-            .theory-layout { grid-template-columns: 1fr; }
-            .theory-sidebar { display: none; }
+        .usecase-body {
+            padding: 28px;
+        }
+
+        .usecase-body h4 {
+            margin: 0 0 15px 0;
+            color: var(--kafka-accent);
+            font-size: 1.2rem;
+        }
+
+        .usecase-body p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* === COMPANIES GRID === */
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .company-badge {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px 20px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .company-badge:hover {
+            border-color: var(--kafka-accent);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
 
         /* === SCROLLBAR === */
-        ::-webkit-scrollbar { width: 10px; height: 10px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 5px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f3f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #adb5bd;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #868e96;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .theory-layout {
+                grid-template-columns: 1fr;
+            }
+            .theory-sidebar {
+                display: none;
+            }
+            .header {
+                flex-direction: column;
+                height: auto;
+                padding: 20px;
+                gap: 15px;
+            }
+            .nav-tabs {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
 
-<header>
+<header class="header">
     <div class="brand">
-        <div class="brand-logo">ES</div>
+        <div class="kafka-logo">K</div>
         <div class="brand-text">
-            <h1>Elastic Master</h1>
-            <p>המדריך האינטראקטיבי המקיף</p>
+            <h1>Apache Kafka</h1>
+            <p>המדריך האינטראקטיבי המקיף - Data Streaming Platform</p>
         </div>
     </div>
 
     <div class="nav-tabs">
-        <div class="nav-item active" onclick="switchView('simulator', this)">🎮 סימולטור</div>
-        <div class="nav-item" onclick="switchView('theory', this)">📚 תיאוריה</div>
-        <div class="nav-item" onclick="switchView('api', this)">⚙️ API Reference</div>
-        <div class="nav-item" onclick="switchView('lab', this)">💪 תרגילים</div>
+        <div class="nav-item active" onclick="switchView('theory', this)">📚 תיאוריה</div>
+        <div class="nav-item" onclick="switchView('architecture', this)">🏗️ ארכיטקטורה</div>
+        <div class="nav-item" onclick="switchView('commands', this)">⚙️ פקודות</div>
     </div>
 
     <div style="width: 80px;"></div>
@@ -807,1163 +581,1075 @@
 <div class="main-wrapper">
 
     <!-- === THEORY VIEW === -->
-    <div id="view-theory" class="view-section">
+    <div id="view-theory" class="view-section active">
         <div class="theory-layout">
             <aside class="theory-sidebar">
-                <div class="theory-nav-item active" onclick="showTheorySection('intro', this)">
-                    <span>🎯</span> מבוא ל-Elastic Stack
+                <div class="sidebar-section">
+                    <div class="sidebar-header">יסודות</div>
+                    <div class="theory-nav-item active" onclick="showSection('intro', this)">
+                        <span>🎯</span> מבוא ל-Kafka
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('etl-vs-streaming', this)">
+                        <span>⚡</span> ETL vs Streaming
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('what-is-kafka', this)">
+                        <span>🔍</span> מהו Apache Kafka?
+                    </div>
                 </div>
-                <div class="theory-nav-item" onclick="showTheorySection('what-is', this)">
-                    <span>🔍</span> מהו Elasticsearch?
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">ארכיטקטורה</div>
+                    <div class="theory-nav-item" onclick="showSection('architecture', this)">
+                        <span>🏗️</span> ארכיטקטורת Kafka
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('components', this)">
+                        <span>🔧</span> רכיבים עיקריים
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('topics-partitions', this)">
+                        <span>📂</span> Topics & Partitions
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('brokers-clusters', this)">
+                        <span>🖥️</span> Brokers & Clusters
+                    </div>
                 </div>
-                <div class="theory-nav-item" onclick="showTheorySection('elk-stack', this)">
-                    <span>📦</span> ELK Stack
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">שימושים ויישומים</div>
+                    <div class="theory-nav-item" onclick="showSection('use-cases', this)">
+                        <span>🎯</span> מקרי שימוש
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('real-world', this)">
+                        <span>🌍</span> חברות שמשתמשות
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('streaming', this)">
+                        <span>🌊</span> Data Streaming
+                    </div>
                 </div>
-                <div class="theory-nav-item" onclick="showTheorySection('architecture', this)">
-                    <span>🏗️</span> ארכיטקטורה
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('sharding', this)">
-                    <span>🗂️</span> Sharding & Replication
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('inverted-index', this)">
-                    <span>⚡</span> Inverted Index
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('documents', this)">
-                    <span>📄</span> Documents & Fields
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('mappings', this)">
-                    <span>🗺️</span> Mappings
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('queries', this)">
-                    <span>🔎</span> סוגי Queries
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('aggregations', this)">
-                    <span>📊</span> Aggregations
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('kibana-deep', this)">
-                    <span>📈</span> Kibana מתקדם
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('beats-types', this)">
-                    <span>🎵</span> סוגי Beats
-                </div>
-                <div class="theory-nav-item" onclick="showTheorySection('best-practices', this)">
-                    <span>✨</span> Best Practices
+
+                <div class="sidebar-section">
+                    <div class="sidebar-header">מתקדם</div>
+                    <div class="theory-nav-item" onclick="showSection('producers', this)">
+                        <span>📤</span> Producers
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('consumers', this)">
+                        <span>📥</span> Consumers
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('kafka-connect', this)">
+                        <span>🔌</span> Kafka Connect
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('monitoring', this)">
+                        <span>📊</span> Monitoring
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('best-practices', this)">
+                        <span>✨</span> Best Practices
+                    </div>
                 </div>
             </aside>
 
             <main class="theory-content">
 
                 <!-- מבוא -->
-                <div id="theory-intro" class="theory-section active">
-                    <h1>🎯 מבוא ל-Elastic Stack</h1>
+                <div id="section-intro" class="theory-section active">
+                    <h1>🎯 מבוא ל-Apache Kafka</h1>
 
                     <div class="info-card">
-                        <h3>מהו Elastic Stack?</h3>
-                        <p><strong>Elastic Stack</strong> (המכונה גם ELK Stack) הוא אוסף כלים לניהול, עיבוד, אחסון וניתוח נתונים בזמן אמת.</p>
+                        <h3>מהו Apache Kafka?</h3>
+                        <p><strong>Apache Kafka</strong> הוא פלטפורמה מבוזרת לסטרימינג נתונים המבוססת על מודל pub-sub (publish-subscribe).</p>
+                        <p>Kafka הוא <strong>מהיר להפליא, סקלבילי, עמיד לתקלות</strong> ויכול לשמש כפלטפורמת נתונים מרכזית.</p>
                     </div>
 
-                    <h2>הרכיבים העיקריים</h2>
+                    <h2>למה Kafka?</h2>
+                    <p>בעידן המודרני, ארגונים צריכים לעבד נתונים בזמן אמת:</p>
+
                     <div class="comparison-grid">
                         <div class="comparison-card">
-                            <h4>🔍 Elasticsearch</h4>
-                            <p>מנוע חיפוש וניתוח מבוזר המאפשר אחסון, חיפוש וניתוח כמויות גדולות של נתונים בזמן אמת.</p>
+                            <h4>⚡ Real-Time</h4>
+                            <p>עיבוד נתונים ברגע שהם נוצרים, לא בבאצ'ים</p>
                         </div>
                         <div class="comparison-card">
-                            <h4>📊 Kibana</h4>
-                            <p>ממשק ויזואלי לחיפוש, צפייה וניתוח הנתונים האגורים ב-Elasticsearch.</p>
+                            <h4>📈 סקלביליות</h4>
+                            <p>התמודדות עם מיליוני events בשנייה</p>
                         </div>
                         <div class="comparison-card">
-                            <h4>⚙️ Logstash</h4>
-                            <p>צינור עיבוד נתונים לאיסוף, עיבוד והעברת נתונים מ מקורות שונים ל-Elasticsearch.</p>
+                            <h4>🔒 Fault Tolerance</h4>
+                            <p>המערכת ממשיכה לעבוד גם בתקלות</p>
                         </div>
                         <div class="comparison-card">
-                            <h4>📦 Beats</h4>
-                            <p>סוכנים קלי משקל לשליחת נתונים ממאות או אלפי מכונות ל-Logstash או Elasticsearch.</p>
+                            <h4>🌐 מבוזר</h4>
+                            <p>חלוקת עומס על מספר שרתים</p>
                         </div>
                     </div>
 
-                    <h2>תרחישי שימוש נפוצים</h2>
-                    <ul>
-                        <li><strong>ניתוח לוגים</strong> - ריכוז וניתוח לוגים מכל המערכות בארגון</li>
-                        <li><strong>Application Performance Monitoring (APM)</strong> - מעקב אחר ביצועי אפליקציות</li>
-                        <li><strong>Security Analytics</strong> - זיהוי איומים וניתוח אבטחה</li>
-                        <li><strong>Business Analytics</strong> - ניתוח נתונים עסקיים בזמן אמת</li>
-                        <li><strong>Full-Text Search</strong> - חיפוש טקסט מלא באתרים ואפליקציות</li>
-                    </ul>
+                    <h2>הבעיה שKafka פותר</h2>
+                    <div class="concept-card">
+                        <h4>🔄 מערכות ישנות (ETL)</h4>
+                        <ul>
+                            <li>רצות בזמנים מוגדרים (לא real-time)</li>
+                            <li>מורכבות בהתמודדות עם נתונים רבים</li>
+                            <li>קשות לסקלביליות</li>
+                            <li>עלויות תפעול גבוהות</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-card">
+                        <h4>✨ הפתרון: Data Streaming עם Kafka</h4>
+                        <ul>
+                            <li><strong>מערכת עצבים מרכזית</strong> לכל הנתונים בארגון</li>
+                            <li><strong>Message bus סקלבילי</strong> בזמן אמת</li>
+                            <li><strong>Source of Truth</strong> - מקור אמת יחיד לכל הנתונים</li>
+                            <li>מזין מערכות: Databases, Data Warehouses, Hadoop, NoSQL ועוד</li>
+                        </ul>
+                    </div>
+
+                    <h2>מי משתמש ב-Kafka?</h2>
+                    <div class="companies-grid">
+                        <div class="company-badge">Netflix</div>
+                        <div class="company-badge">Uber</div>
+                        <div class="company-badge">LinkedIn</div>
+                        <div class="company-badge">Airbnb</div>
+                        <div class="company-badge">PayPal</div>
+                        <div class="company-badge">Walmart</div>
+                        <div class="company-badge">Spotify</div>
+                        <div class="company-badge">Twitter</div>
+                        <div class="company-badge">Pinterest</div>
+                        <div class="company-badge">Goldman Sachs</div>
+                        <div class="company-badge">Cisco</div>
+                        <div class="company-badge">eBay</div>
+                    </div>
                 </div>
 
-                <!-- מהו Elasticsearch -->
-                <div id="theory-what-is" class="theory-section">
-                    <h1>🔍 מהו Elasticsearch?</h1>
+                <!-- ETL vs Streaming -->
+                <div id="section-etl-vs-streaming" class="theory-section">
+                    <h1>⚡ ETL vs Data Streaming</h1>
+
+                    <h2>ETL - העולם הישן</h2>
+                    <div class="warning-card">
+                        <h4>⚠️ מגבלות ETL מסורתי:</h4>
+                        <ul>
+                            <li>התפתח בשנות ה-90, בעיקר לניתוח נתונים</li>
+                            <li><strong>רץ בזמנים מוגדרים</strong> - לא בזמן אמת</li>
+                            <li>מורכב ב-incremental capturing</li>
+                            <li>רץ על databases יחידים (Operational / DWH)</li>
+                            <li>מתאים בעיקר ל-<strong>schematic data</strong></li>
+                            <li>קשה מאוד לסקלביליות בעומסים גבוהים</li>
+                            <li>עלות תפעולית גבוהה - איטי ודורש משאבים</li>
+                            <li>תמיכה מוגבלת או אפסית ב-real-time</li>
+                        </ul>
+                    </div>
+
+                    <h2>Data Streaming - העולם החדש</h2>
+                    <div class="success-card">
+                        <h4>✅ דרישות של העידן המודרני:</h4>
+                        <ul>
+                            <li><strong>Fault Tolerance</strong> - עמידות בפני תקלות</li>
+                            <li><strong>Parallel Processing</strong> - עיבוד מקבילי</li>
+                            <li><strong>Low Latency</strong> - זמן תגובה נמוך | Real-Time</li>
+                            <li>תמיכה בנתונים schematic ו-non-schematic</li>
+                            <li>קל לתפעול וניטור</li>
+                            <li>פתרון reusable מלא ולא רק כלי בודד</li>
+                        </ul>
+                    </div>
+
+                    <h2>פלטפורמת Streaming מרכזית</h2>
+                    <div class="architecture-diagram">
+                        <h3 style="margin-bottom: 30px;">תפקידי הפלטפורמה</h3>
+                        <div style="text-align: right; max-width: 800px; margin: 0 auto;">
+                            <div class="concept-card" style="margin-bottom: 20px;">
+                                <h4>🧠 מערכת עצבים מרכזית</h4>
+                                <p>נקודת מעבר אחת לכל הנתונים בארגון</p>
+                            </div>
+                            <div class="concept-card" style="margin-bottom: 20px;">
+                                <h4>📨 Message Bus</h4>
+                                <p>אפיק הודעות סקלבילי בזמן אמת ממקורות מרובים</p>
+                            </div>
+                            <div class="concept-card">
+                                <h4>🎯 Source of Truth</h4>
+                                <p>Pipeline ייחוס לכל יעדי עיבוד הנתונים:<br>
+                                RDBMs, DWH, Hadoop, NoSQL, מערכות ניטור ועוד</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What is Kafka -->
+                <div id="section-what-is-kafka" class="theory-section">
+                    <h1>🔍 מהו Apache Kafka?</h1>
 
                     <div class="info-card">
-                        <p><strong>Elasticsearch</strong> הוא מנוע חיפוש וניתוח מבוזר, בנוי על Apache Lucene, המאפשר אחסון, חיפוש וניתוח נתונים בזמן כמעט-אמיתי (Near Real-Time).</p>
+                        <p style="font-size: 1.15rem; margin: 0;"><strong>Apache Kafka</strong> הוא מערכת הודעות מבוזרת המבוססת על עקרון pub-sub (publish-subscribe).</p>
                     </div>
 
-                    <h2>מאפיינים עיקריים</h2>
-
-                    <h3>🌐 מבוזר (Distributed)</h3>
-                    <p>Elasticsearch בנוי להיות מבוזר מההתחלה. הוא מאפשר להפיץ נתונים על פני מספר servers (nodes) ולהרחיב את המערכת אופקית.</p>
-
-                    <h3>⚡ Near Real-Time (NRT)</h3>
-                    <p>יש זמן השהיה קטן (בדרך כלל שנייה אחת) מרגע שאתה מאנדקס document עד שהוא הופך ניתן לחיפוש.</p>
-
-                    <h3>📝 Schema-Free</h3>
-                    <p>אין צורך להגדיר schema מראש. Elasticsearch יוצר אוטומטית mapping על בסיס המבנה של ה-documents שנשלחים.</p>
-
-                    <h3>🔄 RESTful API</h3>
-                    <p>כל הפעולות מתבצעות דרך REST API פשוט, באמצעות JSON over HTTP.</p>
-
-                    <div class="concept-highlight">
-                        <h4>💡 למה Elasticsearch כל כך מהיר?</h4>
-                        <p>הסוד נמצא במבנה ה-<strong>Inverted Index</strong> שמאפשר חיפוש מהיר ביותר אפילו על מיליארדי documents.</p>
-                    </div>
-                </div>
-
-                <!-- ELK Stack -->
-                <div id="theory-elk-stack" class="theory-section">
-                    <h1>📦 ELK Stack - תהליך עבודה מלא</h1>
-
-                    <h2>1️⃣ Beats - איסוף נתונים</h2>
-                    <div class="concept-highlight">
-                        <h4>🎵 מהם Beats?</h4>
-                        <p>Beats הם data shippers קלים שאתה מתקין כ-agents על השרתים שלך לשליחת נתונים תפעוליים.</p>
+                    <h2>מאפיינים מרכזיים</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>⚡ מהיר להפליא</h4>
+                            <p>מסוגל לעבד מיליוני messages בשנייה עם latency של מילישניות</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📈 Highly Scalable</h4>
+                            <p>ניתן להרחבה אופקית - הוספת brokers ללא הפסקת שירות</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔒 Fault-Tolerant</h4>
+                            <p>עמיד לתקלות באמצעות replication ו-distributed architecture</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>💾 יכול לשמש כאחסון</h4>
+                            <p>אחסון זרם של records לפרקי זמן מוגדרים</p>
+                        </div>
                     </div>
 
-                    <h3>סוגי Beats פופולריים:</h3>
-                    <ul>
-                        <li><strong>Filebeat</strong> - לוגים מקבצים</li>
-                        <li><strong>Metricbeat</strong> - metrics מערכת ושירותים</li>
-                        <li><strong>Packetbeat</strong> - נתוני רשת</li>
-                        <li><strong>Heartbeat</strong> - uptime monitoring</li>
-                        <li><strong>Auditbeat</strong> - audit data</li>
-                    </ul>
-
-                    <h2>2️⃣ Logstash - עיבוד נתונים</h2>
-                    <div class="concept-highlight">
-                        <h4>⚙️ מה עושה Logstash?</h4>
-                        <p>Logstash הוא data processing pipeline שמקבל נתונים, מעבד אותם (parsing, filtering, enrichment) ושולח אותם ל-Elasticsearch.</p>
-                    </div>
-
-                    <h3>שלבי Logstash Pipeline:</h3>
-                    <ul>
-                        <li><strong>Input</strong> - קבלת נתונים ממקורות שונים</li>
-                        <li><strong>Filter</strong> - עיבוד ושינוי הנתונים (grok, mutate, date)</li>
-                        <li><strong>Output</strong> - שליחת הנתונים המעובדים ליעד (Elasticsearch)</li>
-                    </ul>
-
-                    <h2>3️⃣ Elasticsearch - אחסון וחיפוש</h2>
-                    <p>הנתונים המעובדים נשמרים ב-Elasticsearch במבנה אופטימלי לחיפוש מהיר.</p>
-
-                    <h2>4️⃣ Kibana - ויזואליזציה וניתוח</h2>
-                    <div class="concept-highlight">
-                        <h4>📊 יכולות Kibana:</h4>
+                    <h2>Kafka כפלטפורמת Streaming</h2>
+                    <div class="concept-card">
+                        <h4>🌊 יכולות מרכזיות:</h4>
                         <ul>
-                            <li><strong>Discover</strong> - חיפוש וסינון נתונים</li>
-                            <li><strong>Visualize</strong> - יצירת תרשימים וגרפים</li>
-                            <li><strong>Dashboard</strong> - צירוף visualizations ל-dashboards</li>
-                            <li><strong>Canvas</strong> - יצירת infographics</li>
-                            <li><strong>Maps</strong> - ויזואליזציה גיאוגרפית</li>
+                            <li><strong>הפלטפורמה הפופולרית ביותר</strong> לsטרימינג נתונים</li>
+                            <li>מספקת <strong>messaging backbone סקלבילי</strong> לאינטגרציית נתונים</li>
+                            <li>מאפשרת בניית <strong>data pipelines</strong> לסטרימינג</li>
+                            <li>מספקת לוגיקה לעיבוד וטרנספורמציה של נתונים</li>
+                            <li><strong>Event/Message handler</strong> - מטפל בשינויי נתונים בטבלאות, לוגים ועוד</li>
                         </ul>
+                    </div>
+
+                    <h3>חיבורים למקורות נתונים</h3>
+                    <ul>
+                        <li>מספק <strong>APIs לחיבור</strong> למקורות נתונים מרובים (Apps, DBs)</li>
+                        <li>מטפל ב-<strong>high-volume</strong> ו-<strong>high-diversity</strong> של נתונים</li>
+                        <li><strong>Event-Centric Thinking</strong> - עיבוד אירועים ברגע שהם מתרחשים</li>
+                    </ul>
+
+                    <div class="success-card">
+                        <h4>💡 דוגמה: אפליקציית מכירות</h4>
+                        <p><strong>אירוע:</strong> מוצר נצפה באתר</p>
+                        <p><strong>Kafka יכול לספק:</strong> צבירת צפיות במוצר ב<strong>זמן אמת</strong></p>
                     </div>
                 </div>
 
                 <!-- ארכיטקטורה -->
-                <div id="theory-architecture" class="theory-section">
-                    <h1>🏗️ ארכיטקטורת Elasticsearch</h1>
+                <div id="section-architecture" class="theory-section">
+                    <h1>🏗️ ארכיטקטורת Apache Kafka</h1>
 
-                    <h2>מבנה Cluster</h2>
-                    <div class="info-card">
-                        <p><strong>Cluster</strong> הוא אוסף של nodes (שרתים) שעובדים יחד ומחזיקים את כל הנתונים שלך.</p>
-                        <p>כל cluster מזוהה על ידי שם ייחודי (ברירת מחדל: "elasticsearch").</p>
-                    </div>
-
-                    <h3>🖥️ סוגי Nodes</h3>
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h4>Master Node</h4>
-                            <p>אחראי על פעולות ניהול ברמת ה-cluster: יצירת/מחיקת indices, מעקב אחר nodes, הקצאת shards.</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Data Node</h4>
-                            <p>מחזיק data ומבצע פעולות הקשורות לנתונים: CRUD, search, aggregations.</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Ingest Node</h4>
-                            <p>מבצע pre-processing על documents לפני ה-indexing.</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Coordinating Node</h4>
-                            <p>מנתב requests, מבצע reduce phase של search, מפזר bulk indexing.</p>
-                        </div>
-                    </div>
-
-                    <h2>Index, Document, Field</h2>
-                    <div class="concept-highlight">
-                        <h4>📊 אנלוגיה למסד נתונים:</h4>
-                        <ul>
-                            <li><strong>Index</strong> ≈ Database</li>
-                            <li><strong>Document</strong> ≈ Row/Record</li>
-                            <li><strong>Field</strong> ≈ Column</li>
-                        </ul>
-                    </div>
-
-                    <h3>Index</h3>
-                    <p>אוסף של documents עם מאפיינים דומים. לדוגמה: index של logs, index של users.</p>
-
-                    <h3>Document</h3>
-                    <p>יחידת המידע הבסיסית שניתן לאנדקס. זה JSON object.</p>
-
-                    <h3>Field</h3>
-                    <p>מפתח-ערך בתוך document. לכל field יש data type.</p>
-                </div>
-
-                <!-- Sharding & Replication -->
-                <div id="theory-sharding" class="theory-section">
-                    <h1>🗂️ Sharding & Replication</h1>
-
-                    <h2>למה צריך Sharding?</h2>
-                    <div class="info-card">
-                        <p>Index יכול להכיל כמות גדולה של נתונים שעלולה לעבור את מגבלות החומרה של node בודד.</p>
-                        <p><strong>Sharding</strong> מאפשר לפצל את ה-index למספר חלקים (shards) שיכולים להיות מאוכסנים על nodes שונים.</p>
-                    </div>
-
-                    <h3>✅ יתרונות Sharding:</h3>
-                    <ul>
-                        <li><strong>Scale horizontally</strong> - הוספת יותר נתונים מעבר ליכולת של node בודד</li>
-                        <li><strong>Parallelism</strong> - פעולות (חיפוש, indexing) יכולות לרוץ במקביל על shards שונים</li>
-                        <li><strong>Performance</strong> - חלוקת העומס על nodes מרובים</li>
-                    </ul>
-
-                    <h2>Primary vs Replica Shards</h2>
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h4>Primary Shard</h4>
-                            <p>כל document שייך ל-primary shard אחד. מספר ה-primary shards נקבע בעת יצירת ה-index.</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Replica Shard</h4>
-                            <p>עותק של primary shard. מספק high availability במקרה של כשל, ומאפשר להגדיל את throughput של queries.</p>
-                        </div>
-                    </div>
-
-                    <h3>🎯 Replica Shards - למה?</h3>
-                    <ul>
-                        <li><strong>High Availability</strong> - אם node נופל, הנתונים עדיין זמינים</li>
-                        <li><strong>Scalability</strong> - search queries יכולים לרוץ על כל הרפליקות במקביל</li>
-                    </ul>
-
-                    <div class="concept-highlight">
-                        <h4>⚠️ כלל חשוב:</h4>
-                        <p>Replica shard לעולם לא יוקצה לאותו node כמו ה-primary shard שלו (למניעת data loss).</p>
-                    </div>
-                </div>
-
-                <!-- Inverted Index -->
-                <div id="theory-inverted-index" class="theory-section">
-                    <h1>⚡ Inverted Index - הקסם מאחורי המהירות</h1>
+                    <h2>מודל עבודה</h2>
+                    <p>שיטות הingest מסורתיות כללו העברת נתונים ל-DWH לפני עיבוד אנליטי. סביבות מודרניות עשויות להשתמש ב-Hadoop/Hive כ-DWH או כ-staging area לבאצ'ים.</p>
 
                     <div class="info-card">
-                        <p><strong>Inverted Index</strong> הוא מבנה הנתונים המרכזי שעושה את Elasticsearch כל כך מהיר.</p>
+                        <h4>Kafka משתמשת ב-Streaming במקום Batch Processing</h4>
+                        <p>הנתונים נכנסים לפלטפורמה <strong>ברגע שהם נוצרים</strong> - real-time!</p>
                     </div>
 
-                    <h2>איך זה עובד?</h2>
-                    <p>במקום לשמור "document → מילים", Elasticsearch שומר "מילה → documents".</p>
+                    <h2>רכיבים בארכיטקטורה</h2>
+                    <div class="architecture-diagram">
+                        <h3 style="margin-bottom: 30px;">תהליך הסטרימינג</h3>
 
-                    <h3>דוגמה:</h3>
-                    <div class="concept-highlight">
-                        <p><strong>Doc 1:</strong> "The quick brown fox"</p>
-                        <p><strong>Doc 2:</strong> "The quick blue rabbit"</p>
-                        <p><strong>Doc 3:</strong> "The slow brown turtle"</p>
+                        <div class="diagram-row">
+                            <div class="diagram-box producer">
+                                📤<br>PRODUCERS<br>
+                                <span style="font-size: 0.75rem; font-weight: 400;">ספקי הנתונים</span>
+                            </div>
+                            <div class="diagram-arrow">→</div>
+                            <div class="diagram-box broker">
+                                🔥<br>KAFKA<br>BROKER
+                            </div>
+                            <div class="diagram-arrow">→</div>
+                            <div class="diagram-box consumer">
+                                📥<br>CONSUMERS<br>
+                                <span style="font-size: 0.75rem; font-weight: 400;">צרכני הנתונים</span>
+                            </div>
+                        </div>
 
-                        <h4 style="margin-top: 20px;">Inverted Index:</h4>
-                        <ul style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">
-                            <li>the → [1, 2, 3]</li>
-                            <li>quick → [1, 2]</li>
-                            <li>brown → [1, 3]</li>
-                            <li>fox → [1]</li>
-                            <li>blue → [2]</li>
-                            <li>rabbit → [2]</li>
-                            <li>slow → [3]</li>
-                            <li>turtle → [3]</li>
-                        </ul>
+                        <div style="margin-top: 40px; text-align: right;">
+                            <div class="concept-card">
+                                <ul>
+                                    <li><strong>כל ספקי הנתונים = PRODUCERS</strong></li>
+                                    <li>הנתונים נכתבים ל-streaming platform בזמן אמת</li>
+                                    <li>ניתן לבצע פעולות תוך כדי: ספירות, aggregations, המרות</li>
+                                    <li><strong>לאחר ההכנה → נשלחים ל-CONSUMERS</strong></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <p>עכשיו כשאתה מחפש "brown", Elasticsearch יודע מיד שזה מופיע ב-documents 1 ו-3 - בלי לעבור על כל ה-documents!</p>
-
-                    <h2>תהליך Indexing</h2>
-                    <ol>
-                        <li><strong>Analysis</strong> - הטקסט מפוצל למילים (tokens)</li>
-                        <li><strong>Normalization</strong> - lowercase, הסרת ניקוד וכו'</li>
-                        <li><strong>Indexing</strong> - יצירת ה-inverted index</li>
+                    <h2>התהליך המלא</h2>
+                    <ol style="font-size: 1.05rem; line-height: 2;">
+                        <li><strong>Producers</strong> שולחים events/messages ל-Kafka topics</li>
+                        <li><strong>Kafka Brokers</strong> מאחסנים ומנהלים את הנתונים</li>
+                        <li>פעולות עיבוד מתבצעות על הנתונים בזרם</li>
+                        <li><strong>Consumers</strong> קוראים את הנתונים המעובדים</li>
                     </ol>
                 </div>
 
-                <!-- Documents & Fields -->
-                <div id="theory-documents" class="theory-section">
-                    <h1>📄 Documents & Fields</h1>
+                <!-- רכיבים -->
+                <div id="section-components" class="theory-section">
+                    <h1>🔧 רכיבים עיקריים ב-Kafka</h1>
 
-                    <h2>מהו Document?</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📤 Producer</h4>
+                            <p>אפליקציה ששולחת (מפרסמת) messages ל-Kafka topics</p>
+                            <ul>
+                                <li>יכול לבחור ל-איזה partition לשלוח</li>
+                                <li>תומך ב-batching</li>
+                                <li>תומך ב-compression</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📥 Consumer</h4>
+                            <p>אפליקציה שקוראת messages מ-Kafka topics</p>
+                            <ul>
+                                <li>שייכת ל-consumer group</li>
+                                <li>שומרת offset</li>
+                                <li>יכולה לקרוא במקביל</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🖥️ Broker</h4>
+                            <p>שרת Kafka המאחסן ומנהל topics</p>
+                            <ul>
+                                <li>חלק מ-cluster</li>
+                                <li>מנהל partitions</li>
+                                <li>מטפל ב-replication</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🐘 ZooKeeper</h4>
+                            <p>מנהל את מטא-דאטה של ה-cluster</p>
+                            <ul>
+                                <li>בוחר leader לpartitions</li>
+                                <li>שומר קונפיגורציה</li>
+                                <li>(בגרסאות חדשות - Kraft במקום)</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📂 Topic</h4>
+                            <p>קטגוריה/feed name שאליו נשלחים messages</p>
+                            <ul>
+                                <li>מחולק ל-partitions</li>
+                                <li>ניתן ל-replication</li>
+                                <li>כמו "טבלה" במסד נתונים</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🗂️ Partition</h4>
+                            <p>חלוקה פיזית של topic לחלקים</p>
+                            <ul>
+                                <li>ordered, immutable</li>
+                                <li>כל message מקבל offset</li>
+                                <li>מאפשר parallelism</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topics & Partitions -->
+                <div id="section-topics-partitions" class="theory-section">
+                    <h1>📂 Topics & Partitions</h1>
+
+                    <h2>מהו Topic?</h2>
                     <div class="info-card">
-                        <p>Document הוא יחידת המידע הבסיסית ב-Elasticsearch. זה JSON object שמכיל fields.</p>
+                        <p><strong>Topic</strong> הוא stream של records. זה category או feed name שאליו נשלחים messages.</p>
+                        <p>כל topic מזוהה על ידי שם ייחודי.</p>
                     </div>
 
-                    <h3>דוגמת Document:</h3>
-                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">{
-  "_index": "users",
-  "_id": "1",
-  "_source": {
-    "name": "Lev Beck",
-    "email": "lev@example.com",
-    "age": 30,
-    "joined": "2024-01-15",
-    "interests": ["data", "elasticsearch", "coding"]
-  }
-}</div>
-
-                    <h2>Metadata Fields</h2>
+                    <h3>מאפיינים:</h3>
                     <ul>
-                        <li><strong>_index</strong> - איזה index ה-document שייך אליו</li>
-                        <li><strong>_id</strong> - מזהה ייחודי של ה-document</li>
-                        <li><strong>_source</strong> - ה-JSON המקורי שנשלח</li>
-                        <li><strong>_score</strong> - relevance score בחיפוש</li>
+                        <li>Topics הם <strong>multi-subscriber</strong> - יכולים להיות מספר consumers</li>
+                        <li>Messages נשמרים לפרק זמן מוגדר (retention)</li>
+                        <li>ניתן להגדיר compression (gzip, snappy, lz4)</li>
                     </ul>
 
-                    <h2>Field Data Types</h2>
+                    <h2>מהו Partition?</h2>
+                    <div class="concept-card">
+                        <h4>🗂️ Partition = חלוקה של Topic</h4>
+                        <p>כל topic מחולק ל-<strong>partitions</strong> (אחד או יותר).</p>
+                        <p>כל partition הוא <strong>ordered, immutable sequence</strong> של records.</p>
+                    </div>
+
+                    <div class="architecture-diagram">
+                        <h3>מבנה Topic עם 3 Partitions</h3>
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color);">
+<strong>Topic: user-events</strong>
+
+Partition 0: [msg0] → [msg3] → [msg6] → [msg9] ...
+Partition 1: [msg1] → [msg4] → [msg7] → [msg10] ...
+Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
+
+כל message מקבל <strong>offset</strong> ייחודי בpartition שלו
+                        </div>
+                    </div>
+
+                    <h2>למה Partitions?</h2>
                     <div class="comparison-grid">
                         <div class="comparison-card">
-                            <h4>טקסט</h4>
-                            <ul>
-                                <li><strong>text</strong> - full-text search</li>
-                                <li><strong>keyword</strong> - exact values</li>
-                            </ul>
+                            <h4>📈 Scalability</h4>
+                            <p>חלוקת הנתונים על מספר servers</p>
                         </div>
                         <div class="comparison-card">
-                            <h4>מספרים</h4>
-                            <ul>
-                                <li><strong>long, integer, short, byte</strong></li>
-                                <li><strong>double, float</strong></li>
-                            </ul>
+                            <h4>⚡ Parallelism</h4>
+                            <p>מספר consumers יכולים לקרוא במקביל</p>
                         </div>
                         <div class="comparison-card">
-                            <h4>תאריכים ובוליאנים</h4>
-                            <ul>
-                                <li><strong>date</strong></li>
-                                <li><strong>boolean</strong></li>
-                            </ul>
+                            <h4>🔒 Ordering</h4>
+                            <p>סדר מובטח <strong>בתוך partition</strong></p>
                         </div>
                         <div class="comparison-card">
-                            <h4>מורכבים</h4>
-                            <ul>
-                                <li><strong>object</strong> - JSON object</li>
-                                <li><strong>nested</strong> - array of objects</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mappings -->
-                <div id="theory-mappings" class="theory-section">
-                    <h1>🗺️ Mappings</h1>
-
-                    <div class="info-card">
-                        <p><strong>Mapping</strong> מגדיר איך documents ו-fields שלהם מאוחסנים ומאונדקסים.</p>
-                        <p>זה בערך כמו schema במסד נתונים רלציוני.</p>
-                    </div>
-
-                    <h2>Dynamic Mapping</h2>
-                    <p>Elasticsearch יכול להסיק אוטומטית את ה-mapping על בסיס הנתונים שנשלחים:</p>
-                    <ul>
-                        <li>String → text + keyword</li>
-                        <li>Number → long/double</li>
-                        <li>Boolean → boolean</li>
-                        <li>Date string → date</li>
-                    </ul>
-
-                    <h2>Explicit Mapping</h2>
-                    <p>אתה יכול (ומומלץ בפרודקשן) להגדיר mapping מפורש:</p>
-                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">PUT /my-index
-{
-  "mappings": {
-    "properties": {
-      "title": { "type": "text" },
-      "author": { "type": "keyword" },
-      "pages": { "type": "integer" },
-      "published": { "type": "date" }
-    }
-  }
-}</div>
-
-                    <h3>⚠️ חשוב לדעת:</h3>
-                    <div class="concept-highlight">
-                        <p>לא ניתן לשנות mapping של field קיים! צריך ליצור index חדש ולעשות reindex.</p>
-                    </div>
-                </div>
-
-                <!-- Queries -->
-                <div id="theory-queries" class="theory-section">
-                    <h1>🔎 סוגי Queries ב-Elasticsearch</h1>
-
-                    <h2>Query Context vs Filter Context</h2>
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h4>Query Context</h4>
-                            <p>עונה על: "כמה טוב ה-document מתאים?"</p>
-                            <p>מחשב <strong>relevance score</strong> (_score)</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Filter Context</h4>
-                            <p>עונה על: "האם ה-document מתאים?"</p>
-                            <p>תשובה: כן/לא (בלי score)</p>
-                            <p><strong>מהיר יותר</strong> ו-cacheable</p>
+                            <h4>💾 Distribution</h4>
+                            <p>פיזור העומס והאחסון</p>
                         </div>
                     </div>
 
-                    <h2>Full-Text Queries</h2>
-                    <h3>Match Query</h3>
-                    <p>החיפוש הבסיסי ביותר. מבצע analysis על הטקסט.</p>
-                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">POST /books/_search
-{
-  "query": {
-    "match": {
-      "title": "elasticsearch guide"
-    }
-  }
-}</div>
-
-                    <h3>Multi-Match Query</h3>
-                    <p>חיפוש במספר fields במקביל.</p>
-
-                    <h3>Match Phrase</h3>
-                    <p>חיפוש ביטוי מדויק (המילים בסדר הנכון).</p>
-
-                    <h2>Term-Level Queries</h2>
-                    <p>חיפוש ערכים מדויקים (ללא analysis):</p>
-                    <ul>
-                        <li><strong>Term</strong> - ערך מדויק אחד</li>
-                        <li><strong>Terms</strong> - מספר ערכים (OR)</li>
-                        <li><strong>Range</strong> - טווח (תאריכים, מספרים)</li>
-                        <li><strong>Exists</strong> - בדיקה שה-field קיים</li>
-                        <li><strong>Wildcard</strong> - תווים כללים (* ?)</li>
-                        <li><strong>Regexp</strong> - regular expressions</li>
-                    </ul>
-
-                    <h2>Boolean Query</h2>
-                    <p>שילוב של queries עם לוגיקה בוליאנית:</p>
-                    <ul>
-                        <li><strong>must</strong> - חייב להתאים (AND) + משפיע על ה-score</li>
-                        <li><strong>should</strong> - רצוי (OR) + משפיע על ה-score</li>
-                        <li><strong>must_not</strong> - לא צריך להתאים (NOT)</li>
-                        <li><strong>filter</strong> - חייב להתאים אבל בלי score</li>
-                    </ul>
-                </div>
-
-                <!-- Aggregations -->
-                <div id="theory-aggregations" class="theory-section">
-                    <h1>📊 Aggregations - ניתוח נתונים</h1>
-
-                    <div class="info-card">
-                        <p><strong>Aggregations</strong> מאפשרות לנו לבצע ניתוח על הנתונים - סכומים, ממוצעים, קיבוצים ועוד.</p>
-                    </div>
-
-                    <h2>סוגי Aggregations</h2>
-
-                    <h3>1. Metric Aggregations</h3>
-                    <p>חישובים מתמטיים על ערכים:</p>
-                    <ul>
-                        <li><strong>avg</strong> - ממוצע</li>
-                        <li><strong>sum</strong> - סכום</li>
-                        <li><strong>min / max</strong> - מינימום / מקסימום</li>
-                        <li><strong>stats</strong> - כל הנ"ל ביחד</li>
-                        <li><strong>cardinality</strong> - ספירת ערכים ייחודיים</li>
-                    </ul>
-
-                    <h3>2. Bucket Aggregations</h3>
-                    <p>קיבוץ documents ל-"דליים":</p>
-                    <ul>
-                        <li><strong>terms</strong> - קיבוץ לפי ערכים (top N)</li>
-                        <li><strong>range</strong> - קיבוץ לפי טווחים</li>
-                        <li><strong>date_histogram</strong> - קיבוץ לפי תאריכים</li>
-                        <li><strong>histogram</strong> - קיבוץ לפי מספרים</li>
-                    </ul>
-
-                    <h3>דוגמה - ספירת לוגים לפי רמת חומרה:</h3>
-                    <div class="code-snippet" style="background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left; margin: 20px 0;">POST /logs/_search
-{
-  "size": 0,
-  "aggs": {
-    "levels": {
-      "terms": {
-        "field": "level.keyword"
-      }
-    }
-  }
-}</div>
-
-                    <h3>3. Pipeline Aggregations</h3>
-                    <p>aggregations על תוצאות של aggregations אחרים.</p>
-                </div>
-
-                <!-- Kibana מתקדם -->
-                <div id="theory-kibana-deep" class="theory-section">
-                    <h1>📈 Kibana - מעבר ליסודות</h1>
-
-                    <h2>Discover</h2>
-                    <p>חיפוש וסינון נתונים:</p>
-                    <ul>
-                        <li>חיפוש חופשי בטקסט</li>
-                        <li>סינון לפי fields</li>
-                        <li>שמירת searches</li>
-                        <li>ייצוא נתונים</li>
-                    </ul>
-
-                    <h2>Visualize</h2>
-                    <p>יצירת תרשימים ווויזואליזציות:</p>
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h4>Line / Area / Bar</h4>
-                            <p>תרשימי קו, שטח ועמודות לנתונים לאורך זמן</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Pie / Donut</h4>
-                            <p>חלוקה פרופורציונלית של נתונים</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Data Table</h4>
-                            <p>טבלה עם aggregations</p>
-                        </div>
-                        <div class="comparison-card">
-                            <h4>Metric</h4>
-                            <p>מספר גדול אחד (KPI)</p>
-                        </div>
-                    </div>
-
-                    <h2>Dashboard</h2>
-                    <p>צירוף visualizations לתצוגה מאוחדת:</p>
-                    <ul>
-                        <li>Drag & drop</li>
-                        <li>זמן משותף לכל הפאנלים</li>
-                        <li>פילטרים גלובליים</li>
-                        <li>Refresh אוטומטי</li>
-                    </ul>
-
-                    <h2>Canvas</h2>
-                    <p>יצירת presentations ו-infographics מותאמות אישית עם עיצוב חופשי.</p>
-
-                    <h2>Maps</h2>
-                    <p>ויזואליזציה של נתונים גיאוגרפיים על מפה.</p>
-                </div>
-
-                <!-- סוגי Beats -->
-                <div id="theory-beats-types" class="theory-section">
-                    <h1>🎵 סוגי Beats - Data Shippers</h1>
-
-                    <div class="comparison-grid">
-                        <div class="comparison-card">
-                            <h4>📄 Filebeat</h4>
-                            <p><strong>מה:</strong> שולח לוגים מקבצים</p>
-                            <p><strong>למה:</strong> logs, application logs, system logs</p>
-                            <p><strong>תכונה:</strong> Modules מוכנים (Apache, Nginx, MySQL...)</p>
-                        </div>
-
-                        <div class="comparison-card">
-                            <h4>📊 Metricbeat</h4>
-                            <p><strong>מה:</strong> שולח metrics מהמערכת ושירותים</p>
-                            <p><strong>למה:</strong> CPU, RAM, Disk, Network, Docker, Kubernetes</p>
-                            <p><strong>תכונה:</strong> Modules לכל השירותים הפופולריים</p>
-                        </div>
-
-                        <div class="comparison-card">
-                            <h4>🌐 Packetbeat</h4>
-                            <p><strong>מה:</strong> network packet analyzer</p>
-                            <p><strong>למה:</strong> ניטור תעבורת רשת, protocols (HTTP, MySQL, Redis...)</p>
-                            <p><strong>תכונה:</strong> real-time network monitoring</p>
-                        </div>
-
-                        <div class="comparison-card">
-                            <h4>💓 Heartbeat</h4>
-                            <p><strong>מה:</strong> uptime monitoring</p>
-                            <p><strong>למה:</strong> בדיקת זמינות של שירותים</p>
-                            <p><strong>תכונה:</strong> ICMP, TCP, HTTP pings</p>
-                        </div>
-
-                        <div class="comparison-card">
-                            <h4>🔒 Auditbeat</h4>
-                            <p><strong>מה:</strong> audit framework data</p>
-                            <p><strong>למה:</strong> שינויים בקבצים, פעילות משתמשים</p>
-                            <p><strong>תכונה:</strong> security & compliance</p>
-                        </div>
-
-                        <div class="comparison-card">
-                            <h4>🐳 Other Beats</h4>
-                            <p><strong>Winlogbeat:</strong> Windows event logs</p>
-                            <p><strong>Functionbeat:</strong> serverless data shipper</p>
-                            <p>ועוד community beats רבים...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Best Practices -->
-                <div id="theory-best-practices" class="theory-section">
-                    <h1>✨ Best Practices</h1>
-
-                    <h2>🏗️ תכנון Index</h2>
-                    <div class="concept-highlight">
-                        <h4>מספר Shards</h4>
+                    <div class="warning-card">
+                        <h4>⚠️ חשוב לזכור:</h4>
                         <ul>
-                            <li>יותר מדי shards = overhead</li>
-                            <li>מעט מדי = bottleneck</li>
-                            <li><strong>כלל אצבע:</strong> shard size בין 10GB-50GB</li>
-                            <li>למידע קטן: 1-2 shards מספיק</li>
+                            <li><strong>Ordering מובטח רק בתוך partition</strong> - לא בין partitions</li>
+                            <li>Producer בוחר ל-איזה partition לשלוח (לפי key או round-robin)</li>
+                            <li>מספר partitions לא ניתן לשינוי בקלות - תכנן מראש!</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Brokers & Clusters -->
+                <div id="section-brokers-clusters" class="theory-section">
+                    <h1>🖥️ Brokers & Clusters</h1>
+
+                    <h2>מהו Broker?</h2>
+                    <div class="info-card">
+                        <p><strong>Kafka Broker</strong> הוא שרת Kafka. זה תהליך שרץ על מכונה ומנהל את אחסון ה-messages.</p>
+                    </div>
+
+                    <h3>תפקידי ה-Broker:</h3>
+                    <ul>
+                        <li><strong>מקבל messages</strong> מ-producers</li>
+                        <li><strong>מאחסן messages</strong> על הדיסק</li>
+                        <li><strong>משרת messages</strong> ל-consumers</li>
+                        <li>מנהל <strong>replication</strong> של partitions</li>
+                        <li>מטפל ב-<strong>leader election</strong></li>
+                    </ul>
+
+                    <h2>מהו Cluster?</h2>
+                    <div class="concept-card">
+                        <h4>🌐 Kafka Cluster</h4>
+                        <p>אוסף של <strong>מספר Kafka Brokers</strong> שעובדים יחד כמערכת אחת.</p>
+                        <p>כל broker מזוהה על ידי <strong>broker ID</strong> ייחודי (מספר שלם).</p>
+                    </div>
+
+                    <div class="architecture-diagram">
+                        <h3>Cluster עם 3 Brokers</h3>
+                        <div class="diagram-row" style="flex-direction: column; gap: 15px;">
+                            <div style="display: flex; gap: 25px; justify-content: center; flex-wrap: wrap;">
+                                <div class="diagram-box broker" style="padding: 25px;">
+                                    Broker 0<br>
+                                    <span style="font-size: 0.8rem; font-weight: 400;">Leader: P0, P1<br>Follower: P2</span>
+                                </div>
+                                <div class="diagram-box broker" style="padding: 25px;">
+                                    Broker 1<br>
+                                    <span style="font-size: 0.8rem; font-weight: 400;">Leader: P2<br>Follower: P0</span>
+                                </div>
+                                <div class="diagram-box broker" style="padding: 25px;">
+                                    Broker 2<br>
+                                    <span style="font-size: 0.8rem; font-weight: 400;">Leader: P3<br>Follower: P1</span>
+                                </div>
+                            </div>
+                            <div style="background: #fff5f5; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto;">
+                                <p style="margin: 0; text-align: center;"><strong>כל partition יש לו leader ו-followers<br>אם broker נופל - אחר הופך ל-leader</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Replication</h2>
+                    <div class="success-card">
+                        <h4>🔄 העתקה לגיבוי</h4>
+                        <p>כל partition יכול להיות <strong>replicated</strong> על מספר brokers.</p>
+                        <ul>
+                            <li><strong>Replication Factor</strong> קובע כמה עותקים</li>
+                            <li>יש <strong>leader partition</strong> אחד - מטפל בכל הקריאות והכתיבות</li>
+                            <li>יש <strong>follower partitions</strong> - רק מעתיקים נתונים</li>
+                            <li>אם ה-leader נופל, אחד מה-followers הופך ל-leader</li>
                         </ul>
                     </div>
 
-                    <h3>Replicas</h3>
-                    <ul>
-                        <li><strong>מינימום 1 replica</strong> לפרודקשן (high availability)</li>
-                        <li>יותר replicas = יותר search throughput</li>
-                        <li>אבל: דורש יותר אחסון ויותר indexing overhead</li>
-                    </ul>
+                    <div class="warning-card">
+                        <h4>⚙️ Replication Factor מומלץ:</h4>
+                        <p><strong>לפחות 3</strong> בפרודקשן (מאפשר אובדן של עד 2 brokers)</p>
+                    </div>
+                </div>
 
-                    <h2>📝 Mappings</h2>
-                    <ul>
-                        <li><strong>הגדר mapping מפורש</strong> לפרודקשן (אל תסמוך על dynamic mapping)</li>
-                        <li>השתמש ב-<strong>keyword</strong> לשדות שאתה לא צריך full-text search עליהם</li>
-                        <li>השבת <code>_all</code> field אם לא צריך (מיושן ממילא)</li>
-                        <li>השתמש ב-<strong>index: false</strong> לשדות שלא צריך לחפש בהם</li>
-                    </ul>
+                <!-- Use Cases -->
+                <div id="section-use-cases" class="theory-section">
+                    <h1>🎯 מקרי שימוש ב-Apache Kafka</h1>
 
-                    <h2>🔍 Queries</h2>
-                    <div class="concept-highlight">
-                        <h4>⚡ ביצועים:</h4>
+                    <div class="usecase-grid">
+                        <div class="usecase-card">
+                            <div class="usecase-header">🌐 Web Analytics</div>
+                            <div class="usecase-body">
+                                <h4>Click-Stream Analysis</h4>
+                                <p>כל קליק שלקוחות מבצעים נשלח ל-Kafka בזמן אמת:</p>
+                                <ul>
+                                    <li>באיזה עמודים הם ביקרו?</li>
+                                    <li>איזה נתיב עברו?</li>
+                                    <li>על אילו מודעות לחצו?</li>
+                                    <li>ניתוח התנהגות לקוחות</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">🏭 IoT & Sensors</div>
+                            <div class="usecase-body">
+                                <h4>ניטור סנסורים תעשייתיים</h4>
+                                <p>חברות תעשייתיות משתמשות ב-Kafka לניטור מכונות:</p>
+                                <ul>
+                                    <li>נתונים מסנסורים בזמן אמת</li>
+                                    <li>הבנת ביצועי קווי ייצור</li>
+                                    <li>חיזוי תקלות לפני שהן קורות (ML)</li>
+                                    <li>דוגמה: רכבים אוטונומיים - 100GB/שעה לרכב!</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">📊 Log Aggregation</div>
+                            <div class="usecase-body">
+                                <h4>ניהול קבצי לוג</h4>
+                                <p>איחוד לוגים מאפליקציות רבות:</p>
+                                <ul>
+                                    <li>לוגים מסוגים שונים</li>
+                                    <li>מפוזרים במיקומים שונים</li>
+                                    <li>Kafka מאחד הכל למנגנון log collection אחד</li>
+                                    <li>ניתוח מרכזי וקל יותר</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">💰 Fraud Detection</div>
+                            <div class="usecase-body">
+                                <h4>זיהוי הונאות בזמן אמת</h4>
+                                <p>חיוני בתעשייה הפיננסית:</p>
+                                <ul>
+                                    <li>ניתוח טרנזקציות בזמן אמת</li>
+                                    <li>זיהוי דפוסים חשודים</li>
+                                    <li>חסימה מיידית של פעולות מפוקפקות</li>
+                                    <li>שימושים: PayPal, בנקים, כרטיסי אשראי</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">📦 Order Processing</div>
+                            <div class="usecase-body">
+                                <h4>עיבוד הזמנות</h4>
+                                <p>חברות קמעונאיות כמו Walmart:</p>
+                                <ul>
+                                    <li>מיליארדי טרנזקציות ביום</li>
+                                    <li>חלק דורש טיפול מיידי</li>
+                                    <li>חלק לאנליטיקה מאוחר יותר</li>
+                                    <li>Kafka מאפשר עיבוד בזמן אמת</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="usecase-card">
+                            <div class="usecase-header">🚗 Real-Time Location</div>
+                            <div class="usecase-body">
+                                <h4>מעקב מיקום (Uber דוגמה)</h4>
+                                <p>מבוסס לחלוטין על אירועים בזמן אמת:</p>
+                                <ul>
+                                    <li>חיבור בין נוסעים לנהגים</li>
+                                    <li>מי נמצא איפה - real-time</li>
+                                    <li>חישוב מסלולים דינמי</li>
+                                    <li>Kafka Streams לניתוח</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real World -->
+                <div id="section-real-world" class="theory-section">
+                    <h1>🌍 חברות שמשתמשות ב-Kafka</h1>
+
+                    <div class="companies-grid" style="margin-bottom: 50px;">
+                        <div class="company-badge" style="background: #E50914; color: white; border-color: #E50914;">NETFLIX</div>
+                        <div class="company-badge">UBER</div>
+                        <div class="company-badge" style="background: #0077B5; color: white; border-color: #0077B5;">LINKEDIN</div>
+                        <div class="company-badge" style="background: #FF5A5F; color: white; border-color: #FF5A5F;">AIRBNB</div>
+                        <div class="company-badge" style="background: #003087; color: white; border-color: #003087;">PAYPAL</div>
+                        <div class="company-badge" style="background: #0071CE; color: white; border-color: #0071CE;">WALMART</div>
+                        <div class="company-badge" style="background: #1DB954; color: white; border-color: #1DB954;">SPOTIFY</div>
+                        <div class="company-badge" style="background: #1DA1F2; color: white; border-color: #1DA1F2;">TWITTER</div>
+                        <div class="company-badge" style="background: #E60023; color: white; border-color: #E60023;">PINTEREST</div>
+                        <div class="company-badge">GOLDMAN SACHS</div>
+                        <div class="company-badge">CISCO</div>
+                        <div class="company-badge" style="background: #E53238; color: white; border-color: #E53238;">EBAY</div>
+                    </div>
+
+                    <h2>📺 Netflix</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: #E50914;">NETFLIX</div>
+                        <div class="usecase-body">
+                            <p>Netflix משתמשת ב-Kafka לתיעוד אירועים שנוצרים על ידי משתמשים:</p>
+                            <ul>
+                                <li><strong>כל הסרטים שנצפו</strong> - לכל משתמש</li>
+                                <li><strong>מערכת המלצות</strong> - על בסיס צפייה קודמת</li>
+                                <li><strong>"המשך מהנקודה האחרונה"</strong> - שמירת מיקום לכל משתמש בכל סרט/תוכנית</li>
+                            </ul>
+                            <div class="success-card" style="margin-top: 20px;">
+                                <h4>🎯 התוצאה:</h4>
+                                <p>Kafka עוזר ל-Netflix לספק <strong>חוויית משתמש משופרת</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>💳 PayPal</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: #003087;">PAYPAL</div>
+                        <div class="usecase-body">
+                            <p>חברה כמו PayPal מעבדת מיליונים או אפילו מיליארדי טרנזקציות מדי חודש:</p>
+                            <ul>
+                                <li>Kafka מסייעת להבטיח שהטרנזקציות <strong>consistent</strong></li>
+                                <li>הטרנזקציות <strong>מדויקות ובזמן</strong></li>
+                                <li><strong>מניעת הונאות בזמן אמת</strong></li>
+                            </ul>
+                            <div class="warning-card" style="margin-top: 20px;">
+                                <h4>🔒 Real-Time Fraud Detection</h4>
+                                <p>זיהוי הונאות בזמן אמת הוא <strong>קריטי לתעשייה הפיננסית</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>🛒 Walmart</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: #0071CE;">WALMART</div>
+                        <div class="usecase-body">
+                            <p>אפילו חברות קמעונאיות כמו Walmart עושות שימוש ב-Kafka:</p>
+                            <ul>
+                                <li>מעבדים <strong>מיליארדי טרנזקציות מדי יום</strong></li>
+                                <li>חלק מהטרנזקציות צריכות <strong>טיפול מיידי</strong></li>
+                                <li>אחרות משמשות <strong>לאנליטיקה</strong> מאוחר יותר</li>
+                            </ul>
+                            <div class="success-card" style="margin-top: 20px;">
+                                <h4>⚡ עיבוד בזמן אמת</h4>
+                                <p>Kafka מספקת ל-Walmart את היכולת לעבד <strong>עומס גבוה של טרנזקציות בזמן אמת</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>🚗 Uber</h2>
+                    <div class="usecase-card">
+                        <div class="usecase-header" style="background: linear-gradient(135deg, #000000, #276EF1); color: white;">UBER</div>
+                        <div class="usecase-body">
+                            <p>תרחיש השימוש של Uber מבוסס מאוד על אירועים בזמן אמת:</p>
+                            <ul>
+                                <li>צריך <strong>לחבר בין נוסעים לנהגים</strong></li>
+                                <li>צריך לדעת <strong>מי נמצא איפה - real-time</strong></li>
+                                <li>כל העיבוד נעשה דרך <strong>Kafka Streams</strong></li>
+                            </ul>
+                            <div class="info-card" style="margin-top: 20px;">
+                                <h4>💡 תרומה לקוד פתוח</h4>
+                                <p>Uber תרמה לקהילת ה-open-source בפתרונות Kafka שפותחו בפנים</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Streaming -->
+                <div id="section-streaming" class="theory-section">
+                    <h1>🌊 Data Streaming</h1>
+
+                    <h2>מהו Data Streaming?</h2>
+                    <div class="info-card">
+                        <p><strong>Data streaming applications</strong> הם אפליקציות ששולחות נתונים ברגע שהם מגיעים או נוצרים.</p>
+                        <p>הנתונים יכולים להיות מעובדים כדי להפיק ערכים.</p>
+                    </div>
+
+                    <h3>Producer vs Consumer vs Stream Processing</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>📤 Producers</h4>
+                            <p>יוצרים records ושולחים אותם ל-Kafka</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📥 Consumers</h4>
+                            <p>קוראים records מ-Kafka</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔄 Stream Processing</h4>
+                            <p>מעבדים ומנתחים את הנתונים בזמן אמת</p>
+                        </div>
+                    </div>
+
+                    <div class="concept-card">
+                        <h4>⚠️ חשוב להבין:</h4>
+                        <p>Producers ו-Consumers <strong>רק מעבירים</strong> נתונים - לא מנתחים!</p>
+                        <p>לניתוח צריך <strong>stream applications</strong> כמו:</p>
                         <ul>
-                            <li>השתמש ב-<strong>filter context</strong> כשאין צורך ב-scoring (cacheable!)</li>
-                            <li>הגבל את מספר התוצאות עם <code>size</code></li>
-                            <li>השתמש ב-<code>_source</code> filtering כדי להחזיר רק שדות שצריך</li>
-                            <li>העדף <code>term</code> queries על <code>match</code> כשמחפשים ערכים מדויקים</li>
+                            <li><strong>Kafka Streams</strong> - ספריית Java native</li>
+                            <li><strong>Apache Spark</strong> (Java, Scala, Python, PySpark)</li>
+                            <li><strong>Apache Flink</strong></li>
                         </ul>
                     </div>
 
-                    <h2>🗂️ Index Lifecycle</h2>
-                    <p>עבור נתונים time-based (לוגים):</p>
-                    <ul>
-                        <li>צור indices חדשים לפי זמן (daily/weekly)</li>
-                        <li>השתמש ב-<strong>Index Lifecycle Management (ILM)</strong></li>
-                        <li>העבר indices ישנים ל-cold/frozen tier</li>
-                        <li>מחק או ארכב indices ישנים מדי</li>
-                    </ul>
+                    <h2>תרחישי שימוש</h2>
 
-                    <h2>🔐 Security</h2>
-                    <ul>
-                        <li>אל תחשוף Elasticsearch ישירות לאינטרנט</li>
-                        <li>השתמש ב-authentication & authorization</li>
-                        <li>הגדר HTTPS/TLS</li>
-                        <li>גבה (backup) את הנתונים באופן קבוע</li>
-                    </ul>
+                    <h3>📈 מסחר במניות</h3>
+                    <div class="success-card">
+                        <p>כאשר מניות נסחרות בבורסה, מחירי המניות משתנים.</p>
+                        <p>אפליקציית streaming יכולה לקחת את המחירים ולשלוח אותם <strong>בזמן אמת</strong> ללקוחות או לאפליקציות אחרות שמשתמשות בנתונים לעיבוד נוסף.</p>
+                    </div>
 
-                    <h2>📊 Monitoring</h2>
-                    <ul>
-                        <li>עקוב אחר <strong>cluster health</strong> (green/yellow/red)</li>
-                        <li>נטר disk space, memory, CPU</li>
-                        <li>בדוק slow queries</li>
-                        <li>השתמש ב-Elastic Stack Monitoring</li>
-                    </ul>
+                    <h3>🌐 ביקורים באתר & מכירות</h3>
+                    <div class="success-card">
+                        <p>עיבוד streaming יכול לספק פרטים על ביקורי לקוחות ומכירות עם <strong>נתוני השוואה בזמן אמת</strong>:</p>
+                        <ul>
+                            <li>כמה משתמשים באתר כרגע?</li>
+                            <li>מהן המכירות בשעה האחרונה לעומת אתמול?</li>
+                            <li>אילו מוצרים הכי פופולריים עכשיו?</li>
+                        </ul>
+                    </div>
+
+                    <h2>Streaming ברמת ארגון</h2>
+                    <div class="architecture-diagram">
+                        <h3 style="margin-bottom: 25px;">Event Streaming בארגון</h3>
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color); text-align: center;">
+<strong style="font-size: 1.2rem;">🌐 מקורות נתונים</strong>
+    ↓    ↓    ↓    ↓    ↓
+[Apps] [IoT] [DBs] [Logs] [APIs]
+           ↓
+    ┌──────────────┐
+    │ <strong style="color: var(--kafka-accent);">Apache Kafka</strong> │
+    │ Event Streaming │
+    │   Platform    │
+    └──────────────┘
+           ↓
+    ↓    ↓    ↓    ↓    ↓
+[Analytics] [ML] [DWH] [Apps] [Real-time Dashboards]
+                        </div>
+                    </div>
                 </div>
+
+                <!-- More sections to be continued in next parts... -->
 
             </main>
         </div>
     </div>
 
-    <!-- === SIMULATOR VIEW === -->
-    <div id="view-simulator" class="view-section active">
-        <div style="max-width: 1200px; margin: 0 auto;">
+    <!-- === ARCHITECTURE VIEW === -->
+    <div id="view-architecture" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;">🏗️ ארכיטקטורת Kafka - מבט עמוק</h1>
 
-            <!-- Pipeline Card -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h2><span style="color:var(--elastic-green)">●</span> צינור עיבוד נתונים (Data Pipeline)</h2>
-                </div>
-                <div class="card-body">
-                    <p style="margin-bottom: 20px; color: var(--text-secondary); text-align: center;">
-                        הזן לוג וצפה בתהליך: <strong>Beats</strong> → <strong>Logstash</strong> → <strong>Elasticsearch</strong> → <strong>Kibana</strong>
-                    </p>
-
-                    <div style="display: flex; gap: 15px; margin-bottom: 40px;">
-                        <input type="text" id="rawLogInput" class="input-field"
-                               value="2024-03-15 INFO User login successful ip=192.168.1.1"
-                               placeholder="הזן לוג...">
-                        <button class="btn btn-primary" id="runBtn" onclick="runPipeline()">📦 שלח לוג</button>
-                    </div>
-
-                    <div class="pipeline-track" id="pipelineTrack">
-                        <div class="pipeline-line"></div>
-
-                        <div class="pipeline-stage" id="stage-beats" style="border-color: var(--elastic-green);">
-                            <span class="stage-icon">📦</span>
-                            <span class="stage-title">Beats</span>
-                            <span class="stage-desc">איסוף נתונים</span>
-                        </div>
-
-                        <div class="pipeline-stage" id="stage-logstash" style="border-color: var(--elastic-yellow);">
-                            <span class="stage-icon">⚙️</span>
-                            <span class="stage-title">Logstash</span>
-                            <span class="stage-desc">עיבוד ושינוי</span>
-                        </div>
-
-                        <div class="pipeline-stage" id="stage-es" style="border-color: var(--elastic-blue);">
-                            <span class="stage-icon">🗄️</span>
-                            <span class="stage-title">Elasticsearch</span>
-                            <span class="stage-desc">אחסון וחיפוש</span>
-                        </div>
-
-                        <div id="packet" class="packet"></div>
-                    </div>
-
-                    <div class="output-box">
-                        <div style="margin-bottom: 8px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--elastic-yellow);">⚙️ Logstash Output:</div>
-                        <div id="logstash-out">// Waiting for data...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cluster Card -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h2><span style="color:var(--elastic-blue)">●</span> טופולוגיית Cluster</h2>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn btn-secondary" onclick="addNode()">➕ הוסף Node</button>
-                        <button class="btn btn-secondary" onclick="resetCluster()">🔄 אתחל</button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p style="font-size: 0.95rem; color: var(--text-tertiary); margin-bottom: 25px; text-align: center;">
-                        הדמיה של <strong>Primary Shards (P)</strong> ו-<strong>Replica Shards (R)</strong> על פני Nodes
-                    </p>
-                    <div class="cluster-visual" id="clusterGrid">
-                        <div class="node-box" id="node-0">
-                            <div class="node-header"><span>MASTER</span> <span>Node-0</span></div>
-                            <div class="shards-container" id="shards-0"></div>
-                        </div>
-                        <div class="node-box" id="node-1">
-                            <div class="node-header"><span>DATA</span> <span>Node-1</span></div>
-                            <div class="shards-container" id="shards-1"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kibana Card -->
-            <div class="content-card" style="border-top: 4px solid var(--elastic-pink);">
-                <div class="card-header">
-                    <h2><span style="color:var(--elastic-pink)">●</span> Kibana - ניתוח וויזואליזציה</h2>
-                </div>
-                <div class="card-body">
-                    <div class="kibana-panel">
+            <div style="background: white; padding: 50px; border-radius: 20px; box-shadow: var(--shadow-lg); margin-bottom: 40px;">
+                <h2 style="text-align: center; margin-bottom: 40px; font-size: 2rem;">הזרימה המלאה</h2>
+                <div class="architecture-diagram">
+                    <div class="diagram-row" style="flex-direction: column; gap: 40px;">
+                        <!-- Producers -->
                         <div>
-                            <h4 style="margin: 0 0 15px 0; font-size: 0.95rem; color: var(--text-secondary); font-weight: 700;">🔍 Discover</h4>
-                            <div id="kibana-list" class="kibana-discover">
-                                <div style="color: #cbd5e0; text-align: center; padding-top: 60px;">אין לוגים באינדקס</div>
+                            <h3 style="text-align: center; color: var(--kafka-green); margin-bottom: 20px;">📤 PRODUCERS</h3>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <div class="diagram-box producer">Web App</div>
+                                <div class="diagram-box producer">Mobile App</div>
+                                <div class="diagram-box producer">IoT Device</div>
+                                <div class="diagram-box producer">Database CDC</div>
                             </div>
                         </div>
+
+                        <div style="text-align: center; font-size: 3rem; color: var(--text-tertiary);">↓</div>
+
+                        <!-- Kafka Cluster -->
                         <div>
-                            <h4 style="margin: 0 0 15px 0; font-size: 0.95rem; color: var(--text-secondary); font-weight: 700;">📊 Dashboard</h4>
-                            <div class="chart-container">
-                                <div class="chart-bar" id="bar-info" style="background: var(--elastic-blue);"></div>
-                                <div class="chart-bar" id="bar-warn" style="background: var(--elastic-yellow);"></div>
-                                <div class="chart-bar" id="bar-error" style="background: var(--elastic-pink);"></div>
+                            <h3 style="text-align: center; color: var(--kafka-accent); margin-bottom: 20px;">🔥 KAFKA CLUSTER</h3>
+                            <div style="background: linear-gradient(135deg, #fff5f5, white); border: 3px solid var(--kafka-accent); border-radius: 16px; padding: 40px;">
+                                <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;">
+                                    <div class="diagram-box" style="background: linear-gradient(135deg, #fafafa, white);">Broker 1</div>
+                                    <div class="diagram-box" style="background: linear-gradient(135deg, #fafafa, white);">Broker 2</div>
+                                    <div class="diagram-box" style="background: linear-gradient(135deg, #fafafa, white);">Broker 3</div>
+                                </div>
+                                <div style="text-align: center; padding: 20px; background: white; border-radius: 12px;">
+                                    <strong>Topics: </strong>
+                                    <span style="background: #ebfbee; padding: 8px 16px; border-radius: 6px; margin: 0 5px;">user-events</span>
+                                    <span style="background: #e7f5ff; padding: 8px 16px; border-radius: 6px; margin: 0 5px;">orders</span>
+                                    <span style="background: #fff9db; padding: 8px 16px; border-radius: 6px; margin: 0 5px;">logs</span>
+                                </div>
                             </div>
-                            <div class="chart-label">
-                                <span>INFO</span>
-                                <span>WARN</span>
-                                <span>ERROR</span>
+                        </div>
+
+                        <div style="text-align: center; font-size: 3rem; color: var(--text-tertiary);">↓</div>
+
+                        <!-- Consumers -->
+                        <div>
+                            <h3 style="text-align: center; color: var(--kafka-blue); margin-bottom: 20px;">📥 CONSUMERS</h3>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <div class="diagram-box consumer">Analytics</div>
+                                <div class="diagram-box consumer">Data Lake</div>
+                                <div class="diagram-box consumer">Elasticsearch</div>
+                                <div class="diagram-box consumer">Real-time Dashboard</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-    </div>
-
-    <!-- === API REFERENCE VIEW === -->
-    <div id="view-api" class="view-section">
-        <div style="max-width: 900px; margin: 0 auto;">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800;">Elasticsearch REST API</h1>
-                <p style="color: var(--text-secondary); font-size: 1.05rem;">אינטראקציה עם ה-Cluster באמצעות JSON over HTTP</p>
-            </div>
-
-            <div class="api-grid">
-
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-put">PUT</span>
-                        <span class="endpoint">/{index}</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">יצירת index חדש עם הגדרות</p>
-                        <div class="code-snippet">PUT /my-index
-{
-  "settings": {
-    "number_of_shards": 3,
-    "number_of_replicas": 2
-  }
-}</div>
+            <!-- Additional architecture details cards -->
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>📂 Topic Structure</h4>
+                    <div class="code-block" style="font-size: 0.75rem;">
+Topic: user-events
+├── Partition 0
+│   ├── Replica 0 (Leader)
+│   └── Replica 1 (Follower)
+├── Partition 1
+│   ├── Replica 0 (Leader)
+│   └── Replica 1 (Follower)
+└── Partition 2
+    ├── Replica 0 (Leader)
+    └── Replica 1 (Follower)
                     </div>
                 </div>
 
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-post">POST</span>
-                        <span class="endpoint">/{index}/_doc</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">הוספת document חדש (ID אוטומטי)</p>
-                        <div class="code-snippet">POST /my-index/_doc
-{
-  "user": "Lev",
-  "message": "Welcome to Elasticsearch",
-  "timestamp": "2024-01-01T12:00:00"
-}</div>
-                    </div>
+                <div class="comparison-card">
+                    <h4>🔄 Message Flow</h4>
+                    <ol style="font-size: 0.9rem; line-height: 1.8;">
+                        <li>Producer שולח message</li>
+                        <li>Broker מקבל ושומר</li>
+                        <li>Message מקבל offset</li>
+                        <li>Replication ל-followers</li>
+                        <li>Consumer קורא message</li>
+                        <li>Consumer מעדכן offset</li>
+                    </ol>
                 </div>
 
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-get">GET</span>
-                        <span class="endpoint">/{index}/_doc/{id}</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">קבלת document לפי ID</p>
-                        <div class="code-snippet">GET /my-index/_doc/1</div>
-                    </div>
+                <div class="comparison-card">
+                    <h4>⚙️ Key Components</h4>
+                    <ul style="font-size: 0.9rem;">
+                        <li><strong>ZooKeeper/KRaft:</strong> Coordination</li>
+                        <li><strong>Brokers:</strong> Storage & serving</li>
+                        <li><strong>Topics:</strong> Logical channels</li>
+                        <li><strong>Partitions:</strong> Physical division</li>
+                        <li><strong>Offsets:</strong> Message position</li>
+                    </ul>
                 </div>
 
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-post">POST</span>
-                        <span class="endpoint">/{index}/_search</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">חיפוש מורכב עם Query DSL</p>
-                        <div class="code-snippet">POST /my-index/_search
-{
-  "query": {
-    "match": {
-      "message": "elasticsearch"
-    }
-  }
-}</div>
-                    </div>
+                <div class="comparison-card">
+                    <h4>🎯 Guarantees</h4>
+                    <ul style="font-size: 0.9rem;">
+                        <li><strong>Ordering:</strong> Within partition</li>
+                        <li><strong>Durability:</strong> Configurable</li>
+                        <li><strong>At-least-once:</strong> Default</li>
+                        <li><strong>Exactly-once:</strong> Available</li>
+                    </ul>
                 </div>
-
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-post">POST</span>
-                        <span class="endpoint">/{index}/_update/{id}</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">עדכון חלקי של document</p>
-                        <div class="code-snippet">POST /my-index/_update/1
-{
-  "doc": {
-    "message": "Updated message"
-  }
-}</div>
-                    </div>
-                </div>
-
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-delete">DELETE</span>
-                        <span class="endpoint">/{index}/_doc/{id}</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">מחיקת document</p>
-                        <div class="code-snippet">DELETE /my-index/_doc/1</div>
-                    </div>
-                </div>
-
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-post">POST</span>
-                        <span class="endpoint">/_bulk</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">פעולות מרובות בקריאה אחת</p>
-                        <div class="code-snippet">POST /_bulk
-{"index":{"_index":"test","_id":"1"}}
-{"field1":"value1"}
-{"delete":{"_index":"test","_id":"2"}}
-{"create":{"_index":"test","_id":"3"}}
-{"field1":"value3"}</div>
-                    </div>
-                </div>
-
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-get">GET</span>
-                        <span class="endpoint">/_cat/indices?v</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">רשימת כל ה-indices</p>
-                        <div class="code-snippet">GET /_cat/indices?v</div>
-                    </div>
-                </div>
-
-                <div class="api-item">
-                    <div class="api-item-header">
-                        <span class="method-badge badge-get">GET</span>
-                        <span class="endpoint">/_cluster/health</span>
-                    </div>
-                    <div class="api-item-body">
-                        <p style="margin: 0 0 10px 0; color: var(--text-secondary);">בדיקת בריאות ה-Cluster</p>
-                        <div class="code-snippet">GET /_cluster/health</div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 
-    <!-- === PRACTICE LAB VIEW === -->
-    <div id="view-lab" class="view-section">
-        <div style="max-width: 1100px; margin: 0 auto;">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800;">💪 תרגילים מעשיים</h1>
-                <p style="color: var(--text-secondary); font-size: 1.05rem;">נסה לפתור לפני שתסתכל על הפתרון!</p>
+    <!-- === COMMANDS VIEW === -->
+    <div id="view-commands" class="view-section">
+        <div style="padding: 60px; max-width: 1200px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;">⚙️ פקודות Kafka Essential</h1>
+
+            <div class="info-card">
+                <h3>💡 לפני שמתחילים</h3>
+                <p>כל הפקודות מניחות ש-<code>$KAFKA_HOME</code> מוגדר לתיקיית ההתקנה של Kafka.</p>
             </div>
 
-            <div class="exercise-list">
+            <h2 style="margin-top: 50px;">📂 Topics</h2>
 
-                <div class="exercise-card" style="border-right: 5px solid var(--elastic-accent);">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">הקמה</span>
-                            <span class="ex-title">יצירת Index והוספת נתונים</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-setup')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">צור index בשם <code>bookdb_index</code> עם 1 shard, והוסף 4 ספרים באמצעות <code>_bulk</code> API.</p>
-                    <div id="sol-setup" class="solution-box">PUT /bookdb_index
-{
-  "settings": {
-    "number_of_shards": 1
-  }
-}
-
-POST /bookdb_index/_doc/_bulk
-{"index":{"_id":1}}
-{"title":"Elasticsearch: The Definitive Guide","authors":["clinton gormley","zachary tong"],"summary":"A distributed real-time search and analytics engine","publish_date":"2015-02-07","num_reviews":20,"publisher":"oreilly"}
-{"index":{"_id":2}}
-{"title":"Taming Text","authors":["grant ingersoll","thomas morton"],"summary":"organize text using full-text search","publish_date":"2013-01-24","num_reviews":12,"publisher":"manning"}
-{"index":{"_id":3}}
-{"title":"Elasticsearch in Action","authors":["radu gheorge","matthew lee hinman"],"summary":"build scalable search applications","publish_date":"2015-12-03","num_reviews":18,"publisher":"manning"}
-{"index":{"_id":4}}
-{"title":"Solr in Action","authors":["trey grainger","timothy potter"],"summary":"Comprehensive guide to Apache Solr","publish_date":"2014-04-05","num_reviews":23,"publisher":"manning"}</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>יצירת Topic</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --create \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --partitions 3 \
+  --replication-factor 2
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">01</span>
-                            <span class="ex-title">החזר את כל ה-documents</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-1')">הצג פתרון</button>
-                    </div>
-                    <div id="sol-1" class="solution-box">GET /bookdb_index/_search</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>רשימת כל ה-Topics</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --list \
+  --bootstrap-server localhost:9092
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">02</span>
-                            <span class="ex-title">חיפוש Multi-Match</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-2')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">חפש את המילה "guide" בכל השדות.</p>
-                    <div id="sol-2" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "multi_match": {
-      "query": "guide"
-    }
-  }
-}</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>תיאור Topic</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --describe \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">03</span>
-                            <span class="ex-title">חיפוש בשדה ספציפי</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-3')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">חפש את הביטוי "in action" בשדה <strong>title</strong>.</p>
-                    <div id="sol-3" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "match": {
-      "title": "in action"
-    }
-  }
-}</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>מחיקת Topic</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-topics.sh \
+  --delete \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">04</span>
-                            <span class="ex-title">Boosting - הגברת רלוונטיות</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-4')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">חפש "search analytics" עם boost של 3.</p>
-                    <div id="sol-4" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "multi_match": {
-      "query": "search analytics",
-      "boost": 3
-    }
-  }
-}</div>
+            <h2 style="margin-top: 50px;">📤 Producer</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Console Producer</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic
+
+<span class="code-comment"># Type messages and press Enter</span>
+> Hello Kafka
+> This is a message
+> ^C  <span class="code-comment">(Ctrl+C to exit)</span>
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">05</span>
-                            <span class="ex-title">לוגיקה בוליאנית</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-5')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">מצא ספרים עם "Elasticsearch" או "Solr" בכותרת, שנכתבו על ידי "Clinton Gormley", אבל לא "Radu Gheorge".</p>
-                    <div id="sol-5" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "bool": {
-      "must": {
-        "bool": {
-          "should": [
-            {"match": {"title": "Elasticsearch"}},
-            {"match": {"title": "Solr"}}
-          ],
-          "must": {"match": {"authors": "clinton gormley"}}
-        }
-      },
-      "must_not": {"match": {"authors": "radu gheorge"}}
-    }
-  }
-}</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Producer עם Key</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-producer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --property "parse.key=true" \
+  --property "key.separator=:"
+
+<span class="code-comment"># Format: key:value</span>
+> user1:Login event
+> user2:Logout event
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">06</span>
-                            <span class="ex-title">Wildcard & Highlight</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-6')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">מצא מחברים ששמם מתחיל ב-'t' והדגש את שדה המחברים.</p>
-                    <div id="sol-6" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "wildcard": {
-      "authors": "t*"
-    }
-  },
-  "highlight": {
-    "fields": {
-      "authors": {}
-    }
-  }
-}</div>
+            <h2 style="margin-top: 50px;">📥 Consumer</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Console Consumer</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --from-beginning
+
+<span class="code-comment"># Shows all messages from the beginning</span>
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">07</span>
-                            <span class="ex-title">Regular Expression</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-7')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">מצא מחברים ששמם מתחיל ב-'t' ומסתיים ב-'y'.</p>
-                    <div id="sol-7" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "regexp": {
-      "authors": "t[a-z]*y"
-    }
-  }
-}</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Consumer עם Group</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic my-topic \
+  --group my-consumer-group
+
+<span class="code-comment"># Part of a consumer group</span>
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">08</span>
-                            <span class="ex-title">Range Query</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-8')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">חפש ספרים שפורסמו ב-2015 בלבד.</p>
-                    <div id="sol-8" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "range": {
-      "publish_date": {
-        "gte": "2015-01-01",
-        "lte": "2015-12-31"
-      }
-    }
-  }
-}</div>
+            <h2 style="margin-top: 50px;">👥 Consumer Groups</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>רשימת Consumer Groups</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --list
                 </div>
+            </div>
 
-                <div class="exercise-card">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">09</span>
-                            <span class="ex-title">סינון תוצאות</span>
-                        </div>
-                        <button class="reveal-btn" onclick="toggleSolution('sol-9')">הצג פתרון</button>
-                    </div>
-                    <p style="margin-bottom: 15px;">ספרים עם "Elasticsearch" בכותרת/תקציר ו-20+ ביקורות.</p>
-                    <div id="sol-9" class="solution-box">POST /bookdb_index/_search
-{
-  "query": {
-    "bool": {
-      "must": {
-        "multi_match": {
-          "query": "elasticsearch",
-          "fields": ["title", "summary"]
-        }
-      },
-      "filter": {
-        "range": {
-          "num_reviews": {"gte": 20}
-        }
-      }
-    }
-  }
-}</div>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>מצב Consumer Group (Offset Status)</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --group my-consumer-group \
+  --describe
+
+<span class="code-comment"># Shows: TOPIC, PARTITION, CURRENT-OFFSET, LOG-END-OFFSET, LAG</span>
                 </div>
+            </div>
 
-                <div class="exercise-card" style="border-right: 5px solid var(--elastic-pink);">
-                    <div class="ex-header">
-                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
-                            <span class="ex-number">אתגר</span>
-                            <span class="ex-title">📊 Kibana Dashboard</span>
-                        </div>
-                    </div>
-                    <p>השתמש ב-Kibana ליצירת dashboard מהספרים שהוספת (למשל: תרשים עוגה של מוציאים לאור).</p>
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>איפוס Offsets להתחלה</h4>
+                <div class="code-block">
+$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 \
+  --group my-consumer-group \
+  --reset-offsets \
+  --to-earliest \
+  --topic my-topic \
+  --execute
                 </div>
+            </div>
 
+            <h2 style="margin-top: 50px;">🔌 Kafka Connect (REST API)</h2>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>רשימת Connectors פעילים</h4>
+                <div class="code-block">
+$ curl localhost:8083/connectors | python -m json.tool
+
+<span class="code-comment"># Output:</span>
+<span class="code-comment"># [</span>
+<span class="code-comment">#   "jdbc-source-connector",</span>
+<span class="code-comment">#   "hdfs-sink-connector"</span>
+<span class="code-comment"># ]</span>
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>סטטוס Connector</h4>
+                <div class="code-block">
+$ curl localhost:8083/connectors/my-connector/status \
+  | python -m json.tool
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Pause/Resume Connector</h4>
+                <div class="code-block">
+<span class="code-comment"># Pause</span>
+$ curl -X PUT localhost:8083/connectors/my-connector/pause
+
+<span class="code-comment"># Resume</span>
+$ curl -X PUT localhost:8083/connectors/my-connector/resume
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>Restart Connector</h4>
+                <div class="code-block">
+$ curl -X POST localhost:8083/connectors/my-connector/restart
+                </div>
+            </div>
+
+            <div class="comparison-card" style="margin-bottom: 25px;">
+                <h4>מחיקת Connector</h4>
+                <div class="code-block">
+$ curl -X DELETE localhost:8083/connectors/my-connector
+                </div>
+            </div>
+
+            <div class="warning-card" style="margin-top: 50px;">
+                <h4>⚠️ טיפים חשובים</h4>
+                <ul>
+                    <li>תמיד וודא ש-Kafka Cluster רץ לפני הרצת פקודות</li>
+                    <li>השתמש ב-<code>--bootstrap-server</code> במקום <code>--zookeeper</code> (deprecated)</li>
+                    <li>Consumer Groups שומרים offset - שימושי לresume מאיפה שעצרת</li>
+                    <li>תמיד בדוק LAG של consumer groups לניטור ביצועים</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -1971,7 +1657,6 @@ POST /bookdb_index/_doc/_bulk
 </div>
 
 <script>
-    /* === NAVIGATION === */
     function switchView(viewId, btn) {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.getElementById('view-' + viewId).classList.add('active');
@@ -1980,171 +1665,12 @@ POST /bookdb_index/_doc/_bulk
         btn.classList.add('active');
     }
 
-    function showTheorySection(sectionId, btn) {
+    function showSection(sectionId, btn) {
         document.querySelectorAll('.theory-section').forEach(el => el.classList.remove('active'));
-        document.getElementById('theory-' + sectionId).classList.add('active');
+        document.getElementById('section-' + sectionId).classList.add('active');
 
         document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
-    }
-
-    function toggleSolution(id) {
-        const el = document.getElementById(id);
-        const btn = event.target;
-        if(el.style.display === 'block') {
-            el.style.display = 'none';
-            btn.innerText = 'הצג פתרון';
-        } else {
-            el.style.display = 'block';
-            btn.innerText = 'הסתר פתרון';
-        }
-    }
-
-    /* === SIMULATOR === */
-    let isProcessing = false;
-    let nodes = [0, 1];
-    let docId = 1;
-    let stats = { info: 0, warn: 0, error: 0 };
-
-    function runPipeline() {
-        if(isProcessing) return;
-        isProcessing = true;
-
-        const btn = document.getElementById('runBtn');
-        btn.innerText = "⏳ מעבד...";
-        btn.disabled = true;
-
-        const rawLog = document.getElementById('rawLogInput').value;
-        const packet = document.getElementById('packet');
-        const track = document.getElementById('pipelineTrack').getBoundingClientRect();
-
-        packet.style.display = 'block';
-        const startPos = track.width * 0.85;
-        packet.style.right = startPos + 'px';
-
-        // Beats -> Logstash
-        packet.animate([
-            { right: startPos + 'px' },
-            { right: (track.width / 2) + 'px' }
-        ], { duration: 1000, fill: 'forwards' }).onfinish = () => {
-
-            const parsed = parseLog(rawLog);
-            document.getElementById('logstash-out').innerHTML =
-                `<span style="color:#10b981;">✓ Parsed:</span>\n${JSON.stringify(parsed, null, 2)}`;
-
-            setTimeout(() => {
-                // Logstash -> ES
-                packet.animate([
-                    { right: (track.width / 2) + 'px' },
-                    { right: '80px' }
-                ], { duration: 1000, fill: 'forwards' }).onfinish = () => {
-                    packet.style.display = 'none';
-                    indexData(parsed);
-                    isProcessing = false;
-                    btn.innerText = "📦 שלח לוג";
-                    btn.disabled = false;
-                };
-            }, 600);
-        };
-    }
-
-    function parseLog(log) {
-        const parts = log.split(" ");
-        let level = "INFO";
-        if(log.toLowerCase().includes("warn")) level = "WARN";
-        if(log.toLowerCase().includes("error")) level = "ERROR";
-
-        return {
-            "@timestamp": new Date().toISOString(),
-            "level": level,
-            "message": parts.slice(2).join(" "),
-            "source_ip": parts.find(p => p.includes("="))?.split("=")[1] || "unknown"
-        };
-    }
-
-    function indexData(data) {
-        docId++;
-        const primaryNode = nodes[Math.floor(Math.random() * nodes.length)];
-        let replicaNode = nodes.find(n => n !== primaryNode);
-        if(replicaNode === undefined) replicaNode = primaryNode;
-
-        addShardUI(primaryNode, 'P'+docId, 'primary');
-        if(nodes.length > 1) {
-            setTimeout(() => addShardUI(replicaNode, 'R'+docId, 'replica'), 300);
-        }
-
-        updateKibana(data);
-    }
-
-    function addShardUI(nodeId, text, type) {
-        const container = document.getElementById('shards-' + nodeId);
-        if(!container) return;
-
-        const el = document.createElement('div');
-        el.className = `shard ${type}`;
-        el.innerText = text;
-        el.title = "Index: logs-2024";
-        container.appendChild(el);
-    }
-
-    function updateKibana(data) {
-        const list = document.getElementById('kibana-list');
-        if(list.innerText.includes("אין לוגים")) list.innerHTML = "";
-
-        const row = document.createElement('div');
-        row.className = 'log-entry';
-        row.innerHTML = `<span style="color:#0077cc; font-weight:600;">${data['@timestamp'].split('T')[1].substring(0,8)}</span> [<span style="font-weight:700;">${data.level}</span>] ${data.message}`;
-        list.prepend(row);
-
-        if(data.level === 'INFO') stats.info++;
-        if(data.level === 'WARN') stats.warn++;
-        if(data.level === 'ERROR') stats.error++;
-
-        const total = Math.max(stats.info, stats.warn, stats.error, 1);
-        document.getElementById('bar-info').style.height = (stats.info / total * 100) + '%';
-        document.getElementById('bar-warn').style.height = (stats.warn / total * 100) + '%';
-        document.getElementById('bar-error').style.height = (stats.error / total * 100) + '%';
-    }
-
-    function addNode() {
-        const id = nodes.length;
-        nodes.push(id);
-
-        const container = document.getElementById('clusterGrid');
-        const node = document.createElement('div');
-        node.className = 'node-box';
-        node.id = 'node-' + id;
-        node.innerHTML = `
-            <div class="node-header"><span>DATA</span> <span>Node-${id}</span></div>
-            <div class="shards-container" id="shards-${id}"></div>
-        `;
-        container.appendChild(node);
-    }
-
-    function resetCluster() {
-        nodes = [0, 1];
-        docId = 0;
-        stats = { info: 0, warn: 0, error: 0 };
-
-        document.getElementById('clusterGrid').innerHTML = `
-            <div class="node-box" id="node-0">
-                <div class="node-header"><span>MASTER</span> <span>Node-0</span></div>
-                <div class="shards-container" id="shards-0"></div>
-            </div>
-            <div class="node-box" id="node-1">
-                <div class="node-header"><span>DATA</span> <span>Node-1</span></div>
-                <div class="shards-container" id="shards-1"></div>
-            </div>
-        `;
-
-        document.getElementById('kibana-list').innerHTML =
-            '<div style="color: #cbd5e0; text-align: center; padding-top: 60px;">אין לוגים באינדקס</div>';
-
-        ['info','warn','error'].forEach(k =>
-            document.getElementById('bar-'+k).style.height = '0%'
-        );
-
-        document.getElementById('logstash-out').innerText = '// Waiting for data...';
     }
 </script>
 
