@@ -255,37 +255,67 @@
         .code-block {
             background: var(--code-bg);
             color: var(--code-text);
-            padding: 20px;
+            padding: 25px;
             border-radius: var(--radius-md);
             margin: 20px 0;
             overflow-x: auto;
             direction: ltr;
             text-align: left;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 2;
             cursor: pointer;
             transition: background 0.3s;
             position: relative;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid #334155;
         }
 
         .code-block:hover {
-            background: #2a2a2a;
+            background: #2a3142;
+            border-color: var(--spark-orange);
         }
 
         .code-block::before {
-            content: 'לחץ להעתקה';
+            content: '📋 לחץ להעתקה';
             position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
+            top: 8px;
+            left: 8px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            background: #1e293b;
+            padding: 4px 10px;
+            border-radius: 4px;
             opacity: 0;
             transition: opacity 0.3s;
+            border: 1px solid #334155;
         }
 
         .code-block:hover::before {
             opacity: 1;
+        }
+
+        /* Syntax Highlighting */
+        .code-block .comment {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .code-block .keyword {
+            color: #f472b6;
+        }
+
+        .code-block .string {
+            color: #86efac;
+        }
+
+        .code-block .number {
+            color: #fbbf24;
+        }
+
+        .code-block .function {
+            color: #60a5fa;
         }
 
         /* === THEORY SIDEBAR === */
@@ -590,10 +620,13 @@
                     </div>
 
                     <div class="code-block"># דוגמה: מבנה HDFS
+
 NameNode (Metadata):
   /logs/031512.log: B1,B2,B3
   /logs/042313.log: B4,B5
 
+
+Block Locations:
   B1: NodeA, NodeB, NodeD
   B2: NodeB, NodeD, NodeE
   B3: NodeA, NodeB, NodeC
@@ -680,7 +713,9 @@ NameNode (Metadata):
                     </div>
 
                     <div class="code-block"># Spark Python API - Word Count
+
 text_file = spark.textFile("hdfs://...")
+
 text_file.flatMap(lambda line: line.split()) \
     .map(lambda word: (word, 1)) \
     .reduceByKey(lambda a, b: a+b)</div>
@@ -768,13 +803,20 @@ text_file.flatMap(lambda line: line.split()) \
                     <div class="code-block"># Python - יצירת SparkContext
 from pyspark import SparkContext
 
-sc = SparkContext(master='local[*]', appName='my_app')</div>
+sc = SparkContext(
+    master='local[*]',
+    appName='my_app'
+)</div>
 
                     <div class="code-block">// Scala - יצירת SparkContext
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 
-val conf = new SparkConf().setAppName("my_app").setMaster("local[*]")
+
+val conf = new SparkConf()
+    .setAppName("my_app")
+    .setMaster("local[*]")
+
 val sc = new SparkContext(conf)</div>
                 </div>
             </main>
@@ -819,14 +861,18 @@ val sc = new SparkContext(conf)</div>
                     <div class="code-block"># קריאה מ-path יחסי (משתמש ב-default fs configuration)
 rdd = sc.textFile('/data/sample/table1/')
 
+
 # קריאה מ-HDFS
 rdd = sc.textFile('hdfs://my-hdfs:8020/data/sample/table1/')
+
 
 # קריאה מ-local filesystem
 rdd = sc.textFile('file:///home/my_user/my_data/')
 
+
 # קריאה מ-S3
 rdd = sc.textFile('s3a://spark/data/sample/table1/')
+
 
 # קריאה רק של קבצי CSV
 rdd = sc.textFile('/data/sample/table1/*.csv')</div>
@@ -836,6 +882,7 @@ rdd = sc.textFile('/data/sample/table1/*.csv')</div>
 data = [7, 17, 25, 88, 28]
 rdd = sc.parallelize(data)
 
+
 # Python - Key-Value RDD
 data = [('avi', 40), ('yossi', 17), ('eli', 8)]
 rdd = sc.parallelize(data)</div>
@@ -844,11 +891,13 @@ rdd = sc.parallelize(data)</div>
 List<Integer> data = Arrays.asList(7, 17, 25, 88, 28);
 JavaRDD<Integer> rdd = sc.parallelize(data);
 
+
 // Java - Key-Value RDD
 List<Tuple2<String, Integer>> data = Arrays.asList(
     new Tuple2<>("avi", 40),
     new Tuple2<>("yossi", 17)
 );
+
 JavaPairRDD<String, Integer> rdd = sc.parallelizePairs(data);</div>
 
                     <h4 style="margin-top: 25px;">3️⃣ מ-RDD אחר</h4>
@@ -889,23 +938,30 @@ JavaPairRDD<String, Integer> rdd = sc.parallelizePairs(data);</div>
                     <div class="code-block"># map - מיפוי כל אלמנט
 rdd.map(lambda x: x * 2)
 
+
 # filter - סינון
 rdd.filter(lambda x: x > 10)
+
 
 # flatMap - מיפוי והשטחה
 rdd.flatMap(lambda line: line.split())
 
+
 # reduceByKey - צמצום לפי מפתח (Pair RDD)
 rdd.reduceByKey(lambda a, b: a + b)
+
 
 # sortByKey - מיון לפי מפתח
 rdd.sortByKey()
 
+
 # distinct - ערכים ייחודיים
 rdd.distinct()
 
+
 # union - איחוד שני RDDs
 rdd1.union(rdd2)
+
 
 # join - חיבור שני Pair RDDs
 rdd1.join(rdd2)</div>
@@ -914,20 +970,26 @@ rdd1.join(rdd2)</div>
                     <div class="code-block"># count - ספירת אלמנטים
 count = rdd.count()
 
+
 # collect - החזרת כל האלמנטים ל-Driver
 data = rdd.collect()
+
 
 # take - החזרת N אלמנטים ראשונים
 first_5 = rdd.take(5)
 
+
 # first - החזרת אלמנט ראשון
 first = rdd.first()
+
 
 # reduce - צמצום לערך יחיד
 sum = rdd.reduce(lambda a, b: a + b)
 
+
 # foreach - ביצוע פעולה על כל אלמנט
 rdd.foreach(lambda x: print(x))
+
 
 # saveAsTextFile - שמירה לקובץ
 rdd.saveAsTextFile('/output/path')</div>
@@ -958,11 +1020,14 @@ rdd.saveAsTextFile('/output/path')</div>
                     <div class="code-block"># בדיקת מספר Partitions
 num_partitions = rdd.getNumPartitions()
 
+
 # שינוי מספר Partitions - coalesce (רק הקטנה)
 rdd = rdd.coalesce(2)
 
+
 # שינוי מספר Partitions - repartition (הגדלה/הקטנה)
 rdd = rdd.repartition(10)
+
 
 # יצירת RDD עם מספר Partitions מוגדר
 rdd = sc.textFile('/path', minPartitions=10)</div>
@@ -985,6 +1050,7 @@ rdd = sc.textFile('/path', minPartitions=10)</div>
 lookup_table = {"key1": "value1", "key2": "value2"}
 broadcast_lookup = sc.broadcast(lookup_table)
 
+
 # שימוש ב-Broadcast Variable
 def enrich_data(x):
     return broadcast_lookup.value.get(x, "unknown")
@@ -1000,6 +1066,7 @@ enriched = rdd.map(enrich_data)</div>
                     <div class="code-block"># יצירת Accumulator
 error_counter = sc.accumulator(0)
 
+
 def process_line(line):
     global error_counter
     try:
@@ -1009,8 +1076,10 @@ def process_line(line):
         error_counter.add(1)
         return None
 
+
 processed = rdd.map(process_line)
 processed.count()  # מפעיל את החישוב
+
 
 print(f"Total errors: {error_counter.value}")</div>
                 </div>
@@ -1073,6 +1142,7 @@ print(f"Total errors: {error_counter.value}")</div>
                     <div class="code-block"># Python - יצירת SparkSession
 from pyspark.sql import SparkSession
 
+
 spark = SparkSession.builder \
     .appName("my_app") \
     .master("local[*]") \
@@ -1080,13 +1150,18 @@ spark = SparkSession.builder \
 
                     <h3>קריאת נתונים</h3>
                     <div class="code-block"># קריאה מ-CSV
-df = spark.read.csv('/path/to/file.csv', header=True, inferSchema=True)
+df = spark.read.csv('/path/to/file.csv',
+                    header=True,
+                    inferSchema=True)
+
 
 # קריאה מ-JSON
 df = spark.read.json('/path/to/file.json')
 
+
 # קריאה מ-Parquet
 df = spark.read.parquet('/path/to/file.parquet')
+
 
 # קריאה מ-JDBC (Database)
 df = spark.read \
@@ -1102,9 +1177,15 @@ df = spark.read \
 data = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]
 df = spark.createDataFrame(data, ["name", "age"])
 
+
 # מ-Pandas DataFrame
 import pandas as pd
-pandas_df = pd.DataFrame({"name": ["Alice", "Bob"], "age": [25, 30]})
+
+pandas_df = pd.DataFrame({
+    "name": ["Alice", "Bob"],
+    "age": [25, 30]
+})
+
 df = spark.createDataFrame(pandas_df)</div>
                 </div>
             </div>
@@ -1118,18 +1199,25 @@ df = spark.createDataFrame(pandas_df)</div>
                     <h3>בחירת עמודות (Select)</h3>
                     <div class="code-block"># בחירת עמודות
 df.select("name", "age")
+
 df.select(df.name, df.age)
+
 df.select(df["name"], df["age"])
+
 
 # בחירה עם ביטויים
 from pyspark.sql.functions import col
+
 df.select(col("age") + 1)</div>
 
                     <h3>סינון (Filter / Where)</h3>
                     <div class="code-block"># סינון
 df.filter(df.age > 25)
+
 df.where(df.age > 25)
+
 df.filter("age > 25")
+
 
 # סינון מורכב
 df.filter((df.age > 25) & (df.name.startswith("A")))</div>
@@ -1138,13 +1226,17 @@ df.filter((df.age > 25) & (df.name.startswith("A")))</div>
                     <div class="code-block"># קיבוץ וספירה
 df.groupBy("department").count()
 
+
 # קיבוץ עם aggregations
-df.groupBy("department").agg(
-    {"salary": "avg", "age": "max"}
-)
+df.groupBy("department").agg({
+    "salary": "avg",
+    "age": "max"
+})
+
 
 # עם functions
 from pyspark.sql.functions import avg, max, min
+
 df.groupBy("department").agg(
     avg("salary").alias("avg_salary"),
     max("age").alias("max_age")
@@ -1153,14 +1245,19 @@ df.groupBy("department").agg(
                     <h3>מיון (OrderBy / Sort)</h3>
                     <div class="code-block"># מיון
 df.orderBy("age")
+
 df.orderBy(df.age.desc())
+
 df.sort("age", ascending=False)</div>
 
                     <h3>הוספת עמודות</h3>
                     <div class="code-block"># הוספת עמודה חדשה
 from pyspark.sql.functions import lit
+
 df = df.withColumn("new_age", df.age + 1)
+
 df = df.withColumn("country", lit("Israel"))
+
 
 # שינוי שם עמודה
 df = df.withColumnRenamed("name", "full_name")</div>
@@ -1169,8 +1266,10 @@ df = df.withColumnRenamed("name", "full_name")</div>
                     <div class="code-block"># Inner Join
 df1.join(df2, df1.id == df2.user_id, "inner")
 
+
 # Left Join
 df1.join(df2, df1.id == df2.user_id, "left")
+
 
 # Join על שם עמודה זהה
 df1.join(df2, "id", "inner")</div>
@@ -1178,14 +1277,19 @@ df1.join(df2, "id", "inner")</div>
                     <h3>הצגת נתונים</h3>
                     <div class="code-block"># הצגת שורות ראשונות
 df.show()
+
 df.show(10)
+
 df.show(10, truncate=False)
+
 
 # הצגת Schema
 df.printSchema()
 
+
 # מידע על DataFrame
 df.describe().show()
+
 
 # המרה ל-Pandas
 pandas_df = df.toPandas()</div>
@@ -1206,19 +1310,24 @@ pandas_df = df.toPandas()</div>
                     <div class="code-block"># רישום DataFrame כטבלה זמנית
 df.createOrReplaceTempView("users")
 
+
 # הרצת SQL
 result = spark.sql("""
-    SELECT department, AVG(salary) as avg_salary
+    SELECT
+        department,
+        AVG(salary) as avg_salary
     FROM users
     WHERE age > 25
     GROUP BY department
     ORDER BY avg_salary DESC
 """)
 
+
 result.show()</div>
 
                     <div class="code-block"># Global Temp View (זמינה בין Sessions)
 df.createGlobalTempView("global_users")
+
 
 # גישה דרך global_temp
 spark.sql("SELECT * FROM global_temp.global_users")</div>
@@ -1240,9 +1349,11 @@ spark.sql("SELECT * FROM global_temp.global_users")</div>
                     <div class="code-block">// Scala - Dataset
 case class User(name: String, age: Int, salary: Double)
 
+
 val ds: Dataset[User] = spark.read
     .json("/path/to/users.json")
     .as[User]
+
 
 // פעולות type-safe
 ds.filter(_.age > 25)
@@ -1274,14 +1385,18 @@ df = spark.read \
     .option("delimiter", ",") \
     .csv("/path/to/file.csv")
 
+
 # JSON
 df = spark.read.json("/path/to/file.json")
+
 
 # Parquet (מומלץ!)
 df = spark.read.parquet("/path/to/file.parquet")
 
+
 # ORC
 df = spark.read.orc("/path/to/file.orc")
+
 
 # Avro
 df = spark.read.format("avro").load("/path/to/file.avro")</div>
@@ -1290,15 +1405,19 @@ df = spark.read.format("avro").load("/path/to/file.avro")</div>
                     <div class="code-block"># כתיבה ל-CSV
 df.write.csv("/output/path")
 
+
 # כתיבה ל-Parquet
 df.write.parquet("/output/path")
+
 
 # כתיבה עם modes
 df.write.mode("overwrite").parquet("/output/path")
 # modes: append, overwrite, ignore, error (default)
 
+
 # Partitioning
 df.write.partitionBy("year", "month").parquet("/output/path")
+
 
 # כתיבה ל-Database
 df.write \
@@ -1370,11 +1489,14 @@ df.write \
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 
+
 sc = SparkContext("local[2]", "NetworkWordCount")
 ssc = StreamingContext(sc, 1)  # batch interval של 1 שניה
 
+
 # קריאה מ-socket
 lines = ssc.socketTextStream("localhost", 9999)
+
 
 # עיבוד
 words = lines.flatMap(lambda line: line.split())
@@ -1382,6 +1504,7 @@ pairs = words.map(lambda word: (word, 1))
 wordCounts = pairs.reduceByKey(lambda a, b: a + b)
 
 wordCounts.pprint()
+
 
 # התחלה
 ssc.start()
@@ -1409,6 +1532,7 @@ spark = SparkSession.builder \
     .appName("StructuredKafkaWordCount") \
     .getOrCreate()
 
+
 # קריאה מ-Kafka
 df = spark \
     .readStream \
@@ -1417,13 +1541,17 @@ df = spark \
     .option("subscribe", "my-topic") \
     .load()
 
+
 # הנתונים מגיעים כ-binary, צריך להמיר
 from pyspark.sql.functions import col
+
 lines = df.select(col("value").cast("string"))
+
 
 # עיבוד
 words = lines.selectExpr("explode(split(value, ' ')) as word")
 wordCounts = words.groupBy("word").count()
+
 
 # כתיבה ל-console
 query = wordCounts \
@@ -1462,6 +1590,7 @@ query = df \
     .option("topic", "output-topic") \
     .start()
 
+
 # כתיבה ל-Parquet
 query = df \
     .writeStream \
@@ -1470,12 +1599,14 @@ query = df \
     .option("checkpointLocation", "/checkpoint/path") \
     .start()
 
+
 # כתיבה ל-Memory (לבדיקות)
 query = df \
     .writeStream \
     .format("memory") \
     .queryName("my_table") \
     .start()
+
 
 # אפשר לשאול עם SQL
 spark.sql("SELECT * FROM my_table").show()</div>
@@ -1493,7 +1624,8 @@ windowedCounts = df \
     .groupBy(
         window(col("timestamp"), "5 minutes"),
         col("word")
-    ).count()</div>
+    ) \
+    .count()</div>
                 </div>
             </div>
 
@@ -1608,12 +1740,16 @@ windowedCounts = df \
                     <h3>Caching & Persistence</h3>
                     <div class="code-block"># Cache ב-memory
 df.cache()
+
 # או
 df.persist()
 
+
 # Cache עם storage level
 from pyspark import StorageLevel
+
 df.persist(StorageLevel.MEMORY_AND_DISK)
+
 
 # ניקוי cache
 df.unpersist()</div>
@@ -1642,6 +1778,7 @@ df.unpersist()</div>
 
                     <div class="code-block"># ❌ גרוע - groupByKey
 rdd.groupByKey().mapValues(lambda x: sum(x))
+
 
 # ✅ טוב יותר - reduceByKey
 rdd.reduceByKey(lambda a, b: a + b)</div>
@@ -1677,10 +1814,12 @@ result = large_df.join(broadcast(small_df), "id")</div>
 
                     <h3>Rolling Logs</h3>
                     <div class="code-block"># log4j.properties - Rolling File Appender
+
 log4j.appender.RollingAppender=org.apache.log4j.RollingFileAppender
 log4j.appender.RollingAppender.File=spark.log
 log4j.appender.RollingAppender.MaxFileSize=100MB
 log4j.appender.RollingAppender.MaxBackupIndex=10
+
 log4j.appender.RollingAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.RollingAppender.layout.ConversionPattern=[%p] %d %c - %m%n</div>
 
@@ -1688,13 +1827,17 @@ log4j.appender.RollingAppender.layout.ConversionPattern=[%p] %d %c - %m%n</div>
                     <div class="code-block"># Spark logs
 log4j.logger.org.apache.spark=INFO, RollingAppender
 
+
 # User logs
 log4j.logger.il.naya=WARN, userAppender
 
+
+# User Appender Configuration
 log4j.appender.userAppender=org.apache.log4j.RollingFileAppender
 log4j.appender.userAppender.File=user.log
 log4j.appender.userAppender.MaxFileSize=100MB
 log4j.appender.userAppender.MaxBackupIndex=10
+
 log4j.appender.userAppender.layout=org.apache.log4j.PatternLayout
 log4j.appender.userAppender.layout.ConversionPattern=[%p] %d %c - %m%n</div>
 
@@ -1745,12 +1888,16 @@ spark.streaming.stopGracefullyOnShutdown = true</div>
 import atexit
 from time import sleep
 
+
 def graceful_shutdown(spark, query_stream):
     """עצירה חלקה של Streaming"""
     query_stream.stop()
+
     while query_stream.isActive():
         sleep(5)
+
     spark.stop()
+
 
 # רישום ה-shutdown handler
 atexit.register(graceful_shutdown, spark, query_stream)</div>
@@ -1759,24 +1906,29 @@ atexit.register(graceful_shutdown, spark, query_stream)</div>
                     <div class="code-block"># במקום awaitTermination
 # query.awaitTermination()
 
+
 # השתמש ב-while loop
 import signal
 import sys
 
 stop_flag = False
 
+
 def signal_handler(sig, frame):
     global stop_flag
     print("Stopping gracefully...")
     stop_flag = True
 
+
 signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGINT, signal_handler)
+
 
 while not stop_flag:
     if not query.isActive:
         break
     sleep(1)
+
 
 graceful_shutdown(spark, query)</div>
 
@@ -1833,6 +1985,9 @@ sc = SparkContext()
 sqlContext = SQLContext(sc)
 df = sqlContext.read.json("file.json")
 
+
+# ============================================
+
 # Spark 2.x
 from pyspark.sql import SparkSession
 
@@ -1884,4 +2039,3 @@ df = spark.read.json("file.json")</div>
 
 </body>
 </html>
-
