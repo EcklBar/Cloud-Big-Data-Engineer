@@ -399,85 +399,88 @@
 
     <header class="hero">
         <div class="hero-content">
-            <h1><span>Git</span> Masterclass</h1>
-            <p>Git for Data Engineers | Interactive Guide</p>
+            <div style="font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; opacity: 0.9; margin-bottom: 10px;">
+                DATA ENGINEERING HUB
+            </div>
+            <h1><span>Git</span> למהנדסי נתונים</h1>
+            <p>מדריך אינטראקטיבי מקיף</p>
             <div style="font-size: 3em; margin-top: 20px;">🚀 💾 🌿</div>
         </div>
     </header>
 
     <div class="nav-container">
         <div class="nav-scroller">
-            <button class="nav-btn active" onclick="switchSection('intro')">Intro & Concepts</button>
-            <button class="nav-btn" onclick="switchSection('basics')">Basic Commands</button>
-            <button class="nav-btn" onclick="switchSection('workflow')">Workflow</button>
-            <button class="nav-btn" onclick="switchSection('branching')">Branching & Merging</button>
-            <button class="nav-btn" onclick="switchSection('mergevis')">Merge Visualization</button>
-            <button class="nav-btn" onclick="switchSection('conflicts')">Conflict Resolution</button>
-            <button class="nav-btn" onclick="switchSection('commands')">Full Command List</button>
-            <button class="nav-btn" onclick="switchSection('advanced')">Advanced Commands</button>
-            <button class="nav-btn" onclick="switchSection('exercises')">Exercises (Labs)</button>
+            <button class="nav-btn active" onclick="switchSection('intro')">מבוא ומושגים</button>
+            <button class="nav-btn" onclick="switchSection('basics')">פקודות בסיסיות</button>
+            <button class="nav-btn" onclick="switchSection('workflow')">תהליך עבודה</button>
+            <button class="nav-btn" onclick="switchSection('branching')">הסתעפות ומיזוג</button>
+            <button class="nav-btn" onclick="switchSection('mergevis')">הדמיית מיזוג</button>
+            <button class="nav-btn" onclick="switchSection('conflicts')">פתרון קונפליקטים</button>
+            <button class="nav-btn" onclick="switchSection('commands')">רשימת פקודות מלאה</button>
+            <button class="nav-btn" onclick="switchSection('advanced')">פקודות מתקדמות</button>
+            <button class="nav-btn" onclick="switchSection('exercises')">תרגילים מעשיים</button>
         </div>
     </div>
 
     <div class="container">
 
         <div id="intro" class="section active">
-            <h2>Introduction to Version Control (VCS)</h2>
-            <p><strong>Version Control System</strong> is an application that manages and stores every revision of your code and files.</p>
+            <h2>מבוא לבקרת גרסאות (VCS)</h2>
+            <p><strong>מערכת בקרת גרסאות</strong> היא אפליקציה שמנהלת ושומרת כל גרסה של הקוד והקבצים שלך.</p>
 
             <div class="grid">
                 <div class="info-card">
                     <div class="icon-box">🛡️</div>
-                    <h3>Why is it Critical?</h3>
+                    <h3>למה זה קריטי?</h3>
                     <ul>
-                        <li>Collaborate on the same source code within a team.</li>
-                        <li>Manage software releases.</li>
-                        <li><strong>Rollback:</strong> Revert to previous versions if bugs are discovered.</li>
+                        <li>שיתוף פעולה על אותו קוד מקור בתוך צוות</li>
+                        <li>ניהול גרסאות תוכנה</li>
+                        <li><strong>החזרה לאחור:</strong> חזרה לגרסאות קודמות אם מתגלים באגים</li>
                     </ul>
                 </div>
                 <div class="info-card">
                     <div class="icon-box">🌐</div>
-                    <h3>Distributed Model</h3>
-                    <p>Unlike older tools (like SVN), in Git, every developer has a <strong>full copy</strong> of the repository and its entire history. This allows for fast, offline work.</p>
+                    <h3>מודל מבוזר</h3>
+                    <p>בניגוד לכלים ישנים (כמו SVN), ב-Git כל מפתח יש לו <strong>עותק מלא</strong> של המאגר וכל ההיסטוריה שלו. זה מאפשר עבודה מהירה וללא חיבור לאינטרנט.</p>
                 </div>
             </div>
 
-            <h3>Git Advantages & Challenges</h3>
+            <h3>יתרונות ואתגרים של Git</h3>
             <div class="grid">
                 <div class="info-card" style="background-color: #e8f5e9;">
                     <div class="icon-box">✅</div>
-                    <h4>Advantages</h4>
+                    <h4>יתרונות</h4>
                     <ul>
-                        <li><strong>Distributed development:</strong> Work on your local copy</li>
-                        <li><strong>High performance:</strong> Fast operations</li>
-                        <li><strong>Ease of use:</strong> Intuitive commands once learned</li>
-                        <li><strong>Strong branching support:</strong> Excellent history management</li>
-                        <li><strong>Extensive tools:</strong> Advanced operations made easy</li>
+                        <li><strong>פיתוח מבוזר:</strong> עבודה על העותק המקומי שלך</li>
+                        <li><strong>ביצועים גבוהים:</strong> פעולות מהירות</li>
+                        <li><strong>קלות שימוש:</strong> פקודות אינטואיטיביות לאחר למידה</li>
+                        <li><strong>תמיכה חזקה בענפים:</strong> ניהול היסטוריה מעולה</li>
+                        <li><strong>כלים מתקדמים:</strong> פעולות מתקדמות בקלות</li>
                     </ul>
                 </div>
                 <div class="info-card" style="background-color: #fff3e0;">
                     <div class="icon-box">⚠️</div>
-                    <h4>Challenges</h4>
+                    <h4>אתגרים</h4>
                     <ul>
-                        <li><strong>New mental model:</strong> Different approach to version control</li>
-                        <li><strong>Learning curve:</strong> Takes time to master</li>
-                        <li><strong>Destructive operations:</strong> Some commands can lose data if misused</li>
-                        <li><strong>Binary file limitations:</strong> Not ideal for large binary files</li>
+                        <li><strong>מודל מחשבה חדש:</strong> גישה שונה לבקרת גרסאות</li>
+                        <li><strong>עקומת למידה:</strong> לוקח זמן להשתלט</li>
+                        <li><strong>פעולות הרסניות:</strong> חלק מהפקודות יכולות לגרום לאובדן מידע</li>
+                        <li><strong>מגבלות קבצים בינאריים:</strong> לא אידיאלי לקבצים בינאריים גדולים</li>
                     </ul>
                 </div>
             </div>
 
-            <h3>Delta Storage Mechanism</h3>
-            <p>Git uses a smart mechanism to save space:</p>
+            <h3>מנגנון אחסון דלתות</h3>
+            <p>Git משתמש במנגנון חכם כדי לחסוך מקום:</p>
             <div class="diagram-container" style="justify-content: flex-start;">
                 <div style="flex: 1;">
-                    <p>📦 <strong>Original Files:</strong> Stored as a complete object the first time.</p>
-                    <p>📝 <strong>Changes:</strong> Stored as <strong>Deltas</strong> (differences) between versions.</p>
-                    <p>📸 <strong>Commit:</strong> A "snapshot" of the project state at a given moment.</p>
+                    <p>📦 <strong>קבצים מקוריים:</strong> מאוחסנים כאובייקט שלם בפעם הראשונה.</p>
+                    <p>📝 <strong>שינויים:</strong> מאוחסנים כ-<strong>דלתות</strong> (הבדלים) בין גרסאות.</p>
+                    <p>📸 <strong>Commit:</strong> "תמונת מצב" של הפרויקט ברגע נתון.</p>
                 </div>
             </div>
 
-            <h3>Git Objects Types</h3>
+            <h3>סוגי אובייקטים ב-Git</h3>
             <div class="tab-container">
                 <div class="tabs">
                     <button class="tab-btn active" onclick="openTab(event, 'blob')">Blob</button>
@@ -486,199 +489,199 @@
                     <button class="tab-btn" onclick="openTab(event, 'tag')">Tag</button>
                 </div>
                 <div id="blob" class="tab-content active">
-                    <strong>Binary Large Object:</strong> Contains the raw content of the file (binary). It has no metadata (no filename, no permissions). Just pure data.
+                    <strong>אובייקט בינארי גדול:</strong> מכיל את התוכן הגולמי של הקובץ (בינארי). אין לו מטא-דאטה (ללא שם קובץ, ללא הרשאות). רק נתונים טהורים.
                 </div>
                 <div id="tree" class="tab-content">
-                    Represents a <strong>Directory</strong>. It contains a list of filenames and pointers to their Blobs, or pointers to other Trees (sub-directories).
+                    מייצג <strong>תיקייה</strong>. מכיל רשימה של שמות קבצים ומצביעים ל-Blobs שלהם, או מצביעים ל-Trees אחרים (תת-תיקיות).
                 </div>
                 <div id="commit" class="tab-content">
-                    Represents a <strong>Version</strong>. Contains a pointer to the main Tree of the project at that moment, plus metadata: Author, Date, and a Message.
+                    מייצג <strong>גרסה</strong>. מכיל מצביע ל-Tree הראשי של הפרויקט באותו רגע, בנוסף למטא-דאטה: יוצר, תאריך והודעה.
                 </div>
                 <div id="tag" class="tab-content">
-                    A <strong>Label</strong> associated with a commit, for example, a version number (v1.0, v2.0). Tags are used to mark specific points in history as important.
+                    <strong>תווית</strong> המשויכת ל-commit, לדוגמה, מספר גרסה (v1.0, v2.0). Tags משמשים לסימון נקודות ספציפיות בהיסטוריה כחשובות.
                 </div>
             </div>
 
-            <h3>VCS Services</h3>
+            <h3>שירותי VCS</h3>
             <div class="grid">
                 <div class="info-card">
                     <div class="icon-box">🐙</div>
                     <h4>GitHub</h4>
                     <ul>
-                        <li>Web-based hosting service using Git</li>
-                        <li>Access control, bug tracking, documentation, automation</li>
-                        <li>Leading VCS service for open source and enterprises</li>
-                        <li>Acquired by Microsoft in 2018</li>
+                        <li>שירות אירוח מבוסס אינטרנט המשתמש ב-Git</li>
+                        <li>בקרת גישה, מעקב אחר באגים, תיעוד, אוטומציה</li>
+                        <li>שירות ה-VCS המוביל לקוד פתוח וארגונים</li>
+                        <li>נרכש על ידי מיקרוסופט ב-2018</li>
                     </ul>
                 </div>
                 <div class="info-card">
                     <div class="icon-box">🦊</div>
-                    <h4>Alternatives</h4>
+                    <h4>חלופות</h4>
                     <ul>
-                        <li><strong>GitLab:</strong> Self-hosted option with CI/CD</li>
-                        <li><strong>BitBucket:</strong> Atlassian's Git solution</li>
-                        <li><strong>Azure DevOps:</strong> Microsoft's enterprise solution</li>
+                        <li><strong>GitLab:</strong> אפשרות אירוח עצמי עם CI/CD</li>
+                        <li><strong>BitBucket:</strong> פתרון Git של Atlassian</li>
+                        <li><strong>Azure DevOps:</strong> פתרון ארגוני של מיקרוסופט</li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div id="basics" class="section">
-            <h2>Basic Commands</h2>
-            <p>The essential toolkit every Data Engineer needs to know.</p>
+            <h2>פקודות בסיסיות</h2>
+            <p>ערכת הכלים החיונית שכל מהנדס נתונים צריך לדעת.</p>
 
             <div class="command-box">
-                <button class="copy-btn" onclick="copyCode(this)">Copy All</button>
+                <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="cmd">git init</span> <span class="comment"># Initialize a new repository in the current directory</span>
+                        <span class="cmd">git init</span> <span class="comment"># אתחול מאגר חדש בתיקייה הנוכחית</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="cmd">git clone</span> <span class="arg">&lt;repo_url&gt;</span> <span class="comment"># Download a full copy of an existing remote repository</span>
+                        <span class="cmd">git clone</span> <span class="arg">&lt;repo_url&gt;</span> <span class="comment"># הורדת עותק מלא של מאגר מרוחק קיים</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="cmd">git status</span> <span class="comment"># Check file status (what changed? what is staged?)</span>
+                        <span class="cmd">git status</span> <span class="comment"># בדיקת סטטוס קבצים (מה השתנה? מה מועבר?)</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Move file to Staging Area (prepare for commit)</span>
+                        <span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># העברת קובץ לאזור ההעברה (הכנה לcommit)</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="cmd">git commit</span> <span class="arg">-m "message"</span> <span class="comment"># Save changes to the local repository history</span>
+                        <span class="cmd">git commit</span> <span class="arg">-m "message"</span> <span class="comment"># שמירת שינויים להיסטוריית המאגר המקומי</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
             </div>
 
             <div class="info-card" style="background-color: #e3f2fd; border-color: #2196f3;">
-                <h3>💡 Pro Tip</h3>
-                <p>Use <code>git diff</code> before adding files to see exactly what lines changed, and <code>git log</code> to view the full project history.</p>
+                <h3>💡 טיפ מקצועי</h3>
+                <p>השתמש ב-<code>git diff</code> לפני הוספת קבצים כדי לראות בדיוק אילו שורות השתנו, וב-<code>git log</code> כדי לצפות בהיסטוריה המלאה של הפרויקט.</p>
             </div>
         </div>
 
         <div id="workflow" class="section">
-            <h2>The Workflow (The 3 Stages)</h2>
-            <p>Understanding Git's structure is key to preventing errors.</p>
+            <h2>תהליך העבודה (3 השלבים)</h2>
+            <p>הבנת המבנה של Git היא המפתח למניעת שגיאות.</p>
 
             <div class="diagram-container">
                 <div class="stage repo">
-                    <div>Repository</div>
-                    <small>Saved History</small>
+                    <div>מאגר</div>
+                    <small>היסטוריה שמורה</small>
                 </div>
                 <div class="arrow">➜</div>
                 <div class="stage staging">
-                    <div>Staging Area</div>
-                    <small>Index (Prep)</small>
+                    <div>אזור העברה</div>
+                    <small>אינדקס (הכנה)</small>
                 </div>
                 <div class="arrow">➜</div>
                 <div class="stage working">
-                    <div>Working Directory</div>
-                    <small>Sandbox (Edit)</small>
+                    <div>תיקיית עבודה</div>
+                    <small>סביבת עבודה (עריכה)</small>
                 </div>
             </div>
 
             <div class="grid">
                 <div class="info-card">
-                    <h3>1. Working Directory</h3>
-                    <p>Where you create, edit, and delete files. This is your immediate workspace.</p>
+                    <h3>1. תיקיית עבודה</h3>
+                    <p>המקום בו אתה יוצר, עורך ומוחק קבצים. זהו סביבת העבודה המיידית שלך.</p>
                 </div>
                 <div class="info-card">
-                    <h3>2. Staging Area</h3>
-                    <p>A middle ground. You "choose" which modified files go into the next version. <code>git add</code> moves files here.</p>
+                    <h3>2. אזור העברה</h3>
+                    <p>שטח ביניים. אתה "בוחר" אילו קבצים שונו יכנסו לגרסה הבאה. <code>git add</code> מעביר קבצים לכאן.</p>
                 </div>
                 <div class="info-card">
-                    <h3>3. Repository</h3>
-                    <p>The database. <code>git commit</code> takes everything from Staging and saves it forever in history.</p>
+                    <h3>3. מאגר</h3>
+                    <p>בסיס הנתונים. <code>git commit</code> לוקח הכל מאזור ההעברה ושומר אותו לנצח בהיסטוריה.</p>
                 </div>
             </div>
 
-            <h3>File States</h3>
+            <h3>מצבי קבצים</h3>
             <ul>
-                <li><strong>Untracked:</strong> New file Git doesn't know yet.</li>
-                <li><strong>Unmodified:</strong> Existing file that hasn't changed.</li>
-                <li><strong>Modified:</strong> Existing file with changes.</li>
-                <li><strong>Staged:</strong> File marked ready for the next Commit.</li>
-                <li><strong>Committed:</strong> Changes safely saved in the local database.</li>
+                <li><strong>לא במעקב:</strong> קובץ חדש ש-Git עדיין לא מכיר.</li>
+                <li><strong>לא שונה:</strong> קובץ קיים שלא השתנה.</li>
+                <li><strong>שונה:</strong> קובץ קיים עם שינויים.</li>
+                <li><strong>מועבר:</strong> קובץ מסומן כמוכן ל-Commit הבא.</li>
+                <li><strong>מוגש:</strong> שינויים נשמרו בבטחה במסד הנתונים המקומי.</li>
             </ul>
         </div>
 
         <div id="branching" class="section">
-            <h2>Branching & Merging</h2>
-            <p>Git's superpower. Work on features in parallel without breaking the main code.</p>
+            <h2>הסתעפות ומיזוג</h2>
+            <p>כוח העל של Git. עבודה על תכונות במקביל מבלי לשבור את הקוד הראשי.</p>
 
             <div class="command-box">
-                <button class="copy-btn" onclick="copyCode(this)">Copy All</button>
+                <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="comment"># Create and switch to a new branch</span>
+                        <span class="comment"># יצירת ענף חדש ומעבר אליו</span>
                     </div>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
                         <span class="cmd">git checkout</span> <span class="arg">-b feature_branch</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="comment"># List all branches</span>
+                        <span class="comment"># הצגת כל הענפים</span>
                     </div>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
                         <span class="cmd">git branch</span> <span class="arg">-a</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="comment"># Switch back to main branch</span>
+                        <span class="comment"># חזרה לענף הראשי</span>
                     </div>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
                         <span class="cmd">git checkout</span> <span class="arg">main</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="comment"># Merge side branch into main</span>
+                        <span class="comment"># מיזוג ענף צדדי לענף הראשי</span>
                     </div>
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
                         <span class="cmd">git merge</span> <span class="arg">feature_branch</span>
                     </div>
-                    <button class="copy-line-btn" onclick="copyLine(this)">Copy</button>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
                 </div>
             </div>
 
-            <h3>Merge Strategies</h3>
+            <h3>אסטרטגיות מיזוג</h3>
             <div class="grid">
                 <div class="info-card">
-                    <h4>Fast-Forward Merge</h4>
-                    <p>Happens when the main branch <strong>has not changed</strong> since you created the side branch. Git simply "moves the pointer" forward. No divergent history.</p>
+                    <h4>מיזוג Fast-Forward</h4>
+                    <p>קורה כאשר הענף הראשי <strong>לא השתנה</strong> מאז יצרת את הענף הצדדי. Git פשוט "מזיז את המצביע" קדימה. אין היסטוריה מתפצלת.</p>
                     <div class="command-box">
-                        <div><span class="cmd">git merge --ff-only</span> <span class="arg">feature_branch</span> <span class="comment"># Only merge if fast-forward is possible</span></div>
+                        <div><span class="cmd">git merge --ff-only</span> <span class="arg">feature_branch</span> <span class="comment"># מיזוג רק אם fast-forward אפשרי</span></div>
                     </div>
                 </div>
                 <div class="info-card">
                     <h4>Merge Commit</h4>
-                    <p>Happens when there is <strong>divergent history</strong> (both main and side branches advanced). Git creates a special Merge Commit joining both branches.</p>
+                    <p>קורה כאשר יש <strong>היסטוריה מתפצלת</strong> (גם הענף הראשי וגם הצדדי התקדמו). Git יוצר Merge Commit מיוחד שמחבר את שני הענפים.</p>
                     <div class="command-box">
-                        <div><span class="cmd">git merge --no-ff</span> <span class="arg">feature_branch</span> <span class="comment"># Always create a merge commit</span></div>
+                        <div><span class="cmd">git merge --no-ff</span> <span class="arg">feature_branch</span> <span class="comment"># תמיד צור merge commit</span></div>
                     </div>
                 </div>
             </div>
@@ -686,15 +689,15 @@
             <div class="grid" style="margin-top: 30px;">
                 <div class="info-card">
                     <h4>Squash Merge</h4>
-                    <p>Combines all commits from the feature branch into a single commit in the target branch. Great for clean history.</p>
+                    <p>משלב את כל ה-commits מהענף התכונה ל-commit בודד בענף היעד. מעולה להיסטוריה נקייה.</p>
                     <div class="command-box">
                         <div><span class="cmd">git merge --squash</span> <span class="arg">feature_branch</span></div>
-                        <div><span class="cmd">git commit</span> <span class="arg">-m "Complete feature"</span></div>
+                        <div><span class="cmd">git commit</span> <span class="arg">-m "השלמת תכונה"</span></div>
                     </div>
                 </div>
                 <div class="info-card">
                     <h4>Octopus Merge</h4>
-                    <p>Merge more than two branches simultaneously. Rarely used, requires no conflicts.</p>
+                    <p>מיזוג יותר משני ענפים בו-זמנית. נדיר בשימוש, דורש שלא יהיו קונפליקטים.</p>
                     <div class="command-box">
                         <div><span class="cmd">git merge</span> <span class="arg">branch1 branch2 branch3</span></div>
                     </div>
@@ -703,12 +706,12 @@
         </div>
 
         <div id="mergevis" class="section">
-            <h2>Merge Visualization</h2>
-            <p>Interactive visualization to understand different merge strategies.</p>
+            <h2>הדמיית מיזוג</h2>
+            <p>הדמיה אינטראקטיבית להבנת אסטרטגיות מיזוג שונות.</p>
 
             <div style="text-align: center; margin: 20px 0;">
                 <button class="merge-btn active" onclick="showMergeType('fast-forward')">Fast-Forward</button>
-                <button class="merge-btn" onclick="showMergeType('recursive')">Recursive</button>
+                <button class="merge-btn" onclick="showMergeType('recursive')">רקורסיבי</button>
                 <button class="merge-btn" onclick="showMergeType('squash')">Squash</button>
                 <button class="merge-btn" onclick="showMergeType('octopus')">Octopus</button>
             </div>
@@ -716,11 +719,11 @@
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-dot main"></div>
-                    <span>Main Branch</span>
+                    <span>ענף ראשי</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot feature"></div>
-                    <span>Feature Branch</span>
+                    <span>ענף תכונה</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-dot merge"></div>
@@ -734,10 +737,10 @@
         </div>
 
         <div id="conflicts" class="section">
-            <h2>Managing Conflicts</h2>
-            <p>What happens when two people change the <strong>same line</strong> in the <strong>same file</strong>? Git stops and asks for help.</p>
+            <h2>ניהול קונפליקטים</h2>
+            <p>מה קורה כאשר שני אנשים משנים את <strong>אותה שורה</strong> ב-<strong>אותו קובץ</strong>? Git עוצר ומבקש עזרה.</p>
 
-            <h3>Identifying a Conflict</h3>
+            <h3>זיהוי קונפליקט</h3>
             <div class="command-box" style="border-left-color: var(--danger);">
                 <div class="command-line">
                     <div class="command-line-content">
@@ -746,7 +749,7 @@
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="comment"># Code currently in Main</span>
+                        <span class="comment"># קוד קיים בענף הראשי</span>
                     </div>
                 </div>
                 <div class="command-line">
@@ -761,7 +764,7 @@
                 </div>
                 <div class="command-line">
                     <div class="command-line-content">
-                        <span class="comment"># Code from side branch</span>
+                        <span class="comment"># קוד מהענף הצדדי</span>
                     </div>
                 </div>
                 <div class="command-line">
@@ -777,156 +780,156 @@
             </div>
 
             <div class="info-card" style="background: #fff3e0;">
-                <h3>How to Resolve?</h3>
+                <h3>איך לפתור?</h3>
                 <ol>
-                    <li>Open the file.</li>
-                    <li>Choose which version to keep (or combine manually).</li>
-                    <li>Delete Git markers (<<<<, ====, >>>>).</li>
-                    <li>Run <code>git add</code> on the fixed file.</li>
-                    <li>Run <code>git commit</code> or <code>git merge --continue</code> to finish the merge.</li>
+                    <li>פתח את הקובץ</li>
+                    <li>בחר איזו גרסה לשמור (או שלב ידנית)</li>
+                    <li>מחק את הסימנים של Git (<<<<, ====, >>>>)</li>
+                    <li>הרץ <code>git add</code> על הקובץ המתוקן</li>
+                    <li>הרץ <code>git commit</code> או <code>git merge --continue</code> כדי לסיים את המיזוג</li>
                 </ol>
             </div>
 
-            <p style="margin-top: 20px;"><strong>Recommendation:</strong> Use VSCode or another modern IDE. It shows helpful buttons like <em>"Accept Incoming Change"</em>, <em>"Accept Current Change"</em>, <em>"Accept Both Changes"</em> making the process easy.</p>
+            <p style="margin-top: 20px;"><strong>המלצה:</strong> השתמש ב-VSCode או IDE מודרני אחר. הוא מציג כפתורים מועילים כמו <em>"קבל שינוי נכנס"</em>, <em>"קבל שינוי נוכחי"</em>, <em>"קבל את שני השינויים"</em> שמקלים על התהליך.</p>
 
-            <h3>Using VSCode Merge Editor</h3>
+            <h3>שימוש בעורך המיזוג של VSCode</h3>
             <div class="exercise">
-                <h3>🔧 VSCode Merge Resolution Steps</h3>
+                <h3>🔧 שלבי פתרון מיזוג ב-VSCode</h3>
                 <ol>
-                    <li>Open the file with the conflict</li>
-                    <li>Click "Resolve in Merge Editor"</li>
-                    <li>Compare changes and resolve conflicts</li>
-                    <li>Select "Accept Incoming" for changes from the side branch</li>
-                    <li>Select "Accept Current" for changes from the main branch</li>
-                    <li>Manually update the result if needed</li>
-                    <li>Click "Complete Merge" to stage the file</li>
-                    <li>Run <code>git merge --continue</code> or use VSCode to finalize</li>
+                    <li>פתח את הקובץ עם הקונפליקט</li>
+                    <li>לחץ על "פתור בעורך המיזוג"</li>
+                    <li>השווה שינויים ופתור קונפליקטים</li>
+                    <li>בחר "קבל נכנס" לשינויים מהענף הצדדי</li>
+                    <li>בחר "קבל נוכחי" לשינויים מהענף הראשי</li>
+                    <li>עדכן את התוצאה ידנית במידת הצורך</li>
+                    <li>לחץ על "השלם מיזוג" כדי להעביר את הקובץ</li>
+                    <li>הרץ <code>git merge --continue</code> או השתמש ב-VSCode לסיום</li>
                 </ol>
             </div>
         </div>
 
         <div id="commands" class="section">
-            <h2>Comprehensive Command List</h2>
+            <h2>רשימת פקודות מקיפה</h2>
 
             <div class="grid">
                 <div class="info-card">
-                    <h3>Repository Management</h3>
+                    <h3>ניהול מאגר</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git init</span> <span class="comment"># Create new local repo</span></div>
-                        <div><span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Download copy of remote repo</span></div>
-                        <div><span class="cmd">git status</span> <span class="comment"># Display working directory status</span></div>
-                        <div><span class="cmd">git remote -v</span> <span class="comment"># View all remotes with URLs</span></div>
-                        <div><span class="cmd">git remote</span> <span class="comment"># View all remotes</span></div>
-                        <div><span class="cmd">git remote add origin</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># Add new remote repo</span></div>
-                        <div><span class="cmd">git remote add</span> <span class="arg">new_name &lt;path&gt;</span> <span class="comment"># Add new name for remote repo</span></div>
+                        <div><span class="cmd">git init</span> <span class="comment"># יצירת מאגר מקומי חדש</span></div>
+                        <div><span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># הורדת עותק של מאגר מרוחק</span></div>
+                        <div><span class="cmd">git status</span> <span class="comment"># הצגת סטטוס תיקיית העבודה</span></div>
+                        <div><span class="cmd">git remote -v</span> <span class="comment"># צפייה בכל המאגרים המרוחקים עם URLs</span></div>
+                        <div><span class="cmd">git remote</span> <span class="comment"># צפייה בכל המאגרים המרוחקים</span></div>
+                        <div><span class="cmd">git remote add origin</span> <span class="arg">&lt;url&gt;</span> <span class="comment"># הוספת מאגר מרוחק חדש</span></div>
+                        <div><span class="cmd">git remote add</span> <span class="arg">new_name &lt;path&gt;</span> <span class="comment"># הוספת שם חדש למאגר מרוחק</span></div>
                     </div>
                 </div>
                 <div class="info-card">
-                    <h3>Staging & Committing</h3>
+                    <h3>העברה ו-Commit</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Stage specific file</span></div>
-                        <div><span class="cmd">git add .</span> <span class="comment"># Stage all changes in current dir</span></div>
-                        <div><span class="cmd">git restore --staged</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Unstage file (same as reset for file)</span></div>
-                        <div><span class="cmd">git restore --staged</span> <span class="comment"># Unstage all files</span></div>
-                        <div><span class="cmd">git reset</span> <span class="comment"># Unstage changes</span></div>
-                        <div><span class="cmd">git reset --hard</span> <span class="comment"># Reset working dir to last commit</span></div>
-                        <div><span class="cmd">git commit</span> <span class="comment"># Create new commit (changeset) in local repo</span></div>
-                        <div><span class="cmd">git commit -m</span> <span class="arg">"message"</span> <span class="comment"># Commit with one-line message</span></div>
+                        <div><span class="cmd">git add</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># העברת קובץ ספציפי</span></div>
+                        <div><span class="cmd">git add .</span> <span class="comment"># העברת כל השינויים בתיקייה הנוכחית</span></div>
+                        <div><span class="cmd">git restore --staged</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># ביטול העברה של קובץ</span></div>
+                        <div><span class="cmd">git restore --staged</span> <span class="comment"># ביטול העברה של כל הקבצים</span></div>
+                        <div><span class="cmd">git reset</span> <span class="comment"># ביטול העברת שינויים</span></div>
+                        <div><span class="cmd">git reset --hard</span> <span class="comment"># איפוס תיקיית העבודה ל-commit האחרון</span></div>
+                        <div><span class="cmd">git commit</span> <span class="comment"># יצירת commit חדש במאגר המקומי</span></div>
+                        <div><span class="cmd">git commit -m</span> <span class="arg">"message"</span> <span class="comment"># commit עם הודעה בשורה אחת</span></div>
                     </div>
                 </div>
             </div>
 
             <div class="grid">
                 <div class="info-card">
-                    <h3>Branching & Merging</h3>
+                    <h3>הסתעפות ומיזוג</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git branch</span> <span class="comment"># List all branches</span></div>
-                        <div><span class="cmd">git branch</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Create new branch</span></div>
-                        <div><span class="cmd">git branch -d</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Delete local branch (prevents if unmerged)</span></div>
-                        <div><span class="cmd">git branch -D</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Force delete local branch (even if unmerged)</span></div>
-                        <div><span class="cmd">git branch -m</span> <span class="arg">old_name new_name</span> <span class="comment"># Rename branch</span></div>
-                        <div><span class="cmd">git checkout</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># Switch to another branch</span></div>
-                        <div><span class="cmd">git checkout -b</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Create & switch to new branch (fails if exists)</span></div>
-                        <div><span class="cmd">git checkout -B</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># Create or reset existing branch to current HEAD</span></div>
-                        <div><span class="cmd">git merge</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># Merge branch into current branch</span></div>
-                        <div><span class="cmd">git merge</span> <span class="arg">&lt;branch&gt; --ff-only</span> <span class="comment"># Only merge if fast-forward possible</span></div>
-                        <div><span class="cmd">git merge --no-ff</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># Always create merge commit, even if fast-forward possible</span></div>
-                        <div><span class="cmd">git merge --squash</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># Combine all commits into one without merge commit</span></div>
-                        <div><span class="cmd">git merge -s octopus</span> <span class="arg">&lt;branch1&gt; &lt;branch2&gt; ...</span> <span class="comment"># Merge multiple branches with single merge commit</span></div>
+                        <div><span class="cmd">git branch</span> <span class="comment"># הצגת כל הענפים</span></div>
+                        <div><span class="cmd">git branch</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># יצירת ענף חדש</span></div>
+                        <div><span class="cmd">git branch -d</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># מחיקת ענף מקומי (מונע אם לא מוזג)</span></div>
+                        <div><span class="cmd">git branch -D</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># מחיקה כפויה של ענף (גם אם לא מוזג)</span></div>
+                        <div><span class="cmd">git branch -m</span> <span class="arg">old_name new_name</span> <span class="comment"># שינוי שם ענף</span></div>
+                        <div><span class="cmd">git checkout</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># מעבר לענף אחר</span></div>
+                        <div><span class="cmd">git checkout -b</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># יצירה ומעבר לענף חדש (נכשל אם קיים)</span></div>
+                        <div><span class="cmd">git checkout -B</span> <span class="arg">&lt;name&gt;</span> <span class="comment"># יצירה או איפוס ענף קיים ל-HEAD הנוכחי</span></div>
+                        <div><span class="cmd">git merge</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># מיזוג ענף לענף הנוכחי</span></div>
+                        <div><span class="cmd">git merge</span> <span class="arg">&lt;branch&gt; --ff-only</span> <span class="comment"># מיזוג רק אם fast-forward אפשרי</span></div>
+                        <div><span class="cmd">git merge --no-ff</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># תמיד צור merge commit, גם אם fast-forward אפשרי</span></div>
+                        <div><span class="cmd">git merge --squash</span> <span class="arg">&lt;branch&gt;</span> <span class="comment"># שילוב כל ה-commits לאחד ללא merge commit</span></div>
+                        <div><span class="cmd">git merge -s octopus</span> <span class="arg">&lt;branch1&gt; &lt;branch2&gt; ...</span> <span class="comment"># מיזוג מספר ענפים עם merge commit בודד</span></div>
                     </div>
                 </div>
                 <div class="info-card">
                     <h3>Cherry-pick</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git cherry-pick</span> <span class="arg">&lt;commit-hash&gt;</span> <span class="comment"># Apply commit from another branch</span></div>
-                        <div><span class="cmd">git cherry-pick</span> <span class="arg">&lt;hash1&gt; &lt;hash2&gt;</span> <span class="comment"># Apply multiple commits</span></div>
-                        <div><span class="cmd">git cherry-pick --continue</span> <span class="comment"># Continue after resolving conflicts</span></div>
-                        <div><span class="cmd">git cherry-pick --abort</span> <span class="comment"># Cancel cherry-pick process</span></div>
+                        <div><span class="cmd">git cherry-pick</span> <span class="arg">&lt;commit-hash&gt;</span> <span class="comment"># החלת commit מענף אחר</span></div>
+                        <div><span class="cmd">git cherry-pick</span> <span class="arg">&lt;hash1&gt; &lt;hash2&gt;</span> <span class="comment"># החלת מספר commits</span></div>
+                        <div><span class="cmd">git cherry-pick --continue</span> <span class="comment"># המשך לאחר פתרון קונפליקטים</span></div>
+                        <div><span class="cmd">git cherry-pick --abort</span> <span class="comment"># ביטול תהליך cherry-pick</span></div>
                     </div>
                 </div>
             </div>
 
             <div class="grid">
                 <div class="info-card">
-                    <h3>History & Information</h3>
+                    <h3>היסטוריה ומידע</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git log</span> <span class="comment"># Display commit history in local repo</span></div>
-                        <div><span class="cmd">git log --oneline</span> <span class="comment"># Compact commit history</span></div>
-                        <div><span class="cmd">git log --oneline --graph --all</span> <span class="comment"># Compact history with visual graph of all branches</span></div>
-                        <div><span class="cmd">git log --since=</span><span class="arg">"YYYY-MM-DD"</span> <span class="arg">--until="YYYY-MM-DD"</span> <span class="comment"># Show commit history in date range</span></div>
-                        <div><span class="cmd">git show</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Display details of specific commit</span></div>
-                        <div><span class="cmd">git diff</span> <span class="comment"># Compare changes (local, staged, or between commits)</span></div>
-                        <div><span class="cmd">git diff --staged</span> <span class="comment"># Compare staged files to last commit</span></div>
-                        <div><span class="cmd">git blame</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Show who changed each line in file</span></div>
-                        <div><span class="cmd">git tag</span> <span class="arg">&lt;tag-name&gt;</span> <span class="comment"># Create local tag for current commit to mark important version</span></div>
+                        <div><span class="cmd">git log</span> <span class="comment"># הצגת היסטוריית commits במאגר המקומי</span></div>
+                        <div><span class="cmd">git log --oneline</span> <span class="comment"># היסטוריית commits קומפקטית</span></div>
+                        <div><span class="cmd">git log --oneline --graph --all</span> <span class="comment"># היסטוריה קומפקטית עם גרף ויזואלי של כל הענפים</span></div>
+                        <div><span class="cmd">git log --since=</span><span class="arg">"YYYY-MM-DD"</span> <span class="arg">--until="YYYY-MM-DD"</span> <span class="comment"># הצגת היסטוריית commits בטווח תאריכים</span></div>
+                        <div><span class="cmd">git show</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># הצגת פרטי commit ספציפי</span></div>
+                        <div><span class="cmd">git diff</span> <span class="comment"># השוואת שינויים (מקומי, מועבר, או בין commits)</span></div>
+                        <div><span class="cmd">git diff --staged</span> <span class="comment"># השוואת קבצים מועברים ל-commit האחרון</span></div>
+                        <div><span class="cmd">git blame</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># הצגת מי שינה כל שורה בקובץ</span></div>
+                        <div><span class="cmd">git tag</span> <span class="arg">&lt;tag-name&gt;</span> <span class="comment"># יצירת תג מקומי ל-commit הנוכחי לסימון גרסה חשובה</span></div>
                     </div>
                 </div>
                 <div class="info-card">
-                    <h3>Undoing Changes</h3>
+                    <h3>ביטול שינויים</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git checkout</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Restore file to last commit state</span></div>
-                        <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># Create new commit that undoes changes from specific commit</span></div>
-                        <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt; --no-edit</span> <span class="comment"># Revert without opening text editor</span></div>
-                        <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt; -n</span> <span class="comment"># Revert without creating new commit</span></div>
-                        <div><span class="cmd">git reset HEAD</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># Remove specific file from stage</span></div>
-                        <div><span class="cmd">git reset --soft HEAD~1</span> <span class="comment"># Undo last commit but keep changes staged</span></div>
-                        <div><span class="cmd">git reset --mixed HEAD~1</span> <span class="comment"># Undo last commit, keep changes in working dir but not staged</span></div>
-                        <div><span class="cmd">git reset --hard HEAD~1</span> <span class="comment"># Undo last commit and discard changes</span></div>
+                        <div><span class="cmd">git checkout</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># שחזור קובץ למצב ה-commit האחרון</span></div>
+                        <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># יצירת commit חדש שמבטל שינויים מ-commit ספציפי</span></div>
+                        <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt; --no-edit</span> <span class="comment"># ביטול ללא פתיחת עורך טקסט</span></div>
+                        <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt; -n</span> <span class="comment"># ביטול ללא יצירת commit חדש</span></div>
+                        <div><span class="cmd">git reset HEAD</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># הסרת קובץ ספציפי מאזור ההעברה</span></div>
+                        <div><span class="cmd">git reset --soft HEAD~1</span> <span class="comment"># ביטול commit אחרון אך שמירת שינויים מועברים</span></div>
+                        <div><span class="cmd">git reset --mixed HEAD~1</span> <span class="comment"># ביטול commit אחרון, שמירת שינויים בעבודה אך לא מועברים</span></div>
+                        <div><span class="cmd">git reset --hard HEAD~1</span> <span class="comment"># ביטול commit אחרון ומחיקת שינויים</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="advanced" class="section">
-            <h2>Advanced Commands</h2>
-            <p>Power tools for advanced Git users.</p>
+            <h2>פקודות מתקדמות</h2>
+            <p>כלים מתקדמים למשתמשי Git מנוסים.</p>
 
             <div class="grid">
                 <div class="info-card">
                     <h3>Rebase</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git rebase</span> <span class="arg">main</span> <span class="comment"># Rebase current branch onto main</span></div>
-                        <div><span class="cmd">git rebase -i</span> <span class="arg">master</span> <span class="comment"># Interactive rebase of current branch onto master</span></div>
-                        <div><span class="comment"># Allows you to edit, combine, or remove commits</span></div>
-                        <div style="margin-top: 15px;"><span class="comment"># Interactive rebase commands:</span></div>
-                        <div><span class="comment"># p, pick   = use commit as is</span></div>
-                        <div><span class="comment"># r, reword = use commit, but edit commit message</span></div>
-                        <div><span class="comment"># e, edit   = use commit, but stop for amending</span></div>
-                        <div><span class="comment"># s, squash = combine commit into previous (keep both messages)</span></div>
-                        <div><span class="comment"># f, fixup  = combine commit into previous (discard this message)</span></div>
-                        <div><span class="comment"># x, exec   = run shell command during rebase</span></div>
-                        <div><span class="comment"># d, drop   = remove commit completely</span></div>
+                        <div><span class="cmd">git rebase</span> <span class="arg">main</span> <span class="comment"># Rebase של הענף הנוכחי על main</span></div>
+                        <div><span class="cmd">git rebase -i</span> <span class="arg">master</span> <span class="comment"># Rebase אינטראקטיבי של הענף הנוכחי על master</span></div>
+                        <div><span class="comment"># מאפשר לערוך, לשלב או להסיר commits</span></div>
+                        <div style="margin-top: 15px;"><span class="comment"># פקודות rebase אינטראקטיבי:</span></div>
+                        <div><span class="comment"># p, pick   = שימוש ב-commit כמו שהוא</span></div>
+                        <div><span class="comment"># r, reword = שימוש ב-commit, אך עריכת הודעת ה-commit</span></div>
+                        <div><span class="comment"># e, edit   = שימוש ב-commit, אך עצירה לתיקון</span></div>
+                        <div><span class="comment"># s, squash = שילוב commit לקודם (שמירת שתי ההודעות)</span></div>
+                        <div><span class="comment"># f, fixup  = שילוב commit לקודם (השלכת הודעה זו)</span></div>
+                        <div><span class="comment"># x, exec   = הרצת פקודת shell במהלך rebase</span></div>
+                        <div><span class="comment"># d, drop   = הסרת commit לחלוטין</span></div>
                     </div>
                 </div>
                 <div class="info-card">
                     <h3>Bisect</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git bisect</span> <span class="comment"># Start binary search to find bug</span></div>
-                        <div><span class="cmd">git bisect start</span> <span class="comment"># Start bisect session</span></div>
-                        <div><span class="cmd">git bisect bad</span> <span class="comment"># Mark current commit as bad</span></div>
-                        <div><span class="cmd">git bisect good</span> <span class="arg">&lt;commit-hash&gt;</span> <span class="comment"># Mark known good commit</span></div>
-                        <div><span class="cmd">git bisect run</span> <span class="arg">&lt;script_name&gt;</span> <span class="comment"># Run automated test with script</span></div>
-                        <div><span class="cmd">git bisect reset</span> <span class="comment"># End bisect and return to original state</span></div>
+                        <div><span class="cmd">git bisect</span> <span class="comment"># התחלת חיפוש בינארי למציאת באג</span></div>
+                        <div><span class="cmd">git bisect start</span> <span class="comment"># התחלת סשן bisect</span></div>
+                        <div><span class="cmd">git bisect bad</span> <span class="comment"># סימון commit נוכחי כרע</span></div>
+                        <div><span class="cmd">git bisect good</span> <span class="arg">&lt;commit-hash&gt;</span> <span class="comment"># סימון commit ידוע כטוב</span></div>
+                        <div><span class="cmd">git bisect run</span> <span class="arg">&lt;script_name&gt;</span> <span class="comment"># הרצת בדיקה אוטומטית עם סקריפט</span></div>
+                        <div><span class="cmd">git bisect reset</span> <span class="comment"># סיום bisect וחזרה למצב המקורי</span></div>
                     </div>
                 </div>
             </div>
@@ -935,20 +938,20 @@
                 <div class="info-card">
                     <h3>Filter Repo</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git install git-filter-repo</span> <span class="comment"># Install filter-repo tool</span></div>
-                        <div><span class="cmd">git filter-repo --path</span> <span class="arg">secret.txt --invert-paths</span> <span class="comment"># Remove specific file from history</span></div>
-                        <div><span class="cmd">git filter-repo --path</span> <span class="arg">config.ini --invert-paths --force</span> <span class="comment"># Force remove file from history</span></div>
+                        <div><span class="cmd">git install git-filter-repo</span> <span class="comment"># התקנת כלי filter-repo</span></div>
+                        <div><span class="cmd">git filter-repo --path</span> <span class="arg">secret.txt --invert-paths</span> <span class="comment"># הסרת קובץ ספציפי מההיסטוריה</span></div>
+                        <div><span class="cmd">git filter-repo --path</span> <span class="arg">config.ini --invert-paths --force</span> <span class="comment"># הסרה כפויה של קובץ מההיסטוריה</span></div>
                     </div>
-                    <p style="margin-top: 15px; color: var(--danger); font-size: 0.95em;"><strong>⚠️ Warning:</strong> This rewrites Git history. Use with extreme caution!</p>
+                    <p style="margin-top: 15px; color: var(--danger); font-size: 0.95em;"><strong>⚠️ אזהרה:</strong> זה משכתב את היסטוריית Git. השתמש בזהירות רבה!</p>
                 </div>
                 <div class="info-card">
-                    <h3>Reflog (Recovery)</h3>
+                    <h3>Reflog (שחזור)</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git reflog</span> <span class="comment"># Display reference log</span></div>
-                        <div><span class="cmd">git reflog show</span> <span class="comment"># Show reflog details</span></div>
-                        <div><span class="cmd">git reflog expire</span> <span class="comment"># Clean old reflog entries</span></div>
-                        <div><span class="cmd">git reflog --since</span> <span class="comment"># Display reflog entries from specific time</span></div>
-                        <div><span class="cmd">git reflog --until</span> <span class="comment"># Display reflog entries until specific time</span></div>
+                        <div><span class="cmd">git reflog</span> <span class="comment"># הצגת יומן הפניות</span></div>
+                        <div><span class="cmd">git reflog show</span> <span class="comment"># הצגת פרטי reflog</span></div>
+                        <div><span class="cmd">git reflog expire</span> <span class="comment"># ניקוי רשומות reflog ישנות</span></div>
+                        <div><span class="cmd">git reflog --since</span> <span class="comment"># הצגת רשומות reflog מזמן ספציפי</span></div>
+                        <div><span class="cmd">git reflog --until</span> <span class="comment"># הצגת רשומות reflog עד זמן ספציפי</span></div>
                     </div>
                 </div>
             </div>
@@ -957,20 +960,20 @@
                 <div class="info-card">
                     <h3>Stash</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git stash</span> <span class="comment"># Save changes temporarily</span></div>
-                        <div><span class="cmd">git stash list</span> <span class="comment"># List all stashes</span></div>
-                        <div><span class="cmd">git stash pop</span> <span class="comment"># Apply & remove last stash</span></div>
-                        <div><span class="cmd">git stash apply</span> <span class="comment"># Apply last stash (keep it)</span></div>
-                        <div><span class="cmd">git stash drop</span> <span class="comment"># Delete last stash</span></div>
+                        <div><span class="cmd">git stash</span> <span class="comment"># שמירת שינויים זמנית</span></div>
+                        <div><span class="cmd">git stash list</span> <span class="comment"># הצגת כל ה-stashes</span></div>
+                        <div><span class="cmd">git stash pop</span> <span class="comment"># החלה והסרה של stash אחרון</span></div>
+                        <div><span class="cmd">git stash apply</span> <span class="comment"># החלת stash אחרון (שמירתו)</span></div>
+                        <div><span class="cmd">git stash drop</span> <span class="comment"># מחיקת stash אחרון</span></div>
                     </div>
                 </div>
                 <div class="info-card">
                     <h3>Worktree</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git worktree</span> <span class="comment"># Manage multiple working directories</span></div>
-                        <div><span class="cmd">git worktree add</span> <span class="arg">&lt;path&gt; &lt;branch&gt;</span> <span class="comment"># Create new worktree at path for branch</span></div>
-                        <div><span class="cmd">git worktree list</span> <span class="comment"># Display all linked worktrees</span></div>
-                        <div><span class="cmd">git worktree remove</span> <span class="arg">&lt;path&gt;</span> <span class="comment"># Remove worktree</span></div>
+                        <div><span class="cmd">git worktree</span> <span class="comment"># ניהול מספר תיקיות עבודה</span></div>
+                        <div><span class="cmd">git worktree add</span> <span class="arg">&lt;path&gt; &lt;branch&gt;</span> <span class="comment"># יצירת worktree חדש בנתיב לענף</span></div>
+                        <div><span class="cmd">git worktree list</span> <span class="comment"># הצגת כל ה-worktrees המקושרים</span></div>
+                        <div><span class="cmd">git worktree remove</span> <span class="arg">&lt;path&gt;</span> <span class="comment"># הסרת worktree</span></div>
                     </div>
                 </div>
             </div>
@@ -979,80 +982,80 @@
                 <div class="info-card">
                     <h3>Git Submodules</h3>
                     <div class="command-box">
-                        <div><span class="cmd">git submodule</span> <span class="comment"># Manage submodules</span></div>
-                        <div><span class="cmd">git submodule add</span> <span class="arg">&lt;repository_link|dir&gt; &lt;path&gt;</span> <span class="comment"># Add new submodule</span></div>
-                        <div><span class="cmd">git submodule list</span> <span class="comment"># Display submodules</span></div>
-                        <div><span class="cmd">git submodule status</span> <span class="comment"># Show status (commit + sync state) of submodules</span></div>
-                        <div><span class="cmd">git submodule update --init</span> <span class="comment"># Initialize and fetch submodules</span></div>
-                        <div><span class="cmd">git submodule update --init --recursive</span> <span class="comment"># Initialize and update all nested submodules</span></div>
-                        <div><span class="cmd">git submodule update --init</span> <span class="arg">&lt;path_to_submodule&gt;</span> <span class="comment"># Initialize and update specific submodule</span></div>
-                        <div><span class="cmd">git submodule deinit</span> <span class="arg">&lt;submodule_name&gt;</span> <span class="comment"># Unregister submodule</span></div>
-                        <div><span class="cmd">git rm</span> <span class="arg">&lt;path&gt;</span> <span class="comment"># Remove submodule from repository</span></div>
+                        <div><span class="cmd">git submodule</span> <span class="comment"># ניהול submodules</span></div>
+                        <div><span class="cmd">git submodule add</span> <span class="arg">&lt;repository_link|dir&gt; &lt;path&gt;</span> <span class="comment"># הוספת submodule חדש</span></div>
+                        <div><span class="cmd">git submodule list</span> <span class="comment"># הצגת submodules</span></div>
+                        <div><span class="cmd">git submodule status</span> <span class="comment"># הצגת סטטוס (commit + מצב סינכרון) של submodules</span></div>
+                        <div><span class="cmd">git submodule update --init</span> <span class="comment"># אתחול ומשיכת submodules</span></div>
+                        <div><span class="cmd">git submodule update --init --recursive</span> <span class="comment"># אתחול ועדכון כל ה-submodules המקוננים</span></div>
+                        <div><span class="cmd">git submodule update --init</span> <span class="arg">&lt;path_to_submodule&gt;</span> <span class="comment"># אתחול ועדכון submodule ספציפי</span></div>
+                        <div><span class="cmd">git submodule deinit</span> <span class="arg">&lt;submodule_name&gt;</span> <span class="comment"># ביטול רישום submodule</span></div>
+                        <div><span class="cmd">git rm</span> <span class="arg">&lt;path&gt;</span> <span class="comment"># הסרת submodule מהמאגר</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="exercises" class="section">
-            <h2>Hands-on Labs</h2>
-            <p>The best way to learn is by doing. Open your terminal.</p>
+            <h2>תרגילים מעשיים</h2>
+            <p>הדרך הטובה ביותר ללמוד היא על ידי עשייה. פתח את הטרמינל שלך.</p>
 
             <div class="exercise">
-                <h3>📝 Lab 1: Local Repo</h3>
+                <h3>📝 תרגיל 1: מאגר מקומי</h3>
                 <ol>
-                    <li>Create a new folder and open terminal.</li>
-                    <li>Initialize repo: <code>git init</code>.</li>
-                    <li>Create file <code>name.txt</code> with your name.</li>
-                    <li>Stage it: <code>git add name.txt</code>.</li>
-                    <li>Commit: <code>git commit -m "Initial commit"</code>.</li>
+                    <li>צור תיקייה חדשה ופתח טרמינל</li>
+                    <li>אתחל מאגר: <code>git init</code></li>
+                    <li>צור קובץ <code>name.txt</code> עם השם שלך</li>
+                    <li>העבר אותו: <code>git add name.txt</code></li>
+                    <li>בצע commit: <code>git commit -m "Initial commit"</code></li>
                 </ol>
             </div>
 
             <div class="exercise">
-                <h3>🌿 Lab 2: Branching</h3>
+                <h3>🌿 תרגיל 2: הסתעפות</h3>
                 <ol>
-                    <li>Create new branch: <code>git checkout -b side_branch</code>.</li>
-                    <li>Change content of <code>name.txt</code> to a friend's name.</li>
-                    <li>Stage and Commit changes on the new branch.</li>
-                    <li>Check history: <code>git log</code> and <code>git status</code>.</li>
+                    <li>צור ענף חדש: <code>git checkout -b side_branch</code></li>
+                    <li>שנה את תוכן <code>name.txt</code> לשם של חבר</li>
+                    <li>העבר ובצע commit של השינויים בענף החדש</li>
+                    <li>בדוק היסטוריה: <code>git log</code> ו-<code>git status</code></li>
                 </ol>
             </div>
 
             <div class="exercise">
-                <h3>🔀 Lab 3: Merging & Conflicts</h3>
+                <h3>🔀 תרגיל 3: מיזוג וקונפליקטים</h3>
                 <ol>
-                    <li>Switch back to main: <code>git checkout main</code>.</li>
-                    <li>Change <code>name.txt</code> on main branch too (create a conflict).</li>
-                    <li>Stage and commit the change.</li>
-                    <li>Attempt merge: <code>git merge side_branch</code>.</li>
-                    <li><strong>Notice:</strong> You get a conflict!</li>
-                    <li>Resolve conflict so both names appear.</li>
-                    <li>Stage resolved file and finish merge with <code>git commit</code>.</li>
+                    <li>חזור לענף הראשי: <code>git checkout main</code></li>
+                    <li>שנה את <code>name.txt</code> גם בענף הראשי (צור קונפליקט)</li>
+                    <li>העבר ובצע commit של השינוי</li>
+                    <li>נסה למזג: <code>git merge side_branch</code></li>
+                    <li><strong>שים לב:</strong> יש לך קונפליקט!</li>
+                    <li>פתור את הקונפליקט כך ששני השמות יופיעו</li>
+                    <li>העבר את הקובץ הפתור וסיים את המיזוג עם <code>git commit</code></li>
                 </ol>
             </div>
 
             <div class="exercise">
-                <h3>🍒 Lab 4: Cherry-pick</h3>
+                <h3>🍒 תרגיל 4: Cherry-pick</h3>
                 <ol>
-                    <li>Create a new branch: <code>git checkout -b experimental</code>.</li>
-                    <li>Make several commits with different changes.</li>
-                    <li>Switch to main: <code>git checkout main</code>.</li>
-                    <li>Use <code>git log --oneline experimental</code> to find a commit hash.</li>
-                    <li>Cherry-pick one specific commit: <code>git cherry-pick &lt;hash&gt;</code>.</li>
+                    <li>צור ענף חדש: <code>git checkout -b experimental</code></li>
+                    <li>בצע מספר commits עם שינויים שונים</li>
+                    <li>חזור לענף הראשי: <code>git checkout main</code></li>
+                    <li>השתמש ב-<code>git log --oneline experimental</code> כדי למצוא hash של commit</li>
+                    <li>בצע cherry-pick של commit ספציפי: <code>git cherry-pick &lt;hash&gt;</code></li>
                 </ol>
             </div>
 
             <div class="info-card" style="margin-top: 30px; text-align: center;">
-                <h3>📚 Additional Resources</h3>
-                <p>Try the interactive game: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a></p>
-                <p style="margin-top: 10px;">Read the official book: <a href="https://git-scm.com/book/en/v2" target="_blank" style="color: var(--accent); font-weight: bold;">Pro Git Book</a></p>
+                <h3>📚 משאבים נוספים</h3>
+                <p>נסה את המשחק האינטראקטיבי: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a></p>
+                <p style="margin-top: 10px;">קרא את הספר הרשמי: <a href="https://git-scm.com/book/en/v2" target="_blank" style="color: var(--accent); font-weight: bold;">Pro Git Book</a></p>
             </div>
         </div>
 
     </div>
 
     <footer>
-        <p>© Created for Data Engineers | Git Masterclass Enhanced Edition</p>
+        <p>© נוצר עבור מהנדסי נתונים | Git למהנדסי נתונים - מהדורה משופרת</p>
     </footer>
 
     <script>
@@ -1223,17 +1226,17 @@
         // Merge Visualization Logic
         const mergeVisualizationTypes = {
             'fast-forward': {
-                title: 'Fast-Forward Merge',
-                description: 'Occurs when the target branch has not changed since the feature branch was created. Git simply moves the pointer forward along the same line.',
+                title: 'מיזוג Fast-Forward',
+                description: 'מתרחש כאשר הענף היעד לא השתנה מאז יצירת ענף התכונה. Git פשוט מזיז את המצביע קדימה לאורך אותה קו.',
                 benefits: [
-                    'Creates clean, linear history',
-                    'No unnecessary merge commits',
-                    'Easy to understand and follow'
+                    'יוצר היסטוריה נקייה וליניארית',
+                    'ללא commits מיזוג מיותרים',
+                    'קל להבין ולעקוב'
                 ],
                 commands: [
                     'git checkout main',
                     'git merge feature-branch',
-                    '# Or force fast-forward only',
+                    '# או אכיפת fast-forward בלבד',
                     'git merge --ff-only feature-branch'
                 ],
                 commits: [
@@ -1249,18 +1252,18 @@
                 ]
             },
             'recursive': {
-                title: 'Recursive Merge',
-                description: 'The most common merge strategy. Used when both branches have diverged. Creates a new merge commit that combines changes from both branches.',
+                title: 'מיזוג רקורסיבי',
+                description: 'אסטרטגיית המיזוג הנפוצה ביותר. משמשת כאשר שני הענפים התפצלו. יוצרת commit מיזוג חדש שמשלב שינויים משני הענפים.',
                 benefits: [
-                    'Preserves complete history of both branches',
-                    'Handles simple conflicts automatically',
-                    'Shows clearly where changes came from'
+                    'שומרת היסטוריה מלאה של שני הענפים',
+                    'מטפלת בקונפליקטים פשוטים אוטומטית',
+                    'מציגה בבירור מאיפה הגיעו השינויים'
                 ],
                 commands: [
                     'git checkout main',
                     'git merge feature-branch',
-                    '# Creates a merge commit automatically',
-                    '# Resolve conflicts if they occur'
+                    '# יוצר merge commit אוטומטית',
+                    '# פתור קונפליקטים אם הם מתרחשים'
                 ],
                 commits: [
                     { id: 'A', x: 100, y: 200, type: 'main', label: 'A' },
@@ -1280,18 +1283,18 @@
                 ]
             },
             'squash': {
-                title: 'Squash Merge',
-                description: 'Takes all commits from the feature branch and creates a single new commit in the target branch. Feature branch history is not preserved.',
+                title: 'מיזוג Squash',
+                description: 'לוקח את כל ה-commits מענף התכונה ויוצר commit בודד חדש בענף היעד. היסטוריית ענף התכונה לא נשמרת.',
                 benefits: [
-                    'Creates very clean, linear history',
-                    'Hides intermediate development commits',
-                    'Perfect for small features or bug fixes'
+                    'יוצר היסטוריה נקייה מאוד וליניארית',
+                    'מסתיר commits ביניים של פיתוח',
+                    'מושלם לתכונות קטנות או תיקוני באגים'
                 ],
                 commands: [
                     'git checkout main',
                     'git merge --squash feature-branch',
-                    'git commit -m "Complete feature (squashed)"',
-                    '# All changes combined into one commit'
+                    'git commit -m "השלמת תכונה (squashed)"',
+                    '# כל השינויים משולבים ב-commit אחד'
                 ],
                 commits: [
                     { id: 'A', x: 100, y: 200, type: 'main', label: 'A' },
@@ -1308,17 +1311,17 @@
                 ]
             },
             'octopus': {
-                title: 'Octopus Merge',
-                description: 'Allows merging more than two branches at once. Rarely used and requires no conflicts.',
+                title: 'מיזוג Octopus',
+                description: 'מאפשר מיזוג יותר משני ענפים בבת אחת. נדיר בשימוש ודורש שלא יהיו קונפליקטים.',
                 benefits: [
-                    'Can merge multiple branches at once',
-                    'Reduces number of merge commits',
-                    'Useful for integrating several small features'
+                    'יכול למזג מספר ענפים בבת אחת',
+                    'מקטין מספר commits מיזוג',
+                    'שימושי לאינטגרציה של מספר תכונות קטנות'
                 ],
                 commands: [
                     'git checkout main',
                     'git merge feature1 feature2 feature3',
-                    '# Or explicitly use octopus strategy',
+                    '# או שימוש מפורש באסטרטגיית octopus',
                     'git merge -s octopus feature1 feature2 feature3'
                 ],
                 commits: [
@@ -1421,13 +1424,13 @@
                 <h3 style="color: ${getComputedStyle(document.documentElement).getPropertyValue('--secondary')}; margin-bottom: 15px;">${merge.title}</h3>
                 <p style="line-height: 1.8; margin-bottom: 15px;">${merge.description}</p>
                 <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; border-left: 4px solid #27ae60; margin: 15px 0;">
-                    <h4 style="color: #27ae60; margin-bottom: 10px;">Benefits</h4>
+                    <h4 style="color: #27ae60; margin-bottom: 10px;">יתרונות</h4>
                     <ul style="margin-left: 20px;">
                         ${merge.benefits.map(benefit => `<li style="margin-bottom: 5px;">${benefit}</li>`).join('')}
                     </ul>
                 </div>
                 <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #e2e8f0; padding: 25px; border-radius: 12px; margin-top: 20px; font-family: 'Fira Code', monospace; border-left: 5px solid #3b82f6; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); line-height: 2;">
-                    <h4 style="color: #fbbf24; margin-bottom: 15px;">Commands</h4>
+                    <h4 style="color: #fbbf24; margin-bottom: 15px;">פקודות</h4>
                     ${merge.commands.map(cmd => {
                         if (cmd.startsWith('#')) {
                             return `<div style="color: #94a3b8; font-style: italic; font-size: 0.95em;">${cmd}</div>`;
