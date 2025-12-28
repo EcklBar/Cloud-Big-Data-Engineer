@@ -826,14 +826,42 @@ val sc = new SparkContext(conf)</div>
 
     <!-- === RDD VIEW === -->
     <div id="view-rdd" class="view-section">
-        <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="theory-layout">
+            <aside class="theory-sidebar">
+                <div class="theory-nav-item active" onclick="scrollToSection('rdd-what', this)">
+                    <span>🎯</span> מהו RDD?
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-create', this)">
+                    <span>📝</span> יצירת RDD
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-lazy', this)">
+                    <span>🦥</span> Lazy Evaluation
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-pair', this)">
+                    <span>🔑</span> Pair RDD
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-transformations', this)">
+                    <span>🔄</span> Transformations vs Actions
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-partitions', this)">
+                    <span>📦</span> Partitioning
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-issues', this)">
+                    <span>⚠️</span> בעיות נפוצות
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('rdd-broadcast', this)">
+                    <span>📡</span> Broadcast & Accumulators
+                </div>
+            </aside>
+
+            <main class="theory-content">
             <div style="text-align: center; margin-bottom: 50px;">
                 <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">🔥 RDD - Resilient Distributed Dataset</h1>
                 <p style="color: var(--text-secondary); font-size: 1.05rem;">מבנה הנתונים הבסיסי של Spark</p>
             </div>
 
             <!-- What is RDD -->
-            <div class="content-card">
+            <div id="rdd-what" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> מהו RDD?</h2>
                 </div>
@@ -851,7 +879,7 @@ val sc = new SparkContext(conf)</div>
             </div>
 
             <!-- Creating RDD -->
-            <div class="content-card">
+            <div id="rdd-create" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> איך יוצרים RDD?</h2>
                 </div>
@@ -909,7 +937,7 @@ JavaPairRDD<String, Integer> rdd = sc.parallelizePairs(data);</div>
             </div>
 
             <!-- Lazy Evaluation -->
-            <div class="content-card">
+            <div id="rdd-lazy" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> Lazy Evaluation</h2>
                 </div>
@@ -945,7 +973,7 @@ count = rdd3.count()  # Action - מפעיל את כל הביצוע!</div>
             </div>
 
             <!-- Pair RDD -->
-            <div class="content-card">
+            <div id="rdd-pair" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> Pair RDD (Key-Value)</h2>
                 </div>
@@ -1004,7 +1032,7 @@ pairs.reduceByKey(lambda a, b: a + b)</div>
             </div>
 
             <!-- Transformations vs Actions -->
-            <div class="content-card">
+            <div id="rdd-transformations" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-green)">●</span> Transformations vs Actions</h2>
                 </div>
@@ -1195,7 +1223,7 @@ values = pair_rdd.lookup('key1')  # list של ערכים</div>
             </div>
 
             <!-- Partitioning -->
-            <div class="content-card">
+            <div id="rdd-partitions" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-purple)">●</span> Partitioning</h2>
                 </div>
@@ -1233,7 +1261,7 @@ rdd = sc.textFile('/path', minPartitions=10)</div>
             </div>
 
             <!-- Common Issues -->
-            <div class="content-card">
+            <div id="rdd-issues" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-red)">●</span> בעיות נפוצות ופתרונות</h2>
                 </div>
@@ -1317,7 +1345,7 @@ final_result = result.map(lambda kv: (kv[0].split('_')[0], kv[1])) \
             </div>
 
             <!-- Broadcast & Accumulators -->
-            <div class="content-card">
+            <div id="rdd-broadcast" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-purple)">●</span> Broadcast & Accumulators</h2>
                 </div>
@@ -1366,19 +1394,51 @@ processed.count()  # מפעיל את החישוב
 print(f"Total errors: {error_counter.value}")</div>
                 </div>
             </div>
+            </main>
         </div>
     </div>
 
     <!-- === DATAFRAMES VIEW === -->
     <div id="view-dataframes" class="view-section">
-        <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="theory-layout">
+            <aside class="theory-sidebar">
+                <div class="theory-nav-item active" onclick="scrollToSection('df-intro', this)">
+                    <span>📊</span> מהו DataFrame?
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-create', this)">
+                    <span>📝</span> יצירת DataFrames
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-operations', this)">
+                    <span>⚙️</span> פעולות על DataFrames
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-sql', this)">
+                    <span>🔍</span> Spark SQL
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-udfs', this)">
+                    <span>🔧</span> UDFs
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-window', this)">
+                    <span>🪟</span> Window Functions
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-catalyst', this)">
+                    <span>⚡</span> Catalyst Optimizer
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-dataset', this)">
+                    <span>📦</span> Dataset
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('df-sources', this)">
+                    <span>💾</span> Data Sources
+                </div>
+            </aside>
+
+            <main class="theory-content">
             <div style="text-align: center; margin-bottom: 50px;">
                 <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">📊 DataFrames & Spark SQL</h1>
                 <p style="color: var(--text-secondary); font-size: 1.05rem;">עבודה עם נתונים מובנים</p>
             </div>
 
             <!-- DataFrame Intro -->
-            <div class="content-card">
+            <div id="df-intro" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> מהו DataFrame?</h2>
                 </div>
@@ -1411,7 +1471,7 @@ print(f"Total errors: {error_counter.value}")</div>
             </div>
 
             <!-- Creating DataFrames -->
-            <div class="content-card">
+            <div id="df-create" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> יצירת DataFrames</h2>
                 </div>
@@ -1473,7 +1533,7 @@ df = spark.createDataFrame(pandas_df)</div>
             </div>
 
             <!-- DataFrame Operations -->
-            <div class="content-card">
+            <div id="df-operations" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-green)">●</span> פעולות על DataFrames</h2>
                 </div>
@@ -1579,7 +1639,7 @@ pandas_df = df.toPandas()</div>
             </div>
 
             <!-- Spark SQL -->
-            <div class="content-card">
+            <div id="df-sql" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-purple)">●</span> Spark SQL</h2>
                 </div>
@@ -1657,7 +1717,7 @@ df.select(
             </div>
 
             <!-- UDFs -->
-            <div class="content-card">
+            <div id="df-udfs" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> User Defined Functions (UDFs)</h2>
                 </div>
@@ -1745,7 +1805,7 @@ df.groupBy("group").applyInPandas(normalize_per_group, schema="id long, value do
             </div>
 
             <!-- Window Functions -->
-            <div class="content-card">
+            <div id="df-window" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-green)">●</span> Window Functions</h2>
                 </div>
@@ -1804,7 +1864,7 @@ top_earners = df.withColumn("rank", rank().over(window_spec3)) \
             </div>
 
             <!-- Catalyst Optimizer -->
-            <div class="content-card">
+            <div id="df-catalyst" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> Catalyst Optimizer</h2>
                 </div>
@@ -1878,7 +1938,7 @@ df.explain(True)  # Logical + Physical + Optimized
             </div>
 
             <!-- Dataset -->
-            <div class="content-card">
+            <div id="df-dataset" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-red)">●</span> Dataset</h2>
                 </div>
@@ -1915,7 +1975,7 @@ ds.filter(_.age > 25)
             </div>
 
             <!-- Data Sources -->
-            <div class="content-card">
+            <div id="df-sources" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> עבודה עם Data Sources</h2>
                 </div>
@@ -2039,19 +2099,36 @@ df.write \
     .save()</div>
                 </div>
             </div>
+            </main>
         </div>
     </div>
 
     <!-- === STREAMING VIEW === -->
     <div id="view-streaming" class="view-section">
-        <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="theory-layout">
+            <aside class="theory-sidebar">
+                <div class="theory-nav-item active" onclick="scrollToSection('stream-kafka', this)">
+                    <span>📨</span> Apache Kafka
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('stream-dstreams', this)">
+                    <span>📡</span> DStreams (Legacy)
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('stream-structured', this)">
+                    <span>⚡</span> Structured Streaming
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('stream-comparison', this)">
+                    <span>⚖️</span> DStreams vs Structured
+                </div>
+            </aside>
+
+            <main class="theory-content">
             <div style="text-align: center; margin-bottom: 50px;">
                 <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">🌊 Spark Streaming</h1>
                 <p style="color: var(--text-secondary); font-size: 1.05rem;">עיבוד נתונים בזמן אמת</p>
             </div>
 
             <!-- Kafka -->
-            <div class="content-card">
+            <div id="stream-kafka" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> Apache Kafka</h2>
                 </div>
@@ -2148,7 +2225,7 @@ Consumer Group: "spark-app"
             </div>
 
             <!-- DStreams -->
-            <div class="content-card">
+            <div id="stream-dstreams" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> Spark Streaming (DStreams)</h2>
                 </div>
@@ -2187,7 +2264,7 @@ ssc.awaitTermination()</div>
             </div>
 
             <!-- Structured Streaming -->
-            <div class="content-card">
+            <div id="stream-structured" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-green)">●</span> Structured Streaming</h2>
                 </div>
@@ -2417,7 +2494,7 @@ result = df.groupByKey(lambda x: x.key) \
             </div>
 
             <!-- Comparison -->
-            <div class="content-card">
+            <div id="stream-comparison" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-purple)">●</span> DStreams vs Structured Streaming</h2>
                 </div>
@@ -2441,19 +2518,45 @@ result = df.groupByKey(lambda x: x.key) \
                     </div>
                 </div>
             </div>
+            </main>
         </div>
     </div>
 
     <!-- === ADVANCED VIEW === -->
     <div id="view-advanced" class="view-section">
-        <div style="max-width: 1200px; margin: 0 auto;">
+        <div class="theory-layout">
+            <aside class="theory-sidebar">
+                <div class="theory-nav-item active" onclick="scrollToSection('adv-submit', this)">
+                    <span>🚀</span> Spark Submit
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('adv-ui', this)">
+                    <span>📊</span> Spark UI
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('adv-performance', this)">
+                    <span>⚡</span> שיפור ביצועים
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('adv-logs', this)">
+                    <span>📝</span> ניהול Logs
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('adv-shutdown', this)">
+                    <span>🛑</span> Graceful Shutdown
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('adv-migration', this)">
+                    <span>🔄</span> Migration 1.x → 2.x
+                </div>
+                <div class="theory-nav-item" onclick="scrollToSection('adv-tungsten', this)">
+                    <span>🔥</span> Project Tungsten
+                </div>
+            </aside>
+
+            <main class="theory-content">
             <div style="text-align: center; margin-bottom: 50px;">
                 <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">⚙️ נושאים מתקדמים</h1>
                 <p style="color: var(--text-secondary); font-size: 1.05rem;">Spark UI, ביצועים וניהול</p>
             </div>
 
             <!-- Spark Submit -->
-            <div class="content-card">
+            <div id="adv-submit" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-orange)">●</span> Spark Submit</h2>
                 </div>
@@ -2546,7 +2649,7 @@ if __name__ == "__main__":
             </div>
 
             <!-- Spark UI -->
-            <div class="content-card">
+            <div id="adv-ui" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> Spark UI</h2>
                 </div>
@@ -2603,7 +2706,7 @@ if __name__ == "__main__":
             </div>
 
             <!-- Performance Tuning -->
-            <div class="content-card">
+            <div id="adv-performance" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-blue)">●</span> שיפור ביצועים</h2>
                 </div>
@@ -2762,7 +2865,7 @@ result.coalesce(10).write.parquet("/output")</div>
             </div>
 
             <!-- Log Management -->
-            <div class="content-card">
+            <div id="adv-logs" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-green)">●</span> ניהול Logs</h2>
                 </div>
@@ -2835,7 +2938,7 @@ log4j.appender.userAppender.layout.ConversionPattern=[%p] %d %c - %m%n</div>
             </div>
 
             <!-- Graceful Shutdown -->
-            <div class="content-card">
+            <div id="adv-shutdown" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-purple)">●</span> Graceful Shutdown</h2>
                 </div>
@@ -2916,7 +3019,7 @@ graceful_shutdown(spark, query)</div>
             </div>
 
             <!-- Migration -->
-            <div class="content-card">
+            <div id="adv-migration" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-red)">●</span> Migration: Spark 1.x → 2.x</h2>
                 </div>
@@ -3003,7 +3106,7 @@ df = spark.sql("SELECT * FROM hive_table")</div>
             </div>
 
             <!-- Tungsten -->
-            <div class="content-card">
+            <div id="adv-tungsten" class="content-card">
                 <div class="card-header">
                     <h2><span style="color:var(--spark-green)">●</span> Project Tungsten</h2>
                 </div>
@@ -3068,6 +3171,7 @@ df.filter(col("age") > 25) \
                     </div>
                 </div>
             </div>
+            </main>
         </div>
     </div>
 
@@ -3422,6 +3526,20 @@ result.show()</div>
 
         document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
+    }
+
+    function scrollToSection(sectionId, btn) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Update active state
+            const parent = btn.closest('.theory-sidebar');
+            if (parent) {
+                parent.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
+                btn.classList.add('active');
+            }
+        }
     }
 
     /* === COPY CODE BLOCKS === */
