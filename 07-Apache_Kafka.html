@@ -981,13 +981,13 @@
                     <div class="architecture-diagram">
                         <h3>מבנה Topic עם 3 Partitions</h3>
                         <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color);">
-<strong>Topic: user-events</strong>
+<strong style="font-size: 1.1rem;">Topic: user-events</strong>
 
-Partition 0: [msg0] → [msg3] → [msg6] → [msg9] ...
-Partition 1: [msg1] → [msg4] → [msg7] → [msg10] ...
-Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
+📦 Partition 0: [msg0] → [msg3] → [msg6] → [msg9] ...
+📦 Partition 1: [msg1] → [msg4] → [msg7] → [msg10] ...
+📦 Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
 
-כל message מקבל <strong>offset</strong> ייחודי בpartition שלו
+💡 כל message מקבל <strong>offset</strong> ייחודי ב-partition שלו
                         </div>
                     </div>
 
@@ -1324,19 +1324,19 @@ Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
                     <h2>Streaming ברמת ארגון</h2>
                     <div class="architecture-diagram">
                         <h3 style="margin-bottom: 25px;">Event Streaming בארגון</h3>
-                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color); text-align: center;">
-<strong style="font-size: 1.2rem;">🌐 מקורות נתונים</strong>
-    ↓    ↓    ↓    ↓    ↓
-[Apps] [IoT] [DBs] [Logs] [APIs]
-           ↓
-    ┌──────────────┐
-    │ <strong style="color: var(--kafka-accent);">Apache Kafka</strong> │
-    │ Event Streaming │
-    │   Platform    │
-    └──────────────┘
-           ↓
-    ↓    ↓    ↓    ↓    ↓
-[Analytics] [ML] [DWH] [Apps] [Real-time Dashboards]
+                        <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color); text-align: center; line-height: 2;">
+<strong style="font-size: 1.3rem;">🌐 מקורות נתונים</strong>
+        ↓        ↓        ↓        ↓        ↓
+   [Apps]    [IoT]    [DBs]   [Logs]   [APIs]
+                       ↓
+              ┌──────────────────┐
+              │ <strong style="color: var(--kafka-accent);">Apache Kafka</strong>   │
+              │ Event Streaming  │
+              │    Platform      │
+              └──────────────────┘
+                       ↓
+        ↓        ↓        ↓        ↓        ↓
+ [Analytics]  [ML]   [DWH]   [Apps]  [Dashboards]
                         </div>
                     </div>
                 </div>
@@ -1438,12 +1438,12 @@ Partition 2: [msg2] → [msg5] → [msg8] → [msg11] ...
                     <div class="architecture-diagram">
                         <h3>דוגמה: Topic עם 4 Partitions</h3>
                         <div class="code-block" style="background: white; color: var(--text-primary); border: 2px solid var(--border-color);">
-<strong>Consumer Group: analytics-group</strong>
+<strong style="font-size: 1.1rem;">Consumer Group: analytics-group</strong>
 
-Topic: user-events (4 partitions)
+📊 Topic: user-events (4 partitions)
 
-Consumer 1 → Partition 0, Partition 1
-Consumer 2 → Partition 2, Partition 3
+👤 Consumer 1 → 📦 Partition 0, 📦 Partition 1
+👤 Consumer 2 → 📦 Partition 2, 📦 Partition 3
 
 <strong style="color: var(--kafka-green);">✓ כל partition נצרך פעם אחת</strong>
 <strong style="color: var(--kafka-blue);">✓ עומס מחולק בין 2 consumers</strong>
@@ -1625,15 +1625,21 @@ Consumer 2 → Partition 2, Partition 3
 
                         <div class="code-block" style="margin-top: 15px;">
 <span class="code-comment"># רשימת consumer groups</span>
-$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+$ kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --list
 
 <span class="code-comment"># בדיקת lag של group</span>
-$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
-  --group my-group --describe
+$ kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group my-group \
+    --describe
 
 <span class="code-comment"># תיאור topic</span>
-$ kafka-topics.sh --bootstrap-server localhost:9092 \
-  --describe --topic my-topic
+$ kafka-topics.sh \
+    --bootstrap-server localhost:9092 \
+    --describe \
+    --topic my-topic
                         </div>
                     </div>
 
@@ -1984,7 +1990,8 @@ Topic: user-events
 
             <div class="info-card">
                 <h3>💡 לפני שמתחילים</h3>
-                <p>כל הפקודות מניחות ש-<code>$KAFKA_HOME</code> מוגדר לתיקיית ההתקנה של Kafka.</p>
+                <p>כל הפקודות מניחות שהכלים של Kafka נמצאים ב-PATH, או שאתה מפעיל מתוך <code>$KAFKA_HOME/bin/</code></p>
+                <p>אם הפקודה לא עובדת, הוסף את הנתיב המלא: <code>$KAFKA_HOME/bin/kafka-topics.sh</code></p>
             </div>
 
             <h2 style="margin-top: 50px;">📂 Topics</h2>
@@ -1992,41 +1999,41 @@ Topic: user-events
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>יצירת Topic</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-topics.sh \
-  --create \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic \
-  --partitions 3 \
-  --replication-factor 2
+$ kafka-topics.sh \
+    --create \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic \
+    --partitions 3 \
+    --replication-factor 2
                 </div>
             </div>
 
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>רשימת כל ה-Topics</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-topics.sh \
-  --list \
-  --bootstrap-server localhost:9092
+$ kafka-topics.sh \
+    --list \
+    --bootstrap-server localhost:9092
                 </div>
             </div>
 
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>תיאור Topic</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-topics.sh \
-  --describe \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic
+$ kafka-topics.sh \
+    --describe \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic
                 </div>
             </div>
 
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>מחיקת Topic</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-topics.sh \
-  --delete \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic
+$ kafka-topics.sh \
+    --delete \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic
                 </div>
             </div>
 
@@ -2035,9 +2042,9 @@ $ $KAFKA_HOME/bin/kafka-topics.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>Console Producer</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-console-producer.sh \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic
+$ kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic
 
 <span class="code-comment"># Type messages and press Enter</span>
 > Hello Kafka
@@ -2049,11 +2056,11 @@ $ $KAFKA_HOME/bin/kafka-console-producer.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>Producer עם Key</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-console-producer.sh \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic \
-  --property "parse.key=true" \
-  --property "key.separator=:"
+$ kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic \
+    --property "parse.key=true" \
+    --property "key.separator=:"
 
 <span class="code-comment"># Format: key:value</span>
 > user1:Login event
@@ -2066,10 +2073,10 @@ $ $KAFKA_HOME/bin/kafka-console-producer.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>Console Consumer</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-console-consumer.sh \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic \
-  --from-beginning
+$ kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic \
+    --from-beginning
 
 <span class="code-comment"># Shows all messages from the beginning</span>
                 </div>
@@ -2078,10 +2085,10 @@ $ $KAFKA_HOME/bin/kafka-console-consumer.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>Consumer עם Group</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-console-consumer.sh \
-  --bootstrap-server localhost:9092 \
-  --topic my-topic \
-  --group my-consumer-group
+$ kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic \
+    --group my-consumer-group
 
 <span class="code-comment"># Part of a consumer group</span>
                 </div>
@@ -2092,19 +2099,19 @@ $ $KAFKA_HOME/bin/kafka-console-consumer.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>רשימת Consumer Groups</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
-  --bootstrap-server localhost:9092 \
-  --list
+$ kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --list
                 </div>
             </div>
 
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>מצב Consumer Group (Offset Status)</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
-  --bootstrap-server localhost:9092 \
-  --group my-consumer-group \
-  --describe
+$ kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group my-consumer-group \
+    --describe
 
 <span class="code-comment"># Shows: TOPIC, PARTITION, CURRENT-OFFSET, LOG-END-OFFSET, LAG</span>
                 </div>
@@ -2113,13 +2120,13 @@ $ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>איפוס Offsets להתחלה</h4>
                 <div class="code-block">
-$ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
-  --bootstrap-server localhost:9092 \
-  --group my-consumer-group \
-  --reset-offsets \
-  --to-earliest \
-  --topic my-topic \
-  --execute
+$ kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group my-consumer-group \
+    --reset-offsets \
+    --to-earliest \
+    --topic my-topic \
+    --execute
                 </div>
             </div>
 
@@ -2128,7 +2135,7 @@ $ $KAFKA_HOME/bin/kafka-consumer-groups.sh \
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>רשימת Connectors פעילים</h4>
                 <div class="code-block">
-$ curl localhost:8083/connectors | python -m json.tool
+$ curl localhost:8083/connectors | jq
 
 <span class="code-comment"># Output:</span>
 <span class="code-comment"># [</span>
@@ -2141,8 +2148,7 @@ $ curl localhost:8083/connectors | python -m json.tool
             <div class="comparison-card" style="margin-bottom: 25px;">
                 <h4>סטטוס Connector</h4>
                 <div class="code-block">
-$ curl localhost:8083/connectors/my-connector/status \
-  | python -m json.tool
+$ curl localhost:8083/connectors/my-connector/status | jq
                 </div>
             </div>
 
