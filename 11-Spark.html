@@ -525,6 +525,7 @@
         <div class="nav-item" onclick="switchView('dataframes', this)">📊 DataFrames & SQL</div>
         <div class="nav-item" onclick="switchView('streaming', this)">🌊 Streaming</div>
         <div class="nav-item" onclick="switchView('advanced', this)">⚙️ מתקדם</div>
+        <div class="nav-item" onclick="switchView('exercises', this)">📝 תרגילים</div>
     </div>
 
     <div style="width: 80px;"></div>
@@ -907,6 +908,101 @@ JavaPairRDD<String, Integer> rdd = sc.parallelizePairs(data);</div>
                 </div>
             </div>
 
+            <!-- Lazy Evaluation -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-orange)">●</span> Lazy Evaluation</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהי Lazy Evaluation?</h3>
+                        <p>Spark לא מבצע Transformations מיד - הוא בונה תוכנית ביצוע (DAG) ומבצע אותה רק כאשר Action נקרא.</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ יתרונות</h3>
+                        <ul>
+                            <li><strong>אופטימיזציה</strong> - Spark יכול לאפטם את כל התוכנית לפני הביצוע</li>
+                            <li><strong>יעילות</strong> - הימנעות מחישובים מיותרים</li>
+                            <li><strong>Pipeline Optimization</strong> - איחוד פעולות</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># כל השורות האלו לא מבצעות כלום!
+rdd1 = sc.textFile('/data/input.txt')  # Lazy
+rdd2 = rdd1.filter(lambda x: len(x) > 0)  # Lazy
+rdd3 = rdd2.map(lambda x: x.upper())  # Lazy
+
+# רק כאן Spark מתחיל לעבוד בפועל
+count = rdd3.count()  # Action - מפעיל את כל הביצוע!</div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ חשוב לזכור</h3>
+                        <p>אם תקרא ל-Action פעמיים על אותו RDD, החישוב יתבצע פעמיים!</p>
+                        <p>לכן כדאי להשתמש ב-<code>cache()</code> אם אתה צריך את התוצאה יותר מפעם אחת.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pair RDD -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-blue)">●</span> Pair RDD (Key-Value)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהו Pair RDD?</h3>
+                        <p><strong>Pair RDD</strong> הוא RDD של זוגות (Key, Value).</p>
+                        <p>מאפשר פעולות מתקדמות כמו groupByKey, reduceByKey, join ועוד.</p>
+                    </div>
+
+                    <div class="code-block"># יצירת Pair RDD
+data = [('apple', 5), ('banana', 3), ('apple', 2), ('orange', 8)]
+pair_rdd = sc.parallelize(data)
+
+# או המרה מ-RDD רגיל
+lines = sc.textFile('/data/users.txt')
+# כל שורה: "John,25"
+pairs = lines.map(lambda line: (line.split(',')[0], int(line.split(',')[1])))
+# תוצאה: [('John', 25), ('Mary', 30), ...]</div>
+
+                    <h3>פעולות על Pair RDD</h3>
+                    <div class="code-block"># reduceByKey - צמצום לפי מפתח (שומר על Partitioning!)
+word_counts = pairs.reduceByKey(lambda a, b: a + b)
+
+# groupByKey - קיבוץ ערכים לפי מפתח
+grouped = pairs.groupByKey()
+
+# mapValues - map רק על הערכים
+doubled = pairs.mapValues(lambda x: x * 2)
+
+# keys / values - קבלת רק המפתחות או הערכים
+all_keys = pairs.keys()
+all_values = pairs.values()
+
+# sortByKey - מיון לפי מפתח
+sorted_pairs = pairs.sortByKey(ascending=True)
+
+# join - חיבור שני Pair RDDs
+rdd1.join(rdd2)
+
+# leftOuterJoin / rightOuterJoin
+rdd1.leftOuterJoin(rdd2)</div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ groupByKey vs reduceByKey</h3>
+                        <p><strong>groupByKey</strong> - מעביר את כל הנתונים דרך הרשת (Shuffle כבד!)</p>
+                        <p><strong>reduceByKey</strong> - מבצע צמצום מקומי לפני Shuffle (יעיל יותר!)</p>
+                    </div>
+
+                    <div class="code-block"># ❌ לא יעיל - groupByKey
+pairs.groupByKey().mapValues(lambda values: sum(values))
+
+# ✅ יעיל - reduceByKey
+pairs.reduceByKey(lambda a, b: a + b)</div>
+                </div>
+            </div>
+
             <!-- Transformations vs Actions -->
             <div class="content-card">
                 <div class="card-header">
@@ -915,8 +1011,8 @@ JavaPairRDD<String, Integer> rdd = sc.parallelizePairs(data);</div>
                 <div class="card-body">
                     <div class="warning-box">
                         <h3>שני סוגי פעולות ב-RDD</h3>
-                        <p><strong>Transformation</strong> - תמיד רץ על ה-Cluster</p>
-                        <p><strong>Action</strong> - יכול להחזיר ערך ל-Driver או לכתוב ל-Data Store</p>
+                        <p><strong>Transformation</strong> - תמיד רץ על ה-Cluster, Lazy Evaluation</p>
+                        <p><strong>Action</strong> - מפעיל ביצוע בפועל, יכול להחזיר ערך ל-Driver או לכתוב ל-Data Store</p>
                     </div>
 
                     <div class="feature-grid">
@@ -935,48 +1031,106 @@ JavaPairRDD<String, Integer> rdd = sc.parallelizePairs(data);</div>
                     </div>
 
                     <h3>Transformations נפוצות:</h3>
-                    <div class="code-block"># map - מיפוי כל אלמנט
-rdd.map(lambda x: x * 2)
+                    <div class="code-block"># map - מיפוי כל אלמנט (1:1)
+rdd = sc.parallelize([1, 2, 3, 4])
+rdd.map(lambda x: x * 2)  # [2, 4, 6, 8]
 
 
-# filter - סינון
-rdd.filter(lambda x: x > 10)
+# filter - סינון אלמנטים
+rdd.filter(lambda x: x > 10)  # רק אלמנטים גדולים מ-10
 
 
-# flatMap - מיפוי והשטחה
-rdd.flatMap(lambda line: line.split())
+# flatMap - מיפוי והשטחה (1:N)
+lines = sc.parallelize(["hello world", "spark rocks"])
+words = lines.flatMap(lambda line: line.split())
+# ["hello", "world", "spark", "rocks"]
 
 
-# reduceByKey - צמצום לפי מפתח (Pair RDD)
-rdd.reduceByKey(lambda a, b: a + b)
+# mapPartitions - עיבוד partition שלם בבת אחת (יעיל!)
+def process_partition(iterator):
+    # פעולה יקרה שנעשית פעם אחת per partition
+    connection = create_db_connection()
+    for record in iterator:
+        yield process_record(connection, record)
+    connection.close()
+
+rdd.mapPartitions(process_partition)
 
 
-# sortByKey - מיון לפי מפתח
-rdd.sortByKey()
+# mapPartitionsWithIndex - כמו mapPartitions עם מספר partition
+def process_with_index(partition_index, iterator):
+    yield f"Partition {partition_index}: {sum(iterator)}"
+
+rdd.mapPartitionsWithIndex(process_with_index)
 
 
-# distinct - ערכים ייחודיים
+# sample - דגימה אקראית
+rdd.sample(withReplacement=False, fraction=0.1)  # 10% דגימה
+
+
+# distinct - ערכים ייחודיים בלבד
 rdd.distinct()
 
 
-# union - איחוד שני RDDs
+# union - איחוד שני RDDs (כולל כפילויות)
 rdd1.union(rdd2)
 
 
+# intersection - חיתוך (ערכים משותפים)
+rdd1.intersection(rdd2)
+
+
+# subtract - הפרש (ערכים ב-rdd1 שלא ב-rdd2)
+rdd1.subtract(rdd2)
+
+
+# === Pair RDD Transformations ===
+
+# reduceByKey - צמצום לפי מפתח (יעיל!)
+pairs.reduceByKey(lambda a, b: a + b)
+
+
+# groupByKey - קיבוץ ערכים לפי מפתח (פחות יעיל)
+pairs.groupByKey()
+
+
+# sortByKey - מיון לפי מפתח
+pairs.sortByKey(ascending=True)
+
+
+# mapValues - map רק על הערכים
+pairs.mapValues(lambda x: x * 2)
+
+
 # join - חיבור שני Pair RDDs
-rdd1.join(rdd2)</div>
+rdd1.join(rdd2)  # Inner Join
+rdd1.leftOuterJoin(rdd2)
+rdd1.rightOuterJoin(rdd2)
+
+
+# cogroup - קיבוץ משני RDDs
+rdd1.cogroup(rdd2)</div>
 
                     <h3>Actions נפוצות:</h3>
                     <div class="code-block"># count - ספירת אלמנטים
-count = rdd.count()
+count = rdd.count()  # מחזיר מספר
 
 
-# collect - החזרת כל האלמנטים ל-Driver
-data = rdd.collect()
+# collect - החזרת כל האלמנטים ל-Driver (זהירות! רק לנתונים קטנים)
+data = rdd.collect()  # מחזיר list
 
 
 # take - החזרת N אלמנטים ראשונים
-first_5 = rdd.take(5)
+first_5 = rdd.take(5)  # מחזיר list של 5 אלמנטים
+
+
+# takeSample - דגימה אקראית
+sample = rdd.takeSample(withReplacement=False, num=10)
+
+
+# takeOrdered - N אלמנטים הקטנים ביותר (ממויינים)
+smallest_5 = rdd.takeOrdered(5)
+largest_5 = rdd.takeOrdered(5, key=lambda x: -x)  # הפוך
 
 
 # first - החזרת אלמנט ראשון
@@ -984,15 +1138,59 @@ first = rdd.first()
 
 
 # reduce - צמצום לערך יחיד
-sum = rdd.reduce(lambda a, b: a + b)
+sum_all = rdd.reduce(lambda a, b: a + b)
+max_value = rdd.reduce(lambda a, b: a if a > b else b)
 
 
-# foreach - ביצוע פעולה על כל אלמנט
-rdd.foreach(lambda x: print(x))
+# fold - כמו reduce אבל עם ערך התחלתי
+total = rdd.fold(0, lambda acc, value: acc + value)
 
 
-# saveAsTextFile - שמירה לקובץ
-rdd.saveAsTextFile('/output/path')</div>
+# aggregate - aggregation מתקדם
+# aggregate(zeroValue, seqOp, combOp)
+sum_and_count = rdd.aggregate(
+    (0, 0),  # (sum, count)
+    lambda acc, value: (acc[0] + value, acc[1] + 1),  # per partition
+    lambda acc1, acc2: (acc1[0] + acc2[0], acc1[1] + acc2[1])  # combine
+)
+average = sum_and_count[0] / sum_and_count[1]
+
+
+# foreach - ביצוע פעולה על כל אלמנט (ב-Executors)
+rdd.foreach(lambda x: print(x))  # יודפס ב-Executors, לא ב-Driver!
+
+
+# foreachPartition - ביצוע פעולה על partition שלם
+def save_partition(iterator):
+    connection = create_db_connection()
+    for record in iterator:
+        connection.insert(record)
+    connection.close()
+
+rdd.foreachPartition(save_partition)
+
+
+# === פעולות שמירה ===
+
+# saveAsTextFile - שמירה כקבצי טקסט
+rdd.saveAsTextFile('/output/path')
+
+# saveAsSequenceFile - Hadoop SequenceFile (Pair RDD)
+pair_rdd.saveAsSequenceFile('/output/path')
+
+
+# === Pair RDD Actions ===
+
+# countByKey - ספירת ערכים לכל מפתח
+counts = pair_rdd.countByKey()  # dict: {key: count}
+
+
+# collectAsMap - המרה ל-dictionary (זהירות! רק לנתונים קטנים)
+result_dict = pair_rdd.collectAsMap()
+
+
+# lookup - קבלת כל הערכים למפתח מסוים
+values = pair_rdd.lookup('key1')  # list של ערכים</div>
                 </div>
             </div>
 
@@ -1034,10 +1232,94 @@ rdd = sc.textFile('/path', minPartitions=10)</div>
                 </div>
             </div>
 
+            <!-- Common Issues -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-red)">●</span> בעיות נפוצות ופתרונות</h2>
+                </div>
+                <div class="card-body">
+                    <h3>⚠️ בעיות זיכרון (Out of Memory)</h3>
+                    <div class="warning-box">
+                        <h3>Container is running beyond physical memory limits</h3>
+                        <p>הודעת שגיאה נפוצה:</p>
+                        <code style="display: block; background: #2d2d2d; color: #ff6b6b; padding: 10px; border-radius: 4px; margin: 10px 0;">
+Container [container_id] is running beyond physical memory limits.<br>
+Current usage: 1.6 GB of 1.4 GB physical memory used.<br>
+Killing container.
+                        </code>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות</h3>
+                        <ul>
+                            <li><strong>הגדלת Executor Memory:</strong> <code>--executor-memory 4g</code></li>
+                            <li><strong>הגדלת Driver Memory:</strong> <code>--driver-memory 4g</code></li>
+                            <li><strong>הקטנת Executor Cores:</strong> <code>--executor-cores 2</code> (פחות tasks במקביל)</li>
+                            <li><strong>הגדלת מספר Partitions:</strong> פחות נתונים per task</li>
+                            <li><strong>הימנעות מ-collect():</strong> אל תחזיר נתונים גדולים ל-Driver</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה להגדרת זיכרון
+spark-submit \
+    --master yarn \
+    --deploy-mode cluster \
+    --executor-memory 4g \
+    --driver-memory 2g \
+    --executor-cores 4 \
+    --num-executors 10 \
+    my_app.py</div>
+
+                    <h3>⚠️ Data Skew (חלוקה לא אחידה)</h3>
+                    <div class="warning-box">
+                        <p>בעיה: מפתח אחד מכיל הרבה יותר נתונים מאחרים → Task אחד לוקח הרבה זמן!</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות</h3>
+                        <ul>
+                            <li><strong>Salting:</strong> הוספת מפתח אקראי לפיזור</li>
+                            <li><strong>Custom Partitioner:</strong> חלוקה מותאמת אישית</li>
+                            <li><strong>Filter + Broadcast:</strong> טיפול נפרד במפתחות גדולים</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה ל-Salting (פתרון ל-Data Skew)
+from random import randint
+
+# הוספת salt למפתח
+def add_salt(key, num_salts=10):
+    return f"{key}_{randint(0, num_salts-1)}"
+
+# שימוש
+salted_rdd = rdd.map(lambda kv: (add_salt(kv[0]), kv[1]))
+result = salted_rdd.reduceByKey(lambda a, b: a + b)
+
+# הסרת salt
+final_result = result.map(lambda kv: (kv[0].split('_')[0], kv[1])) \
+                     .reduceByKey(lambda a, b: a + b)</div>
+
+                    <h3>⚠️ Shuffle Spill</h3>
+                    <div class="warning-box">
+                        <p>כאשר Shuffle גדול מדי, Spark כותב לדיסק → איטי!</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות</h3>
+                        <ul>
+                            <li><strong>הגדלת spark.executor.memory</strong></li>
+                            <li><strong>הגדלת spark.shuffle.memoryFraction</strong></li>
+                            <li><strong>שימוש ב-reduceByKey במקום groupByKey</strong></li>
+                            <li><strong>Broadcast Join</strong> לטבלאות קטנות</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Broadcast & Accumulators -->
             <div class="content-card">
                 <div class="card-header">
-                    <h2><span style="color:var(--spark-red)">●</span> Broadcast & Accumulators</h2>
+                    <h2><span style="color:var(--spark-purple)">●</span> Broadcast & Accumulators</h2>
                 </div>
                 <div class="card-body">
                     <h3>Broadcast Variables</h3>
@@ -1331,6 +1613,267 @@ df.createGlobalTempView("global_users")
 
 # גישה דרך global_temp
 spark.sql("SELECT * FROM global_temp.global_users")</div>
+
+                    <h3>פונקציות SQL מובנות</h3>
+                    <div class="code-block">from pyspark.sql.functions import *
+
+# String functions
+df.select(
+    upper(col("name")),
+    lower(col("name")),
+    length(col("name")),
+    concat(col("first_name"), lit(" "), col("last_name")),
+    substring(col("name"), 1, 3)
+)
+
+# Date functions
+df.select(
+    current_date(),
+    current_timestamp(),
+    year(col("date")),
+    month(col("date")),
+    dayofmonth(col("date")),
+    datediff(col("end_date"), col("start_date"))
+)
+
+# Aggregation functions
+df.select(
+    count("*"),
+    sum("salary"),
+    avg("age"),
+    min("age"),
+    max("salary"),
+    stddev("salary")
+)
+
+# Conditional functions
+df.select(
+    when(col("age") > 65, "Senior")
+     .when(col("age") > 18, "Adult")
+     .otherwise("Minor")
+     .alias("age_group")
+)</div>
+                </div>
+            </div>
+
+            <!-- UDFs -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-blue)">●</span> User Defined Functions (UDFs)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהי UDF?</h3>
+                        <p><strong>UDF</strong> מאפשרת להגדיר פונקציה מותאמת אישית ולהשתמש בה ב-DataFrames ו-SQL.</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ ביצועים</h3>
+                        <p>UDFs ב-Python איטיות יותר מפונקציות מובנות!</p>
+                        <p>הן דורשות סיריאליזציה Python ↔ JVM</p>
+                        <p><strong>תמיד העדף פונקציות מובנות אם אפשר!</strong></p>
+                    </div>
+
+                    <div class="code-block"># Python UDF - דרך 1
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+
+def categorize_age(age):
+    if age < 18:
+        return "Minor"
+    elif age < 65:
+        return "Adult"
+    else:
+        return "Senior"
+
+# רישום UDF
+categorize_udf = udf(categorize_age, StringType())
+
+# שימוש
+df.withColumn("age_category", categorize_udf(col("age")))
+
+
+# Python UDF - דרך 2 (עם decorator)
+@udf(returnType=StringType())
+def categorize_age_udf(age):
+    if age < 18:
+        return "Minor"
+    elif age < 65:
+        return "Adult"
+    else:
+        return "Senior"
+
+df.withColumn("age_category", categorize_age_udf(col("age")))</div>
+
+                    <div class="code-block"># רישום UDF ל-SQL
+spark.udf.register("categorize_age", categorize_age, StringType())
+
+# שימוש ב-SQL
+spark.sql("""
+    SELECT
+        name,
+        age,
+        categorize_age(age) as age_category
+    FROM users
+""")</div>
+
+                    <h3>Pandas UDF (מהיר יותר!)</h3>
+                    <div class="success-box">
+                        <h3>✅ מומלץ!</h3>
+                        <p>Pandas UDF עובד על batches של נתונים → הרבה יותר מהיר!</p>
+                    </div>
+
+                    <div class="code-block">from pyspark.sql.functions import pandas_udf
+import pandas as pd
+
+# Pandas UDF - Series to Series
+@pandas_udf("double")
+def multiply_by_two(s: pd.Series) -> pd.Series:
+    return s * 2
+
+df.withColumn("doubled", multiply_by_two(col("value")))
+
+
+# Pandas UDF - DataFrame to DataFrame (grouped map)
+@pandas_udf("id long, value double")
+def normalize_per_group(pdf: pd.DataFrame) -> pd.DataFrame:
+    pdf['value'] = (pdf['value'] - pdf['value'].mean()) / pdf['value'].std()
+    return pdf
+
+df.groupBy("group").applyInPandas(normalize_per_group, schema="id long, value double")</div>
+                </div>
+            </div>
+
+            <!-- Window Functions -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-green)">●</span> Window Functions</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהן Window Functions?</h3>
+                        <p><strong>Window Functions</strong> מאפשרות לבצע חישובים על "חלון" של שורות.</p>
+                        <p>דומה ל-SQL Window Functions.</p>
+                    </div>
+
+                    <div class="code-block">from pyspark.sql.window import Window
+from pyspark.sql.functions import row_number, rank, dense_rank, lag, lead
+
+# הגדרת Window
+window_spec = Window.partitionBy("department").orderBy("salary")
+
+# שימוש ב-Window Functions
+df.withColumn("row_num", row_number().over(window_spec)) \
+  .withColumn("rank", rank().over(window_spec)) \
+  .withColumn("dense_rank", dense_rank().over(window_spec))
+
+
+# Lag / Lead - גישה לשורות קודמות/הבאות
+df.withColumn("prev_salary", lag("salary", 1).over(window_spec)) \
+  .withColumn("next_salary", lead("salary", 1).over(window_spec))
+
+
+# Aggregations על Window
+from pyspark.sql.functions import sum, avg, max, min
+
+window_spec2 = Window.partitionBy("department") \
+                     .orderBy("date") \
+                     .rowsBetween(Window.unboundedPreceding, Window.currentRow)
+
+df.withColumn("running_total", sum("amount").over(window_spec2)) \
+  .withColumn("running_avg", avg("amount").over(window_spec2))
+
+
+# Top N per group
+window_spec3 = Window.partitionBy("department").orderBy(col("salary").desc())
+
+top_earners = df.withColumn("rank", rank().over(window_spec3)) \
+                .filter(col("rank") <= 3)</div>
+
+                    <div class="success-box">
+                        <h3>סוגי Window Frames</h3>
+                        <ul>
+                            <li><strong>rowsBetween</strong> - מבוסס על מספר שורות</li>
+                            <li><strong>rangeBetween</strong> - מבוסס על ערכים</li>
+                            <li><strong>unboundedPreceding</strong> - מתחילת ה-partition</li>
+                            <li><strong>unboundedFollowing</strong> - עד סוף ה-partition</li>
+                            <li><strong>currentRow</strong> - השורה הנוכחית</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Catalyst Optimizer -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-orange)">●</span> Catalyst Optimizer</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהו Catalyst?</h3>
+                        <p><strong>Catalyst</strong> הוא מנוע האופטימיזציה של Spark SQL.</p>
+                        <p>הוא ממיר שאילתות SQL ופעולות DataFrame לתוכנית ביצוע מאופטמת.</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>שלבי אופטימיזציה</h3>
+                        <ol>
+                            <li><strong>Logical Plan</strong> - ייצוג לוגי של השאילתה</li>
+                            <li><strong>Optimized Logical Plan</strong> - אופטימיזציות (predicate pushdown, column pruning)</li>
+                            <li><strong>Physical Plans</strong> - מספר אסטרטגיות ביצוע אפשריות</li>
+                            <li><strong>Cost Model</strong> - בחירת התוכנית הזולה ביותר</li>
+                            <li><strong>Code Generation</strong> - יצירת קוד JVM ממוטב</li>
+                        </ol>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔍 Predicate Pushdown</h4>
+                            <p>דחיפת סינונים למקור הנתונים</p>
+                            <p>קריאת פחות נתונים!</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>✂️ Column Pruning</h4>
+                            <p>קריאה רק של עמודות נדרשות</p>
+                            <p>יעיל ב-Parquet/ORC!</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 Constant Folding</h4>
+                            <p>חישוב ערכים קבועים מראש</p>
+                            <p>פחות עבודה בזמן ריצה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Code Generation</h4>
+                            <p>יצירת קוד ממוטב</p>
+                            <p>WholeStageCodegen</p>
+                        </div>
+                    </div>
+
+                    <div class="code-block"># דוגמה - Catalyst מייעל אוטומטית!
+df = spark.read.parquet("/data/users")
+
+# שאילתה
+result = df.filter(df.age > 25) \
+           .select("name", "age") \
+           .filter(df.name.startswith("A"))
+
+# Catalyst יבצע:
+# 1. איחוד שני filters לאחד: age > 25 AND name LIKE 'A%'
+# 2. Predicate Pushdown - דחיפת הסינון ל-Parquet
+# 3. Column Pruning - קריאה רק של name, age (לא כל העמודות!)
+# 4. Code Generation - קוד ממוטם
+
+# ניתן לראות את התוכנית:
+result.explain(True)  # הדפסת כל שלבי האופטימיזציה</div>
+
+                    <div class="warning-box">
+                        <h3>💡 טיפ חשוב</h3>
+                        <p>השתמש ב-<code>explain()</code> כדי לראות איך Spark מייעל את השאילתה שלך!</p>
+                        <code style="display: block; background: #2d2d2d; color: #86efac; padding: 10px; border-radius: 4px; margin: 10px 0;">
+df.explain()  # Physical Plan<br>
+df.explain(True)  # Logical + Physical + Optimized
+                        </code>
+                    </div>
                 </div>
             </div>
 
@@ -1377,12 +1920,79 @@ ds.filter(_.age > 25)
                     <h2><span style="color:var(--spark-orange)">●</span> עבודה עם Data Sources</h2>
                 </div>
                 <div class="card-body">
+                    <h3>פורמטים שונים של קבצים</h3>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>📄 CSV</h4>
+                            <p>✅ קריא לבני אדם</p>
+                            <p>❌ גדול, איטי</p>
+                            <p>❌ אין Schema מובנה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📦 Parquet</h4>
+                            <p>✅ מהיר מאוד!</p>
+                            <p>✅ דחוס (columnar)</p>
+                            <p>✅ Schema מובנה</p>
+                            <p><strong>מומלץ!</strong></p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🗜️ ORC</h4>
+                            <p>✅ דחוס מאוד</p>
+                            <p>✅ מהיר (columnar)</p>
+                            <p>✅ Schema מובנה</p>
+                            <p>פופולרי ב-Hive</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔷 Avro</h4>
+                            <p>✅ Schema evolution</p>
+                            <p>✅ Row-based</p>
+                            <p>✅ מעולה ל-Streaming</p>
+                            <p>פופולרי ב-Kafka</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>🎯 מתי להשתמש במה?</h3>
+                        <ul>
+                            <li><strong>Parquet</strong> - ברירת מחדל מומלצת! מעולה לאנליטיקה (קריאה רק של עמודות ספציפיות)</li>
+                            <li><strong>ORC</strong> - אם אתה עובד עם Hive, דומה ל-Parquet</li>
+                            <li><strong>Avro</strong> - כאשר Schema משתנה לעתים קרובות, מעולה ל-Kafka Streaming</li>
+                            <li><strong>CSV/JSON</strong> - רק לפיתוח/דוגמאות, לא לפרודקשן!</li>
+                        </ul>
+                    </div>
+
+                    <h3>Parquet - Columnar Storage</h3>
+                    <div class="success-box">
+                        <h3>יתרונות</h3>
+                        <ul>
+                            <li><strong>Columnar Format</strong> - נתונים מאוחסנים לפי עמודות</li>
+                            <li><strong>דחיסה מעולה</strong> - נתונים דומים באותה עמודה → דחיסה טובה</li>
+                            <li><strong>Predicate Pushdown</strong> - קריאה רק של עמודות ושורות רלוונטיות</li>
+                            <li><strong>Schema מובנה</strong> - לא צריך inferSchema</li>
+                            <li><strong>תואם למגוון כלים</strong> - Spark, Hive, Impala, Presto</li>
+                        </ul>
+                    </div>
+
+                    <h3>Avro - Schema Evolution</h3>
+                    <div class="info-box">
+                        <h3>יתרונות</h3>
+                        <ul>
+                            <li><strong>Schema Evolution</strong> - ניתן לשנות Schema לאורך זמן</li>
+                            <li><strong>Row-based</strong> - מעולה לכתיבה מהירה</li>
+                            <li><strong>אינטגרציה עם Kafka</strong> - פורמט פופולרי ב-Streaming</li>
+                            <li><strong>Schema Registry</strong> - ניהול מרכזי של schemas</li>
+                        </ul>
+                    </div>
+
                     <h3>קריאה מפורמטים שונים</h3>
                     <div class="code-block"># CSV עם אופציות
 df = spark.read \
     .option("header", "true") \
     .option("inferSchema", "true") \
     .option("delimiter", ",") \
+    .option("quote", '"') \
+    .option("escape", "\\") \
     .csv("/path/to/file.csv")
 
 
@@ -1398,7 +2008,7 @@ df = spark.read.parquet("/path/to/file.parquet")
 df = spark.read.orc("/path/to/file.orc")
 
 
-# Avro
+# Avro (צריך spark-avro package)
 df = spark.read.format("avro").load("/path/to/file.avro")</div>
 
                     <h3>כתיבה</h3>
@@ -1449,27 +2059,91 @@ df.write \
                     <div class="info-box">
                         <h3>מהו Kafka?</h3>
                         <p><strong>Apache Kafka</strong> הוא פלטפורמה מבוזרת ל-streaming של אירועים.</p>
-                        <p>שימושי כמקור נתונים ל-Spark Streaming.</p>
+                        <p>משמש כ-Message Queue מהיר ומדרגי, מצוין לאינטגרציה עם Spark Streaming.</p>
                     </div>
 
                     <div class="feature-grid">
                         <div class="feature-card">
                             <h4>📨 Topics</h4>
-                            <p>ערוצי נתונים</p>
+                            <p>ערוצי נתונים (כמו טבלאות)</p>
+                            <p>כל Topic מחולק ל-Partitions</p>
                         </div>
                         <div class="feature-card">
                             <h4>📤 Producers</h4>
-                            <p>שולחים הודעות</p>
+                            <p>שולחים הודעות ל-Topics</p>
+                            <p>יכולים לבחור Partition</p>
                         </div>
                         <div class="feature-card">
                             <h4>📥 Consumers</h4>
-                            <p>קוראים הודעות</p>
+                            <p>קוראים הודעות מ-Topics</p>
+                            <p>Consumer Groups למקביליות</p>
                         </div>
                         <div class="feature-card">
                             <h4>🔄 Partitions</h4>
-                            <p>מקביליות</p>
+                            <p>מאפשר מקביליות</p>
+                            <p>שמירת סדר per partition</p>
                         </div>
                     </div>
+
+                    <h3>ארכיטקטורת Kafka</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>Broker</strong> - שרת Kafka (בדרך כלל כמה brokers ב-cluster)</li>
+                            <li><strong>Topic</strong> - קטגוריה של הודעות (לדוגמה: "user-events", "transactions")</li>
+                            <li><strong>Partition</strong> - חלוקה לוגית של Topic (מאפשר מקביליות)</li>
+                            <li><strong>Offset</strong> - מזהה ייחודי של הודעה בתוך Partition</li>
+                            <li><strong>Consumer Group</strong> - קבוצת Consumers שעובדים ביחד</li>
+                            <li><strong>ZooKeeper</strong> - ניהול metadata (עד Kafka 2.8, אחר כך KRaft)</li>
+                        </ul>
+                    </div>
+
+                    <h3>יתרונות Kafka</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>Throughput גבוה</strong> - מיליוני הודעות לשנייה</li>
+                            <li><strong>Low Latency</strong> - מילישניות</li>
+                            <li><strong>Durability</strong> - הודעות נשמרות לדיסק</li>
+                            <li><strong>Scalability</strong> - הוספת brokers/partitions</li>
+                            <li><strong>Fault Tolerance</strong> - שכפול (replication)</li>
+                            <li><strong>Ordering</strong> - שמירת סדר per partition</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה - מבנה Topic עם Partitions
+
+Topic: "user-events"
+├── Partition 0: [msg0, msg3, msg6, msg9, ...]
+├── Partition 1: [msg1, msg4, msg7, msg10, ...]
+└── Partition 2: [msg2, msg5, msg8, msg11, ...]
+
+# כל הודעה יש לה:
+# - Key (אופציונלי) - קובע לאיזה partition
+# - Value - התוכן
+# - Timestamp
+# - Offset - מספר סידורי ב-partition</div>
+
+                    <h3>Consumer Groups</h3>
+                    <div class="warning-box">
+                        <h3>איך זה עובד?</h3>
+                        <ul>
+                            <li>כל Consumer Group קורא את כל ההודעות</li>
+                            <li>בתוך Group, כל Partition נקרא רק על-ידי Consumer אחד</li>
+                            <li>מספר Consumers ≤ מספר Partitions (אחרת יש Consumers מיותרים)</li>
+                            <li>Kafka שומר את ה-Offset האחרון שכל Consumer קרא</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה - Consumer Group
+
+Topic: "events" (3 partitions)
+Consumer Group: "spark-app"
+├── Consumer 1 → Partition 0
+├── Consumer 2 → Partition 1
+└── Consumer 3 → Partition 2
+
+# אם יש רק 2 Consumers:
+├── Consumer 1 → Partition 0, 1
+└── Consumer 2 → Partition 2</div>
                 </div>
             </div>
 
@@ -1613,7 +2287,9 @@ spark.sql("SELECT * FROM my_table").show()</div>
 
                     <h3>Watermarking</h3>
                     <div class="info-box">
-                        <p><strong>Watermarking</strong> מאפשר לטפל ב-late data בצורה חכמה.</p>
+                        <h3>מהו Watermark?</h3>
+                        <p><strong>Watermarking</strong> מאפשר לטפל ב-late data (נתונים שמגיעים באיחור) בצורה חכמה.</p>
+                        <p>Watermark קובע: "אני מוכן לחכות עד X זמן לנתונים מאוחרים"</p>
                     </div>
 
                     <div class="code-block"># עם Watermarking
@@ -1625,7 +2301,118 @@ windowedCounts = df \
         window(col("timestamp"), "5 minutes"),
         col("word")
     ) \
-    .count()</div>
+    .count()
+
+# משמעות: חכה עד 10 דקות לנתונים מאוחרים
+# אחרי 10 דקות - השלך נתונים ישנים</div>
+
+                    <h3>Checkpoints</h3>
+                    <div class="warning-box">
+                        <h3>⚠️ חובה ב-Production!</h3>
+                        <p><strong>Checkpoint</strong> שומר את המצב של ה-Streaming application.</p>
+                        <p>מאפשר התאוששות לאחר כשל ללא אובדן נתונים!</p>
+                    </div>
+
+                    <div class="code-block"># Checkpoint נדרש ל-file sinks
+query = df \
+    .writeStream \
+    .format("parquet") \
+    .option("path", "/output/path") \
+    .option("checkpointLocation", "/checkpoint/path") \
+    .start()
+
+# Checkpoint שומר:
+# - Offsets שנקראו מ-Kafka
+# - Metadata של ה-stream
+# - State של aggregations</div>
+
+                    <h3>Triggers - שליטה בתדירות</h3>
+                    <div class="info-box">
+                        <p>Trigger קובע מתי Spark מעבד batch חדש של נתונים.</p>
+                    </div>
+
+                    <div class="code-block"># Default - micro-batches ברגע שיש נתונים
+query = df.writeStream.start()
+
+
+# ProcessingTime - כל X זמן
+query = df.writeStream \
+    .trigger(processingTime='10 seconds') \
+    .start()
+
+
+# Once - עבד batch אחד ועצור (לבדיקות)
+query = df.writeStream \
+    .trigger(once=True) \
+    .start()
+
+
+# Continuous - experimental, latency נמוך מאוד
+query = df.writeStream \
+    .trigger(continuous='1 second') \
+    .start()</div>
+
+                    <h3>ניטור Streaming Query</h3>
+                    <div class="code-block"># בדיקת סטטוס
+query.isActive  # True/False
+
+# מידע על ה-query
+query.status
+
+# הצגת progress אחרון
+query.lastProgress
+
+# המתנה לסיום
+query.awaitTermination()
+
+# עצירה
+query.stop()</div>
+
+                    <h3>Stateful Streaming - ניהול State</h3>
+                    <div class="info-box">
+                        <h3>מהו State?</h3>
+                        <p>State מאפשר לזכור מידע בין batches - לדוגמה, aggregations running.</p>
+                    </div>
+
+                    <div class="code-block"># דוגמה - running count per word
+wordCounts = words \
+    .groupBy("word") \
+    .count()  # State: שומר count עבור כל word
+
+# State נשמר ב-checkpoint!
+query = wordCounts \
+    .writeStream \
+    .outputMode("update") \
+    .option("checkpointLocation", "/checkpoint") \
+    .format("console") \
+    .start()</div>
+
+                    <div class="code-block"># mapGroupsWithState - custom state management
+from pyspark.sql.streaming import GroupState
+
+def update_state(key, values, state):
+    # key = המפתח שאנחנו מקבצים לפיו
+    # values = ערכים חדשים ב-batch הנוכחי
+    # state = ה-state הקודם
+
+    if state.exists:
+        old_count = state.get
+    else:
+        old_count = 0
+
+    new_count = old_count + sum(values)
+    state.update(new_count)
+
+    return (key, new_count)
+
+# שימוש
+result = df.groupByKey(lambda x: x.key) \
+           .mapGroupsWithState(update_state)</div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ State Size</h3>
+                        <p>State יכול לגדול מאוד! חשוב להשתמש ב-Watermarking כדי לנקות state ישן.</p>
+                    </div>
                 </div>
             </div>
 
@@ -1665,10 +2452,103 @@ windowedCounts = df \
                 <p style="color: var(--text-secondary); font-size: 1.05rem;">Spark UI, ביצועים וניהול</p>
             </div>
 
+            <!-- Spark Submit -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-orange)">●</span> Spark Submit</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>הרצת Spark Application</h3>
+                        <p><code>spark-submit</code> הוא הכלי להרצת יישומי Spark על Cluster.</p>
+                    </div>
+
+                    <div class="code-block"># תחביר בסיסי
+spark-submit \
+    --master yarn \
+    --deploy-mode cluster \
+    --executor-memory 4g \
+    --executor-cores 4 \
+    --num-executors 10 \
+    --driver-memory 2g \
+    --conf spark.sql.shuffle.partitions=200 \
+    my_application.py</div>
+
+                    <h3>אפשרויות חשובות</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🎯 --master</h4>
+                            <p>local[*] - מקומי</p>
+                            <p>yarn - YARN cluster</p>
+                            <p>spark://HOST:PORT - Standalone</p>
+                            <p>k8s://... - Kubernetes</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📍 --deploy-mode</h4>
+                            <p>client - Driver על המכונה המקומית</p>
+                            <p>cluster - Driver על ה-Cluster</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚙️ Resources</h4>
+                            <p>--executor-memory 4g</p>
+                            <p>--executor-cores 4</p>
+                            <p>--num-executors 10</p>
+                            <p>--driver-memory 2g</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📦 Dependencies</h4>
+                            <p>--jars - JAR files</p>
+                            <p>--packages - Maven coords</p>
+                            <p>--py-files - Python files</p>
+                        </div>
+                    </div>
+
+                    <div class="code-block"># דוגמה מלאה עם dependencies
+spark-submit \
+    --master yarn \
+    --deploy-mode cluster \
+    --executor-memory 8g \
+    --executor-cores 4 \
+    --num-executors 20 \
+    --driver-memory 4g \
+    --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.0 \
+    --py-files utils.zip,helpers.py \
+    --conf spark.sql.shuffle.partitions=400 \
+    --conf spark.executor.memoryOverhead=2g \
+    --conf spark.dynamicAllocation.enabled=true \
+    --conf spark.shuffle.service.enabled=true \
+    --name "MySparkApp" \
+    app.py arg1 arg2</div>
+
+                    <div class="code-block"># Python - קבלת arguments
+import sys
+
+if __name__ == "__main__":
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+
+    spark = SparkSession.builder.getOrCreate()
+    # ... rest of code</div>
+
+                    <h3>Dynamic Allocation</h3>
+                    <div class="success-box">
+                        <h3>✅ מומלץ!</h3>
+                        <p>Dynamic Allocation מאפשר ל-Spark להוסיף/להסיר Executors דינמית לפי העומס.</p>
+                    </div>
+
+                    <div class="code-block"># הפעלת Dynamic Allocation
+--conf spark.dynamicAllocation.enabled=true
+--conf spark.shuffle.service.enabled=true
+--conf spark.dynamicAllocation.minExecutors=2
+--conf spark.dynamicAllocation.maxExecutors=50
+--conf spark.dynamicAllocation.initialExecutors=10</div>
+                </div>
+            </div>
+
             <!-- Spark UI -->
             <div class="content-card">
                 <div class="card-header">
-                    <h2><span style="color:var(--spark-orange)">●</span> Spark UI</h2>
+                    <h2><span style="color:var(--spark-blue)">●</span> Spark UI</h2>
                 </div>
                 <div class="card-body">
                     <div class="info-box">
@@ -1794,10 +2674,90 @@ spark = SparkSession.builder \
     .getOrCreate()</div>
 
                     <h3>Broadcast Join</h3>
+                    <div class="info-box">
+                        <p>אם טבלה אחת קטנה מספיק (< 10MB), השתמש ב-Broadcast Join.</p>
+                        <p>זה מונע Shuffle יקר!</p>
+                    </div>
+
                     <div class="code-block"># אם טבלה אחת קטנה (< 10MB)
 from pyspark.sql.functions import broadcast
 
-result = large_df.join(broadcast(small_df), "id")</div>
+result = large_df.join(broadcast(small_df), "id")
+
+# Spark יעתיק את small_df לכל Executor
+# במקום לעשות Shuffle על large_df!</div>
+
+                    <h3>פורמט Parquet עם Partitioning</h3>
+                    <div class="success-box">
+                        <h3>✅ Best Practice</h3>
+                        <p>שמור נתונים ב-Parquet עם partitioning לפי עמודות נפוצות (תאריך, אזור, וכו')</p>
+                    </div>
+
+                    <div class="code-block"># כתיבה עם partitioning
+df.write \
+    .partitionBy("year", "month", "day") \
+    .mode("overwrite") \
+    .parquet("/data/output")
+
+# מבנה התיקיות:
+# /data/output/
+#   year=2023/
+#     month=01/
+#       day=01/
+#         part-00000.parquet
+#       day=02/
+#         part-00000.parquet
+
+# קריאה עם partition pruning
+df = spark.read.parquet("/data/output")
+result = df.filter("year = 2023 AND month = 1")
+# Spark יקרא רק את הקבצים הרלוונטיים!</div>
+
+                    <h3>רשימת Best Practices</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>✅ DO</h4>
+                            <p>• השתמש ב-Parquet</p>
+                            <p>• Cache נתונים שנמשכים</p>
+                            <p>• Filter מוקדם</p>
+                            <p>• Broadcast joins קטנים</p>
+                            <p>• reduceByKey במקום groupByKey</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>❌ DON'T</h4>
+                            <p>• collect() על נתונים גדולים</p>
+                            <p>• groupByKey בלי צורך</p>
+                            <p>• CSV לפרודקשן</p>
+                            <p>• Partitions קטנים מדי/גדולים מדי</p>
+                            <p>• UDFs ללא צורך</p>
+                        </div>
+                    </div>
+
+                    <h3>טיפים נוספים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>filter לפני join</strong> - הקטן את הנתונים לפני פעולות יקרות</li>
+                            <li><strong>select רק עמודות נדרשות</strong> - Column Pruning</li>
+                            <li><strong>repartition לפני כתיבה</strong> - מספר קבצים סביר</li>
+                            <li><strong>coalesce במקום repartition</strong> - אם רק מקטינים partitions</li>
+                            <li><strong>persist() עם storage level מתאים</strong> - לפי צרכי הזיכרון</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה לקוד מאופטם
+result = spark.read.parquet("/data/large_table") \
+    .select("id", "name", "amount", "date") \  # רק עמודות נדרשות
+    .filter(col("date") >= "2023-01-01") \      # סינון מוקדם
+    .join(                                       # join לאחר filter
+        broadcast(small_lookup),                 # broadcast לטבלה קטנה
+        "id"
+    ) \
+    .groupBy("name") \
+    .agg(sum("amount").alias("total")) \
+    .cache()                                     # cache אם נשתמש שוב
+
+# כתיבה עם repartition
+result.coalesce(10).write.parquet("/output")</div>
                 </div>
             </div>
 
@@ -1844,10 +2804,21 @@ log4j.appender.userAppender.layout.ConversionPattern=[%p] %d %c - %m%n</div>
                     <div class="success-box">
                         <h3>✅ Best Practices</h3>
                         <ul>
-                            <li>Rolling logs למניעת קבצים ענקיים</li>
+                            <li>Rolling logs למניעת קבצים ענקיים (קריטי!)</li>
                             <li>הפרדה בין Application logs ו-Spark logs</li>
-                            <li>שמירת רק מידע רלוונטי</li>
-                            <li>קריטי ב-Streaming applications!</li>
+                            <li>שמירת רק מידע רלוונטי - לא DEBUG בפרודקשן</li>
+                            <li>קריטי ב-Streaming applications - logs צומחים מהר!</li>
+                            <li>שימוש ב-log retention policies - מחיקה אוטומטית של logs ישנים</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ נקודות חשובות</h3>
+                        <ul>
+                            <li><strong>Write to bigger file takes longer</strong> - קבצים גדולים = כתיבה איטית</li>
+                            <li><strong>Rolling options:</strong> לפי גודל או זמן</li>
+                            <li><strong>Set back files to store</strong> - כמה קבצים ישנים לשמור</li>
+                            <li><strong>Avoid huge files</strong> - יכול לגרום לבעיות ביצועים</li>
                         </ul>
                     </div>
 
@@ -1993,8 +2964,439 @@ from pyspark.sql import SparkSession
 
 spark = SparkSession.builder.getOrCreate()
 df = spark.read.json("file.json")</div>
+
+                    <h3>SQLContext vs HiveContext (Spark 1.x)</h3>
+                    <div class="info-box">
+                        <p>ב-Spark 1.x היו שני contexts נפרדים:</p>
+                        <ul>
+                            <li><strong>SQLContext</strong> - פונקציונליות SQL בסיסית</li>
+                            <li><strong>HiveContext</strong> - SQLContext + תמיכה ב-Hive (Window functions, UDAFs)</li>
+                        </ul>
+                        <p>ב-Spark 2.x, SparkSession כולל את כל הפונקציונליות!</p>
+                    </div>
+
+                    <div class="code-block"># Spark 1.x - HiveContext
+from pyspark.sql import HiveContext
+
+hiveContext = HiveContext(sc)
+df = hiveContext.sql("SELECT * FROM hive_table")
+
+
+# Spark 2.x - הכל ב-SparkSession
+spark = SparkSession.builder \
+    .enableHiveSupport() \
+    .getOrCreate()
+
+df = spark.sql("SELECT * FROM hive_table")</div>
+
+                    <div class="success-box">
+                        <h3>✅ יתרונות Spark 2.x</h3>
+                        <ul>
+                            <li><strong>API מאוחד</strong> - SparkSession במקום מספר contexts</li>
+                            <li><strong>Structured Streaming</strong> - API חדש לזמן אמת</li>
+                            <li><strong>Tungsten Phase 2</strong> - Whole-stage code generation</li>
+                            <li><strong>Native CSV/JSON</strong> - תמיכה מובנית</li>
+                            <li><strong>Vectorized Parquet</strong> - קריאה מהירה יותר</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+
+            <!-- Tungsten -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-green)">●</span> Project Tungsten</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהו Tungsten?</h3>
+                        <p><strong>Project Tungsten</strong> הוא מנוע הביצוע המשודרג של Spark.</p>
+                        <p>שיפורים משמעותיים בניהול זיכרון וביצועי CPU.</p>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>💾 Memory Management</h4>
+                            <p>ניהול זיכרון off-heap ידני</p>
+                            <p>פחות Garbage Collection</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ Cache-aware</h4>
+                            <p>מבנה נתונים מותאם לCache</p>
+                            <p>גישה רציפה לזיכרון</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔧 Code Generation</h4>
+                            <p>Whole-stage codegen</p>
+                            <p>קוד ממוטם בזמן ריצה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Binary Format</h4>
+                            <p>פורמט בינארי קומפקטי</p>
+                            <p>פחות overhead</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>Whole-Stage Code Generation</h3>
+                        <p>Tungsten יוצר קוד Java ממוטם עבור כל ה-pipeline!</p>
+                        <p>במקום לקרוא לפונקציות וירטואליות עבור כל שורה, הוא יוצר קוד אחד יעיל.</p>
+                    </div>
+
+                    <div class="code-block"># דוגמה - Spark יוצר קוד ממוטם עבור:
+df.filter(col("age") > 25) \
+  .select("name", "age") \
+  .groupBy("name").count()
+
+# במקום:
+# for each row:
+#   if filter(row):
+#     row = select(row)
+#     aggregate(row)
+
+# Tungsten יוצר:
+# for each row:
+#   if row.age > 25:
+#     count[row.name]++
+
+# הכל בלולאה אחת - מהיר הרבה יותר!</div>
+
+                    <div class="warning-box">
+                        <h3>💡 טיפ</h3>
+                        <p>Tungsten עובד אוטומטית! אין צורך בשינויים בקוד.</p>
+                        <p>ניתן לראות את הקוד שנוצר עם: <code>df.explain(mode="codegen")</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === EXERCISES VIEW === -->
+    <div id="view-exercises" class="view-section">
+        <div class="exercise-list">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">📝 תרגילים מעשיים</h1>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">תרגלו את הנושאים שלמדתם</p>
+            </div>
+
+            <!-- Exercise 1 - RDD Basics -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 1</div>
+                    <div class="ex-title">RDD - ספירת מילים (Word Count)</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> קרא קובץ טקסט וספור כמה פעמים כל מילה מופיעה.</p>
+                    <ul>
+                        <li>קרא קובץ טקסט באמצעות <code>sc.textFile()</code></li>
+                        <li>פצל כל שורה למילים</li>
+                        <li>המר כל מילה ל-(word, 1)</li>
+                        <li>צמצם לפי מפתח לספירת המילים</li>
+                        <li>הצג את 10 המילים הנפוצות ביותר</li>
+                    </ul>
+                    <div class="code-block"># פתרון
+lines = sc.textFile("/path/to/file.txt")
+
+words = lines.flatMap(lambda line: line.split())
+
+word_pairs = words.map(lambda word: (word.lower(), 1))
+
+word_counts = word_pairs.reduceByKey(lambda a, b: a + b)
+
+top_10 = word_counts.sortBy(lambda x: x[1], ascending=False).take(10)
+
+for word, count in top_10:
+    print(f"{word}: {count}")</div>
+                </div>
+            </div>
+
+            <!-- Exercise 2 - DataFrame Operations -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 2</div>
+                    <div class="ex-title">DataFrame - ניתוח נתוני מכירות</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> נתח נתוני מכירות מקובץ CSV.</p>
+                    <ul>
+                        <li>קרא קובץ CSV עם עמודות: product, category, price, quantity, date</li>
+                        <li>סנן רק מכירות מ-2023</li>
+                        <li>הוסף עמודה: total_price = price * quantity</li>
+                        <li>מצא את סך המכירות לפי קטגוריה</li>
+                        <li>מיין לפי סך מכירות (יורד)</li>
+                    </ul>
+                    <div class="code-block"># פתרון
+from pyspark.sql.functions import col, year, sum as _sum
+
+# קריאת הנתונים
+df = spark.read.csv("/path/to/sales.csv", header=True, inferSchema=True)
+
+# סינון ל-2023
+df_2023 = df.filter(year(col("date")) == 2023)
+
+# הוספת total_price
+df_with_total = df_2023.withColumn("total_price", col("price") * col("quantity"))
+
+# קיבוץ לפי קטגוריה
+sales_by_category = df_with_total.groupBy("category") \
+    .agg(_sum("total_price").alias("total_sales"))
+
+# מיון
+result = sales_by_category.orderBy(col("total_sales").desc())
+
+result.show()</div>
+                </div>
+            </div>
+
+            <!-- Exercise 3 - Joins -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 3</div>
+                    <div class="ex-title">Joins - חיבור טבלאות</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> חבר בין טבלת משתמשים לטבלת הזמנות.</p>
+                    <ul>
+                        <li>טבלה 1: users (id, name, city)</li>
+                        <li>טבלה 2: orders (order_id, user_id, amount)</li>
+                        <li>חבר את הטבלאות</li>
+                        <li>חשב סך הזמנות לכל משתמש</li>
+                        <li>הצג משתמשים ללא הזמנות (אם יש)</li>
+                    </ul>
+                    <div class="code-block"># פתרון
+from pyspark.sql.functions import sum, coalesce
+
+users = spark.createDataFrame([
+    (1, "Alice", "Tel Aviv"),
+    (2, "Bob", "Haifa"),
+    (3, "Charlie", "Jerusalem")
+], ["id", "name", "city"])
+
+orders = spark.createDataFrame([
+    (101, 1, 100),
+    (102, 1, 200),
+    (103, 2, 150)
+], ["order_id", "user_id", "amount"])
+
+# Left Join - כולל משתמשים ללא הזמנות
+result = users.join(orders, users.id == orders.user_id, "left")
+
+# קיבוץ וסיכום
+from pyspark.sql.functions import lit
+
+user_totals = result.groupBy("id", "name", "city") \
+    .agg(
+        coalesce(sum("amount"), lit(0)).alias("total_orders")
+    )
+
+user_totals.show()
+
+# משתמשים ללא הזמנות
+no_orders = user_totals.filter(col("total_orders") == 0)
+no_orders.show()</div>
+                </div>
+            </div>
+
+            <!-- Exercise 4 - Window Functions -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 4</div>
+                    <div class="ex-title">Window Functions - דירוג עובדים</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> דרג עובדים לפי משכורת בכל מחלקה.</p>
+                    <ul>
+                        <li>טבלה: employees (name, department, salary)</li>
+                        <li>הוסף עמודת rank לפי משכורת בכל מחלקה</li>
+                        <li>מצא את 3 המשכורות הגבוהות בכל מחלקה</li>
+                        <li>חשב משכורת ממוצעת per מחלקה והוסף כעמודה</li>
+                    </ul>
+                    <div class="code-block"># פתרון
+from pyspark.sql.window import Window
+from pyspark.sql.functions import rank, avg
+
+employees = spark.createDataFrame([
+    ("Alice", "Engineering", 120000),
+    ("Bob", "Engineering", 110000),
+    ("Charlie", "Engineering", 105000),
+    ("David", "Sales", 90000),
+    ("Eve", "Sales", 95000)
+], ["name", "department", "salary"])
+
+# הגדרת window
+window_spec = Window.partitionBy("department").orderBy(col("salary").desc())
+
+# הוספת rank
+ranked = employees.withColumn("rank", rank().over(window_spec))
+
+# Top 3 per department
+top_3 = ranked.filter(col("rank") <= 3)
+
+# משכורת ממוצעת per department
+window_spec2 = Window.partitionBy("department")
+with_avg = top_3.withColumn("dept_avg_salary", avg("salary").over(window_spec2))
+
+with_avg.show()</div>
+                </div>
+            </div>
+
+            <!-- Exercise 5 - Streaming -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 5</div>
+                    <div class="ex-title">Structured Streaming - ספירה בזמן אמת</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> ספור הודעות בזמן אמת מ-Kafka.</p>
+                    <ul>
+                        <li>קרא stream מ-Kafka topic</li>
+                        <li>המר את value ל-string</li>
+                        <li>פצל למילים וספור</li>
+                        <li>כתוב לconsole עם update mode</li>
+                        <li>הוסף checkpoint</li>
+                    </ul>
+                    <div class="code-block"># פתרון
+from pyspark.sql.functions import explode, split
+
+# קריאה מ-Kafka
+df = spark.readStream \
+    .format("kafka") \
+    .option("kafka.bootstrap.servers", "localhost:9092") \
+    .option("subscribe", "messages") \
+    .load()
+
+# המרה ל-string
+lines = df.selectExpr("CAST(value AS STRING)")
+
+# פיצול וספירה
+words = lines.select(explode(split(col("value"), " ")).alias("word"))
+word_counts = words.groupBy("word").count()
+
+# כתיבה לconsole
+query = word_counts.writeStream \
+    .outputMode("update") \
+    .format("console") \
+    .option("checkpointLocation", "/tmp/checkpoint") \
+    .start()
+
+query.awaitTermination()</div>
+                </div>
+            </div>
+
+            <!-- Exercise 6 - Optimization -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 6</div>
+                    <div class="ex-title">אופטימיזציה - שיפור ביצועים</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> אופטם את הקוד הבא:</p>
+                    <div class="code-block"># קוד לא מאופטם
+large_df = spark.read.csv("/data/large.csv")
+small_df = spark.read.csv("/data/small.csv")
+
+result = large_df.join(small_df, "id") \
+    .filter(col("date") >= "2023-01-01") \
+    .select("*") \
+    .groupBy("category").count()
+
+result.show()
+result.show()  # שימוש חוזר</div>
+
+                    <p><strong>בעיות:</strong></p>
+                    <ul>
+                        <li>❌ Join לפני filter</li>
+                        <li>❌ Select של כל העמודות</li>
+                        <li>❌ אין cache לשימוש חוזר</li>
+                        <li>❌ לא משתמש ב-broadcast לטבלה קטנה</li>
+                    </ul>
+
+                    <div class="code-block"># פתרון מאופטם
+from pyspark.sql.functions import broadcast
+
+# קריאה + filter מיד
+large_df = spark.read.csv("/data/large.csv") \
+    .filter(col("date") >= "2023-01-01") \
+    .select("id", "category", "date")  # רק עמודות נדרשות
+
+small_df = spark.read.csv("/data/small.csv")
+
+# Broadcast join
+result = large_df.join(broadcast(small_df), "id") \
+    .groupBy("category").count() \
+    .cache()  # cache לשימוש חוזר
+
+result.show()
+result.show()  # פעם שנייה מהירה!</div>
+                </div>
+            </div>
+
+            <!-- Exercise 7 - UDFs -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div class="ex-number">תרגיל 7</div>
+                    <div class="ex-title">UDF - קטגוריזציה מותאמת אישית</div>
+                </div>
+                <div class="ex-content">
+                    <p><strong>משימה:</strong> צור UDF לקטגוריזציה של ציונים.</p>
+                    <ul>
+                        <li>90-100: Excellent</li>
+                        <li>80-89: Good</li>
+                        <li>70-79: Average</li>
+                        <li>מתחת ל-70: Need Improvement</li>
+                    </ul>
+                    <div class="code-block"># פתרון
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+
+# הגדרת UDF
+@udf(returnType=StringType())
+def grade_category(score):
+    if score >= 90:
+        return "Excellent"
+    elif score >= 80:
+        return "Good"
+    elif score >= 70:
+        return "Average"
+    else:
+        return "Need Improvement"
+
+# נתוני דוגמה
+students = spark.createDataFrame([
+    ("Alice", 95),
+    ("Bob", 85),
+    ("Charlie", 75),
+    ("David", 65)
+], ["name", "score"])
+
+# שימוש ב-UDF
+result = students.withColumn("grade", grade_category(col("score")))
+result.show()</div>
+
+                    <p><strong>בונוס:</strong> המר ל-Pandas UDF לביצועים טובים יותר!</p>
+                    <div class="code-block"># Pandas UDF - יעיל יותר!
+from pyspark.sql.functions import pandas_udf
+import pandas as pd
+
+@pandas_udf("string")
+def grade_category_pandas(scores: pd.Series) -> pd.Series:
+    def categorize(score):
+        if score >= 90:
+            return "Excellent"
+        elif score >= 80:
+            return "Good"
+        elif score >= 70:
+            return "Average"
+        else:
+            return "Need Improvement"
+
+    return scores.apply(categorize)
+
+result = students.withColumn("grade", grade_category_pandas(col("score")))
+result.show()</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
