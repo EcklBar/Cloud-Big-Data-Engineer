@@ -505,6 +505,140 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 5px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            --bg-body: #1a1c20;
+            --bg-surface: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #4a5568;
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .content-card {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .card-header {
+            background: linear-gradient(to left, #2d3748, #374151);
+        }
+
+        body.dark-mode .code-block {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        body.dark-mode .info-box {
+            background: rgba(30, 136, 229, 0.15);
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(226, 90, 28, 0.15);
+        }
+
+        body.dark-mode .theory-sidebar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .theory-nav-item:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .theory-nav-item.active {
+            background: rgba(226, 90, 28, 0.2);
+        }
+
+        body.dark-mode .exercise-card {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchBar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchInput {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        /* === SEARCH RESULTS === */
+        .search-result-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-right: 4px solid var(--spark-orange);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-result-item:hover {
+            background: #e9ecef;
+            transform: translateX(-4px);
+        }
+
+        body.dark-mode .search-result-item {
+            background: #374151;
+        }
+
+        body.dark-mode .search-result-item:hover {
+            background: #4b5563;
+        }
+
+        .search-highlight {
+            background: #ffd700;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--spark-orange), #FFB74D);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(226, 90, 28, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(76, 175, 80, 0.1);
+            border-right: 4px solid var(--spark-green);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -525,11 +659,29 @@
         <div class="nav-item" onclick="switchView('dataframes', this)">📊 DataFrames & SQL</div>
         <div class="nav-item" onclick="switchView('streaming', this)">🌊 Streaming</div>
         <div class="nav-item" onclick="switchView('advanced', this)">⚙️ מתקדם</div>
+        <div class="nav-item" onclick="switchView('troubleshooting', this)">🔧 פתרון בעיות</div>
+        <div class="nav-item" onclick="switchView('bestpractices', this)">⭐ Best Practices</div>
         <div class="nav-item" onclick="switchView('exercises', this)">📝 תרגילים</div>
     </div>
 
-    <div style="width: 80px;"></div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+            🌙 מצב לילה
+        </button>
+        <button onclick="toggleSearch()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+            🔍 חיפוש
+        </button>
+    </div>
 </header>
+
+<!-- Search Bar -->
+<div id="searchBar" style="display: none; background: white; padding: 20px 40px; border-bottom: 2px solid var(--border-color); box-shadow: var(--shadow-md);">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+        <input type="text" id="searchInput" placeholder="חפש פקודות, פונקציות, או נושאים..." style="flex: 1; padding: 12px 20px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: 'Heebo', sans-serif;" oninput="performSearch(this.value)">
+        <button onclick="toggleSearch()" style="padding: 12px 24px; background: var(--spark-orange); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">סגור</button>
+    </div>
+    <div id="searchResults" style="max-width: 800px; margin: 15px auto 0; max-height: 400px; overflow-y: auto;"></div>
+</div>
 
 <div class="main-wrapper">
 
@@ -3843,6 +3995,500 @@ df.filter(col("age") > 25) \
         </div>
     </div>
 
+    <!-- === TROUBLESHOOTING VIEW === -->
+    <div id="view-troubleshooting" class="view-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">🔧 מדריך פתרון בעיות</h1>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">פתרונות לבעיות נפוצות ב-Spark</p>
+            </div>
+
+            <!-- Error 1: Out of Memory -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-red)">❌</span> Out of Memory Errors</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>שגיאות נפוצות:</h3>
+                        <code style="display: block; background: #2d2d2d; color: #ff6b6b; padding: 10px; border-radius: 4px; margin: 10px 0; direction: ltr; text-align: left;">
+Container [pid=12345] is running beyond physical memory limits.<br>
+Current usage: 1.6 GB of 1.4 GB physical memory used.<br>
+Killing container.
+                        </code>
+                        <code style="display: block; background: #2d2d2d; color: #ff6b6b; padding: 10px; border-radius: 4px; margin: 10px 0; direction: ltr; text-align: left;">
+java.lang.OutOfMemoryError: GC overhead limit exceeded
+                        </code>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <h4>1. הגדלת Executor Memory</h4>
+                        <div class="code-block">spark-submit \
+    --executor-memory 8g \
+    --driver-memory 4g \
+    --executor-cores 4 \
+    my_app.py</div>
+
+                        <h4>2. הקטנת Executor Cores (פחות tasks במקביל)</h4>
+                        <div class="code-block">spark-submit \
+    --executor-cores 2 \  # במקום 4-5
+    --executor-memory 4g \
+    my_app.py</div>
+
+                        <h4>3. הגדלת מספר Partitions</h4>
+                        <div class="code-block"># יותר partitions = פחות נתונים per task
+spark.conf.set("spark.sql.shuffle.partitions", "400")  # default: 200
+
+# או
+df = df.repartition(400)</div>
+
+                        <h4>4. השתמש ב-Memory-Efficient Transformations</h4>
+                        <div class="code-block"># ❌ גרוע - מביא הכל ל-Driver
+data = df.collect()
+
+# ✅ טוב - עיבוד ב-Cluster
+df.write.parquet("/output")
+
+# ❌ גרוע - groupByKey
+rdd.groupByKey().mapValues(sum)
+
+# ✅ טוב - reduceByKey (local aggregation)
+rdd.reduceByKey(lambda a,b: a+b)</div>
+
+                        <h4>5. Memory Overhead</h4>
+                        <div class="code-block">spark-submit \
+    --conf spark.executor.memoryOverhead=2g \
+    --executor-memory 6g \
+    my_app.py</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error 2: Slow Performance -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-orange)">🐌</span> ביצועים איטיים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>תסמינים:</h3>
+                        <ul>
+                            <li>Job לוקח שעות במקום דקות</li>
+                            <li>רוב ה-Tasks מסתיימים מהר, אבל כמה Tasks לוקחים נצח</li>
+                            <li>Shuffle Write/Read גבוה מאוד ב-Spark UI</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <h4>1. Data Skew - חלוקה לא אחידה</h4>
+                        <div class="code-block"># בדיקה - האם יש מפתח עם הרבה ערכים?
+df.groupBy("key").count().orderBy(col("count").desc()).show()
+
+# פתרון: Salting
+from pyspark.sql.functions import rand, concat
+
+df_salted = df.withColumn("salted_key",
+    concat(col("key"), lit("_"), (rand() * 10).cast("int")))
+
+result = df_salted.groupBy("salted_key").agg(...)
+
+# הסרת salt
+final = result.withColumn("key", split(col("salted_key"), "_")[0]) \
+              .groupBy("key").agg(...)</div>
+
+                        <h4>2. Shuffle Optimization</h4>
+                        <div class="code-block"># הקטנת Shuffle
+# ✅ filter לפני join
+df1.filter(col("date") > "2023-01-01").join(df2, "id")
+
+# ✅ Broadcast join לטבלאות קטנות
+from pyspark.sql.functions import broadcast
+large_df.join(broadcast(small_df), "id")
+
+# ✅ Partition pruning עם Parquet
+df.write.partitionBy("year", "month").parquet("/data")
+# קריאה רק של נתונים רלוונטיים
+spark.read.parquet("/data").filter("year=2023 AND month=12")</div>
+
+                        <h4>3. Caching נכון</h4>
+                        <div class="code-block"># cache נתונים שנמשכים יותר מפעם אחת
+df_cached = df.filter(...).cache()
+
+df_cached.count()  # מפעיל את ה-cache
+df_cached.show()   # מהיר!
+df_cached.write.parquet("/output")  # מהיר!
+
+# ניקוי בסוף
+df_cached.unpersist()</div>
+
+                        <h4>4. AQE - Adaptive Query Execution (Spark 3.0+)</h4>
+                        <div class="code-block">spark.conf.set("spark.sql.adaptive.enabled", "true")
+spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")
+spark.conf.set("spark.sql.adaptive.skewJoin.enabled", "true")</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error 3: Connection Timeout -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-purple)">⏱️</span> Connection Timeout</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>שגיאות:</h3>
+                        <code style="display: block; background: #2d2d2d; color: #ff6b6b; padding: 10px; border-radius: 4px; margin: 10px 0; direction: ltr; text-align: left;">
+java.util.concurrent.TimeoutException: Futures timed out after [120 seconds]
+                        </code>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <div class="code-block"># הגדלת Timeouts
+spark.conf.set("spark.network.timeout", "600s")  # default: 120s
+spark.conf.set("spark.executor.heartbeatInterval", "60s")
+spark.conf.set("spark.sql.broadcastTimeout", "600")  # Broadcast timeout</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error 4: File Not Found -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-blue)">📁</span> File Not Found / Permission Denied</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>שגיאות:</h3>
+                        <code style="display: block; background: #2d2d2d; color: #ff6b6b; padding: 10px; border-radius: 4px; margin: 10px 0; direction: ltr; text-align: left;">
+org.apache.hadoop.mapred.InvalidInputException: Input path does not exist
+                        </code>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <div class="code-block"># בדיקת קיום הקובץ
+from pyspark.sql.utils import AnalysisException
+
+try:
+    df = spark.read.parquet("/path/to/data")
+except AnalysisException as e:
+    print(f"File not found: {e}")
+
+# קריאה עם אפשרות לקבצים חסרים
+df = spark.read.option("pathGlobFilter", "*.parquet") \
+               .option("recursiveFileLookup", "true") \
+               .parquet("/path/to/data")
+
+# בדיקת הרשאות
+# וודא ש-HDFS/S3 permissions נכונים
+# hdfs dfs -ls /path/to/data
+# hdfs dfs -chmod 755 /path/to/data</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error 5: Spark UI / Debug -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-green)">🔍</span> איך לנפות באגים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>Spark UI - http://localhost:4040</h3>
+                        <h4>1. Jobs Tab</h4>
+                        <ul>
+                            <li>בדוק איזה Job לוקח הכי הרבה זמן</li>
+                            <li>לחץ על Job כדי לראות Stages</li>
+                        </ul>
+
+                        <h4>2. Stages Tab</h4>
+                        <ul>
+                            <li>בדוק Duration - איזה Stage איטי?</li>
+                            <li>Shuffle Read/Write - גבוה = בעיה!</li>
+                            <li>Tasks - האם יש Tasks שלוקחים הרבה יותר זמן? → Data Skew</li>
+                        </ul>
+
+                        <h4>3. Storage Tab</h4>
+                        <ul>
+                            <li>בדוק RDDs/DataFrames שב-cache</li>
+                            <li>Size in Memory - האם מתאים ל-Executor Memory?</li>
+                        </ul>
+
+                        <h4>4. Executors Tab</h4>
+                        <ul>
+                            <li>GC Time - גבוה? → הגדל Executor Memory</li>
+                            <li>Shuffle Read/Write - לא מאוזן? → Data Skew</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># הצגת Execution Plan
+df.explain(True)  # Logical + Physical + Optimized
+
+# Output:
+# == Parsed Logical Plan ==
+# == Analyzed Logical Plan ==
+# == Optimized Logical Plan ==
+# == Physical Plan ==</div>
+
+                    <div class="success-box">
+                        <h3>💡 Debug Checklist</h3>
+                        <ol>
+                            <li>✅ בדוק Spark UI - איפה הזמן הולך?</li>
+                            <li>✅ explain() - האם יש Shuffle מיותר?</li>
+                            <li>✅ בדוק Data Skew - groupBy("key").count()</li>
+                            <li>✅ בדוק Memory - GC Time ב-Executors Tab</li>
+                            <li>✅ בדוק Partitions - getNumPartitions()</li>
+                            <li>✅ בדוק Logs - YARN/Spark logs</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === BEST PRACTICES VIEW === -->
+    <div id="view-bestpractices" class="view-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">⭐ Best Practices</h1>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">עקרונות ושיטות עבודה מומלצות</p>
+            </div>
+
+            <!-- Data Formats -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-orange)">💾</span> פורמטים וקבצים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="success-box">
+                        <h3>✅ DO - השתמש ב-Parquet</h3>
+                        <ul>
+                            <li><strong>Parquet = ברירת מחדל!</strong> - מהיר פי 10-100 מ-CSV</li>
+                            <li>Columnar format - קריאה רק של עמודות נדרשות</li>
+                            <li>דחיסה מעולה - חוסך מקום ורוחב פס</li>
+                            <li>Schema מובנה - לא צריך inferSchema</li>
+                        </ul>
+                        <div class="code-block"># ✅ Write Parquet with Partitioning
+df.write \
+    .partitionBy("year", "month", "day") \
+    .mode("overwrite") \
+    .parquet("/data/output")
+
+# ✅ Read Parquet - רק נתונים רלוונטיים!
+df = spark.read.parquet("/data/output") \
+          .filter("year=2023 AND month=12")</div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>❌ DON'T - אל תשתמש ב-CSV בפרודקשן</h3>
+                        <ul>
+                            <li>איטי מאוד</li>
+                            <li>גדול (לא דחוס)</li>
+                            <li>צריך inferSchema או schema ידני</li>
+                            <li>בעיות עם encoding, delimiters, quotes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-blue)">⚡</span> ביצועים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>✅ Filter מוקדם</h4>
+                            <p>סנן נתונים מיד אחרי קריאה</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;"># ✅ טוב
+df.filter("date > '2023-01-01'") \
+  .join(df2, "id")</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>✅ Select רק עמודות נדרשות</h4>
+                            <p>Column Pruning</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;"># ✅ טוב
+df.select("id", "name", "age")</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>✅ Broadcast Join</h4>
+                            <p>לטבלאות < 10MB</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;"># ✅ טוב
+broadcast(small_df)</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>✅ reduceByKey</h4>
+                            <p>במקום groupByKey</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;"># ✅ טוב
+reduceByKey(add)</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>✅ Cache בחכמה</h4>
+                            <p>רק נתונים שנמשכים</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;"># ✅ טוב
+df.cache()
+df.count()  # materialize</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <h4>❌ אל תעשה collect()</h4>
+                            <p>על נתונים גדולים!</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;"># ❌ גרוע
+big_df.collect()</div>
+                        </div>
+                    </div>
+
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h3>🎯 Golden Rules</h3>
+                        <ol>
+                            <li><strong>Push Down</strong> - filter/select מוקדם ככל האפשר</li>
+                            <li><strong>Avoid Shuffle</strong> - broadcast, partitionBy, coalesce</li>
+                            <li><strong>Cache Smart</strong> - רק נתונים שנמשכים 2+ פעמים</li>
+                            <li><strong>Right Partitions</strong> - 2-4 partitions לכל core</li>
+                            <li><strong>Parquet Always</strong> - לא CSV!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Quality -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-green)">📝</span> איכות קוד</h2>
+                </div>
+                <div class="card-body">
+                    <div class="code-block"># ✅ קוד נקי וקריא
+
+from pyspark.sql.functions import col, avg, count
+from pyspark.sql import SparkSession
+
+# 1. הגדרות ברורות
+spark = SparkSession.builder \
+    .appName("User Analytics") \
+    .config("spark.sql.shuffle.partitions", "200") \
+    .getOrCreate()
+
+# 2. קריאה + validation
+df = spark.read.parquet("/data/users") \
+          .filter(col("created_at").isNotNull())
+
+# 3. טרנספורמציות עם שמות משתנים ברורים
+active_users = df.filter(col("status") == "active")
+
+user_stats = active_users.groupBy("country") \
+    .agg(
+        count("*").alias("total_users"),
+        avg("age").alias("avg_age")
+    )
+
+# 4. שמירה עם partitioning
+user_stats.write \
+    .partitionBy("country") \
+    .mode("overwrite") \
+    .parquet("/output/user_stats")
+
+# 5. Cleanup
+spark.stop()</div>
+
+                    <div class="info-box">
+                        <h3>💡 עקרונות</h3>
+                        <ul>
+                            <li>✅ שמות משתנים תיאוריים</li>
+                            <li>✅ הערות למה, לא מה</li>
+                            <li>✅ Error handling</li>
+                            <li>✅ Logging</li>
+                            <li>✅ Configuration מרכזית</li>
+                            <li>✅ Unit tests</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Management -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-purple)">🎛️</span> ניהול משאבים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="success-box">
+                        <h3>הגדרות מומלצות</h3>
+                        <div class="code-block">spark-submit \
+    --master yarn \
+    --deploy-mode cluster \
+    \
+    # Memory Settings
+    --executor-memory 8g \
+    --driver-memory 4g \
+    --executor-cores 4 \
+    --num-executors 10 \
+    \
+    # Dynamic Allocation (מומלץ!)
+    --conf spark.dynamicAllocation.enabled=true \
+    --conf spark.shuffle.service.enabled=true \
+    --conf spark.dynamicAllocation.minExecutors=2 \
+    --conf spark.dynamicAllocation.maxExecutors=50 \
+    \
+    # Performance
+    --conf spark.sql.shuffle.partitions=200 \
+    --conf spark.sql.adaptive.enabled=true \
+    --conf spark.sql.adaptive.coalescePartitions.enabled=true \
+    \
+    # Memory Overhead
+    --conf spark.executor.memoryOverhead=2g \
+    \
+    my_app.py</div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>⚖️ איך לבחור Executor Size?</h3>
+                        <ul>
+                            <li><strong>Executor Memory:</strong> 4-8GB (לא יותר מ-16GB)</li>
+                            <li><strong>Executor Cores:</strong> 4-5 cores (לא יותר!)</li>
+                            <li><strong>Num Executors:</strong> תלוי בגודל Cluster</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>נוסחה:</strong></p>
+                        <code>Total Cores = num_executors × executor_cores</code><br>
+                        <code>Total Memory = num_executors × executor_memory</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Production Checklist -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--spark-red)">✅</span> Production Checklist</h2>
+                </div>
+                <div class="card-body">
+                    <div class="feature-grid" style="grid-template-columns: 1fr;">
+                        <div class="info-box">
+                            <h3>לפני הפצה לפרודקשן:</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li>☐ <strong>Data Format:</strong> Parquet עם Partitioning</li>
+                                <li>☐ <strong>Error Handling:</strong> try/except + logging</li>
+                                <li>☐ <strong>Resource Config:</strong> Dynamic Allocation מוגדר</li>
+                                <li>☐ <strong>Monitoring:</strong> Spark UI accessible</li>
+                                <li>☐ <strong>Logging:</strong> Log4j עם Rolling Appender</li>
+                                <li>☐ <strong>Checkpoints:</strong> עבור Streaming</li>
+                                <li>☐ <strong>Testing:</strong> Unit tests + Integration tests</li>
+                                <li>☐ <strong>Documentation:</strong> README + Config docs</li>
+                                <li>☐ <strong>Performance:</strong> נבדק על נתונים אמיתיים</li>
+                                <li>☐ <strong>Alerting:</strong> מוגדר alerting על failures</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- === EXERCISES VIEW === -->
     <div id="view-exercises" class="view-section">
         <div class="exercise-list">
@@ -3866,6 +4512,8 @@ df.filter(col("age") > 25) \
                         <li>צמצם לפי מפתח לספירת המילים</li>
                         <li>הצג את 10 המילים הנפוצות ביותר</li>
                     </ul>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון
 lines = sc.textFile("/path/to/file.txt")
 
@@ -3879,6 +4527,7 @@ top_10 = word_counts.sortBy(lambda x: x[1], ascending=False).take(10)
 
 for word, count in top_10:
     print(f"{word}: {count}")</div>
+                    </div>
                 </div>
             </div>
 
@@ -3897,6 +4546,8 @@ for word, count in top_10:
                         <li>מצא את סך המכירות לפי קטגוריה</li>
                         <li>מיין לפי סך מכירות (יורד)</li>
                     </ul>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון
 from pyspark.sql.functions import col, year, sum as _sum
 
@@ -3917,6 +4568,7 @@ sales_by_category = df_with_total.groupBy("category") \
 result = sales_by_category.orderBy(col("total_sales").desc())
 
 result.show()</div>
+                    </div>
                 </div>
             </div>
 
@@ -3935,6 +4587,8 @@ result.show()</div>
                         <li>חשב סך הזמנות לכל משתמש</li>
                         <li>הצג משתמשים ללא הזמנות (אם יש)</li>
                     </ul>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון
 from pyspark.sql.functions import sum, coalesce
 
@@ -3966,6 +4620,7 @@ user_totals.show()
 # משתמשים ללא הזמנות
 no_orders = user_totals.filter(col("total_orders") == 0)
 no_orders.show()</div>
+                    </div>
                 </div>
             </div>
 
@@ -3983,6 +4638,8 @@ no_orders.show()</div>
                         <li>מצא את 3 המשכורות הגבוהות בכל מחלקה</li>
                         <li>חשב משכורת ממוצעת per מחלקה והוסף כעמודה</li>
                     </ul>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון
 from pyspark.sql.window import Window
 from pyspark.sql.functions import rank, avg
@@ -4009,6 +4666,7 @@ window_spec2 = Window.partitionBy("department")
 with_avg = top_3.withColumn("dept_avg_salary", avg("salary").over(window_spec2))
 
 with_avg.show()</div>
+                    </div>
                 </div>
             </div>
 
@@ -4027,6 +4685,8 @@ with_avg.show()</div>
                         <li>כתוב לconsole עם update mode</li>
                         <li>הוסף checkpoint</li>
                     </ul>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון
 from pyspark.sql.functions import explode, split
 
@@ -4052,6 +4712,7 @@ query = word_counts.writeStream \
     .start()
 
 query.awaitTermination()</div>
+                    </div>
                 </div>
             </div>
 
@@ -4083,6 +4744,8 @@ result.show()  # שימוש חוזר</div>
                         <li>❌ לא משתמש ב-broadcast לטבלה קטנה</li>
                     </ul>
 
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון מאופטם
 from pyspark.sql.functions import broadcast
 
@@ -4100,6 +4763,7 @@ result = large_df.join(broadcast(small_df), "id") \
 
 result.show()
 result.show()  # פעם שנייה מהירה!</div>
+                    </div>
                 </div>
             </div>
 
@@ -4117,6 +4781,8 @@ result.show()  # פעם שנייה מהירה!</div>
                         <li>70-79: Average</li>
                         <li>מתחת ל-70: Need Improvement</li>
                     </ul>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
                     <div class="code-block"># פתרון
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
@@ -4166,6 +4832,7 @@ def grade_category_pandas(scores: pd.Series) -> pd.Series:
 
 result = students.withColumn("grade", grade_category_pandas(col("score")))
 result.show()</div>
+                    </div>
                 </div>
             </div>
 
@@ -4208,6 +4875,135 @@ result.show()</div>
                 btn.classList.add('active');
             }
         }
+    }
+
+    /* === DARK MODE === */
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        const btn = document.getElementById('darkModeToggle');
+        btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+        localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').textContent = '☀️ מצב יום';
+    }
+
+    /* === SEARCH === */
+    function toggleSearch() {
+        const searchBar = document.getElementById('searchBar');
+        const isVisible = searchBar.style.display !== 'none';
+        searchBar.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            document.getElementById('searchInput').focus();
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    }
+
+    // Search database
+    const searchDatabase = [
+        { term: 'map', type: 'RDD', description: 'מיפוי 1:1', example: 'rdd.map(lambda x: x * 2)', section: 'rdd-cheatsheet' },
+        { term: 'filter', type: 'RDD', description: 'סינון אלמנטים', example: 'rdd.filter(lambda x: x > 10)', section: 'rdd-cheatsheet' },
+        { term: 'flatMap', type: 'RDD', description: 'מיפוי והשטחה', example: 'rdd.flatMap(lambda x: x.split())', section: 'rdd-cheatsheet' },
+        { term: 'reduceByKey', type: 'RDD', description: 'צמצום לפי מפתח', example: 'pairs.reduceByKey(lambda a,b: a+b)', section: 'rdd-cheatsheet' },
+        { term: 'groupByKey', type: 'RDD', description: 'קיבוץ לפי מפתח', example: 'pairs.groupByKey()', section: 'rdd-cheatsheet' },
+        { term: 'collect', type: 'RDD', description: 'החזרת כל האלמנטים', example: 'rdd.collect()', section: 'rdd-cheatsheet' },
+        { term: 'count', type: 'RDD/DF', description: 'ספירת אלמנטים', example: 'rdd.count()', section: 'rdd-cheatsheet' },
+        { term: 'select', type: 'DataFrame', description: 'בחירת עמודות', example: 'df.select("name", "age")', section: 'df-cheatsheet' },
+        { term: 'where', type: 'DataFrame', description: 'סינון שורות', example: 'df.filter(col("age") > 25)', section: 'df-cheatsheet' },
+        { term: 'groupBy', type: 'DataFrame', description: 'קיבוץ', example: 'df.groupBy("dept").count()', section: 'df-cheatsheet' },
+        { term: 'join', type: 'DataFrame', description: 'חיבור טבלאות', example: 'df1.join(df2, "id")', section: 'df-cheatsheet' },
+        { term: 'withColumn', type: 'DataFrame', description: 'הוספת עמודה', example: 'df.withColumn("new", col("age")+1)', section: 'df-cheatsheet' },
+        { term: 'cache', type: 'RDD/DF', description: 'שמירה בזיכרון', example: 'rdd.cache()', section: 'rdd-cheatsheet' },
+        { term: 'persist', type: 'RDD/DF', description: 'שמירה מותאמת', example: 'rdd.persist(MEMORY_AND_DISK)', section: 'rdd-cheatsheet' },
+        { term: 'parquet', type: 'I/O', description: 'קריאת/כתיבת Parquet', example: 'spark.read.parquet(path)', section: 'df-sources' },
+        { term: 'broadcast', type: 'Advanced', description: 'Broadcast Join', example: 'broadcast(small_df)', section: 'rdd-broadcast' },
+        { term: 'window', type: 'SQL', description: 'Window Functions', example: 'row_number().over(window_spec)', section: 'df-window' },
+        { term: 'UDF', type: 'SQL', description: 'User Defined Functions', example: '@udf(returnType=StringType())', section: 'df-udfs' },
+        { term: 'streaming', type: 'Streaming', description: 'Structured Streaming', example: 'spark.readStream', section: 'stream-structured' },
+        { term: 'kafka', type: 'Streaming', description: 'קריאה מ-Kafka', example: '.format("kafka")', section: 'stream-kafka' },
+        { term: 'memory', type: 'Error', description: 'Out of Memory', example: '--executor-memory 4g', section: 'rdd-issues' },
+        { term: 'shuffle', type: 'Performance', description: 'Shuffle Optimization', example: 'reduceByKey vs groupByKey', section: 'rdd-issues' }
+    ];
+
+    function performSearch(query) {
+        const resultsDiv = document.getElementById('searchResults');
+
+        if (!query || query.length < 2) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+
+        const results = searchDatabase.filter(item =>
+            item.term.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.includes(query) ||
+            item.example.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">לא נמצאו תוצאות</div>';
+            return;
+        }
+
+        resultsDiv.innerHTML = results.map(item => `
+            <div class="search-result-item" onclick="navigateToSection('${item.section}')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: var(--spark-orange); font-size: 1.1rem; font-family: 'JetBrains Mono', monospace;">${highlightText(item.term, query)}</strong>
+                    <span style="background: var(--spark-blue); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem;">${item.type}</span>
+                </div>
+                <div style="color: var(--text-secondary); margin-bottom: 8px;">${item.description}</div>
+                <code style="background: var(--code-bg); color: var(--code-text); padding: 8px 12px; border-radius: 4px; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">${item.example}</code>
+            </div>
+        `).join('');
+    }
+
+    function highlightText(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    function navigateToSection(sectionId) {
+        toggleSearch(); // Close search
+
+        // Determine which view contains this section
+        const viewMap = {
+            'rdd-': 'rdd',
+            'df-': 'dataframes',
+            'stream-': 'streaming',
+            'adv-': 'advanced',
+            'theory-': 'theory'
+        };
+
+        let targetView = 'rdd';
+        for (const [prefix, view] of Object.entries(viewMap)) {
+            if (sectionId.startsWith(prefix)) {
+                targetView = view;
+                break;
+            }
+        }
+
+        // Switch to correct view
+        const navItem = document.querySelector(`.nav-item[onclick*="${targetView}"]`);
+        if (navItem) navItem.click();
+
+        // Scroll to section
+        setTimeout(() => {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 300);
+    }
+
+    /* === SOLUTION TOGGLE === */
+    function toggleSolution(button) {
+        const content = button.nextElementSibling;
+        content.classList.toggle('show');
+        button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
     }
 
     /* === COPY CODE BLOCKS === */
