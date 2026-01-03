@@ -276,6 +276,185 @@
         strong { color: var(--primary-dark); }
         code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px; font-family: monospace; }
 
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--mongodb-green));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(19, 170, 82, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 237, 100, 0.1);
+            border-right: 4px solid var(--primary-green);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* === TABLES === */
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: white;
+        }
+
+        .reference-table thead {
+            background: var(--mongodb-green);
+            color: white;
+        }
+
+        .reference-table th {
+            padding: 14px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .reference-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .reference-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0a0f14 0%, #0d3d2b 100%);
+        }
+
+        body.dark-mode .container {
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #000000 0%, #13aa52 100%);
+        }
+
+        body.dark-mode .search-container {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .search-box {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .sidebar {
+            background: #2d3748;
+            border-left-color: #4a5568;
+        }
+
+        body.dark-mode .nav-item {
+            color: #cbd5e1;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .nav-item:hover,
+        body.dark-mode .nav-item.active {
+            background: var(--mongodb-green);
+            color: white;
+        }
+
+        body.dark-mode .main-content {
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .section h2 {
+            color: #e2e8f0;
+            border-bottom-color: var(--mongodb-green);
+        }
+
+        body.dark-mode .section h3,
+        body.dark-mode .section h4 {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .section p,
+        body.dark-mode .section li {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .info-box {
+            background: rgba(19, 170, 82, 0.15);
+            border-color: var(--mongodb-green);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: var(--accent-red);
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(0, 237, 100, 0.15);
+            border-color: var(--primary-green);
+        }
+
+        body.dark-mode .feature-card {
+            background: #2d3748;
+            border-top-color: var(--mongodb-green);
+        }
+
+        body.dark-mode .feature-card h4 {
+            color: var(--mongodb-green);
+        }
+
+        body.dark-mode .comparison-table {
+            background: #2d3748;
+        }
+
+        body.dark-mode .comparison-table thead {
+            background: var(--mongodb-green);
+        }
+
+        body.dark-mode .comparison-table tr:nth-child(even) {
+            background: #374151;
+        }
+
+        body.dark-mode .reference-table {
+            background: #2d3748;
+        }
+
+        body.dark-mode .reference-table tr:hover {
+            background: #374151;
+        }
+
+        body.dark-mode strong {
+            color: var(--primary-green);
+        }
+
+        body.dark-mode code {
+            background: #374151;
+            color: var(--primary-green);
+        }
+
         @media (max-width: 768px) {
             .content { grid-template-columns: 1fr; }
             .sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
@@ -297,7 +476,12 @@
         </header>
 
         <div class="search-container">
-            <input type="text" class="search-box" placeholder="🔍 חפש פקודות, מושגים או נושאים..." id="searchInput">
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+                <input type="text" class="search-box" placeholder="🔍 חפש פקודות, מושגים או נושאים..." id="searchInput" style="flex: 1;">
+                <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: var(--mongodb-green); border: none; padding: 12px 24px; border-radius: 25px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Segoe UI', sans-serif; white-space: nowrap;">
+                    🌙 מצב לילה
+                </button>
+            </div>
         </div>
 
         <div class="content">
@@ -316,6 +500,9 @@
                 <a href="#" class="nav-item" data-section="kafka">🔌 Kafka Connector</a>
                 <a href="#" class="nav-item" data-section="hadoop">🐘 MongoDB + Hadoop</a>
                 <a href="#" class="nav-item" data-section="exercises">💪 תרגילים</a>
+                <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
+                <a href="#" class="nav-item" data-section="quickref">📋 Quick Reference</a>
+                <a href="#" class="nav-item" data-section="bestpractices">✨ Best Practices</a>
             </nav>
 
             <main class="main-content">
@@ -1499,70 +1686,138 @@ implementation 'org.mongodb.mongo-hadoop:mongo-hadoop-core:2.0.2'</div>
 
                     <h3>תרגיל 1: התקנה וטעינת נתונים</h3>
                     <div class="info-box">
+                        <p><strong>מטרה:</strong> ייבוא נתונים מקובץ JSON ל-MongoDB</p>
                         <ol style="padding-right: 25px;">
                             <li>בצע התקנה של MongoDB</li>
                             <li>ייבא את כל הנתונים מקובץ <code>products.json</code></li>
+                            <li>בדוק שהנתונים נטענו</li>
                         </ol>
                     </div>
-                    <div class="code-block">// Import JSON file
-mongoimport --db mydb --collection products --file products.json --jsonArray</div>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">// Import JSON file
+mongoimport --db mydb --collection products --file products.json --jsonArray
+
+// Verify import
+mongo
+use mydb
+db.products.count()
+db.products.findOne()</div>
+                    </div>
 
                     <h3>תרגיל 2: Queries בסיסיות</h3>
                     <div class="info-box">
+                        <p><strong>מטרה:</strong> תרגול queries עם operators שונים</p>
                         <p>בנה שאילתות לענות על הדברים הבאים:</p>
                     </div>
 
                     <h4>א. החזר רשומות עם type = "service"</h4>
-                    <div class="code-block">db.products.find({ type: "service" })</div>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.products.find({ type: "service" })</div>
+                    </div>
 
                     <h4>ב. מספר פריטים עם price נמוך מ-100</h4>
-                    <div class="code-block">db.products.find({ price: { $lt: 100 } }).count()
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.products.find({ price: { $lt: 100 } }).count()
 // או
 db.products.countDocuments({ price: { $lt: 100 } })</div>
+                    </div>
 
                     <h4>ג. פריטים שה-name מכיל "AC3" ו-brand = "ACME"</h4>
-                    <div class="code-block">db.products.find({
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.products.find({
   name: /AC3/,
   brand: "ACME"
 })</div>
+                    </div>
 
                     <h4>ד. פריטים עם warranty_years > 0 ו-price < 100</h4>
-                    <div class="code-block">db.products.find({
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.products.find({
   warranty_years: { $gt: 0 },
   price: { $lt: 100 }
 }).count()</div>
+                    </div>
 
-                    <h3>תרגיל 3: עבודה עם Aviation Data</h3>
-                    <div class="code-block">// Import CSV file
+                    <h3>תרגיל 3: עבודה עם Aviation Data + Indexes</h3>
+                    <div class="info-box">
+                        <p><strong>מטרה:</strong> הבנת החשיבות של indexes לביצועים</p>
+                    </div>
+
+                    <h4>שלב 1: ייבוא הנתונים</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">// Import CSV file
 mongoimport --db mydb --collection aviation \
   --type csv --headerline --file Aviation_data.csv</div>
+                    </div>
 
-                    <h4>א. החזר רשומה אחת</h4>
-                    <div class="code-block">db.aviation.findOne()</div>
+                    <h4>שלב 2: בדוק שהנתונים נטענו</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.aviation.findOne()
+db.aviation.count()</div>
+                    </div>
 
-                    <h4>ב. מספר תאונות בארה"ב</h4>
-                    <div class="code-block">db.aviation.find({ Country: "United States" }).count()</div>
+                    <h4>שלב 3: מספר תאונות בארה"ב (ללא index)</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.aviation.find({ Country: "United States" }).count()</div>
+                    </div>
 
-                    <h4>ג. כמה documents נסרקו?</h4>
-                    <div class="code-block">db.aviation.find({ Country: "United States" }).explain("executionStats")
-// Look for: totalDocsExamined</div>
+                    <h4>שלב 4: כמה documents נסרקו? (ללא index)</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.aviation.find({ Country: "United States" }).explain("executionStats")
 
-                    <h4>ד. הוסף index להפחתת סריקות</h4>
-                    <div class="code-block">db.aviation.createIndex({ Country: 1 })</div>
+// Look for:
+// - totalDocsExamined (כמה documents נסרקו)
+// - executionTimeMillis (זמן ביצוע)
+// - stage: "COLLSCAN" (collection scan - לא טוב!)</div>
+                    </div>
 
-                    <h4>ה. בדוק שוב כמה documents נסרקו</h4>
-                    <div class="code-block">db.aviation.find({ Country: "United States" }).explain("executionStats")
-// totalDocsExamined should be much lower now!</div>
+                    <h4>שלב 5: הוסף index על Country</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.aviation.createIndex({ Country: 1 })</div>
+                    </div>
 
-                    <h4>ו. רשימת כל ה-indexes</h4>
-                    <div class="code-block">db.aviation.getIndexes()</div>
+                    <h4>שלב 6: בדוק שוב - כמה documents נסרקו? (עם index)</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.aviation.find({ Country: "United States" }).explain("executionStats")
+
+// עכשיו תראה:
+// - totalDocsExamined הרבה יותר קטן!
+// - stage: "IXSCAN" (index scan - טוב!)
+// - executionTimeMillis הרבה יותר נמוך!</div>
+                    </div>
+
+                    <h4>שלב 7: רשימת כל ה-indexes</h4>
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">db.aviation.getIndexes()
+
+// Output יראה:
+// [
+//   { v: 2, key: { _id: 1 }, name: "_id_" },      // Default
+//   { v: 2, key: { Country: 1 }, name: "Country_1" }  // שלנו!
+// ]</div>
+                    </div>
 
                     <h3>תרגיל 4: Compound Index</h3>
                     <div class="info-box">
+                        <p><strong>מטרה:</strong> למד איך compound index משפר queries עם מספר שדות</p>
                         <p>אופטימיזציה של queries על שני שדות:</p>
                     </div>
 
-                    <div class="code-block">// Create compound index
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">// Create compound index
 db.aviation.createIndex({
   Aircraft_Category: 1,
   Broad_Phase_of_Flight: 1
@@ -1578,10 +1833,21 @@ db.aviation.find({
 db.aviation.find({
   Aircraft_Category: "Airplane",
   Broad_Phase_of_Flight: "APPROACH"
-}).explain("executionStats")</div>
+}).explain("executionStats")
 
-                    <h3>תרגיל 5: יצירה ועדכון</h3>
-                    <div class="code-block">// Create new database and collection
+// Index תומך גם בqueries רק על Aircraft_Category
+// אבל לא רק על Broad_Phase_of_Flight (סדר חשוב!)</div>
+                    </div>
+
+                    <h3>תרגיל 5: יצירה ועדכון - Authors Collection</h3>
+                    <div class="info-box">
+                        <p><strong>מטרה:</strong> תרגול insert, update, ועבודה עם arrays</p>
+                        <p>צור collection של מחברים ועדכן אותם:</p>
+                    </div>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון מלא</button>
+                    <div class="solution-content">
+                        <div class="code-block">// Create new database and collection
 use bookstore
 
 // Insert authors with genres array
@@ -1600,38 +1866,671 @@ db.authors.insertMany([
   }
 ])
 
-// Update single document
+// Update single document - תקן מספר ספרים
 db.authors.updateOne(
   { name: "Isaac Asimov" },
   { $set: { books: 506 } }
 )
 
-// Update multiple documents
+// Update multiple documents - סמן קלאסיקות
 db.authors.updateMany(
   { born: { $lt: 1900 } },
   { $set: { classic: true } }
 )
 
-// Add to array
+// Add to array - הוסף ז'אנר
 db.authors.updateOne(
   { name: "Agatha Christie" },
   { $push: { genres: "Thriller" } }
-)</div>
+)
 
-                    <h3>תרגיל 6: מחיקה</h3>
-                    <div class="code-block">// Delete all documents in collection
+// Verify
+db.authors.find().pretty()</div>
+                    </div>
+
+                    <h3>תרגיל 6: מחיקה ונקיון</h3>
+                    <div class="warning-box">
+                        <p><strong>⚠️ זהירות:</strong> פעולות מחיקה הן בלתי הפיכות!</p>
+                        <p>תרגיל זה מלמד איך לנקות databases ו-collections.</p>
+                    </div>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">// Delete all documents in collection
 db.authors.deleteMany({})
+// Collection עדיין קיים, רק ריק
 
-// Drop collection
+// Drop collection (מחיקה מלאה)
 db.authors.drop()
 
-// Drop database
+// Drop database (מחיקת כל הdatabase!)
 use bookstore
-db.dropDatabase()</div>
+db.dropDatabase()
 
-                    <div class="success-box">
+// Verify
+show dbs  // bookstore לא צריך להיות ברשימה</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">תרגיל 7: Aggregation Pipeline</h3>
+                    <div class="info-box">
+                        <p><strong>מטרה:</strong> למד aggregation לניתוח נתונים מתקדם</p>
+                        <p>חזור ל-products collection וחשב סטטיסטיקות:</p>
+                    </div>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">use mydb
+
+// 1. Average price per type
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$type",
+      avgPrice: { $avg: "$price" },
+      count: { $sum: 1 }
+    }
+  },
+  { $sort: { avgPrice: -1 } }
+])
+
+// 2. Count products by brand
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$brand",
+      totalProducts: { $sum: 1 },
+      totalValue: { $sum: "$price" }
+    }
+  }
+])
+
+// 3. Products with warranty > 0, grouped by type
+db.products.aggregate([
+  { $match: { warranty_years: { $gt: 0 } } },
+  {
+    $group: {
+      _id: "$type",
+      count: { $sum: 1 },
+      maxWarranty: { $max: "$warranty_years" }
+    }
+  }
+])</div>
+                    </div>
+
+                    <div class="success-box" style="margin-top: 40px;">
                         <p><strong>🎉 כל הכבוד!</strong> השלמת את כל התרגילים!</p>
                         <p>עכשיו אתה מוכן לעבוד עם MongoDB בפרויקטים אמיתיים!</p>
+                        <ul style="margin-top: 15px;">
+                            <li>✅ ייבוא נתונים (CSV & JSON)</li>
+                            <li>✅ Queries עם operators</li>
+                            <li>✅ עבודה עם Indexes</li>
+                            <li>✅ Compound Indexes</li>
+                            <li>✅ Update operations</li>
+                            <li>✅ Delete operations</li>
+                            <li>✅ Aggregation Pipeline</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Troubleshooting -->
+                <section class="section" id="troubleshooting">
+                    <h2>🔧 פתרון בעיות ב-MongoDB</h2>
+
+                    <h3>❌ Connection Refused / Cannot Connect</h3>
+                    <div class="warning-box">
+                        <h4>סימפטומים:</h4>
+                        <ul>
+                            <li>Error: "connection refused"</li>
+                            <li>Cannot connect to MongoDB</li>
+                            <li>Timeout errors</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ פתרונות:</h4>
+
+                        <h5>1. בדוק ש-MongoDB רץ:</h5>
+                        <div class="code-block">// Check MongoDB process
+ps aux | grep mongod
+
+// Check MongoDB status (systemd)
+sudo systemctl status mongod
+
+// With Docker
+docker ps | grep mongo</div>
+
+                        <h5 style="margin-top: 20px;">2. בדוק Port:</h5>
+                        <div class="code-block">// Check if MongoDB listening on port 27017
+netstat -tlnp | grep 27017
+sudo lsof -i :27017
+
+// Test connection
+telnet localhost 27017</div>
+
+                        <h5 style="margin-top: 20px;">3. בדוק Configuration:</h5>
+                        <div class="code-block">// Check mongod.conf
+cat /etc/mongod.conf
+
+# Look for:
+net:
+  port: 27017
+  bindIp: 0.0.0.0  # Listen on all interfaces
+  # Or
+  bindIp: localhost  # Only local connections</div>
+
+                        <h5 style="margin-top: 20px;">4. בדוק Logs:</h5>
+                        <div class="code-block">// MongoDB logs location
+tail -f /var/log/mongodb/mongod.log
+
+// Docker logs
+docker logs mongodb</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🐌 Queries איטיות</h3>
+                    <div class="warning-box">
+                        <h4>סימפטומים:</h4>
+                        <ul>
+                            <li>Queries לוקחות זמן רב</li>
+                            <li>CPU usage גבוה</li>
+                            <li>תגובה איטית של Application</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Debug & Fix:</h4>
+
+                        <h5>1. Analyze Query עם explain():</h5>
+                        <div class="code-block">// Check query execution
+db.collection.find({ field: value }).explain("executionStats")
+
+// Look for:
+// - executionTimeMillis (זמן)
+// - totalDocsExamined (כמה documents נסרקו)
+// - totalKeysExamined (כמה index keys)
+// - executionStages.stage (COLLSCAN = רע, IXSCAN = טוב)</div>
+
+                        <h5 style="margin-top: 20px;">2. הוסף Index:</h5>
+                        <div class="code-block">// Create index on frequently queried fields
+db.collection.createIndex({ field: 1 })
+
+// Compound index for multi-field queries
+db.collection.createIndex({ field1: 1, field2: -1 })</div>
+
+                        <h5 style="margin-top: 20px;">3. Enable Profiling:</h5>
+                        <div class="code-block">// Log slow queries (>100ms)
+db.setProfilingLevel(1, { slowms: 100 })
+
+// View slow queries
+db.system.profile.find().sort({ ts: -1 }).limit(10).pretty()</div>
+
+                        <h5 style="margin-top: 20px;">4. אופטימיזציות:</h5>
+                        <div class="code-block">// Use projection (select only needed fields)
+db.users.find(
+  { age: { $gt: 25 } },
+  { name: 1, email: 1, _id: 0 }  // Only these fields
+)
+
+// Limit results
+db.users.find().limit(100)
+
+// Use covered queries (index contains all fields)
+db.users.createIndex({ name: 1, email: 1 })
+db.users.find(
+  { name: "John" },
+  { name: 1, email: 1, _id: 0 }
+).hint({ name: 1, email: 1 })</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">💾 Disk Space Issues</h3>
+                    <div class="warning-box">
+                        <h4>סימפטומים:</h4>
+                        <ul>
+                            <li>MongoDB crashes</li>
+                            <li>Cannot write to database</li>
+                            <li>"No space left on device"</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ פתרונות:</h4>
+
+                        <h5>1. בדוק Disk Usage:</h5>
+                        <div class="code-block">// Check disk space
+df -h
+
+// Check MongoDB data size
+db.stats()
+db.collection.stats()</div>
+
+                        <h5 style="margin-top: 20px;">2. נקה Databases/Collections:</h5>
+                        <div class="code-block">// Drop unused databases
+use oldDatabase
+db.dropDatabase()
+
+// Drop old collections
+db.oldCollection.drop()
+
+// Remove old documents
+db.logs.deleteMany({ createdAt: { $lt: new Date("2023-01-01") } })</div>
+
+                        <h5 style="margin-top: 20px;">3. Compact Collections:</h5>
+                        <div class="code-block">// Reclaim disk space (blocks reads/writes!)
+db.runCommand({ compact: "collectionName" })
+
+// Or repair database (longer, more thorough)
+db.repairDatabase()</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔴 Replica Set Issues</h3>
+                    <div class="warning-box">
+                        <h4>בעיות נפוצות:</h4>
+                        <ul>
+                            <li>Secondary not syncing</li>
+                            <li>No Primary elected</li>
+                            <li>Replica lag</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ Debug Steps:</h4>
+
+                        <h5>1. בדוק Status:</h5>
+                        <div class="code-block">// Check replica set status
+rs.status()
+
+// Check configuration
+rs.conf()
+
+// Check replication lag
+rs.printReplicationInfo()
+rs.printSlaveReplicationInfo()</div>
+
+                        <h5 style="margin-top: 20px;">2. פתרונות:</h5>
+                        <div class="code-block">// Reconfigure replica set
+rs.reconfig(config)
+
+// Step down primary (force new election)
+rs.stepDown()
+
+// Re-sync secondary (remove and add back)
+rs.remove("mongodb2.example.com:27017")
+rs.add("mongodb2.example.com:27017")</div>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 40px;">
+                        <h4>🔍 Debug Checklist</h4>
+                        <ol>
+                            <li>✅ MongoDB process רץ?</li>
+                            <li>✅ Port 27017 פתוח?</li>
+                            <li>✅ bindIp מוגדר נכון?</li>
+                            <li>✅ Disk space פנוי?</li>
+                            <li>✅ RAM מספיק?</li>
+                            <li>✅ Indexes קיימים לqueries?</li>
+                            <li>✅ Replica set healthy?</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Quick Reference -->
+                <section class="section" id="quickref">
+                    <h2>📋 Quick Reference</h2>
+
+                    <h3>🔍 Query Operators</h3>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>תיאור</th>
+                                <th>דוגמה</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$eq</code></td>
+                                <td>שווה ל</td>
+                                <td><code>{ age: { $eq: 25 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$ne</code></td>
+                                <td>לא שווה ל</td>
+                                <td><code>{ status: { $ne: "inactive" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$gt / $gte</code></td>
+                                <td>גדול מ / גדול או שווה</td>
+                                <td><code>{ price: { $gt: 100 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$lt / $lte</code></td>
+                                <td>קטן מ / קטן או שווה</td>
+                                <td><code>{ age: { $lt: 30 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$in</code></td>
+                                <td>נמצא ברשימה</td>
+                                <td><code>{ status: { $in: ["A", "B"] } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$nin</code></td>
+                                <td>לא נמצא ברשימה</td>
+                                <td><code>{ status: { $nin: ["X", "Y"] } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$exists</code></td>
+                                <td>שדה קיים</td>
+                                <td><code>{ email: { $exists: true } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$type</code></td>
+                                <td>טיפוס שדה</td>
+                                <td><code>{ age: { $type: "number" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$regex</code></td>
+                                <td>Regular expression</td>
+                                <td><code>{ name: { $regex: "^A" } }</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top: 40px;">📝 Update Operators</h3>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th>Operator</th>
+                                <th>תיאור</th>
+                                <th>דוגמה</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$set</code></td>
+                                <td>הגדר ערך שדה</td>
+                                <td><code>{ $set: { age: 30 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$unset</code></td>
+                                <td>הסר שדה</td>
+                                <td><code>{ $unset: { temp: "" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$inc</code></td>
+                                <td>הוסף מספר (increment)</td>
+                                <td><code>{ $inc: { views: 1 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$mul</code></td>
+                                <td>הכפל ב</td>
+                                <td><code>{ $mul: { price: 1.1 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$rename</code></td>
+                                <td>שנה שם שדה</td>
+                                <td><code>{ $rename: { "old": "new" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$min / $max</code></td>
+                                <td>עדכן רק אם קטן/גדול יותר</td>
+                                <td><code>{ $min: { score: 50 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$currentDate</code></td>
+                                <td>הגדר לתאריך נוכחי</td>
+                                <td><code>{ $currentDate: { updated: true } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$push</code></td>
+                                <td>הוסף לarray</td>
+                                <td><code>{ $push: { tags: "new" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$pull</code></td>
+                                <td>הסר מarray</td>
+                                <td><code>{ $pull: { tags: "old" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$addToSet</code></td>
+                                <td>הוסף לarray (ייחודי)</td>
+                                <td><code>{ $addToSet: { tags: "tag" } }</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top: 40px;">📊 Aggregation Pipeline Stages</h3>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th>Stage</th>
+                                <th>תיאור</th>
+                                <th>דוגמה</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>$match</code></td>
+                                <td>סינון documents</td>
+                                <td><code>{ $match: { age: { $gt: 25 } } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$project</code></td>
+                                <td>בחירת שדות</td>
+                                <td><code>{ $project: { name: 1, age: 1 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$group</code></td>
+                                <td>קיבוץ לפי field</td>
+                                <td><code>{ $group: { _id: "$city", total: { $sum: 1 } } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$sort</code></td>
+                                <td>מיון</td>
+                                <td><code>{ $sort: { age: -1 } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$limit</code></td>
+                                <td>הגבלת תוצאות</td>
+                                <td><code>{ $limit: 10 }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$skip</code></td>
+                                <td>דילוג על תוצאות</td>
+                                <td><code>{ $skip: 5 }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$lookup</code></td>
+                                <td>Join עם collection אחר</td>
+                                <td><code>{ $lookup: { from: "orders", localField: "_id", foreignField: "userId", as: "userOrders" } }</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$unwind</code></td>
+                                <td>פירוק array</td>
+                                <td><code>{ $unwind: "$tags" }</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top: 40px;">🎯 Common Patterns</h3>
+
+                    <h4>Pagination:</h4>
+                    <div class="code-block">// Page 1 (skip 0, limit 10)
+db.products.find().skip(0).limit(10)
+
+// Page 2 (skip 10, limit 10)
+db.products.find().skip(10).limit(10)
+
+// Better for large collections - use range query on _id
+db.products.find({ _id: { $gt: lastSeenId } }).limit(10)</div>
+
+                    <h4>Search Pattern:</h4>
+                    <div class="code-block">// Case-insensitive search
+db.products.find({ name: { $regex: "laptop", $options: "i" } })
+
+// Starts with
+db.products.find({ name: /^AC/ })
+
+// Contains
+db.products.find({ name: /pattern/ })
+
+// Text search (requires text index)
+db.products.createIndex({ name: "text", description: "text" })
+db.products.find({ $text: { $search: "mongodb tutorial" } })</div>
+
+                    <h4>Upsert Pattern:</h4>
+                    <div class="code-block">// Update if exists, insert if not
+db.users.updateOne(
+  { email: "user@example.com" },
+  { $set: { name: "User", lastLogin: new Date() } },
+  { upsert: true }
+)</div>
+                </section>
+
+                <!-- Best Practices -->
+                <section class="section" id="bestpractices">
+                    <h2>✨ MongoDB Best Practices</h2>
+
+                    <h3>🏗️ Schema Design</h3>
+                    <div class="success-box">
+                        <h4>✅ Best Practices:</h4>
+                        <ul>
+                            <li><strong>Embed vs Reference:</strong>
+                                <ul>
+                                    <li>Embed: נתונים שנקראים ביחד (1-to-1, 1-to-few)</li>
+                                    <li>Reference: נתונים עצמאיים או 1-to-many רב</li>
+                                </ul>
+                            </li>
+                            <li><strong>הימנע מdocuments גדולים מדי:</strong> max 16MB</li>
+                            <li><strong>שקול את access patterns:</strong> איך האפליקציה קוראת את הנתונים?</li>
+                            <li><strong>Denormalization:</strong> כפילות מותרת אם משפרת performance</li>
+                        </ul>
+                    </div>
+
+                    <h4>דוגמה - Embed vs Reference:</h4>
+                    <div class="code-block">// ✅ Embed - 1-to-few (user addresses)
+{
+  _id: 1,
+  name: "John",
+  addresses: [
+    { street: "123 Main St", city: "NYC" },
+    { street: "456 Park Ave", city: "LA" }
+  ]
+}
+
+// ✅ Reference - 1-to-many (user orders)
+// Users collection
+{ _id: 1, name: "John" }
+
+// Orders collection
+{ _id: 101, userId: 1, total: 50.00 }
+{ _id: 102, userId: 1, total: 75.00 }</div>
+
+                    <h3 style="margin-top: 40px;">🔍 Indexing Best Practices</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>צור indexes לqueries תכופים</strong> (בדוק עם explain)</li>
+                            <li><strong>ESR Rule:</strong> Equality, Sort, Range - סדר השדות ב-compound index</li>
+                            <li><strong>הימנע מיותר מדי indexes:</strong> מאט writes!</li>
+                            <li><strong>Use covered queries:</strong> index מכיל את כל השדות הדרושים</li>
+                            <li><strong>מחק indexes לא בשימוש</strong></li>
+                            <li><strong>נטר index usage:</strong> <code>$indexStats</code></li>
+                        </ul>
+                    </div>
+
+                    <h4>ESR Rule דוגמה:</h4>
+                    <div class="code-block">// Query: Find active users, sorted by age, in age range
+db.users.find({
+  status: "active",      // Equality
+  age: { $gte: 25, $lte: 40 }  // Range
+}).sort({ age: 1 })      // Sort
+
+// Optimal index (E-S-R order):
+db.users.createIndex({
+  status: 1,   // E - Equality first
+  age: 1       // S + R - Sort and Range together
+})</div>
+
+                    <h3 style="margin-top: 40px;">⚡ Performance Optimization</h3>
+                    <div class="info-box">
+                        <h4>Write Performance:</h4>
+                        <ul>
+                            <li>השתמש ב-<strong>Bulk Operations</strong> לכמויות גדולות</li>
+                            <li>הפחת מספר <strong>indexes</strong> (כל index = overhead)</li>
+                            <li>השתמש ב-<strong>Unordered Bulk</strong> לparallel writes</li>
+                            <li>שקול <strong>Write Concern</strong> נמוך יותר (w:1) אם לא קריטי</li>
+                        </ul>
+
+                        <h4 style="margin-top: 20px;">Read Performance:</h4>
+                        <ul>
+                            <li>צור <strong>indexes</strong> לqueries תכופים</li>
+                            <li>השתמש ב-<strong>projection</strong> (רק שדות נדרשים)</li>
+                            <li>השתמש ב-<strong>limit()</strong> להגבלת תוצאות</li>
+                            <li><strong>Covered queries</strong> - הכי מהירים!</li>
+                            <li>שקול <strong>Read Preference</strong> לsecondaries</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔒 Security Best Practices</h3>
+                    <div class="warning-box">
+                        <h4>⚠️ Production Security:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>☐ <strong>Authentication:</strong> enable auth, create users</li>
+                            <li>☐ <strong>Authorization:</strong> roles בעלי הרשאות מינימליות</li>
+                            <li>☐ <strong>Encryption in Transit:</strong> SSL/TLS</li>
+                            <li>☐ <strong>Encryption at Rest:</strong> encrypted storage engine</li>
+                            <li>☐ <strong>Network Security:</strong> bindIp, firewall</li>
+                            <li>☐ <strong>Audit Logging:</strong> עקוב אחרי פעילות</li>
+                            <li>☐ <strong>Regular Backups:</strong> mongodump / snapshots</li>
+                            <li>☐ <strong>Updates:</strong> תמיד גרסה עדכנית</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">💾 Backup & Recovery</h3>
+                    <div class="code-block">// mongodump - backup entire database
+mongodump --db mydb --out /backup/
+
+// mongorestore - restore database
+mongorestore --db mydb /backup/mydb/
+
+// Backup specific collection
+mongodump --db mydb --collection users --out /backup/
+
+// Backup with query
+mongodump --db mydb --collection logs \
+  --query '{"createdAt": {"$gt": {"$date": "2024-01-01"}}}'
+
+// Export to JSON
+mongoexport --db mydb --collection users --out users.json
+
+// Import from JSON
+mongoimport --db mydb --collection users --file users.json</div>
+
+                    <h3 style="margin-top: 40px;">🎯 Production Checklist</h3>
+                    <div class="success-box">
+                        <h4>לפני Deploy:</h4>
+                        <ul style="list-style: none; padding: 0; font-size: 1.05rem;">
+                            <li>☐ <strong>Replica Set:</strong> לפחות 3 members</li>
+                            <li>☐ <strong>Authentication:</strong> enabled + strong passwords</li>
+                            <li>☐ <strong>Indexes:</strong> נוצרו לכל queries תכופים</li>
+                            <li>☐ <strong>Monitoring:</strong> setup (Cloud Manager / Ops Manager)</li>
+                            <li>☐ <strong>Backups:</strong> automated backups configured</li>
+                            <li>☐ <strong>Sharding:</strong> אם dataset גדול (>100GB)</li>
+                            <li>☐ <strong>Connection Pooling:</strong> מוגדר באפליקציה</li>
+                            <li>☐ <strong>Write/Read Concerns:</strong> מוגדרים נכון</li>
+                            <li>☐ <strong>Disk Space:</strong> מתוכנן לצמיחה</li>
+                            <li>☐ <strong>Network:</strong> low latency בין replica members</li>
+                            <li>☐ <strong>Testing:</strong> load testing בוצע</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">📚 משאבים נוספים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>Documentation:</strong> docs.mongodb.com</li>
+                            <li><strong>University:</strong> learn.mongodb.com (קורסים חינמיים!)</li>
+                            <li><strong>Community:</strong> MongoDB Community Forums</li>
+                            <li><strong>GitHub:</strong> github.com/mongodb</li>
+                            <li><strong>Blog:</strong> mongodb.com/blog</li>
+                            <li><strong>Certification:</strong> MongoDB Certified Developer/DBA</li>
+                        </ul>
                     </div>
                 </section>
 
@@ -1728,6 +2627,28 @@ db.dropDatabase()</div>
                 searchInput.dispatchEvent(new Event('input'));
             }
         });
+
+        /* === DARK MODE === */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').textContent = '☀️ מצב יום';
+        }
+
+        /* === SOLUTION TOGGLE === */
+        function toggleSolution(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
+        }
     </script>
 </body>
 </html>
