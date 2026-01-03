@@ -314,6 +314,35 @@
             margin: 25px 0;
         }
 
+        /* === STEP CARD === */
+        .step-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 25px 30px;
+            margin: 25px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-card h3 {
+            color: var(--airflow-primary);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--airflow-primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-left: 10px;
+            font-weight: 700;
+        }
+
         /* === COMPARISON GRID === */
         .comparison-grid {
             display: grid;
@@ -613,6 +642,349 @@
             background: #868e96;
         }
 
+        /* === EXERCISES === */
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .exercise-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .exercise-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .ex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .ex-number {
+            background: linear-gradient(135deg, var(--airflow-primary), var(--airflow-secondary));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 6px rgba(1, 124, 238, 0.3);
+        }
+
+        .ex-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .ex-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .ex-content ul, .ex-content ol {
+            padding-right: 25px;
+            margin: 15px 0;
+        }
+
+        .ex-content li {
+            margin-bottom: 10px;
+        }
+
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--airflow-primary), var(--airflow-secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(1, 124, 238, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(17, 213, 140, 0.1);
+            border-right: 4px solid var(--airflow-green);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* === CODE BLOCKS ENHANCED === */
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 25px 30px;
+            border-radius: var(--radius-md);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.8;
+            margin: 25px 0;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            white-space: pre;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .code-block:hover {
+            background: #252538;
+            border-color: var(--airflow-primary);
+        }
+
+        .code-block::before {
+            content: '📋 לחץ להעתקה';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.6);
+            color: #94a3b8;
+            padding: 4px 10px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover::before {
+            opacity: 1;
+        }
+
+        /* === TABLES === */
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .reference-table thead {
+            background: linear-gradient(to left, #e7f5ff, #d0ebff);
+            border-bottom: 2px solid var(--airflow-primary);
+        }
+
+        .reference-table th {
+            padding: 14px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .reference-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .reference-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .reference-table code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--airflow-primary);
+            direction: ltr;
+        }
+
+        /* === COPY NOTIFICATION === */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--airflow-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        /* === SEARCH === */
+        .search-result-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-right: 4px solid var(--airflow-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-result-item:hover {
+            background: #e9ecef;
+            transform: translateX(-4px);
+        }
+
+        .search-highlight {
+            background: #ffd700;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            --bg-body: #1a1c20;
+            --bg-surface: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #4a5568;
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #0D3D56, #017CEE);
+        }
+
+        body.dark-mode .comparison-card,
+        body.dark-mode .exercise-card,
+        body.dark-mode .step-card {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .info-card {
+            background: rgba(1, 124, 238, 0.15);
+            border-color: var(--airflow-primary);
+        }
+
+        body.dark-mode .success-card {
+            background: rgba(17, 213, 140, 0.15);
+            border-color: var(--airflow-green);
+        }
+
+        body.dark-mode .warning-card {
+            background: rgba(255, 109, 76, 0.15);
+            border-color: var(--airflow-orange);
+        }
+
+        body.dark-mode .concept-card {
+            background: #374151;
+            border-right-color: var(--airflow-secondary);
+        }
+
+        body.dark-mode .theory-sidebar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .theory-nav-item:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .theory-nav-item.active {
+            background: rgba(1, 124, 238, 0.2);
+            color: var(--airflow-primary);
+        }
+
+        body.dark-mode .ui-showcase {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .ui-placeholder {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .reference-table {
+            background: #2d3748;
+        }
+
+        body.dark-mode .reference-table thead {
+            background: linear-gradient(to left, #1e3a5f, #2c4a6f);
+        }
+
+        body.dark-mode .reference-table tr:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .reference-table code {
+            background: #1e293b;
+            color: var(--airflow-light);
+        }
+
+        body.dark-mode #searchBar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchInput {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .search-result-item {
+            background: #374151;
+        }
+
+        body.dark-mode .search-result-item:hover {
+            background: #4b5563;
+        }
+
+        body.dark-mode .architecture-diagram {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .diagram-box {
+            background: #374151;
+            border-color: var(--airflow-primary);
+        }
+
+        body.dark-mode .timeline-item {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 1024px) {
             .theory-layout {
@@ -630,6 +1002,7 @@
             .nav-tabs {
                 width: 100%;
                 justify-content: center;
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -651,10 +1024,30 @@
         <div class="nav-item" onclick="switchView('installation', this)">🚀 התקנה</div>
         <div class="nav-item" onclick="switchView('architecture', this)">🏗️ ארכיטקטורה</div>
         <div class="nav-item" onclick="switchView('ui', this)">🖥️ ממשק משתמש</div>
+        <div class="nav-item" onclick="switchView('examples', this)">💡 דוגמאות DAG</div>
+        <div class="nav-item" onclick="switchView('exercises', this)">📝 תרגילים</div>
+        <div class="nav-item" onclick="switchView('cli', this)">⌨️ CLI</div>
+        <div class="nav-item" onclick="switchView('troubleshooting', this)">🔧 פתרון בעיות</div>
     </div>
 
-    <div style="width: 80px;"></div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Heebo', sans-serif;">
+            🌙 מצב לילה
+        </button>
+        <button onclick="toggleSearch()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Heebo', sans-serif;">
+            🔍 חיפוש
+        </button>
+    </div>
 </header>
+
+<!-- Search Bar -->
+<div id="searchBar" style="display: none; background: white; padding: 20px 40px; border-bottom: 2px solid var(--border-color); box-shadow: var(--shadow-md); z-index: 99;">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+        <input type="text" id="searchInput" placeholder="חפש operators, פקודות CLI, או נושאים..." style="flex: 1; padding: 12px 20px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: 'Heebo', sans-serif;" oninput="performSearch(this.value)">
+        <button onclick="toggleSearch()" style="padding: 12px 24px; background: var(--airflow-primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Heebo', sans-serif;">סגור</button>
+    </div>
+    <div id="searchResults" style="max-width: 800px; margin: 15px auto 0; max-height: 400px; overflow-y: auto;"></div>
+</div>
 
 <div class="main-wrapper">
 
@@ -714,6 +1107,9 @@
                     </div>
                     <div class="theory-nav-item" onclick="showSection('subdags', this)">
                         <span>🔄</span> SubDAGs
+                    </div>
+                    <div class="theory-nav-item" onclick="showSection('quick-reference', this)">
+                        <span>📋</span> Quick Reference
                     </div>
                     <div class="theory-nav-item" onclick="showSection('best-practices', this)">
                         <span>✨</span> Best Practices
@@ -1887,6 +2283,440 @@ airflow celery flower
                     </div>
                 </div>
 
+                <!-- Quick Reference -->
+                <div id="section-quick-reference" class="theory-section">
+                    <h1>📋 Quick Reference</h1>
+
+                    <h2>🎯 Operators נפוצים</h2>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; direction: ltr;">Operator</th>
+                                <th>תיאור</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>BashOperator</code></td>
+                                <td>הרצת פקודת bash</td>
+                                <td>Scripts, commands</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>PythonOperator</code></td>
+                                <td>הרצת פונקציית Python</td>
+                                <td>Business logic</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>PostgresOperator</code></td>
+                                <td>הרצת SQL query</td>
+                                <td>Database operations</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>EmailOperator</code></td>
+                                <td>שליחת אימייל</td>
+                                <td>Notifications</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>SimpleHttpOperator</code></td>
+                                <td>קריאת HTTP/API</td>
+                                <td>API integration</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>FileSensor</code></td>
+                                <td>המתנה לקובץ</td>
+                                <td>File dependencies</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>BranchPythonOperator</code></td>
+                                <td>התנאה והסתעפות</td>
+                                <td>Conditional logic</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>DummyOperator</code></td>
+                                <td>Placeholder (לא עושה כלום)</td>
+                                <td>Organization</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 style="margin-top: 40px;">🔀 Trigger Rules</h2>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; direction: ltr;">Trigger Rule</th>
+                                <th>מתי Task רץ?</th>
+                                <th>שימוש</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>all_success</code></td>
+                                <td>כל ה-upstream tasks הצליחו (default)</td>
+                                <td>רוב המקרים</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>all_failed</code></td>
+                                <td>כל ה-upstream tasks נכשלו</td>
+                                <td>Error handlers</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>one_failed</code></td>
+                                <td>לפחות אחד נכשל</td>
+                                <td>Alert tasks</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>one_success</code></td>
+                                <td>לפחות אחד הצליח</td>
+                                <td>Join patterns</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>none_failed</code></td>
+                                <td>אף אחד לא נכשל (success או skipped)</td>
+                                <td>Cleanup tasks</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>none_failed_min_one_success</code></td>
+                                <td>אף אחד לא נכשל ולפחות אחד הצליח</td>
+                                <td>Branching joins</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>all_done</code></td>
+                                <td>כולם הסתיימו (לא משנה איך)</td>
+                                <td>Final cleanup</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 style="margin-top: 40px;">⏰ Schedule Intervals</h2>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; direction: ltr;">Preset</th>
+                                <th>תיאור</th>
+                                <th>Cron Expression</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>@once</code></td>
+                                <td>פעם אחת</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>@hourly</code></td>
+                                <td>כל שעה</td>
+                                <td><code>0 * * * *</code></td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>@daily</code></td>
+                                <td>כל יום (חצות)</td>
+                                <td><code>0 0 * * *</code></td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>@weekly</code></td>
+                                <td>כל שבוע (ראשון חצות)</td>
+                                <td><code>0 0 * * 0</code></td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>@monthly</code></td>
+                                <td>כל חודש (1 בחודש חצות)</td>
+                                <td><code>0 0 1 * *</code></td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>@yearly</code></td>
+                                <td>כל שנה (1 בינואר חצות)</td>
+                                <td><code>0 0 1 1 *</code></td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>timedelta(hours=3)</code></td>
+                                <td>כל 3 שעות</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>"0 8 * * *"</code></td>
+                                <td>כל יום ב-8 בבוקר</td>
+                                <td>Custom cron</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>"0 8 * * 1-5"</code></td>
+                                <td>ימי חול ב-8 בבוקר</td>
+                                <td>Business days</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 style="margin-top: 25px;">Cron Format:</h3>
+                    <div class="info-card">
+                        <div class="code-block"># Format: minute hour day month day_of_week
+# Example:
+#   ┌───────────── minute (0-59)
+#   │ ┌───────────── hour (0-23)
+#   │ │ ┌───────────── day of month (1-31)
+#   │ │ │ ┌───────────── month (1-12)
+#   │ │ │ │ ┌───────────── day of week (0-6) (Sunday=0)
+#   │ │ │ │ │
+#   * * * * *
+
+# Examples:
+"0 8 * * *"      # Every day at 8:00 AM
+"0 8 * * 1-5"    # Weekdays at 8:00 AM
+"0 */2 * * *"    # Every 2 hours
+"30 7 1 * *"     # 7:30 AM on 1st of every month
+"0 0 * * 0"      # Every Sunday at midnight</div>
+                    </div>
+
+                    <h2 style="margin-top: 40px;">📅 Jinja Template Variables</h2>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; direction: ltr;">Variable</th>
+                                <th>תיאור</th>
+                                <th>דוגמה</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ ds }}</code></td>
+                                <td>Execution date (YYYY-MM-DD)</td>
+                                <td>2024-01-15</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ ds_nodash }}</code></td>
+                                <td>Execution date ללא מקפים</td>
+                                <td>20240115</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ prev_ds }}</code></td>
+                                <td>Previous execution date</td>
+                                <td>2024-01-14</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ next_ds }}</code></td>
+                                <td>Next execution date</td>
+                                <td>2024-01-16</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ dag }}</code></td>
+                                <td>DAG object</td>
+                                <td>{{ dag.dag_id }}</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ task }}</code></td>
+                                <td>Task object</td>
+                                <td>{{ task.task_id }}</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ ti }}</code></td>
+                                <td>TaskInstance</td>
+                                <td>{{ ti.xcom_pull(...) }}</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ execution_date }}</code></td>
+                                <td>Execution datetime</td>
+                                <td>datetime object</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ macros.ds_add(ds, 7) }}</code></td>
+                                <td>הוספת ימים</td>
+                                <td>2024-01-22</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>{{ macros.datetime }}</code></td>
+                                <td>Python datetime module</td>
+                                <td>datetime functions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 style="margin-top: 40px;">🔧 DAG Parameters חשובים</h2>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; direction: ltr;">Parameter</th>
+                                <th>תיאור</th>
+                                <th>ברירת מחדל</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>dag_id</code></td>
+                                <td>מזהה ייחודי של DAG</td>
+                                <td>required</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>schedule_interval</code></td>
+                                <td>תדירות הרצה</td>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>start_date</code></td>
+                                <td>תאריך התחלה</td>
+                                <td>required</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>catchup</code></td>
+                                <td>הרצת backfill אוטומטי</td>
+                                <td>True</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>max_active_runs</code></td>
+                                <td>מקסימום הרצות במקביל</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>concurrency</code></td>
+                                <td>מקסימום tasks במקביל</td>
+                                <td>16</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>default_args</code></td>
+                                <td>הגדרות ברירת מחדל לtasks</td>
+                                <td>{}</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>tags</code></td>
+                                <td>תגיות לארגון</td>
+                                <td>[]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 style="margin-top: 40px;">⚙️ Task Parameters חשובים</h2>
+                    <table class="reference-table">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; direction: ltr;">Parameter</th>
+                                <th>תיאור</th>
+                                <th>ברירת מחדל</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>task_id</code></td>
+                                <td>מזהה ייחודי של Task</td>
+                                <td>required</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>retries</code></td>
+                                <td>מספר ניסיונות חוזרים</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>retry_delay</code></td>
+                                <td>זמן המתנה בין retries</td>
+                                <td>timedelta(minutes=5)</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>execution_timeout</code></td>
+                                <td>זמן מקסימלי לביצוע</td>
+                                <td>None</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>trigger_rule</code></td>
+                                <td>תנאי להפעלת Task</td>
+                                <td>all_success</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>pool</code></td>
+                                <td>Pool להגבלת משאבים</td>
+                                <td>default_pool</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>queue</code></td>
+                                <td>Queue ל-CeleryExecutor</td>
+                                <td>default</td>
+                            </tr>
+                            <tr>
+                                <td style="direction: ltr; text-align: left;"><code>depends_on_past</code></td>
+                                <td>תלות בהרצה קודמת</td>
+                                <td>False</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 style="margin-top: 40px;">🎨 דוגמאות מהירות</h2>
+
+                    <h3>DAG בסיסי:</h3>
+                    <div class="code-block">from airflow import DAG
+from airflow.operators.bash import BashOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 1,
+}
+
+dag = DAG(
+    'my_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+task = BashOperator(
+    task_id='my_task',
+    bash_command='echo "Hello"',
+    dag=dag,
+)</div>
+
+                    <h3>תלויות:</h3>
+                    <div class="code-block"># Linear
+task1 >> task2 >> task3
+
+# Parallel
+task1 >> [task2, task3] >> task4
+
+# Multiple dependencies
+[task1, task2] >> task3 >> [task4, task5]
+
+# set_upstream / set_downstream
+task2.set_upstream(task1)
+task3.set_downstream(task4)</div>
+
+                    <h3>XCom:</h3>
+                    <div class="code-block"># Push
+context['ti'].xcom_push(key='my_key', value=42)
+
+# או return
+return 42  # auto-pushed as 'return_value'
+
+# Pull
+value = context['ti'].xcom_pull(
+    task_ids='other_task',
+    key='return_value'  # or specific key
+)</div>
+
+                    <h3>Connections:</h3>
+                    <div class="code-block"># In code
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
+hook = PostgresHook(postgres_conn_id='my_postgres')
+
+# CLI
+airflow connections add 'my_postgres' \
+    --conn-type 'postgres' \
+    --conn-host 'localhost' \
+    --conn-schema 'mydb' \
+    --conn-login 'user' \
+    --conn-password 'pass'</div>
+
+                    <h3>Variables:</h3>
+                    <div class="code-block"># In code
+from airflow.models import Variable
+
+api_key = Variable.get("api_key")
+config = Variable.get("my_config", deserialize_json=True)
+
+# Set variable
+Variable.set("my_key", "my_value")
+
+# CLI
+airflow variables set my_key my_value
+airflow variables get my_key</div>
+                </div>
+
                 <!-- Best Practices -->
                 <div id="section-best-practices" class="theory-section">
                     <h1>✨ Best Practices ל-Apache Airflow</h1>
@@ -1895,9 +2725,9 @@ airflow celery flower
                     <div class="success-card">
                         <h4>עקרונות בסיסיים:</h4>
                         <ul>
-                            <li><strong>Idempotency</strong> - כל task צריך להיות idempotent</li>
-                            <li><strong>Atomicity</strong> - כל task צריך לעשות דבר אחד טוב</li>
-                            <li><strong>Deterministic</strong> - אותה input = אותה output</li>
+                            <li><strong>Idempotency</strong> - כל task צריך להיות idempotent (הרצה מספר פעמים = תוצאה זהה)</li>
+                            <li><strong>Atomicity</strong> - כל task צריך לעשות דבר אחד טוב (Single Responsibility)</li>
+                            <li><strong>Deterministic</strong> - אותה input = אותה output תמיד</li>
                             <li><strong>Independent</strong> - tasks לא תלויים בstate חיצוני משתנה</li>
                         </ul>
                     </div>
@@ -1905,37 +2735,108 @@ airflow celery flower
                     <h2>📝 כתיבת קוד</h2>
                     <div class="comparison-grid">
                         <div class="comparison-card">
-                            <h4>✅ DO</h4>
+                            <h4>✅ DO - עשה</h4>
                             <ul style="font-size: 0.9rem;">
                                 <li>השתמש ב-Variables לconfig</li>
                                 <li>הגדר timeouts לtasks</li>
                                 <li>הוסף retries לtasks שיכולים להיכשל</li>
-                                <li>השתמש ב-execution_date</li>
+                                <li>השתמש ב-execution_date לא ב-datetime.now()</li>
                                 <li>שמור credentials ב-Connections</li>
-                                <li>תעד את הDAGs שלך</li>
+                                <li>תעד את הDAGs שלך (docstring)</li>
+                                <li>השתמש ב-Tags לארגון</li>
+                                <li>הגדר SLAs לtasks קריטיים</li>
                             </ul>
                         </div>
 
                         <div class="comparison-card">
-                            <h4>❌ DON'T</h4>
+                            <h4>❌ DON'T - אל תעשה</h4>
                             <ul style="font-size: 0.9rem;">
-                                <li>אל תשתמש ב-datetime.now()</li>
-                                <li>אל תקשיח credentials בקוד</li>
-                                <li>אל תשתמש ב-XCom לדאטה גדולה</li>
-                                <li>אל תעשה top-level code שרץ בimport</li>
-                                <li>אל תשתמש במשתנים גלובליים</li>
+                                <li>❌ datetime.now() - לא דטרמיניסטי!</li>
+                                <li>❌ Credentials בקוד - סכנת אבטחה!</li>
+                                <li>❌ XCom לדאטה גדולה - יגרום לבעיות!</li>
+                                <li>❌ Top-level code - רץ בכל import!</li>
+                                <li>❌ Global variables - בעיות concurrency!</li>
+                                <li>❌ print() בלבד - השתמש ב-logging!</li>
                             </ul>
                         </div>
                     </div>
 
+                    <h2>💡 דוגמאות קוד טוב vs רע</h2>
+                    <div class="info-card">
+                        <h4>⏰ תאריכים ושעות</h4>
+                        <div class="code-block"># ❌ גרוע - לא דטרמיניסטי
+from datetime import datetime
+today = datetime.now()  # ערך שונה בכל הרצה!
+
+# ✅ טוב - דטרמיניסטי
+def my_function(**context):
+    execution_date = context['execution_date']  # תמיד אותו ערך להרצה ספציפית
+    ds = context['ds']  # 'YYYY-MM-DD' string</div>
+
+                        <h4 style="margin-top: 25px;">🔑 Credentials</h4>
+                        <div class="code-block"># ❌ גרוע - hardcoded
+password = "my_secret_password"
+hook = PostgresHook(password=password)
+
+# ✅ טוב - Connection
+hook = PostgresHook(postgres_conn_id='my_postgres')  # credentials in Airflow UI
+
+# ✅ עוד יותר טוב - Secrets Backend
+# airflow.cfg:
+# [secrets]
+# backend = airflow.providers.amazon.aws.secrets.secrets_manager.SecretsManagerBackend</div>
+
+                        <h4 style="margin-top: 25px;">📊 XCom Usage</h4>
+                        <div class="code-block"># ❌ גרוע - DataFrame גדול ב-XCom
+def process():
+    df = pd.read_csv('large_file.csv')  # 1GB
+    return df  # ❌ יגרום לבעיות!
+
+# ✅ טוב - שמור קובץ, העבר path
+def process():
+    df = pd.read_csv('large_file.csv')
+    output_path = '/tmp/processed.parquet'
+    df.to_parquet(output_path)
+    return output_path  # ✅ רק string קטן!</div>
+
+                        <h4 style="margin-top: 25px;">🔄 Top-level Code</h4>
+                        <div class="code-block"># ❌ גרוע - רץ בכל import (כל 30 שניות!)
+import pandas as pd
+
+# קוד יקר שרץ בכל פעם
+df = pd.read_csv('/data/large.csv')  # ❌ רץ כל 30 שניות!
+CONSTANT = df['value'].sum()
+
+dag = DAG(...)
+
+# ✅ טוב - רק בתוך tasks
+dag = DAG(...)
+
+def process_data():
+    df = pd.read_csv('/data/large.csv')  # ✅ רק כשהtask רץ!
+    return df['value'].sum()</div>
+                    </div>
+
                     <h2>🏗️ ארכיטקטורה</h2>
-                    <div class="concept-card">
-                        <h4>בחירת Executor:</h4>
-                        <ul>
-                            <li><strong>Development:</strong> SequentialExecutor</li>
-                            <li><strong>Small Production:</strong> LocalExecutor</li>
-                            <li><strong>Large Production:</strong> CeleryExecutor או KubernetesExecutor</li>
-                        </ul>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🔧 Development</h4>
+                            <p><strong>Executor:</strong> SequentialExecutor</p>
+                            <p><strong>DB:</strong> SQLite</p>
+                            <p><strong>Setup:</strong> מהיר ופשוט</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🏢 Small Production</h4>
+                            <p><strong>Executor:</strong> LocalExecutor</p>
+                            <p><strong>DB:</strong> PostgreSQL/MySQL</p>
+                            <p><strong>Setup:</strong> Machine אחת חזקה</p>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🌐 Large Production</h4>
+                            <p><strong>Executor:</strong> CeleryExecutor</p>
+                            <p><strong>DB:</strong> PostgreSQL</p>
+                            <p><strong>Setup:</strong> Cluster + Broker</p>
+                        </div>
                     </div>
 
                     <h2>📊 Monitoring & Alerting</h2>
@@ -1943,57 +2844,269 @@ airflow celery flower
                         <h4>מה לנטר?</h4>
                         <ul>
                             <li><strong>DAG duration</strong> - כמה זמן לוקח לDAG להסתיים</li>
-                            <li><strong>Task failures</strong> - אילו tasks נכשלים</li>
-                            <li><strong>Queue size</strong> - כמה tasks בתור</li>
+                            <li><strong>Task failures</strong> - אילו tasks נכשלים (trends)</li>
+                            <li><strong>Queue size</strong> - כמה tasks ממתינים (bottleneck?)</li>
                             <li><strong>Resource usage</strong> - CPU, Memory, Disk</li>
                             <li><strong>SLA misses</strong> - האם עומדים בזמנים</li>
+                            <li><strong>Scheduler health</strong> - heartbeat, parsing time</li>
                         </ul>
                     </div>
+
+                    <h3>דוגמת SLA</h3>
+                    <div class="code-block">from datetime import timedelta
+
+def sla_miss_callback(dag, task_list, blocking_task_list, slas, blocking_tis):
+    """Callback when SLA is missed"""
+    print(f"SLA missed for: {task_list}")
+    # Send alert to Slack/Email
+
+default_args = {
+    'sla': timedelta(hours=2),  # Task צריך להסתיים תוך 2 שעות
+    'sla_miss_callback': sla_miss_callback,
+}
+
+dag = DAG(
+    'my_dag',
+    default_args=default_args,
+    ...
+)</div>
 
                     <h2>🔧 אופטימיזציה</h2>
                     <div class="comparison-grid">
                         <div class="comparison-card">
                             <h4>⚡ Performance</h4>
                             <ul style="font-size: 0.9rem;">
-                                <li>השתמש ב-Pools נבונה</li>
-                                <li>הגדר parallelism נכון</li>
-                                <li>השתמש ב-catchup=False אם לא צריך</li>
-                                <li>נקה DAGs ישנים</li>
+                                <li><strong>Pools:</strong> הגבל גישה למשאבים</li>
+                                <li><strong>Parallelism:</strong> הגדר נכון</li>
+                                <li><strong>catchup=False:</strong> אל תריץ היסטוריה</li>
+                                <li><strong>Clean old data:</strong> db clean</li>
+                                <li><strong>Use Sensors wisely:</strong> poke_interval, timeout</li>
                             </ul>
                         </div>
 
                         <div class="comparison-card">
-                            <h4>💰 Cost</h4>
+                            <h4>💰 Cost Optimization</h4>
                             <ul style="font-size: 0.9rem;">
-                                <li>הרץ tasks כבדים בזמנים זולים</li>
-                                <li>השתמש ב-spot instances לworkers</li>
-                                <li>אופטימז את הmemory usage</li>
-                                <li>השתמש ב-KubernetesExecutor לscale</li>
+                                <li>הרץ tasks כבדים off-peak</li>
+                                <li>Spot instances לworkers</li>
+                                <li>Scale down בלילה/סופ"ש</li>
+                                <li>Kubernetes Executor - scale to 0</li>
+                                <li>Pool limits למניעת over-usage</li>
                             </ul>
                         </div>
                     </div>
 
-                    <h2>🔒 Security</h2>
+                    <h2>🔒 Security Best Practices</h2>
                     <div class="warning-card">
-                        <h4>⚠️ אבטחה:</h4>
+                        <h4>⚠️ אבטחה קריטית:</h4>
                         <ul>
-                            <li>השתמש ב-RBAC (Role-Based Access Control)</li>
-                            <li>הצפן credentials במסד הנתונים</li>
-                            <li>אל תשתף connection IDs בקוד</li>
-                            <li>הגבל גישה ל-UI רק למורשים</li>
-                            <li>השתמש ב-secrets backend (AWS Secrets Manager, Vault)</li>
+                            <li><strong>RBAC:</strong> הפעל Role-Based Access Control</li>
+                            <li><strong>Fernet Key:</strong> הצפן sensitive data</li>
+                            <li><strong>Secrets Backend:</strong> AWS Secrets Manager, HashiCorp Vault</li>
+                            <li><strong>Network:</strong> הגבל גישה ל-UI (VPN, IP whitelist)</li>
+                            <li><strong>Authentication:</strong> LDAP, OAuth, Google Auth</li>
+                            <li><strong>Audit Logs:</strong> עקוב אחר מי עשה מה</li>
+                        </ul>
+                    </div>
+
+                    <h3>הגדרת Fernet Key</h3>
+                    <div class="code-block"># Generate Fernet key
+from cryptography.fernet import Fernet
+
+fernet_key = Fernet.generate_key()
+print(fernet_key.decode())
+
+# Add to airflow.cfg
+# [core]
+# fernet_key = YOUR_KEY_HERE</div>
+
+                    <h2>📁 ארגון קוד</h2>
+                    <div class="success-card">
+                        <h4>✅ מבנה תיקיות מומלץ:</h4>
+                        <div class="code-block">airflow_project/
+├── dags/
+│   ├── common/
+│   │   ├── __init__.py
+│   │   ├── utils.py         # פונקציות משותפות
+│   │   └── config.py        # הגדרות
+│   ├── etl/
+│   │   ├── daily_sales.py
+│   │   └── weekly_report.py
+│   ├── api/
+│   │   └── sync_users.py
+│   └── monitoring/
+│       └── health_checks.py
+├── plugins/
+│   └── custom_operators/
+│       └── my_operator.py
+├── tests/
+│   └── dags/
+│       └── test_daily_sales.py
+├── config/
+│   ├── connections.json
+│   └── variables.json
+└── requirements.txt</div>
+                    </div>
+
+                    <h2>🧪 Testing</h2>
+                    <div class="info-card">
+                        <h4>סוגי Tests:</h4>
+
+                        <h5 style="margin-top: 20px;">1. Syntax Check</h5>
+                        <div class="code-block"># פשוט הרץ את הקובץ
+python dags/my_dag.py
+
+# אם יש שגיאה, היא תופיע</div>
+
+                        <h5 style="margin-top: 20px;">2. DAG Validation</h5>
+                        <div class="code-block">import pytest
+from airflow.models import DagBag
+
+def test_dag_loaded():
+    """Test that DAG loads without errors"""
+    dagbag = DagBag(dag_folder='dags/', include_examples=False)
+    assert len(dagbag.import_errors) == 0, f"Errors: {dagbag.import_errors}"
+
+def test_dag_has_tags():
+    """Test that DAG has required tags"""
+    dagbag = DagBag()
+    dag = dagbag.get_dag('my_dag')
+    assert 'production' in dag.tags</div>
+
+                        <h5 style="margin-top: 20px;">3. Task Testing</h5>
+                        <div class="code-block"># Test individual task
+airflow tasks test my_dag my_task 2024-01-01
+
+# Test with pytest
+def test_task_logic():
+    """Test task business logic"""
+    result = my_task_function(test_data)
+    assert result == expected_output</div>
+                    </div>
+
+                    <h2>🔧 אופטימיזציה מתקדמת</h2>
+                    <div class="info-card">
+                        <h4>Parallelism Settings:</h4>
+                        <div class="code-block"># airflow.cfg optimizations
+
+[core]
+parallelism = 32                    # max tasks across all DAGs (globally)
+dag_concurrency = 16                # max tasks per DAG
+max_active_runs_per_dag = 3         # max concurrent DAG runs
+
+[scheduler]
+max_threads = 4                     # scheduler threads
+parsing_processes = 2               # parallel DAG file parsing
+
+# Per-DAG level
+dag = DAG(
+    'my_dag',
+    max_active_runs=5,              # override global setting
+    concurrency=20,                 # max tasks for this DAG
+    ...
+)</div>
+
+                        <h4 style="margin-top: 25px;">Pool Configuration:</h4>
+                        <div class="code-block"># Create pool in UI or CLI
+# Admin → Pools → Add
+
+# Or via CLI:
+airflow pools set database_pool 10 "Database connections"
+
+# Use in DAG
+task = PythonOperator(
+    task_id='query_db',
+    python_callable=my_func,
+    pool='database_pool',  # Max 10 tasks can use DB
+    pool_slots=1,          # This task uses 1 slot
+    dag=dag,
+)</div>
+
+                        <h4 style="margin-top: 25px;">Queue Management (CeleryExecutor):</h4>
+                        <div class="code-block"># Send heavy tasks to dedicated queue
+heavy_task = BashOperator(
+    task_id='process_big_data',
+    bash_command='python heavy_job.py',
+    queue='heavy_queue',  # Goes to heavy workers
+    dag=dag,
+)
+
+# Start worker for specific queue
+airflow celery worker -q heavy_queue</div>
+                    </div>
+
+                    <h2>🔒 Security & Compliance</h2>
+                    <div class="warning-card">
+                        <h4>⚠️ Production Security Checklist:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>☐ <strong>RBAC Enabled:</strong> Role-based access control</li>
+                            <li>☐ <strong>Fernet Key:</strong> סיסמאות מוצפנות ב-DB</li>
+                            <li>☐ <strong>Secrets Backend:</strong> AWS/GCP/Vault למידע רגיש</li>
+                            <li>☐ <strong>Authentication:</strong> LDAP/OAuth/SAML</li>
+                            <li>☐ <strong>SSL/TLS:</strong> חיבורים מאובטחים</li>
+                            <li>☐ <strong>Network Security:</strong> Firewall, VPN</li>
+                            <li>☐ <strong>Audit Logs:</strong> מעקב אחר פעילות</li>
+                            <li>☐ <strong>Regular Updates:</strong> עדכוני אבטחה</li>
                         </ul>
                     </div>
 
                     <h2>📚 למידה והתפתחות</h2>
                     <div class="info-card">
-                        <h4>משאבים:</h4>
+                        <h4>משאבים מומלצים:</h4>
                         <ul>
-                            <li><strong>Documentation:</strong> airflow.apache.org</li>
-                            <li><strong>Community:</strong> Apache Airflow Slack</li>
-                            <li><strong>GitHub:</strong> github.com/apache/airflow</li>
-                            <li><strong>Tutorials:</strong> Astronomer blog, Medium</li>
+                            <li><strong>Documentation:</strong> <a href="https://airflow.apache.org" target="_blank">airflow.apache.org</a></li>
+                            <li><strong>Community:</strong> Apache Airflow Slack channel</li>
+                            <li><strong>GitHub:</strong> github.com/apache/airflow - issues & discussions</li>
+                            <li><strong>Astronomer:</strong> astronomer.io/blog - best practices</li>
+                            <li><strong>YouTube:</strong> Airflow Summit talks</li>
+                            <li><strong>Books:</strong> "Data Pipelines with Apache Airflow"</li>
                         </ul>
+                    </div>
+
+                    <h2>🎯 Production Checklist סופי</h2>
+                    <div class="success-card">
+                        <h4>לפני Deploy לפרודקשן:</h4>
+                        <ul style="list-style: none; padding: 0; font-size: 1.05rem;">
+                            <li>☐ <strong>Executor:</strong> LocalExecutor או CeleryExecutor</li>
+                            <li>☐ <strong>Database:</strong> PostgreSQL/MySQL (לא SQLite!)</li>
+                            <li>☐ <strong>Connections:</strong> כל ה-Connections מוגדרים</li>
+                            <li>☐ <strong>Variables:</strong> כל ה-Variables מוגדרים</li>
+                            <li>☐ <strong>Error Handling:</strong> try/except + logging</li>
+                            <li>☐ <strong>Retries:</strong> מוגדרים לtasks שיכולים להיכשל</li>
+                            <li>☐ <strong>Email Alerts:</strong> email_on_failure=True</li>
+                            <li>☐ <strong>SLAs:</strong> מוגדרים לtasks קריטיים</li>
+                            <li>☐ <strong>Testing:</strong> כל הDAGs נבדקו</li>
+                            <li>☐ <strong>Documentation:</strong> README + הערות בקוד</li>
+                            <li>☐ <strong>Security:</strong> RBAC, Fernet, Secrets Backend</li>
+                            <li>☐ <strong>Monitoring:</strong> מוגדרים dashboards ו-alerts</li>
+                            <li>☐ <strong>Backup:</strong> תוכנית backup ל-DB</li>
+                            <li>☐ <strong>Scaling:</strong> תוכנית scaling (Pools, Resources)</li>
+                        </ul>
+                    </div>
+
+                    <h2>📏 Design Patterns נפוצים</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>🌳 Fan-Out Pattern</h4>
+                            <p>Task אחד → Tasks מרובים במקביל</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;">start >> [task1, task2, task3]</div>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔀 Fan-In Pattern</h4>
+                            <p>Tasks מרובים → Task אחד מסכם</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;">[task1, task2, task3] >> end</div>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>🔄 Error Handling Pattern</h4>
+                            <p>Task → Success/Failure handlers</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;">task >> [on_success, on_failure]
+# עם trigger_rules</div>
+                        </div>
+                        <div class="comparison-card">
+                            <h4>📦 Staging Pattern</h4>
+                            <p>Extract → Transform → Load</p>
+                            <div class="code-block" style="font-size: 0.75rem; margin-top: 10px;">extract >> transform >> load</div>
+                        </div>
                     </div>
                 </div>
 
@@ -2001,7 +3114,7 @@ airflow celery flower
         </div>
     </div>
 
-    
+
     <!-- INSTALLATION VIEW - הטאב החדש! -->
     <div id="view-installation" class="view-section">
         <div class="theory-content" style="max-width: 1200px; margin: 0 auto;">
@@ -2388,19 +3501,2636 @@ docker exec -it &lt;container-id&gt; bash</div>
                 </div>
             </div>
 
-            <div class="success-card" style="margin-top: 50px;">
+            <div class="comparison-card" style="margin-top: 40px;">
+                <h2 style="margin-top: 0;">🎛️ פעולות נפוצות ב-UI</h2>
+
+                <h3>על DAG:</h3>
+                <ul style="padding-right: 25px;">
+                    <li><strong>Trigger DAG:</strong> ▶️ כפתור Play - הפעלה ידנית</li>
+                    <li><strong>Pause/Unpause:</strong> ⏸️ Toggle switch - עצירה/הפעלה של scheduling</li>
+                    <li><strong>Delete:</strong> 🗑️ מחיקת DAG + history</li>
+                    <li><strong>Refresh:</strong> 🔄 רענון מטא-דאטה</li>
+                </ul>
+
+                <h3>על Task:</h3>
+                <ul style="padding-right: 25px;">
+                    <li><strong>View Log:</strong> צפייה ב-logs של הרצה</li>
+                    <li><strong>Mark Success/Failed:</strong> שינוי סטטוס ידני</li>
+                    <li><strong>Clear:</strong> ניקוי סטטוס (להרצה מחדש)</li>
+                    <li><strong>Run:</strong> הרצה ידנית של task בודד</li>
+                    <li><strong>Task Instance Details:</strong> מידע מפורט</li>
+                    <li><strong>XCom:</strong> צפייה ב-XCom values</li>
+                    <li><strong>Rendered Template:</strong> ערכים אחרי Jinja rendering</li>
+                </ul>
+
+                <h3>Navigation Shortcuts:</h3>
+                <div class="code-block"># Keyboard shortcuts in UI:
+?           # Show help
+/           # Search DAGs
+Shift + /   # Open command palette
+
+# URL patterns:
+/home                                    # Main page
+/dags/{dag_id}/graph                    # Graph view
+/dags/{dag_id}/tree                     # Tree view
+/dags/{dag_id}/gantt                    # Gantt chart
+/admin/connection                       # Connections
+/admin/variable                         # Variables</div>
+            </div>
+
+            <div class="success-card" style="margin-top: 40px;">
                 <h3 style="margin-top: 0;">💡 טיפים לשימוש בUI:</h3>
                 <ul>
-                    <li><strong>Graph View</strong> - הכי טוב להבנת מבנה ה-DAG</li>
-                    <li><strong>Tree View</strong> - הכי טוב לזיהוי patterns של failures</li>
-                    <li><strong>Gantt</strong> - הכי טוב לאופטימיזציה של ביצועים</li>
-                    <li><strong>Task Duration</strong> - הכי טוב לזיהוי bottlenecks</li>
-                    <li>לחץ על tasks כדי לראות logs, retry, mark success/failed</li>
+                    <li><strong>Graph View</strong> - הכי טוב להבנת מבנה ה-DAG ותלויות</li>
+                    <li><strong>Tree View</strong> - הכי טוב לזיהוי patterns של failures לאורך זמן</li>
+                    <li><strong>Gantt Chart</strong> - הכי טוב לאופטימיזציה של ביצועים וזיהוי bottlenecks</li>
+                    <li><strong>Task Duration</strong> - הכי טוב לזיהוי tasks איטיים ו-trends</li>
+                    <li><strong>Code View</strong> - מהיר לבדיקת קוד ללא פתיחת קובץ</li>
+                    <li>לחץ על task לראות logs, retry, mark success/failed, XCom</li>
+                    <li>לחץ על connection בין tasks לראות Relationship</li>
+                    <li>השתמש ב-Refresh כדי לטעון שינויים בקוד</li>
+                    <li>סנן DAGs לפי Tags בעמודה השמאלית</li>
                 </ul>
+            </div>
+
+            <div class="warning-card" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">⚠️ שגיאות נפוצות ב-UI</h3>
+                <ul>
+                    <li><strong>DAG לא מופיע:</strong> בדוק שהקובץ ב-<code>dags/</code> ואין שגיאות syntax</li>
+                    <li><strong>"Broken DAG":</strong> יש שגיאה בקוד - בדוק את ה-Import Errors</li>
+                    <li><strong>Tasks לא רצים:</strong> בדוק שה-DAG לא ב-Pause (toggle switch)</li>
+                    <li><strong>"Queued" לנצח:</strong> Scheduler לא רץ או אין workers זמינים</li>
+                    <li><strong>"Up for retry":</strong> Task נכשל ומחכה ל-retry_delay</li>
+                </ul>
+            </div>
+
+            <div class="info-card" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">🔍 כיצד לנפות באגים דרך UI</h3>
+                <ol style="padding-right: 25px; font-size: 1.05rem; line-height: 2;">
+                    <li>לחץ על ה-DAG → Graph View</li>
+                    <li>זהה tasks עם צבע אדום/כתום (failed/retry)</li>
+                    <li>לחץ על Task → View Log</li>
+                    <li>קרא את ההודעת שגיאה בסוף ה-log</li>
+                    <li>לחץ על Task → Rendered Template לראות ערכים אמיתיים</li>
+                    <li>לחץ על Task → XCom לראות data שהועבר</li>
+                    <li>לאחר תיקון בקוד: לחץ Clear על Task → הרצה מחדש</li>
+                </ol>
             </div>
         </div>
     </div>
 
+    <!-- === EXAMPLES VIEW === -->
+    <div id="view-examples" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">💡 דוגמאות DAG מעשיות</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                8 דוגמאות מוכנות לשימוש - העתק והתחל לעבוד!
+            </p>
+
+            <!-- Example 1: Hello World -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 1: Hello World - DAG ראשון</h2>
+                <p style="margin-bottom: 20px;">DAG פשוט עם BashOperator ו-PythonOperator בסיסי</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+# Default arguments
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2024, 1, 1),
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
+
+# Create DAG
+dag = DAG(
+    'hello_world_dag',
+    default_args=default_args,
+    description='My first Airflow DAG',
+    schedule_interval=timedelta(days=1),
+    catchup=False,
+    tags=['example', 'tutorial'],
+)
+
+# Python function
+def print_hello():
+    print("Hello from Airflow!")
+    return "Success"
+
+# Task 1: Print date
+print_date = BashOperator(
+    task_id='print_date',
+    bash_command='date',
+    dag=dag,
+)
+
+# Task 2: Print hello
+print_hello_task = PythonOperator(
+    task_id='print_hello',
+    python_callable=print_hello,
+    dag=dag,
+)
+
+# Task 3: Print done
+print_done = BashOperator(
+    task_id='print_done',
+    bash_command='echo "Pipeline completed!"',
+    dag=dag,
+)
+
+# Set dependencies
+print_date >> print_hello_task >> print_done</div>
+            </div>
+
+            <!-- Example 2: Database ETL -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 2: Database ETL Pipeline</h2>
+                <p style="margin-bottom: 20px;">קריאה ממסד נתונים, עיבוד, וכתיבה למסד אחר</p>
+                <div class="code-block">from airflow import DAG
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+import pandas as pd
+
+default_args = {
+    'owner': 'data_team',
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5),
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'postgres_etl_pipeline',
+    default_args=default_args,
+    description='ETL from source to target database',
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['etl', 'database'],
+)
+
+# Task 1: Extract data from source
+def extract_data(**context):
+    """Extract data from source database"""
+    hook = PostgresHook(postgres_conn_id='source_db')
+    sql = """
+        SELECT
+            user_id,
+            username,
+            email,
+            created_at
+        FROM users
+        WHERE DATE(created_at) = '{{ ds }}'
+    """
+    df = hook.get_pandas_df(sql)
+
+    # Push to XCom
+    context['ti'].xcom_push(key='user_count', value=len(df))
+
+    # Save to temp location
+    df.to_csv('/tmp/users_{{ ds }}.csv', index=False)
+    print(f"Extracted {len(df)} users")
+
+# Task 2: Transform data
+def transform_data(**context):
+    """Transform the data"""
+    df = pd.read_csv('/tmp/users_{{ ds }}.csv')
+
+    # Transformations
+    df['username'] = df['username'].str.upper()
+    df['email_domain'] = df['email'].str.split('@').str[1]
+    df['load_date'] = datetime.now()
+
+    # Save transformed data
+    df.to_csv('/tmp/users_transformed_{{ ds }}.csv', index=False)
+    print(f"Transformed {len(df)} records")
+
+# Task 3: Load to target database
+def load_data(**context):
+    """Load data to target database"""
+    hook = PostgresHook(postgres_conn_id='target_db')
+    df = pd.read_csv('/tmp/users_transformed_{{ ds }}.csv')
+
+    # Insert into target table
+    hook.insert_rows(
+        table='users_staging',
+        rows=df.values.tolist(),
+        target_fields=df.columns.tolist()
+    )
+    print(f"Loaded {len(df)} records to target")
+
+extract_task = PythonOperator(
+    task_id='extract_data',
+    python_callable=extract_data,
+    provide_context=True,
+    dag=dag,
+)
+
+transform_task = PythonOperator(
+    task_id='transform_data',
+    python_callable=transform_data,
+    provide_context=True,
+    dag=dag,
+)
+
+load_task = PythonOperator(
+    task_id='load_data',
+    python_callable=load_data,
+    provide_context=True,
+    dag=dag,
+)
+
+# Dependencies: Extract → Transform → Load
+extract_task >> transform_task >> load_task</div>
+            </div>
+
+            <!-- Example 3: API Integration -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 3: REST API Integration</h2>
+                <p style="margin-bottom: 20px;">קריאה ל-API חיצוני ועיבוד התוצאות</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.providers.http.operators.http import SimpleHttpOperator
+from airflow.providers.http.sensors.http import HttpSensor
+from datetime import datetime, timedelta
+import json
+
+default_args = {
+    'owner': 'api_team',
+    'retries': 3,
+    'retry_delay': timedelta(minutes=2),
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'api_integration_dag',
+    default_args=default_args,
+    description='Fetch data from REST API',
+    schedule_interval='@hourly',
+    catchup=False,
+    tags=['api', 'integration'],
+)
+
+# Task 1: Check if API is available
+check_api = HttpSensor(
+    task_id='check_api_available',
+    http_conn_id='api_connection',
+    endpoint='health',
+    request_params={},
+    response_check=lambda response: response.status_code == 200,
+    poke_interval=30,
+    timeout=300,
+    dag=dag,
+)
+
+# Task 2: Fetch data from API
+fetch_api_data = SimpleHttpOperator(
+    task_id='fetch_users',
+    http_conn_id='api_connection',
+    endpoint='api/users',
+    method='GET',
+    headers={"Content-Type": "application/json"},
+    response_filter=lambda response: json.loads(response.text),
+    log_response=True,
+    dag=dag,
+)
+
+# Task 3: Process API response
+def process_api_response(**context):
+    """Process the API response"""
+    ti = context['ti']
+    data = ti.xcom_pull(task_ids='fetch_users')
+
+    print(f"Received {len(data)} records from API")
+
+    # Process data
+    processed_count = 0
+    for record in data:
+        # Your processing logic here
+        if record.get('status') == 'active':
+            processed_count += 1
+
+    print(f"Processed {processed_count} active users")
+
+    # Push to next task
+    ti.xcom_push(key='processed_count', value=processed_count)
+
+process_task = PythonOperator(
+    task_id='process_response',
+    python_callable=process_api_response,
+    provide_context=True,
+    dag=dag,
+)
+
+# Task 4: Send notification
+def send_notification(**context):
+    """Send summary notification"""
+    ti = context['ti']
+    count = ti.xcom_pull(task_ids='process_response', key='processed_count')
+    print(f"Pipeline completed! Processed {count} users")
+
+notify_task = PythonOperator(
+    task_id='send_notification',
+    python_callable=send_notification,
+    provide_context=True,
+    dag=dag,
+)
+
+# Dependencies
+check_api >> fetch_api_data >> process_task >> notify_task</div>
+            </div>
+
+            <!-- Example 4: XCom -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 4: XCom - תקשורת בין Tasks</h2>
+                <p style="margin-bottom: 20px;">שימוש ב-XCom להעברת מידע בין tasks</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 1,
+}
+
+dag = DAG(
+    'xcom_example_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['example', 'xcom'],
+)
+
+def calculate_metrics(**context):
+    """Calculate some metrics"""
+    # Simulate calculation
+    total_sales = 150000
+    total_orders = 1250
+    average_order_value = total_sales / total_orders
+
+    # Push multiple values to XCom
+    context['ti'].xcom_push(key='total_sales', value=total_sales)
+    context['ti'].xcom_push(key='total_orders', value=total_orders)
+    context['ti'].xcom_push(key='avg_order_value', value=average_order_value)
+
+    # Return value is automatically pushed with key='return_value'
+    return {
+        'status': 'success',
+        'records_processed': 1250
+    }
+
+def generate_report(**context):
+    """Generate report using XCom data"""
+    ti = context['ti']
+
+    # Pull specific keys
+    sales = ti.xcom_pull(task_ids='calculate', key='total_sales')
+    orders = ti.xcom_pull(task_ids='calculate', key='total_orders')
+    avg = ti.xcom_pull(task_ids='calculate', key='avg_order_value')
+
+    # Pull return value
+    result = ti.xcom_pull(task_ids='calculate')
+
+    print(f"""
+    Daily Report:
+    =============
+    Total Sales: ${sales:,.2f}
+    Total Orders: {orders:,}
+    Average Order Value: ${avg:.2f}
+    Status: {result['status']}
+    """)
+
+def send_alert(**context):
+    """Send alert if threshold exceeded"""
+    ti = context['ti']
+    sales = ti.xcom_pull(task_ids='calculate', key='total_sales')
+
+    if sales > 100000:
+        print(f"🎉 Great day! Sales: ${sales:,.2f}")
+    else:
+        print(f"⚠️ Low sales day: ${sales:,.2f}")
+
+calculate_task = PythonOperator(
+    task_id='calculate',
+    python_callable=calculate_metrics,
+    provide_context=True,
+    dag=dag,
+)
+
+report_task = PythonOperator(
+    task_id='generate_report',
+    python_callable=generate_report,
+    provide_context=True,
+    dag=dag,
+)
+
+alert_task = PythonOperator(
+    task_id='send_alert',
+    python_callable=send_alert,
+    provide_context=True,
+    dag=dag,
+)
+
+# calculate runs first, then both report and alert run in parallel
+calculate_task >> [report_task, alert_task]</div>
+            </div>
+
+            <!-- Example 5: Branching -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 5: Branching - תנאים והסתעפויות</h2>
+                <p style="margin-bottom: 20px;">שימוש ב-BranchPythonOperator להסתעפות לפי תנאים</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'branching_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['example', 'branching'],
+)
+
+def check_data_quality(**context):
+    """Check if data quality is good"""
+    # Simulate quality check
+    quality_score = 85  # In real scenario, calculate from data
+
+    context['ti'].xcom_push(key='quality_score', value=quality_score)
+
+    # Branch based on quality
+    if quality_score >= 80:
+        return 'process_high_quality'
+    else:
+        return 'send_alert_low_quality'
+
+def process_high_quality():
+    """Process high quality data"""
+    print("✅ Data quality is good - processing normally")
+
+def send_alert_low_quality():
+    """Send alert for low quality data"""
+    print("⚠️ Data quality is low - sending alert")
+
+def final_step():
+    """Final step - always runs"""
+    print("🏁 Pipeline completed")
+
+# Tasks
+check_quality = BranchPythonOperator(
+    task_id='check_quality',
+    python_callable=check_data_quality,
+    provide_context=True,
+    dag=dag,
+)
+
+high_quality_task = PythonOperator(
+    task_id='process_high_quality',
+    python_callable=process_high_quality,
+    dag=dag,
+)
+
+low_quality_task = PythonOperator(
+    task_id='send_alert_low_quality',
+    python_callable=send_alert_low_quality,
+    dag=dag,
+)
+
+final_task = BashOperator(
+    task_id='final_step',
+    bash_command='echo "Done"',
+    trigger_rule='none_failed_min_one_success',  # Important!
+    dag=dag,
+)
+
+# Dependencies
+check_quality >> [high_quality_task, low_quality_task] >> final_task</div>
+            </div>
+
+            <!-- Example 6: Multiple Dependencies -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 6: תלויות מורכבות</h2>
+                <p style="margin-bottom: 20px;">DAG עם תלויות מרובות ו-parallel execution</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'complex_dependencies_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['example', 'dependencies'],
+)
+
+# Python functions
+def fetch_source_a():
+    print("📥 Fetching from Source A")
+
+def fetch_source_b():
+    print("📥 Fetching from Source B")
+
+def fetch_source_c():
+    print("📥 Fetching from Source C")
+
+def combine_data(**context):
+    print("🔄 Combining all sources")
+
+def validate_data():
+    print("✅ Validating combined data")
+
+def save_to_warehouse():
+    print("💾 Saving to Data Warehouse")
+
+# Create tasks
+start = BashOperator(
+    task_id='start',
+    bash_command='echo "Starting ETL pipeline"',
+    dag=dag,
+)
+
+# Parallel data fetching
+fetch_a = PythonOperator(
+    task_id='fetch_source_a',
+    python_callable=fetch_source_a,
+    dag=dag,
+)
+
+fetch_b = PythonOperator(
+    task_id='fetch_source_b',
+    python_callable=fetch_source_b,
+    dag=dag,
+)
+
+fetch_c = PythonOperator(
+    task_id='fetch_source_c',
+    python_callable=fetch_source_c,
+    dag=dag,
+)
+
+# Combine after all fetches complete
+combine = PythonOperator(
+    task_id='combine_data',
+    python_callable=combine_data,
+    provide_context=True,
+    dag=dag,
+)
+
+# Validate
+validate = PythonOperator(
+    task_id='validate_data',
+    python_callable=validate_data,
+    dag=dag,
+)
+
+# Save
+save = PythonOperator(
+    task_id='save_to_warehouse',
+    python_callable=save_to_warehouse,
+    dag=dag,
+)
+
+end = BashOperator(
+    task_id='end',
+    bash_command='echo "Pipeline completed successfully"',
+    dag=dag,
+)
+
+# Complex dependencies:
+# Start → [fetch_a, fetch_b, fetch_c] → combine → validate → save → end
+start >> [fetch_a, fetch_b, fetch_c] >> combine >> validate >> save >> end</div>
+            </div>
+
+            <!-- Example 7: File Processing -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 7: File Processing Pipeline</h2>
+                <p style="margin-bottom: 20px;">עיבוד קבצים מתיקייה + ארכוב</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime, timedelta
+import os
+import shutil
+import pandas as pd
+
+default_args = {
+    'owner': 'data_team',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 1,
+}
+
+dag = DAG(
+    'file_processing_pipeline',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['files', 'etl'],
+)
+
+def list_files(**context):
+    """List all files in input directory"""
+    input_dir = '/data/input'
+    files = [f for f in os.listdir(input_dir) if f.endswith('.csv')]
+
+    context['ti'].xcom_push(key='file_list', value=files)
+    print(f"Found {len(files)} CSV files")
+    return len(files)
+
+def process_files(**context):
+    """Process all CSV files"""
+    ti = context['ti']
+    files = ti.xcom_pull(task_ids='list_files', key='file_list')
+
+    processed_count = 0
+    for filename in files:
+        input_path = f'/data/input/{filename}'
+        output_path = f'/data/output/processed_{filename}'
+
+        # Read, process, and save
+        df = pd.read_csv(input_path)
+
+        # Add processing timestamp
+        df['processed_at'] = datetime.now()
+        df['processed_by'] = 'airflow'
+
+        # Save processed file
+        df.to_csv(output_path, index=False)
+        processed_count += 1
+
+    print(f"Processed {processed_count} files")
+    ti.xcom_push(key='processed_count', value=processed_count)
+
+def archive_files(**context):
+    """Move processed files to archive"""
+    ti = context['ti']
+    files = ti.xcom_pull(task_ids='list_files', key='file_list')
+
+    archive_dir = f'/data/archive/{{ ds }}'
+    os.makedirs(archive_dir, exist_ok=True)
+
+    for filename in files:
+        source = f'/data/input/{filename}'
+        destination = f'{archive_dir}/{filename}'
+        shutil.move(source, destination)
+
+    print(f"Archived {len(files)} files")
+
+# Tasks
+list_task = PythonOperator(
+    task_id='list_files',
+    python_callable=list_files,
+    provide_context=True,
+    dag=dag,
+)
+
+process_task = PythonOperator(
+    task_id='process_files',
+    python_callable=process_files,
+    provide_context=True,
+    dag=dag,
+)
+
+archive_task = PythonOperator(
+    task_id='archive_files',
+    python_callable=archive_files,
+    provide_context=True,
+    dag=dag,
+)
+
+cleanup_task = BashOperator(
+    task_id='cleanup_temp',
+    bash_command='rm -rf /tmp/airflow_temp_*',
+    dag=dag,
+)
+
+# Dependencies
+list_task >> process_task >> [archive_task, cleanup_task]</div>
+            </div>
+
+            <!-- Example 8: Monitoring & Alerts -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 8: Monitoring & Email Alerts</h2>
+                <p style="margin-bottom: 20px;">שליחת אימיילים על הצלחה/כשלון</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.email import EmailOperator
+from airflow.utils.trigger_rule import TriggerRule
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'data_team',
+    'start_date': datetime(2024, 1, 1),
+    'email': ['team@example.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5),
+}
+
+dag = DAG(
+    'monitoring_with_alerts_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['monitoring', 'alerts'],
+)
+
+def critical_process(**context):
+    """Critical business process"""
+    import random
+
+    # Simulate processing
+    success_rate = random.random()
+
+    if success_rate > 0.3:  # 70% success rate
+        print("✅ Process completed successfully")
+        context['ti'].xcom_push(key='records_processed', value=1500)
+    else:
+        raise Exception("❌ Process failed - quality check did not pass")
+
+def generate_summary(**context):
+    """Generate success summary"""
+    ti = context['ti']
+    records = ti.xcom_pull(task_ids='critical_process', key='records_processed')
+
+    return f"""
+    <html>
+    <body>
+        <h2>✅ Daily Process Completed Successfully</h2>
+        <p><strong>Date:</strong> {{ ds }}</p>
+        <p><strong>Records Processed:</strong> {records:,}</p>
+        <p><strong>Status:</strong> ✅ Success</p>
+    </body>
+    </html>
+    """
+
+critical_task = PythonOperator(
+    task_id='critical_process',
+    python_callable=critical_process,
+    provide_context=True,
+    dag=dag,
+)
+
+# Success email
+success_email = EmailOperator(
+    task_id='send_success_email',
+    to='team@example.com',
+    subject='✅ Airflow DAG Success: {{ dag.dag_id }}',
+    html_content="""
+    <h3>Pipeline Completed Successfully</h3>
+    <p><b>DAG:</b> {{ dag.dag_id }}</p>
+    <p><b>Execution Date:</b> {{ ds }}</p>
+    <p><b>Task:</b> {{ task.task_id }}</p>
+    """,
+    dag=dag,
+)
+
+# Failure email (runs only on failure)
+failure_email = EmailOperator(
+    task_id='send_failure_email',
+    to='alerts@example.com',
+    subject='❌ Airflow DAG Failed: {{ dag.dag_id }}',
+    html_content="""
+    <h3 style="color: red;">Pipeline Failed</h3>
+    <p><b>DAG:</b> {{ dag.dag_id }}</p>
+    <p><b>Execution Date:</b> {{ ds }}</p>
+    <p><b>Failed Task:</b> {{ task.task_id }}</p>
+    <p>Please investigate immediately!</p>
+    """,
+    trigger_rule=TriggerRule.ONE_FAILED,  # Run if any upstream fails
+    dag=dag,
+)
+
+# Dependencies
+critical_task >> success_email
+critical_task >> failure_email</div>
+            </div>
+
+            <!-- Example 9: TaskGroup -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 9: TaskGroups - ארגון Tasks</h2>
+                <p style="margin-bottom: 20px;">שימוש ב-TaskGroups לארגון tasks (Airflow 2.0+)</p>
+                <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from airflow.utils.task_group import TaskGroup
+from datetime import datetime
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'taskgroup_example_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['example', 'taskgroup'],
+)
+
+def extract_from_api():
+    print("📥 Extracting from API")
+
+def extract_from_db():
+    print("📥 Extracting from Database")
+
+def extract_from_file():
+    print("📥 Extracting from File")
+
+def transform_api_data():
+    print("🔄 Transforming API data")
+
+def transform_db_data():
+    print("🔄 Transforming DB data")
+
+def transform_file_data():
+    print("🔄 Transforming File data")
+
+start = BashOperator(
+    task_id='start',
+    bash_command='echo "Starting ETL"',
+    dag=dag,
+)
+
+# TaskGroup for extraction
+with TaskGroup('extract_group', dag=dag) as extract_group:
+    extract_api = PythonOperator(
+        task_id='extract_api',
+        python_callable=extract_from_api,
+    )
+
+    extract_db = PythonOperator(
+        task_id='extract_db',
+        python_callable=extract_from_db,
+    )
+
+    extract_file = PythonOperator(
+        task_id='extract_file',
+        python_callable=extract_from_file,
+    )
+
+# TaskGroup for transformation
+with TaskGroup('transform_group', dag=dag) as transform_group:
+    transform_api = PythonOperator(
+        task_id='transform_api',
+        python_callable=transform_api_data,
+    )
+
+    transform_db = PythonOperator(
+        task_id='transform_db',
+        python_callable=transform_db_data,
+    )
+
+    transform_file = PythonOperator(
+        task_id='transform_file',
+        python_callable=transform_file_data,
+    )
+
+end = BashOperator(
+    task_id='end',
+    bash_command='echo "ETL Completed"',
+    dag=dag,
+)
+
+# Dependencies: start → extract_group → transform_group → end
+start >> extract_group >> transform_group >> end</div>
+            </div>
+
+            <!-- Example 10: Sensors -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-primary);">דוגמה 10: Sensors - המתנה לאירועים</h2>
+                <p style="margin-bottom: 20px;">שימוש ב-Sensors להמתנה לקובץ, API או תנאי</p>
+                <div class="code-block">from airflow import DAG
+from airflow.sensors.filesystem import FileSensor
+from airflow.providers.http.sensors.http import HttpSensor
+from airflow.sensors.python import PythonSensor
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+import os
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'sensors_example_dag',
+    default_args=default_args,
+    schedule_interval='@hourly',
+    catchup=False,
+    tags=['example', 'sensors'],
+)
+
+# Sensor 1: Wait for file
+wait_for_file = FileSensor(
+    task_id='wait_for_input_file',
+    filepath='/data/input/data_{{ ds }}.csv',
+    poke_interval=30,  # Check every 30 seconds
+    timeout=600,  # Give up after 10 minutes
+    mode='poke',  # 'poke' or 'reschedule'
+    dag=dag,
+)
+
+# Sensor 2: Wait for API
+def check_api_response(response):
+    """Check if API response is valid"""
+    return response.status_code == 200
+
+wait_for_api = HttpSensor(
+    task_id='wait_for_api',
+    http_conn_id='api_connection',
+    endpoint='api/status',
+    response_check=check_api_response,
+    poke_interval=60,
+    timeout=600,
+    dag=dag,
+)
+
+# Sensor 3: Custom condition
+def check_custom_condition():
+    """Custom check - example: check if it's business hours"""
+    from datetime import datetime
+    now = datetime.now()
+    # Business hours: 8:00 - 18:00
+    return 8 <= now.hour < 18
+
+wait_for_business_hours = PythonSensor(
+    task_id='wait_for_business_hours',
+    python_callable=check_custom_condition,
+    poke_interval=300,  # Check every 5 minutes
+    timeout=3600,  # Wait up to 1 hour
+    mode='reschedule',  # Free up worker slot while waiting
+    dag=dag,
+)
+
+def process_data():
+    """Process the data"""
+    print("✅ All conditions met - processing data")
+
+process_task = PythonOperator(
+    task_id='process_data',
+    python_callable=process_data,
+    dag=dag,
+)
+
+# All sensors must complete before processing
+[wait_for_file, wait_for_api, wait_for_business_hours] >> process_task</div>
+            </div>
+
+            <div class="success-card" style="margin-top: 40px;">
+                <h3 style="margin-top: 0;">💡 טיפים לשימוש בדוגמאות</h3>
+                <ul>
+                    <li>העתק את הקוד לתיקיית <code>dags/</code> של Airflow</li>
+                    <li>התאם את ה-Connections ב-Airflow UI (Admin → Connections)</li>
+                    <li>שנה את ה-start_date לתאריך רלוונטי</li>
+                    <li>התאם את ה-schedule_interval לצרכים שלך</li>
+                    <li>הוסף error handling מתאים לסביבת הפרודקשן</li>
+                    <li>בדוק את הקוד עם <code>python my_dag.py</code> לפני deploy</li>
+                    <li>השתמש ב-<code>airflow dags test</code> לבדיקה מקומית</li>
+                </ul>
+            </div>
+
+            <div class="info-card" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">📋 Quick Reference - Jinja Templates</h3>
+                <p>משתנים זמינים בכל task:</p>
+                <table class="reference-table" style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Template Variable</th>
+                            <th>תיאור</th>
+                            <th>דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ ds }}</code></td>
+                            <td>Execution date (YYYY-MM-DD)</td>
+                            <td>2024-01-15</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ ds_nodash }}</code></td>
+                            <td>Execution date ללא מקפים</td>
+                            <td>20240115</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ dag }}</code></td>
+                            <td>DAG object</td>
+                            <td>{{ dag.dag_id }}</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ task }}</code></td>
+                            <td>Task object</td>
+                            <td>{{ task.task_id }}</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ ti }}</code></td>
+                            <td>TaskInstance object</td>
+                            <td>{{ ti.xcom_pull(...) }}</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ execution_date }}</code></td>
+                            <td>Execution datetime object</td>
+                            <td>datetime object</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ prev_ds }}</code></td>
+                            <td>Previous execution date</td>
+                            <td>2024-01-14</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ next_ds }}</code></td>
+                            <td>Next execution date</td>
+                            <td>2024-01-16</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>{{ macros.ds_add(ds, 7) }}</code></td>
+                            <td>הוספת ימים לתאריך</td>
+                            <td>2024-01-22 (+ 7 days)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 25px;">דוגמאות שימוש:</h4>
+                <div class="code-block"># BashOperator עם templates
+process_file = BashOperator(
+    task_id='process',
+    bash_command='python process.py --date {{ ds }} --output /data/{{ ds_nodash }}/',
+)
+
+# PythonOperator עם templates
+def my_function(ds, **context):
+    print(f"Processing date: {ds}")
+    # ds is automatically passed!
+
+task = PythonOperator(
+    task_id='my_task',
+    python_callable=my_function,
+    provide_context=True,
+)
+
+# SQL עם templates
+sql_task = PostgresOperator(
+    task_id='insert_data',
+    sql="""
+        INSERT INTO daily_stats (date, value)
+        VALUES ('{{ ds }}', {{ ti.xcom_pull(task_ids='calc') }});
+    """,
+)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === EXERCISES VIEW === -->
+    <div id="view-exercises" class="view-section">
+        <div class="exercise-list" style="padding: 40px;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">📝 תרגילים מעשיים</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">תרגלו את הנושאים שלמדתם</p>
+            </div>
+
+            <!-- Exercise 1 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 1</span>
+                        <span class="ex-title">יצירת DAG ראשון</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG פשוט עם 3 tasks שרצים ברצף.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>Task 1: הדפס את התאריך הנוכחי (BashOperator)</li>
+                        <li>Task 2: צור רשימה של 5 מספרים אקראיים (PythonOperator)</li>
+                        <li>Task 3: הדפס "Pipeline completed!" (BashOperator)</li>
+                        <li>schedule_interval: ריצה יומית</li>
+                        <li>start_date: 1 בינואר 2024</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+import random
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 1,
+}
+
+dag = DAG(
+    'my_first_dag',
+    default_args=default_args,
+    description='My first practice DAG',
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+def generate_random_numbers():
+    """Generate 5 random numbers"""
+    numbers = [random.randint(1, 100) for _ in range(5)]
+    print(f"Random numbers: {numbers}")
+    return numbers
+
+# Task 1
+print_date = BashOperator(
+    task_id='print_date',
+    bash_command='date',
+    dag=dag,
+)
+
+# Task 2
+generate_numbers = PythonOperator(
+    task_id='generate_numbers',
+    python_callable=generate_random_numbers,
+    dag=dag,
+)
+
+# Task 3
+print_done = BashOperator(
+    task_id='print_done',
+    bash_command='echo "Pipeline completed!"',
+    dag=dag,
+)
+
+# Dependencies
+print_date >> generate_numbers >> print_done</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 2 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 2</span>
+                        <span class="ex-title">עבודה עם XCom</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG שמשתמש ב-XCom להעברת מידע בין tasks.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>Task 1: חשב סכום של מספרים 1-100 והעבר דרך XCom</li>
+                        <li>Task 2: קבל את הסכום וחשב ממוצע</li>
+                        <li>Task 3: הדפס את התוצאות</li>
+                        <li>השתמש ב-xcom_push ו-xcom_pull</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'xcom_practice_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+def calculate_sum(**context):
+    """Calculate sum of 1-100"""
+    total = sum(range(1, 101))
+
+    # Method 1: Explicit push
+    context['ti'].xcom_push(key='total_sum', value=total)
+
+    # Method 2: Return value (auto-pushed as 'return_value')
+    return total
+
+def calculate_average(**context):
+    """Calculate average"""
+    ti = context['ti']
+
+    # Pull from XCom
+    total = ti.xcom_pull(task_ids='calc_sum', key='total_sum')
+    average = total / 100
+
+    print(f"Total: {total}, Average: {average}")
+
+    return average
+
+def print_results(**context):
+    """Print final results"""
+    ti = context['ti']
+
+    total = ti.xcom_pull(task_ids='calc_sum')  # Gets return_value
+    avg = ti.xcom_pull(task_ids='calc_average')
+
+    print(f"""
+    Results:
+    ========
+    Sum (1-100): {total}
+    Average: {avg}
+    """)
+
+calc_sum_task = PythonOperator(
+    task_id='calc_sum',
+    python_callable=calculate_sum,
+    provide_context=True,
+    dag=dag,
+)
+
+calc_avg_task = PythonOperator(
+    task_id='calc_average',
+    python_callable=calculate_average,
+    provide_context=True,
+    dag=dag,
+)
+
+print_task = PythonOperator(
+    task_id='print_results',
+    python_callable=print_results,
+    provide_context=True,
+    dag=dag,
+)
+
+calc_sum_task >> calc_avg_task >> print_task</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 3 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 3</span>
+                        <span class="ex-title">Branching Logic</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG עם לוגיקת branching - תנאי שקובע איזה task ירוץ.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>Task ראשון: בדוק אם היום הוא יום חול (1-5) או סוף שבוע (6-7)</li>
+                        <li>אם יום חול: הרץ task "process_weekday"</li>
+                        <li>אם סוף שבוע: הרץ task "process_weekend"</li>
+                        <li>Task אחרון שתמיד רץ: "final_step"</li>
+                        <li>השתמש ב-BranchPythonOperator</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+from airflow.utils.trigger_rule import TriggerRule
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'branching_practice_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+def check_day_of_week(**context):
+    """Check if weekday or weekend"""
+    execution_date = context['execution_date']
+    day_of_week = execution_date.weekday()  # Monday=0, Sunday=6
+
+    print(f"Day of week: {day_of_week}")
+
+    if day_of_week < 5:  # Monday-Friday
+        return 'process_weekday'
+    else:
+        return 'process_weekend'
+
+def process_weekday():
+    print("📅 Processing weekday data")
+
+def process_weekend():
+    print("🏖️ Processing weekend data")
+
+# Tasks
+check_day = BranchPythonOperator(
+    task_id='check_day',
+    python_callable=check_day_of_week,
+    provide_context=True,
+    dag=dag,
+)
+
+weekday_task = PythonOperator(
+    task_id='process_weekday',
+    python_callable=process_weekday,
+    dag=dag,
+)
+
+weekend_task = PythonOperator(
+    task_id='process_weekend',
+    python_callable=process_weekend,
+    dag=dag,
+)
+
+final_task = BashOperator(
+    task_id='final_step',
+    bash_command='echo "Pipeline done"',
+    trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
+    dag=dag,
+)
+
+# Dependencies
+check_day >> [weekday_task, weekend_task] >> final_task</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 4 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 4</span>
+                        <span class="ex-title">Database Operations</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG שעובד עם PostgreSQL.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>צור טבלה בשם "daily_stats"</li>
+                        <li>הכנס נתונים סטטיסטיים (תאריך, ספירה, סכום)</li>
+                        <li>קרא את הנתונים והדפס אותם</li>
+                        <li>השתמש ב-PostgresOperator ו-PostgresHook</li>
+                    </ul>
+
+                    <div class="warning-card" style="margin: 15px 0;">
+                        <p><strong>הערה:</strong> תצטרך להגדיר Connection ב-Airflow UI:</p>
+                        <code style="background: white; padding: 8px; display: block; border-radius: 4px; margin-top: 10px;">
+                        Admin → Connections → Add<br>
+                        Connection Id: postgres_default<br>
+                        Connection Type: Postgres<br>
+                        Host: localhost<br>
+                        Schema: airflow<br>
+                        Login: airflow<br>
+                        Password: airflow<br>
+                        Port: 5432
+                        </code>
+                    </div>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'data_team',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 1,
+}
+
+dag = DAG(
+    'postgres_practice_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+# Task 1: Create table
+create_table = PostgresOperator(
+    task_id='create_table',
+    postgres_conn_id='postgres_default',
+    sql="""
+        CREATE TABLE IF NOT EXISTS daily_stats (
+            id SERIAL PRIMARY KEY,
+            date DATE NOT NULL,
+            record_count INTEGER,
+            total_amount DECIMAL(10,2),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """,
+    dag=dag,
+)
+
+# Task 2: Insert data
+insert_data = PostgresOperator(
+    task_id='insert_data',
+    postgres_conn_id='postgres_default',
+    sql="""
+        INSERT INTO daily_stats (date, record_count, total_amount)
+        VALUES (
+            '{{ ds }}',
+            {{ params.count }},
+            {{ params.amount }}
+        );
+    """,
+    params={'count': 1500, 'amount': 45000.50},
+    dag=dag,
+)
+
+# Task 3: Read and print data
+def read_stats(**context):
+    """Read data from database"""
+    hook = PostgresHook(postgres_conn_id='postgres_default')
+
+    sql = """
+        SELECT date, record_count, total_amount
+        FROM daily_stats
+        ORDER BY date DESC
+        LIMIT 5
+    """
+
+    df = hook.get_pandas_df(sql)
+    print("Recent Stats:")
+    print(df.to_string())
+
+read_task = PythonOperator(
+    task_id='read_stats',
+    python_callable=read_stats,
+    provide_context=True,
+    dag=dag,
+)
+
+# Dependencies
+create_table >> insert_data >> read_task</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 5 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 5</span>
+                        <span class="ex-title">Dynamic Task Generation</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG שיוצר tasks באופן דינמי.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>צור 5 tasks במקביל שמעבדים קבצים שונים</li>
+                        <li>כל task מעבד קובץ עם שם שונה (file_1.csv, file_2.csv, ...)</li>
+                        <li>לאחר שכל ה-tasks מסיימים, הרץ task מסכם</li>
+                        <li>השתמש ב-loop ליצירת tasks דינמית</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from datetime import datetime
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'dynamic_tasks_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+def process_file(file_name):
+    """Process a specific file"""
+    print(f"Processing {file_name}")
+    # Simulate processing
+    import time
+    time.sleep(2)
+    print(f"Completed processing {file_name}")
+
+def summarize_results(**context):
+    """Summarize all processing results"""
+    print("All files processed successfully!")
+
+# Start task
+start = BashOperator(
+    task_id='start',
+    bash_command='echo "Starting file processing"',
+    dag=dag,
+)
+
+# Dynamically create tasks
+process_tasks = []
+for i in range(1, 6):
+    task = PythonOperator(
+        task_id=f'process_file_{i}',
+        python_callable=process_file,
+        op_kwargs={'file_name': f'file_{i}.csv'},
+        dag=dag,
+    )
+    process_tasks.append(task)
+
+# Summary task
+summary = PythonOperator(
+    task_id='summarize',
+    python_callable=summarize_results,
+    provide_context=True,
+    dag=dag,
+)
+
+# Dependencies: start → [all process tasks] → summary
+start >> process_tasks >> summary</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 6 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 6</span>
+                        <span class="ex-title">Error Handling & Retries</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG עם טיפול בשגיאות ו-retry logic.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>Task שיכול להיכשל (50% סיכוי)</li>
+                        <li>הגדר 3 retries עם delay של 2 דקות</li>
+                        <li>Task שרץ רק על הצלחה</li>
+                        <li>Task שרץ רק על כשלון</li>
+                        <li>השתמש ב-trigger_rule</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.utils.trigger_rule import TriggerRule
+from datetime import datetime, timedelta
+import random
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 3,  # Will retry 3 times
+    'retry_delay': timedelta(minutes=2),
+}
+
+dag = DAG(
+    'error_handling_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+def risky_operation(**context):
+    """Operation that might fail"""
+    # Simulate 50% failure rate
+    if random.random() < 0.5:
+        raise Exception("❌ Operation failed - retrying...")
+
+    print("✅ Operation succeeded!")
+    return "success"
+
+def on_success(**context):
+    """Runs only on success"""
+    print("🎉 Task succeeded - sending success notification")
+
+def on_failure(**context):
+    """Runs only on failure (after all retries)"""
+    print("⚠️ Task failed after retries - sending alert")
+
+# Risky task
+risky_task = PythonOperator(
+    task_id='risky_operation',
+    python_callable=risky_operation,
+    provide_context=True,
+    dag=dag,
+)
+
+# Success handler
+success_task = PythonOperator(
+    task_id='on_success',
+    python_callable=on_success,
+    provide_context=True,
+    trigger_rule=TriggerRule.ALL_SUCCESS,
+    dag=dag,
+)
+
+# Failure handler
+failure_task = PythonOperator(
+    task_id='on_failure',
+    python_callable=on_failure,
+    provide_context=True,
+    trigger_rule=TriggerRule.ALL_FAILED,
+    dag=dag,
+)
+
+# Dependencies
+risky_task >> [success_task, failure_task]</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 7 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 7</span>
+                        <span class="ex-title">TaskGroups - ארגון משימות</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG עם TaskGroups לארגון tasks בצורה הירארכית.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>TaskGroup "data_ingestion" עם 3 tasks (API, DB, Files)</li>
+                        <li>TaskGroup "processing" עם 2 tasks (validate, transform)</li>
+                        <li>Task מסכם בסוף</li>
+                        <li>השתמש ב-<code>with TaskGroup(...)</code> syntax</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
+from airflow.utils.task_group import TaskGroup
+from datetime import datetime
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'taskgroup_practice_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+# Start
+start = BashOperator(
+    task_id='start',
+    bash_command='echo "Pipeline started"',
+    dag=dag,
+)
+
+# TaskGroup 1: Data Ingestion
+with TaskGroup('data_ingestion', dag=dag) as ingestion:
+    ingest_api = PythonOperator(
+        task_id='ingest_from_api',
+        python_callable=lambda: print("📥 Ingesting from API"),
+    )
+
+    ingest_db = PythonOperator(
+        task_id='ingest_from_db',
+        python_callable=lambda: print("📥 Ingesting from Database"),
+    )
+
+    ingest_files = PythonOperator(
+        task_id='ingest_from_files',
+        python_callable=lambda: print("📥 Ingesting from Files"),
+    )
+
+# TaskGroup 2: Processing
+with TaskGroup('processing', dag=dag) as processing:
+    validate = PythonOperator(
+        task_id='validate_data',
+        python_callable=lambda: print("✅ Validating data"),
+    )
+
+    transform = PythonOperator(
+        task_id='transform_data',
+        python_callable=lambda: print("🔄 Transforming data"),
+    )
+
+    # Internal dependencies within group
+    validate >> transform
+
+# Final task
+complete = BashOperator(
+    task_id='complete',
+    bash_command='echo "Pipeline completed!"',
+    dag=dag,
+)
+
+# Main flow: start → ingestion → processing → complete
+start >> ingestion >> processing >> complete</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 8 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 8</span>
+                        <span class="ex-title">Sensors - המתנה לתנאים</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור DAG שמשתמש ב-Sensors להמתנה לאירועים.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>FileSensor: חכה לקובץ <code>/data/input.csv</code></li>
+                        <li>PythonSensor: חכה עד שהשעה אחרי 09:00</li>
+                        <li>כאשר שני התנאים מתקיימים - עבד את הקובץ</li>
+                        <li>הגדר timeout ו-poke_interval</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.sensors.filesystem import FileSensor
+from airflow.sensors.python import PythonSensor
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'sensors_practice_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+# Sensor 1: Wait for file
+wait_for_file = FileSensor(
+    task_id='wait_for_file',
+    filepath='/data/input.csv',
+    poke_interval=30,  # Check every 30 seconds
+    timeout=600,  # Max 10 minutes
+    dag=dag,
+)
+
+# Sensor 2: Wait for time
+def check_time():
+    """Check if after 9 AM"""
+    from datetime import datetime
+    now = datetime.now()
+    return now.hour >= 9
+
+wait_for_time = PythonSensor(
+    task_id='wait_for_time',
+    python_callable=check_time,
+    poke_interval=60,  # Check every minute
+    timeout=3600,  # Max 1 hour
+    mode='reschedule',  # Free up worker while waiting
+    dag=dag,
+)
+
+# Processing task
+def process_file():
+    """Process the file"""
+    import pandas as pd
+    df = pd.read_csv('/data/input.csv')
+    print(f"Processing {len(df)} records")
+    # Your processing logic here
+
+process = PythonOperator(
+    task_id='process_file',
+    python_callable=process_file,
+    dag=dag,
+)
+
+# Both sensors must complete
+[wait_for_file, wait_for_time] >> process</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 9 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 9</span>
+                        <span class="ex-title">Jinja Templates - Templates מתקדמים</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>השתמש ב-Jinja templates לעבודה דינמית עם תאריכים.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>צור task שמעבד קבצים לפי טווח תאריכים</li>
+                        <li>השתמש ב-<code>{{ ds }}</code>, <code>{{ prev_ds }}</code></li>
+                        <li>צור path דינמי: <code>/data/{{ ds_nodash }}/</code></li>
+                        <li>העבר parameters עם <code>macros.ds_add()</code></li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
+from datetime import datetime, timedelta
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 1, 1),
+}
+
+dag = DAG(
+    'jinja_templates_dag',
+    default_args=default_args,
+    schedule_interval='@daily',
+    catchup=False,
+)
+
+# Task 1: Process with template paths
+process_daily_file = BashOperator(
+    task_id='process_daily',
+    bash_command="""
+        echo "Processing date: {{ ds }}"
+        echo "Input: /data/input/{{ ds_nodash }}.csv"
+        echo "Output: /data/output/{{ ds_nodash }}/"
+        echo "Previous date: {{ prev_ds }}"
+        echo "Next date: {{ next_ds }}"
+    """,
+    dag=dag,
+)
+
+# Task 2: Process range of dates
+process_week = BashOperator(
+    task_id='process_week',
+    bash_command="""
+        echo "Week start: {{ ds }}"
+        echo "Week end: {{ macros.ds_add(ds, 7) }}"
+        echo "Last month: {{ macros.ds_add(ds, -30) }}"
+    """,
+    dag=dag,
+)
+
+# Task 3: Use templates in Python
+def process_with_templates(ds, prev_ds, **context):
+    """Access template variables in Python"""
+    print(f"Current date: {ds}")
+    print(f"Previous date: {prev_ds}")
+
+    execution_date = context['execution_date']
+    print(f"Full datetime: {execution_date}")
+
+    # Access macros
+    ti = context['ti']
+    print(f"Task ID: {ti.task_id}")
+    print(f"DAG ID: {ti.dag_id}")
+
+python_templates = PythonOperator(
+    task_id='python_with_templates',
+    python_callable=process_with_templates,
+    provide_context=True,
+    dag=dag,
+)
+
+process_daily_file >> process_week >> python_templates</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 10 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 10</span>
+                        <span class="ex-title">פרויקט מסכם: ETL Pipeline מלא</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור ETL pipeline מלא המשלב את כל מה שלמדת.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>חכה לקובץ CSV (FileSensor)</li>
+                        <li>קרא את הקובץ ו-validate את הנתונים</li>
+                        <li>העבר את הנתונים (uppercase, הוסף timestamps)</li>
+                        <li>טען ל-PostgreSQL</li>
+                        <li>שלח אימייל על הצלחה/כשלון</li>
+                        <li>השתמש ב-XCom, Templates, Error Handling</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from airflow import DAG
+from airflow.sensors.filesystem import FileSensor
+from airflow.operators.python import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.operators.email import EmailOperator
+from airflow.utils.trigger_rule import TriggerRule
+from datetime import datetime, timedelta
+import pandas as pd
+
+default_args = {
+    'owner': 'data_team',
+    'start_date': datetime(2024, 1, 1),
+    'retries': 2,
+    'retry_delay': timedelta(minutes=5),
+    'email': ['team@example.com'],
+    'email_on_failure': True,
+}
+
+dag = DAG(
+    'complete_etl_pipeline',
+    default_args=default_args,
+    description='Complete ETL pipeline with all features',
+    schedule_interval='@daily',
+    catchup=False,
+    tags=['etl', 'production', 'complete'],
+)
+
+# 1. Wait for file
+wait_for_data = FileSensor(
+    task_id='wait_for_input_file',
+    filepath='/data/input/sales_{{ ds }}.csv',
+    poke_interval=60,
+    timeout=1800,
+    dag=dag,
+)
+
+# 2. Extract & Validate
+def extract_and_validate(**context):
+    """Extract data and validate"""
+    filepath = '/data/input/sales_{{ ds }}.csv'
+    df = pd.read_csv(filepath)
+
+    # Validation
+    required_columns = ['product', 'quantity', 'price', 'date']
+    missing = set(required_columns) - set(df.columns)
+
+    if missing:
+        raise ValueError(f"Missing columns: {missing}")
+
+    # Check for nulls
+    null_counts = df[required_columns].isnull().sum()
+    if null_counts.any():
+        raise ValueError(f"Found null values: {null_counts[null_counts > 0]}")
+
+    print(f"✅ Validated {len(df)} records")
+    context['ti'].xcom_push(key='record_count', value=len(df))
+
+    return filepath
+
+extract_task = PythonOperator(
+    task_id='extract_validate',
+    python_callable=extract_and_validate,
+    provide_context=True,
+    dag=dag,
+)
+
+# 3. Transform
+def transform_data(**context):
+    """Transform the data"""
+    ti = context['ti']
+    filepath = ti.xcom_pull(task_ids='extract_validate')
+
+    df = pd.read_csv(filepath)
+
+    # Transformations
+    df['product'] = df['product'].str.upper()
+    df['total'] = df['quantity'] * df['price']
+    df['processed_at'] = datetime.now()
+    df['execution_date'] = context['ds']
+
+    # Save transformed data
+    output_path = '/tmp/transformed_{{ ds }}.csv'
+    df.to_csv(output_path, index=False)
+
+    print(f"✅ Transformed {len(df)} records")
+    ti.xcom_push(key='transformed_path', value=output_path)
+
+transform_task = PythonOperator(
+    task_id='transform_data',
+    python_callable=transform_data,
+    provide_context=True,
+    dag=dag,
+)
+
+# 4. Load to Database
+def load_to_database(**context):
+    """Load data to PostgreSQL"""
+    ti = context['ti']
+    filepath = ti.xcom_pull(task_ids='transform_data', key='transformed_path')
+
+    df = pd.read_csv(filepath)
+
+    hook = PostgresHook(postgres_conn_id='postgres_default')
+
+    # Insert data
+    hook.insert_rows(
+        table='sales',
+        rows=df.values.tolist(),
+        target_fields=df.columns.tolist()
+    )
+
+    print(f"✅ Loaded {len(df)} records to database")
+    ti.xcom_push(key='loaded_count', value=len(df))
+
+load_task = PythonOperator(
+    task_id='load_to_database',
+    python_callable=load_to_database,
+    provide_context=True,
+    dag=dag,
+)
+
+# 5. Success Email
+def generate_success_report(**context):
+    """Generate success email content"""
+    ti = context['ti']
+    count = ti.xcom_pull(task_ids='load_to_database', key='loaded_count')
+
+    return f"""
+    <html>
+    <body>
+        <h2 style="color: green;">✅ ETL Pipeline Completed</h2>
+        <p><strong>Date:</strong> {context['ds']}</p>
+        <p><strong>Records Processed:</strong> {count:,}</p>
+        <p><strong>DAG:</strong> {context['dag'].dag_id}</p>
+        <p><strong>Status:</strong> Success</p>
+    </body>
+    </html>
+    """
+
+success_email = EmailOperator(
+    task_id='send_success_email',
+    to='team@example.com',
+    subject='✅ Daily ETL Completed - {{ ds }}',
+    html_content="{{ ti.xcom_pull(task_ids='generate_report') }}",
+    trigger_rule=TriggerRule.ALL_SUCCESS,
+    dag=dag,
+)
+
+# 6. Failure Email
+failure_email = EmailOperator(
+    task_id='send_failure_email',
+    to='alerts@example.com',
+    subject='❌ Daily ETL Failed - {{ ds }}',
+    html_content="""
+    <h3 style="color: red;">ETL Pipeline Failed!</h3>
+    <p><b>Date:</b> {{ ds }}</p>
+    <p><b>DAG:</b> {{ dag.dag_id }}</p>
+    <p>Please check the logs immediately!</p>
+    """,
+    trigger_rule=TriggerRule.ONE_FAILED,
+    dag=dag,
+)
+
+# Flow
+wait_for_data >> extract_task >> transform_task >> load_task >> success_email
+load_task >> failure_email</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-card" style="margin-top: 40px;">
+                <h3 style="margin-top: 0;">🎓 סיימת את כל התרגילים!</h3>
+                <p>עכשיו אתה מוכן:</p>
+                <ul>
+                    <li>✅ ליצור DAGs מורכבים</li>
+                    <li>✅ להשתמש ב-XCom לתקשורת בין tasks</li>
+                    <li>✅ ליישם branching logic</li>
+                    <li>✅ לעבוד עם Databases</li>
+                    <li>✅ ליצור tasks באופן דינמי</li>
+                    <li>✅ לטפל בשגיאות נכון</li>
+                    <li>✅ לארגן קוד עם TaskGroups</li>
+                    <li>✅ להשתמש ב-Sensors</li>
+                    <li>✅ לעבוד עם Templates</li>
+                    <li>✅ לבנות ETL pipeline מלא!</li>
+                </ul>
+                <p style="margin-top: 20px; font-weight: 600;">💪 המשך ל-Best Practices ו-Production Tips!</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- === CLI VIEW === -->
+    <div id="view-cli" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">⌨️ Airflow CLI - מדריך מעשי</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                פקודות חיוניות לניהול ו-debugging של Airflow
+            </p>
+
+            <!-- DAG Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0;">📋 פקודות DAG</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">פקודה</th>
+                            <th>תיאור</th>
+                            <th>דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags list</code></td>
+                            <td>רשימת כל ה-DAGs</td>
+                            <td><code>airflow dags list</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags trigger</code></td>
+                            <td>הפעלה ידנית של DAG</td>
+                            <td><code>airflow dags trigger my_dag</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags pause</code></td>
+                            <td>השהיית DAG</td>
+                            <td><code>airflow dags pause my_dag</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags unpause</code></td>
+                            <td>הפעלה מחדש של DAG</td>
+                            <td><code>airflow dags unpause my_dag</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags test</code></td>
+                            <td>בדיקת DAG ללא שמירה ב-DB</td>
+                            <td><code>airflow dags test my_dag 2024-01-01</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags backfill</code></td>
+                            <td>הרצה לאחור על טווח תאריכים</td>
+                            <td><code>airflow dags backfill -s 2024-01-01 -e 2024-01-10 my_dag</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow dags delete</code></td>
+                            <td>מחיקת DAG + metadata</td>
+                            <td><code>airflow dags delete my_dag</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Task Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0;">⚙️ פקודות Task</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">פקודה</th>
+                            <th>תיאור</th>
+                            <th>דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow tasks list</code></td>
+                            <td>רשימת tasks ב-DAG</td>
+                            <td><code>airflow tasks list my_dag</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow tasks test</code></td>
+                            <td>הרצת task יחיד לבדיקה</td>
+                            <td><code>airflow tasks test my_dag task1 2024-01-01</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow tasks run</code></td>
+                            <td>הרצת task עם שמירה ב-DB</td>
+                            <td><code>airflow tasks run my_dag task1 2024-01-01</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow tasks clear</code></td>
+                            <td>ניקוי סטטוס task (להרצה מחדש)</td>
+                            <td><code>airflow tasks clear my_dag -t task1</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>airflow tasks states-for-dag-run</code></td>
+                            <td>סטטוס כל ה-tasks בהרצה ספציפית</td>
+                            <td><code>airflow tasks states-for-dag-run my_dag 2024-01-01</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Database Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0;">🗄️ פקודות Database</h2>
+                <div class="code-block"># Initialize database (first time only)
+airflow db init
+
+# Upgrade database to latest version
+airflow db upgrade
+
+# Reset database (⚠️ deletes all data!)
+airflow db reset
+
+# Check database connection
+airflow db check</div>
+            </div>
+
+            <!-- User Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0;">👤 ניהול משתמשים</h2>
+                <div class="code-block"># Create admin user
+airflow users create \
+    --username admin \
+    --firstname Admin \
+    --lastname User \
+    --role Admin \
+    --email admin@example.com \
+    --password admin
+
+# List all users
+airflow users list
+
+# Delete user
+airflow users delete --username user1</div>
+            </div>
+
+            <!-- Connections & Variables -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0;">🔌 Connections & Variables</h2>
+                <div class="code-block"># List connections
+airflow connections list
+
+# Add connection
+airflow connections add 'my_postgres' \
+    --conn-type 'postgres' \
+    --conn-host 'localhost' \
+    --conn-schema 'mydb' \
+    --conn-login 'user' \
+    --conn-password 'pass' \
+    --conn-port 5432
+
+# Export connections to file
+airflow connections export connections.json
+
+# Import connections from file
+airflow connections import connections.json
+
+# ===== Variables =====
+
+# List variables
+airflow variables list
+
+# Set variable
+airflow variables set my_key my_value
+
+# Get variable
+airflow variables get my_key
+
+# Delete variable
+airflow variables delete my_key
+
+# Import from JSON
+airflow variables import variables.json</div>
+            </div>
+
+            <!-- Debugging Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0;">🔍 Debugging & Logs</h2>
+                <div class="code-block"># View task logs
+airflow tasks logs my_dag task1 2024-01-01
+
+# Test DAG syntax
+python /path/to/dag_file.py
+
+# Render template
+airflow tasks render my_dag task1 2024-01-01
+
+# Check DAG dependencies
+airflow dags show my_dag
+
+# List DAG runs
+airflow dags list-runs -d my_dag
+
+# List task instances
+airflow tasks list-instances -d my_dag -s 2024-01-01</div>
+            </div>
+
+            <!-- Useful Workflows -->
+            <div class="success-card" style="margin-top: 40px;">
+                <h3 style="margin-top: 0;">💡 Workflows נפוצים</h3>
+
+                <h4>🐛 Debug DAG שלא עובד:</h4>
+                <div class="code-block"># 1. Check syntax
+python /path/to/your_dag.py
+
+# 2. Test specific task
+airflow tasks test my_dag task_name 2024-01-01
+
+# 3. Check logs
+airflow tasks logs my_dag task_name 2024-01-01
+
+# 4. Check rendered template
+airflow tasks render my_dag task_name 2024-01-01</div>
+
+                <h4 style="margin-top: 25px;">🔄 Re-run failed task:</h4>
+                <div class="code-block"># 1. Clear the failed task
+airflow tasks clear my_dag -t failed_task -s 2024-01-01 -e 2024-01-01
+
+# 2. Or clear entire DAG run
+airflow dags clear my_dag -s 2024-01-01 -e 2024-01-01</div>
+
+                <h4 style="margin-top: 25px;">📊 Monitor DAG status:</h4>
+                <div class="code-block"># List recent runs
+airflow dags list-runs -d my_dag --state failed
+
+# Check current running tasks
+airflow tasks list-instances -d my_dag --state running</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === TROUBLESHOOTING VIEW === -->
+    <div id="view-troubleshooting" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">🔧 מדריך פתרון בעיות</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                פתרונות לבעיות הנפוצות ביותר ב-Airflow
+            </p>
+
+            <!-- Issue 1: DAG not appearing -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-dark);">❓ DAG לא מופיע ב-UI</h2>
+
+                <h3>סימפטומים:</h3>
+                <ul>
+                    <li>שמת קובץ DAG בתיקייה <code>dags/</code></li>
+                    <li>הקובץ לא מופיע ב-UI</li>
+                    <li>אין שגיאות ב-logs</li>
+                </ul>
+
+                <h3 style="margin-top: 25px;">✅ פתרונות:</h3>
+
+                <h4>1. בדוק שהקובץ ב-Path הנכון</h4>
+                <div class="code-block"># בדוק את dags_folder ב-airflow.cfg
+grep dags_folder ~/airflow/airflow.cfg
+
+# או
+airflow config get-value core dags_folder
+
+# ודא שהקובץ שם:
+ls -la ~/airflow/dags/</div>
+
+                <h4>2. בדוק שאין שגיאות בקוד</h4>
+                <div class="code-block"># הרץ את הקובץ ישירות
+python ~/airflow/dags/my_dag.py
+
+# אם יש שגיאה, היא תופיע כאן!</div>
+
+                <h4>3. בדוק את ה-DAG_PROCESSING logs</h4>
+                <div class="code-block"># Logs של Scheduler
+tail -f ~/airflow/logs/scheduler/latest/dag_processing_manager.log
+
+# חפש שגיאות
+grep -i error ~/airflow/logs/scheduler/latest/*.log</div>
+
+                <h4>4. Refresh ידני</h4>
+                <div class="code-block"># Restart scheduler
+docker compose restart airflow-scheduler
+
+# או אם Local installation:
+pkill -f "airflow scheduler"
+airflow scheduler -D</div>
+
+                <h4>5. בדוק שיש משתנה DAG בקובץ</h4>
+                <div class="code-block"># הקובץ חייב להכיל משתנה בשם 'dag' או להשתמש ב-@dag decorator
+dag = DAG('my_dag_id', ...)
+
+# או
+from airflow.decorators import dag
+
+@dag(schedule_interval='@daily', start_date=...)
+def my_dag():
+    ...</div>
+            </div>
+
+            <!-- Issue 2: Task Failed -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-dark);">❌ Task נכשל</h2>
+
+                <h3>איך לנפות באגים:</h3>
+
+                <h4>1. בדוק Logs</h4>
+                <div class="code-block"># דרך UI: לחץ על Task → View Log
+
+# דרך CLI:
+airflow tasks logs my_dag my_task 2024-01-01
+
+# Logs ממוקמים ב:
+~/airflow/logs/my_dag/my_task/2024-01-01/1.log</div>
+
+                <h4>2. הרץ Task במצב Test</h4>
+                <div class="code-block"># Test mode - לא שומר ב-DB, מדפיס output ישירות
+airflow tasks test my_dag my_task 2024-01-01
+
+# עם output ב-stderr
+airflow tasks test my_dag my_task 2024-01-01 2>&1 | less</div>
+
+                <h4>3. בדוק Template Rendering</h4>
+                <div class="code-block"># בדוק איך Jinja templates מתורגמים
+airflow tasks render my_dag my_task 2024-01-01
+
+# יציג את הערכים האמיתיים של {{ ds }}, {{ ti }}, etc.</div>
+
+                <h4>4. בדוק XCom Values</h4>
+                <div class="code-block"># List XComs for specific task
+airflow tasks xcom-list my_dag my_task 2024-01-01
+
+# Pull XCom value
+airflow tasks xcom-pull my_dag my_task 2024-01-01 --key my_key</div>
+
+                <h4>5. Debug Python Code</h4>
+                <div class="code-block"># הוסף breakpoint בקוד שלך
+def my_function(**context):
+    import pdb; pdb.set_trace()  # Python debugger
+    # your code...
+
+# הרץ עם test
+airflow tasks test my_dag my_task 2024-01-01</div>
+            </div>
+
+            <!-- Issue 3: Scheduler Issues -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-dark);">🔄 Scheduler לא מריץ DAGs</h2>
+
+                <h3>✅ פתרונות:</h3>
+
+                <h4>1. בדוק ש-Scheduler רץ</h4>
+                <div class="code-block"># בדוק processes
+ps aux | grep "airflow scheduler"
+
+# או עם Docker:
+docker ps | grep scheduler
+
+# Logs של scheduler
+tail -f ~/airflow/logs/scheduler/latest/*.log</div>
+
+                <h4>2. בדוק שה-DAG לא paused</h4>
+                <div class="code-block"># Unpause DAG
+airflow dags unpause my_dag
+
+# או ב-UI: לחץ על המתג ליד שם ה-DAG</div>
+
+                <h4>3. בדוק את start_date</h4>
+                <div class="code-block"># start_date חייב להיות בעבר!
+# ❌ לא עובד:
+'start_date': datetime.now()
+
+# ✅ עובד:
+'start_date': datetime(2024, 1, 1)
+
+# או
+'start_date': datetime.now() - timedelta(days=1)</div>
+
+                <h4>4. בדוק catchup setting</h4>
+                <div class="code-block"># אם catchup=True (default), Airflow ינסה להריץ כל ההרצות החסרות
+dag = DAG(
+    'my_dag',
+    catchup=False,  # רק הרצות עתידיות
+    ...
+)</div>
+            </div>
+
+            <!-- Issue 4: Connection Errors -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-dark);">🔌 שגיאות Connection</h2>
+
+                <h3>✅ פתרונות:</h3>
+
+                <h4>1. בדוק שה-Connection קיים</h4>
+                <div class="code-block"># List connections
+airflow connections list
+
+# או ב-UI: Admin → Connections</div>
+
+                <h4>2. Test Connection</h4>
+                <div class="code-block"># בדיקת connection ב-Python
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
+hook = PostgresHook(postgres_conn_id='my_postgres')
+try:
+    conn = hook.get_conn()
+    print("✅ Connection successful!")
+except Exception as e:
+    print(f"❌ Connection failed: {e}")</div>
+
+                <h4>3. הגדר Connection מ-CLI</h4>
+                <div class="code-block"># PostgreSQL
+airflow connections add 'postgres_default' \
+    --conn-type 'postgres' \
+    --conn-host 'localhost' \
+    --conn-schema 'airflow' \
+    --conn-login 'airflow' \
+    --conn-password 'airflow' \
+    --conn-port 5432
+
+# MySQL
+airflow connections add 'mysql_default' \
+    --conn-type 'mysql' \
+    --conn-host 'localhost' \
+    --conn-schema 'mydb' \
+    --conn-login 'root' \
+    --conn-password 'password'
+
+# HTTP/API
+airflow connections add 'api_default' \
+    --conn-type 'http' \
+    --conn-host 'https://api.example.com'</div>
+            </div>
+
+            <!-- Issue 5: Performance -->
+            <div class="info-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--airflow-dark);">🐌 Airflow איטי</h2>
+
+                <h3>✅ אופטימיזציות:</h3>
+
+                <h4>1. הגדל Parallelism</h4>
+                <div class="code-block"># airflow.cfg
+[core]
+parallelism = 32              # max tasks across all DAGs
+dag_concurrency = 16          # max tasks per DAG
+max_active_runs_per_dag = 16  # max active runs per DAG</div>
+
+                <h4>2. השתמש ב-LocalExecutor או CeleryExecutor</h4>
+                <div class="code-block"># airflow.cfg
+[core]
+executor = LocalExecutor   # במקום SequentialExecutor
+
+[database]
+sql_alchemy_conn = postgresql+psycopg2://user:pass@localhost/airflow</div>
+
+                <h4>3. נקה DAGs ישנים</h4>
+                <div class="code-block"># Delete old DAG runs
+airflow db clean --clean-before-timestamp "2023-01-01"</div>
+
+                <h4>4. אופטימז את הScheduler</h4>
+                <div class="code-block"># airflow.cfg
+[scheduler]
+min_file_process_interval = 30    # seconds between parsing
+dag_dir_list_interval = 300       # seconds to refresh DAG directory
+processor_poll_interval = 1       # seconds between DAG file parsing</div>
+            </div>
+
+            <!-- Quick Debug Checklist -->
+            <div class="success-card">
+                <h3 style="margin-top: 0;">✅ Debug Checklist מהיר</h3>
+                <ol style="font-size: 1.05rem; line-height: 2;">
+                    <li>✅ <strong>Syntax:</strong> <code>python my_dag.py</code></li>
+                    <li>✅ <strong>Test Task:</strong> <code>airflow tasks test my_dag task1 2024-01-01</code></li>
+                    <li>✅ <strong>Check Logs:</strong> UI → Task → View Log</li>
+                    <li>✅ <strong>Scheduler:</strong> <code>docker ps</code> או <code>ps aux | grep scheduler</code></li>
+                    <li>✅ <strong>Unpause DAG:</strong> <code>airflow dags unpause my_dag</code></li>
+                    <li>✅ <strong>Check start_date:</strong> חייב להיות בעבר!</li>
+                    <li>✅ <strong>Connections:</strong> <code>airflow connections list</code></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Copy Notification -->
+<div class="copy-notification" id="copyNotification">
+    ✅ הועתק ללוח!
 </div>
 
 <script>
@@ -2419,6 +6149,197 @@ docker exec -it &lt;container-id&gt; bash</div>
         document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
     }
+
+    /* === SOLUTION TOGGLE === */
+    function toggleSolution(button) {
+        const content = button.nextElementSibling;
+        content.classList.toggle('show');
+        button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
+    }
+
+    /* === DARK MODE === */
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        const btn = document.getElementById('darkModeToggle');
+        btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+        localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').textContent = '☀️ מצב יום';
+    }
+
+    /* === SEARCH === */
+    function toggleSearch() {
+        const searchBar = document.getElementById('searchBar');
+        const isVisible = searchBar.style.display !== 'none';
+        searchBar.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            document.getElementById('searchInput').focus();
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    }
+
+    // Search database for Airflow
+    const searchDatabase = [
+        { term: 'BashOperator', type: 'Operator', description: 'הרצת פקודות bash', example: "BashOperator(task_id='t', bash_command='date')", section: 'tasks' },
+        { term: 'PythonOperator', type: 'Operator', description: 'הרצת פונקציות Python', example: "PythonOperator(task_id='t', python_callable=func)", section: 'tasks' },
+        { term: 'PostgresOperator', type: 'Operator', description: 'הרצת SQL queries', example: "PostgresOperator(sql='SELECT...')", section: 'tasks' },
+        { term: 'EmailOperator', type: 'Operator', description: 'שליחת אימיילים', example: "EmailOperator(to='user@example.com')", section: 'tasks' },
+        { term: 'BranchPythonOperator', type: 'Operator', description: 'branching logic', example: "BranchPythonOperator(python_callable=choose_branch)", section: 'tasks' },
+        { term: 'FileSensor', type: 'Sensor', description: 'המתנה לקובץ', example: "FileSensor(filepath='/data/file.csv')", section: 'tasks' },
+        { term: 'HttpSensor', type: 'Sensor', description: 'המתנה ל-API', example: "HttpSensor(endpoint='health')", section: 'tasks' },
+
+        { term: 'DAG', type: 'Core', description: 'Directed Acyclic Graph', example: "DAG('my_dag', schedule_interval='@daily')", section: 'dag' },
+        { term: 'Task', type: 'Core', description: 'יחידת עבודה', example: 'instance של Operator', section: 'tasks' },
+        { term: 'XCom', type: 'Core', description: 'תקשורת בין tasks', example: "ti.xcom_push(key='x', value=42)", section: 'xcoms' },
+        { term: 'Hook', type: 'Core', description: 'חיבור למערכות חיצוניות', example: "PostgresHook(postgres_conn_id='db')", section: 'hooks' },
+        { term: 'Pool', type: 'Core', description: 'הגבלת משאבים', example: "pool='database_pool'", section: 'pools-queues' },
+        { term: 'Queue', type: 'Core', description: 'ניהול עדיפויות (Celery)', example: "queue='heavy_queue'", section: 'pools-queues' },
+
+        { term: 'trigger_rule', type: 'Concept', description: 'כללי הפעלת task', example: "trigger_rule='one_failed'", section: 'quick-reference' },
+        { term: 'schedule_interval', type: 'Concept', description: 'תדירות הרצה', example: "schedule_interval='@daily'", section: 'quick-reference' },
+        { term: 'depends_on_past', type: 'Concept', description: 'תלות בהרצה קודמת', example: "depends_on_past=True", section: 'dag' },
+        { term: 'catchup', type: 'Concept', description: 'backfill אוטומטי', example: "catchup=False", section: 'dag' },
+        { term: 'retries', type: 'Concept', description: 'ניסיונות חוזרים', example: "retries=3", section: 'dag' },
+
+        { term: 'SequentialExecutor', type: 'Executor', description: 'task אחד בכל פעם', example: 'executor = SequentialExecutor', section: 'sequential' },
+        { term: 'LocalExecutor', type: 'Executor', description: 'parallelism על מכונה אחת', example: 'executor = LocalExecutor', section: 'local' },
+        { term: 'CeleryExecutor', type: 'Executor', description: 'cluster מבוזר', example: 'executor = CeleryExecutor', section: 'celery' },
+
+        { term: 'ds', type: 'Template', description: 'Execution date', example: '{{ ds }}', section: 'examples' },
+        { term: 'execution_date', type: 'Template', description: 'Execution datetime', example: '{{ execution_date }}', section: 'examples' },
+        { term: 'ti', type: 'Template', description: 'TaskInstance object', example: '{{ ti.xcom_pull(...) }}', section: 'examples' },
+
+        { term: 'dags list', type: 'CLI', description: 'רשימת DAGs', example: 'airflow dags list', section: 'cli' },
+        { term: 'dags trigger', type: 'CLI', description: 'הפעלת DAG', example: 'airflow dags trigger my_dag', section: 'cli' },
+        { term: 'tasks test', type: 'CLI', description: 'בדיקת task', example: 'airflow tasks test my_dag task1 2024-01-01', section: 'cli' },
+        { term: 'tasks logs', type: 'CLI', description: 'הצגת logs', example: 'airflow tasks logs my_dag task1 2024-01-01', section: 'cli' },
+
+        { term: 'DAG not appearing', type: 'Troubleshooting', description: 'DAG לא מופיע ב-UI', example: 'python my_dag.py', section: 'troubleshooting' },
+        { term: 'task failed', type: 'Troubleshooting', description: 'task נכשל', example: 'airflow tasks logs...', section: 'troubleshooting' },
+        { term: 'connection error', type: 'Troubleshooting', description: 'שגיאות חיבור', example: 'airflow connections list', section: 'troubleshooting' },
+
+        { term: 'SimpleHttpOperator', type: 'Operator', description: 'קריאות HTTP/API', example: "SimpleHttpOperator(endpoint='api/users')", section: 'tasks' },
+        { term: 'DummyOperator', type: 'Operator', description: 'placeholder task', example: "DummyOperator(task_id='dummy')", section: 'tasks' },
+        { term: 'SparkSubmitOperator', type: 'Operator', description: 'הרצת Spark jobs', example: "SparkSubmitOperator(application='app.py')", section: 'tasks' },
+
+        { term: 'TaskGroup', type: 'Advanced', description: 'קיבוץ tasks (2.0+)', example: "with TaskGroup('group'):", section: 'examples' },
+        { term: 'SubDAG', type: 'Advanced', description: 'DAG מקונן', example: "SubDagOperator(subdag=...)", section: 'subdags' },
+
+        { term: 'provide_context', type: 'Concept', description: 'העברת context לפונקציה', example: "provide_context=True", section: 'xcoms' },
+        { term: 'execution_timeout', type: 'Concept', description: 'timeout לtask', example: "execution_timeout=timedelta(hours=1)", section: 'quick-reference' },
+        { term: 'email_on_failure', type: 'Concept', description: 'אימייל על כשלון', example: "email_on_failure=True", section: 'examples' },
+
+        { term: 'all_success', type: 'TriggerRule', description: 'כל ה-upstream הצליחו', example: "trigger_rule='all_success'", section: 'quick-reference' },
+        { term: 'one_failed', type: 'TriggerRule', description: 'לפחות אחד נכשל', example: "trigger_rule='one_failed'", section: 'quick-reference' },
+        { term: 'none_failed_min_one_success', type: 'TriggerRule', description: 'אף אחד לא נכשל', example: "trigger_rule='none_failed_min_one_success'", section: 'quick-reference' },
+
+        { term: '@daily', type: 'Schedule', description: 'ריצה יומית', example: "schedule_interval='@daily'", section: 'quick-reference' },
+        { term: '@hourly', type: 'Schedule', description: 'ריצה כל שעה', example: "schedule_interval='@hourly'", section: 'quick-reference' },
+        { term: 'cron', type: 'Schedule', description: 'cron expression', example: "schedule_interval='0 8 * * *'", section: 'quick-reference' },
+
+        { term: 'docker compose', type: 'Installation', description: 'התקנה עם Docker', example: 'docker compose up -d', section: 'installation' },
+        { term: 'connections add', type: 'CLI', description: 'הוספת connection', example: "airflow connections add 'my_db'", section: 'cli' },
+        { term: 'variables set', type: 'CLI', description: 'הגדרת variable', example: 'airflow variables set key value', section: 'cli' },
+        { term: 'users create', type: 'CLI', description: 'יצירת משתמש', example: 'airflow users create --role Admin', section: 'cli' },
+    ];
+
+    function performSearch(query) {
+        const resultsDiv = document.getElementById('searchResults');
+
+        if (!query || query.length < 2) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+
+        const results = searchDatabase.filter(item =>
+            item.term.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.includes(query) ||
+            item.example.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">לא נמצאו תוצאות</div>';
+            return;
+        }
+
+        resultsDiv.innerHTML = results.map(item => `
+            <div class="search-result-item" onclick="navigateToView('${item.section}')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: var(--airflow-primary); font-size: 1.1rem; font-family: 'JetBrains Mono', monospace;">${highlightText(item.term, query)}</strong>
+                    <span style="background: var(--airflow-green); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem;">${item.type}</span>
+                </div>
+                <div style="color: var(--text-secondary); margin-bottom: 8px;">${item.description}</div>
+                <code style="background: var(--code-bg); color: var(--code-text); padding: 8px 12px; border-radius: 4px; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; direction: ltr; text-align: left;">${item.example}</code>
+            </div>
+        `).join('');
+    }
+
+    function highlightText(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    function navigateToView(viewId) {
+        toggleSearch(); // Close search
+
+        // Map sections to views
+        const sectionToView = {
+            'tasks': 'theory',
+            'dag': 'theory',
+            'hooks': 'theory',
+            'pools-queues': 'theory',
+            'xcoms': 'theory',
+            'subdags': 'theory',
+            'sequential': 'theory',
+            'local': 'theory',
+            'celery': 'theory',
+            'quick-reference': 'theory',
+            'best-practices': 'theory',
+            'examples': 'examples',
+            'cli': 'cli',
+            'troubleshooting': 'troubleshooting',
+        };
+
+        const targetView = sectionToView[viewId] || 'theory';
+
+        // Switch to correct view
+        const navItem = document.querySelector(`.nav-item[onclick*="${targetView}"]`);
+        if (navItem) {
+            navItem.click();
+        }
+
+        // If theory section, navigate to specific section
+        if (targetView === 'theory') {
+            setTimeout(() => {
+                const sidebarItem = document.querySelector(`.theory-nav-item[onclick*="${viewId}"]`);
+                if (sidebarItem) {
+                    sidebarItem.click();
+                }
+            }, 100);
+        }
+    }
+
+    /* === COPY CODE BLOCKS === */
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.code-block').forEach(code => {
+            code.addEventListener('click', () => {
+                const text = code.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    const notification = document.getElementById('copyNotification');
+                    notification.classList.add('show');
+                    setTimeout(() => notification.classList.remove('show'), 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+    });
 </script>
 
 </body>
