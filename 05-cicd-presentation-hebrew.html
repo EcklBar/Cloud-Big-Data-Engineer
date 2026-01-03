@@ -282,6 +282,33 @@
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .code-block:hover {
+            background: #2a2a2a;
+        }
+
+        .code-block::before {
+            content: '📋 לחץ להעתקה';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.6);
+            color: #94a3b8;
+            padding: 4px 10px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover::before {
+            opacity: 1;
         }
 
         .comparison-container {
@@ -327,6 +354,157 @@
         strong { color: var(--primary-dark); }
         code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px; font-family: monospace; }
 
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* === EXERCISE CARDS === */
+        .exercise-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .exercise-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1c2e 0%, #3d2f5f 100%);
+        }
+
+        body.dark-mode .container {
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #000000 0%, #1e3a8a 100%);
+        }
+
+        body.dark-mode .search-container {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .search-box {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .sidebar {
+            background: #2d3748;
+            border-left-color: #4a5568;
+        }
+
+        body.dark-mode .nav-item {
+            color: #cbd5e1;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .nav-item:hover,
+        body.dark-mode .nav-item.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        body.dark-mode .main-content {
+            background: #1a1c20;
+        }
+
+        body.dark-mode .section h2 {
+            color: #e2e8f0;
+            border-bottom-color: var(--primary-blue);
+        }
+
+        body.dark-mode .section h3,
+        body.dark-mode .section h4 {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .section p,
+        body.dark-mode .section li {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .info-box {
+            background: rgba(52, 152, 219, 0.15);
+            border-color: var(--primary-blue);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: var(--accent-red);
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(39, 174, 96, 0.15);
+            border-color: var(--accent-green);
+        }
+
+        body.dark-mode .feature-card,
+        body.dark-mode .comparison-box,
+        body.dark-mode .timeline-item,
+        body.dark-mode .exercise-card {
+            background: #2d3748;
+            border-top-color: var(--primary-blue);
+        }
+
+        body.dark-mode .feature-card h4,
+        body.dark-mode .comparison-box h4,
+        body.dark-mode .timeline-item h4 {
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode .pros-box {
+            background: rgba(39, 174, 96, 0.15);
+        }
+
+        body.dark-mode .cons-box {
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        body.dark-mode strong {
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode code {
+            background: #374151;
+            color: var(--primary-blue);
+        }
+
         @media (max-width: 768px) {
             .content { grid-template-columns: 1fr; }
             .sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
@@ -348,7 +526,12 @@
         </header>
 
         <div class="search-container">
-            <input type="text" class="search-box" placeholder="🔍 חפש נושאים, מושגים או כלים..." id="searchInput">
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+                <input type="text" class="search-box" placeholder="🔍 חפש נושאים, מושגים או כלים..." id="searchInput" style="flex: 1;">
+                <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: var(--primary-blue); border: none; padding: 12px 24px; border-radius: 25px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Segoe UI', sans-serif; white-space: nowrap;">
+                    🌙 מצב לילה
+                </button>
+            </div>
         </div>
 
         <div class="content">
@@ -368,6 +551,11 @@
                 <a href="#" class="nav-item" data-section="github-actions">🎬 GitHub Actions</a>
                 <a href="#" class="nav-item" data-section="workflows">📋 Workflows</a>
                 <a href="#" class="nav-item" data-section="example">💡 דוגמה מעשית</a>
+                <a href="#" class="nav-item" data-section="more-examples">🔥 דוגמאות נוספות</a>
+                <a href="#" class="nav-item" data-section="exercises">📝 תרגילים</a>
+                <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
+                <a href="#" class="nav-item" data-section="quickref">📋 Quick Reference</a>
+                <a href="#" class="nav-item" data-section="bestpractices">✨ Best Practices</a>
             </nav>
 
             <main class="main-content">
@@ -1149,6 +1337,747 @@ jobs:
                     </div>
                 </section>
 
+                <!-- דוגמאות נוספות -->
+                <section class="section" id="more-examples">
+                    <h2>🔥 דוגמאות Workflows נוספות</h2>
+
+                    <h3>1. CI/CD למהנדסי נתונים - Spark Job</h3>
+                    <div class="code-block">name: Spark Job CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install PySpark
+        run: |
+          pip install pyspark pytest
+          pip install -r requirements.txt
+
+      - name: Run Unit Tests
+        run: pytest tests/
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t my-spark-job:${{ github.sha }} .
+
+      - name: Push to Registry
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push my-spark-job:${{ github.sha }}</div>
+
+                    <h3 style="margin-top: 40px;">2. Airflow DAG Validation</h3>
+                    <div class="code-block">name: Airflow DAG Validation
+
+on:
+  pull_request:
+    paths:
+      - 'dags/**'
+
+jobs:
+  validate-dags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Airflow
+        run: |
+          pip install apache-airflow==2.7.0
+          pip install -r requirements.txt
+
+      - name: Validate DAG Syntax
+        run: |
+          python -m py_compile dags/*.py
+
+      - name: Test DAG Imports
+        run: |
+          python -c "from airflow.models import DagBag; d = DagBag(dag_folder='dags/'); assert len(d.import_errors) == 0"</div>
+
+                    <h3 style="margin-top: 40px;">3. Data Quality Tests</h3>
+                    <div class="code-block">name: Data Quality Tests
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8 AM
+  workflow_dispatch:
+
+jobs:
+  data-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install great_expectations pandas
+
+      - name: Run Data Quality Checks
+        run: |
+          python scripts/run_data_quality.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Send Slack Notification on Failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "❌ Data Quality checks failed!"
+            }</div>
+
+                    <h3 style="margin-top: 40px;">4. Deploy to Kubernetes</h3>
+                    <div class="code-block">name: Deploy to K8s
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure kubectl
+        uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl rollout status deployment/my-app
+
+      - name: Verify Deployment
+        run: |
+          kubectl get pods
+          kubectl get services</div>
+
+                    <h3 style="margin-top: 40px;">5. Multi-Environment Deployment</h3>
+                    <div class="code-block">name: Multi-Environment Deploy
+
+on:
+  push:
+    branches: [ main, staging, develop ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Determine Environment
+        id: env
+        run: |
+          if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == 'refs/heads/staging' ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          else
+            echo "environment=development" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to ${{ steps.env.outputs.environment }}
+        run: |
+          echo "Deploying to ${{ steps.env.outputs.environment }}"
+          ./deploy.sh ${{ steps.env.outputs.environment }}</div>
+
+                    <h3 style="margin-top: 40px;">6. Scheduled Data Pipeline</h3>
+                    <div class="code-block">name: Daily ETL Pipeline
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM daily
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run ETL
+        run: python scripts/daily_etl.py
+        env:
+          SOURCE_DB: ${{ secrets.SOURCE_DB }}
+          TARGET_DB: ${{ secrets.TARGET_DB }}
+
+      - name: Notify on Success
+        if: success()
+        run: echo "ETL completed successfully"
+
+      - name: Notify on Failure
+        if: failure()
+        run: echo "ETL failed - check logs"</div>
+
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h4>💡 טיפים לWorkflows:</h4>
+                        <ul>
+                            <li>השתמש ב-<code>workflow_dispatch</code> להפעלה ידנית</li>
+                            <li>הגדר <code>needs</code> לתלויות בין jobs</li>
+                            <li>השתמש ב-<code>if: success()</code> או <code>if: failure()</code> לlogic תנאי</li>
+                            <li>שמור secrets ב-GitHub Secrets (לא בקוד!)</li>
+                            <li>הוסף caching ל-dependencies (מהיר יותר!)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- תרגילים -->
+                <section class="section" id="exercises">
+                    <h2>📝 תרגילים מעשיים</h2>
+
+                    <div class="exercise-card">
+                        <h4>תרגיל 1: Workflow ראשון - Python Testing</h4>
+                        <p><strong>מטרה:</strong> צור workflow שמריץ tests על כל push</p>
+                        <p><strong>דרישות:</strong></p>
+                        <ul>
+                            <li>יווצר ב-<code>.github/workflows/test.yml</code></li>
+                            <li>ירוץ על push ל-main</li>
+                            <li>יתקין Python 3.9</li>
+                            <li>יתקין dependencies מ-requirements.txt</li>
+                            <li>ירוץ pytest</li>
+                        </ul>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="code-block">name: Python Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: pytest tests/ -v</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h4>תרגיל 2: Docker Build & Push</h4>
+                        <p><strong>מטרה:</strong> בנה Docker image ושלח ל-DockerHub</p>
+                        <p><strong>דרישות:</strong></p>
+                        <ul>
+                            <li>Build image רק אחרי tests מצליחים</li>
+                            <li>Tag עם commit SHA</li>
+                            <li>Push ל-DockerHub</li>
+                            <li>השתמש ב-GitHub Secrets לcredentials</li>
+                        </ul>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="code-block">name: Docker Build and Push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: |
+          pip install pytest
+          pytest tests/
+
+  build:
+    needs: test  # רק אחרי שtests עברו
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            myusername/myapp:latest
+            myusername/myapp:${{ github.sha }}</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h4>תרגיל 3: Scheduled Workflow - Daily Report</h4>
+                        <p><strong>מטרה:</strong> צור workflow שרץ אוטומטית כל יום</p>
+                        <p><strong>דרישות:</strong></p>
+                        <ul>
+                            <li>ירוץ כל יום ב-7 בבוקר</li>
+                            <li>ירוץ גם באופן ידני (workflow_dispatch)</li>
+                            <li>יריץ סקריפט Python</li>
+                            <li>ישלח notification על הצלחה/כשלון</li>
+                        </ul>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="code-block">name: Daily Report
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 7 AM daily
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Generate Report
+        run: python scripts/daily_report.py
+
+      - name: Success Notification
+        if: success()
+        run: echo "✅ Report generated successfully"
+
+      - name: Failure Notification
+        if: failure()
+        run: echo "❌ Report generation failed"</div>
+                        </div>
+                    </div>
+
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h4>🎓 מעולה!</h4>
+                        <p>עכשיו אתה יודע:</p>
+                        <ul>
+                            <li>✅ ליצור workflows בסיסיים</li>
+                            <li>✅ לבנות ולהעלות Docker images</li>
+                            <li>✅ להגדיר scheduled workflows</li>
+                            <li>✅ להשתמש ב-GitHub Secrets</li>
+                            <li>✅ ליצור תלויות בין jobs</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- פתרון בעיות -->
+                <section class="section" id="troubleshooting">
+                    <h2>🔧 פתרון בעיות ב-GitHub Actions</h2>
+
+                    <h3>❌ Workflow לא רץ</h3>
+                    <div class="warning-box">
+                        <h4>סיבות אפשריות:</h4>
+                        <ul>
+                            <li>קובץ ה-YAML לא ב-<code>.github/workflows/</code></li>
+                            <li>שגיאת syntax ב-YAML</li>
+                            <li>ה-trigger (on:) לא התקיים</li>
+                            <li>Workflow disabled</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ פתרונות:</h4>
+                        <div class="code-block"># 1. בדוק מיקום הקובץ
+ls .github/workflows/
+
+# 2. validate YAML syntax
+# השתמש ב-YAML validator online או:
+yamllint .github/workflows/my-workflow.yml
+
+# 3. בדוק ב-GitHub UI
+# Actions tab → All workflows → בחר workflow
+# תראה אם יש שגיאות</div>
+
+                        <p style="margin-top: 20px;"><strong>טיפ:</strong> בדוק את ה-"Actions" tab ב-repository - תראה לוג של כל ההרצות</p>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">⏱️ Workflow איטי מדי</h3>
+                    <div class="warning-box">
+                        <h4>בעיות נפוצות:</h4>
+                        <ul>
+                            <li>התקנת dependencies לוקחת זמן</li>
+                            <li>Build כבד</li>
+                            <li>Tests ארוכים</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ אופטימיזציות:</h4>
+
+                        <h5>1. Cache Dependencies:</h5>
+                        <div class="code-block">- name: Cache pip packages
+  uses: actions/cache@v3
+  with:
+    path: ~/.cache/pip
+    key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+- name: Install dependencies
+  run: pip install -r requirements.txt</div>
+
+                        <h5 style="margin-top: 20px;">2. Matrix Strategy (Parallel):</h5>
+                        <div class="code-block">jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}</div>
+
+                        <h5 style="margin-top: 20px;">3. Job Dependencies:</h5>
+                        <div class="code-block"># הרץ jobs קלים קודם, כבדים רק אם הקלים עברו
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: flake8 .  # Fast!
+
+  test:
+    needs: lint  # רק אם lint עבר
+    runs-on: ubuntu-latest
+    steps:
+      - run: pytest  # Slower
+
+  deploy:
+    needs: [lint, test]  # רק אם שניהם עברו
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./deploy.sh</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔐 Secrets לא עובדים</h3>
+                    <div class="warning-box">
+                        <h4>בעיות:</h4>
+                        <ul>
+                            <li>Secret לא מוגדר</li>
+                            <li>שם Secret לא נכון</li>
+                            <li>Secret לא זמין לworkflow</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ פתרון:</h4>
+                        <ol>
+                            <li>Settings → Secrets and variables → Actions</li>
+                            <li>New repository secret</li>
+                            <li>שם ב-UPPERCASE (convention)</li>
+                            <li>גישה ב-workflow: <code>${{ secrets.SECRET_NAME }}</code></li>
+                        </ol>
+
+                        <div class="code-block" style="margin-top: 15px;">- name: Use Secret
+  run: echo "API Key is set"
+  env:
+    API_KEY: ${{ secrets.API_KEY }}
+
+# ⚠️ לעולם אל תדפיס secrets!
+# ❌ run: echo ${{ secrets.API_KEY }}  # BAD!
+# ✅ run: echo "Using API key..."     # GOOD!</div>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 40px;">
+                        <h4>🔍 Debug Checklist:</h4>
+                        <ol>
+                            <li>✅ קובץ ב-<code>.github/workflows/</code>?</li>
+                            <li>✅ YAML syntax תקין?</li>
+                            <li>✅ Trigger event קרה?</li>
+                            <li>✅ Secrets מוגדרים?</li>
+                            <li>✅ Permissions נכונים?</li>
+                            <li>✅ בדוק logs ב-Actions tab</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Quick Reference -->
+                <section class="section" id="quickref">
+                    <h2>📋 Quick Reference</h2>
+
+                    <h3>🎯 Trigger Events נפוצים</h3>
+                    <div class="code-block"># Push to specific branch
+on:
+  push:
+    branches: [ main, develop ]
+
+# Pull Request
+on:
+  pull_request:
+    branches: [ main ]
+
+# Multiple events
+on: [push, pull_request]
+
+# Scheduled (cron)
+on:
+  schedule:
+    - cron: '0 8 * * *'  # 8 AM daily
+
+# Manual trigger
+on:
+  workflow_dispatch:
+
+# Tag creation
+on:
+  push:
+    tags:
+      - 'v*'  # v1.0, v2.0, etc.
+
+# Path filtering
+on:
+  push:
+    paths:
+      - 'src/**'
+      - '!docs/**'  # Ignore docs</div>
+
+                    <h3 style="margin-top: 40px;">⚙️ Job Configuration</h3>
+                    <div class="code-block">jobs:
+  my-job:
+    # OS
+    runs-on: ubuntu-latest  # or: windows-latest, macos-latest
+
+    # Environment
+    env:
+      NODE_ENV: production
+
+    # Dependencies
+    needs: [previous-job]
+
+    # Conditional
+    if: github.ref == 'refs/heads/main'
+
+    # Timeout
+    timeout-minutes: 30
+
+    # Strategy (parallel)
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+
+    steps:
+      # your steps here...</div>
+
+                    <h3 style="margin-top: 40px;">📦 Actions שימושיים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>actions/checkout@v3</h4>
+                            <p>Clone הrepository</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>actions/setup-python@v4</h4>
+                            <p>התקנת Python</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>actions/setup-node@v3</h4>
+                            <p>התקנת Node.js</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>actions/cache@v3</h4>
+                            <p>Cache dependencies</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>docker/login-action@v2</h4>
+                            <p>Login ל-DockerHub</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>docker/build-push-action@v4</h4>
+                            <p>Build & Push Docker</p>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔑 Context Variables</h3>
+                    <div class="code-block"># GitHub Context
+${{ github.sha }}           # Commit SHA
+${{ github.ref }}           # Branch/tag ref
+${{ github.repository }}    # owner/repo
+${{ github.actor }}         # User who triggered
+${{ github.event_name }}    # Event type
+
+# Runner Context
+${{ runner.os }}            # Linux, Windows, macOS
+${{ runner.temp }}          # Temp directory
+
+# Job Context
+${{ job.status }}           # success, failure, cancelled
+
+# Steps Context
+${{ steps.step-id.outputs.result }}  # Output from step</div>
+                </section>
+
+                <!-- Best Practices -->
+                <section class="section" id="bestpractices">
+                    <h2>✨ CI/CD Best Practices</h2>
+
+                    <h3>🎯 Workflow Design</h3>
+                    <div class="success-box">
+                        <h4>✅ עשה:</h4>
+                        <ul>
+                            <li><strong>קטן ומהיר:</strong> שמור workflows פשוטים וממוקדים</li>
+                            <li><strong>Fail Fast:</strong> הרץ tests מהירים קודם</li>
+                            <li><strong>Cache:</strong> השתמש ב-caching לdependencies</li>
+                            <li><strong>Parallel Jobs:</strong> הרץ במקביל כשאפשר</li>
+                            <li><strong>Descriptive Names:</strong> שמות ברורים ל-workflows, jobs, steps</li>
+                            <li><strong>Status Badges:</strong> הוסף badges ל-README</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>❌ אל תעשה:</h4>
+                        <ul>
+                            <li>❌ Hardcode secrets בקוד</li>
+                            <li>❌ workflows ענקיים בקובץ אחד</li>
+                            <li>❌ הרצת tests איטיים על כל commit קטן</li>
+                            <li>❌ Deploy לproduction ללא tests</li>
+                            <li>❌ שכחת timeout (workflow יכול לרוץ לנצח!)</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔒 Security Best Practices</h3>
+                    <div class="warning-box">
+                        <h4>⚠️ אבטחה:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>☐ <strong>Secrets:</strong> כל credentials ב-GitHub Secrets</li>
+                            <li>☐ <strong>Pin Versions:</strong> השתמש ב-@v3 לא @main</li>
+                            <li>☐ <strong>Least Privilege:</strong> הרשאות מינימליות</li>
+                            <li>☐ <strong>Review Actions:</strong> בדוק third-party actions</li>
+                            <li>☐ <strong>Branch Protection:</strong> הגן על main branch</li>
+                            <li>☐ <strong>Required Reviews:</strong> approve לפני merge</li>
+                            <li>☐ <strong>Audit Logs:</strong> עקוב אחר פעילות</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">⚡ Performance Tips</h3>
+                    <div class="success-box">
+                        <h4>מהירות:</h4>
+                        <ul>
+                            <li><strong>Cache:</strong> dependencies, build artifacts</li>
+                            <li><strong>Artifacts:</strong> שמור בין jobs</li>
+                            <li><strong>Conditional Steps:</strong> <code>if:</code> להרצה סלקטיבית</li>
+                            <li><strong>Matrix:</strong> parallel testing</li>
+                            <li><strong>Self-Hosted Runners:</strong> לפרויקטים גדולים</li>
+                        </ul>
+
+                        <div class="code-block" style="margin-top: 15px;"># Cache example
+- name: Cache node modules
+  uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+# Conditional step
+- name: Deploy
+  if: github.ref == 'refs/heads/main'
+  run: ./deploy.sh</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🎯 Production Checklist</h3>
+                    <div class="info-box">
+                        <h4>לפני Production:</h4>
+                        <ul style="list-style: none; padding: 0; font-size: 1.05rem;">
+                            <li>☐ <strong>Tests:</strong> unit, integration, e2e</li>
+                            <li>☐ <strong>Linting:</strong> code quality checks</li>
+                            <li>☐ <strong>Security Scan:</strong> vulnerability scanning</li>
+                            <li>☐ <strong>Build:</strong> אוטומטי ועובד</li>
+                            <li>☐ <strong>Deploy:</strong> staging אוטומטי</li>
+                            <li>☐ <strong>Approval:</strong> manual approval לproduction</li>
+                            <li>☐ <strong>Rollback:</strong> תוכנית rollback</li>
+                            <li>☐ <strong>Monitoring:</strong> alerts על failures</li>
+                            <li>☐ <strong>Documentation:</strong> README עם badges</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">📊 Monitoring & Notifications</h3>
+                    <div class="code-block"># Slack notification on failure
+- name: Slack Notification
+  if: failure()
+  uses: slackapi/slack-github-action@v1
+  with:
+    webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+    payload: |
+      {
+        "text": "❌ Build failed: ${{ github.repository }}",
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*Build Failed*\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}"
+            }
+          }
+        ]
+      }
+
+# Email notification (built-in)
+# Settings → Notifications → Actions → Email</div>
+
+                    <h3 style="margin-top: 40px;">📚 משאבים נוספים</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>Documentation:</strong> docs.github.com/actions</li>
+                            <li><strong>Marketplace:</strong> github.com/marketplace (אלפי actions מוכנים!)</li>
+                            <li><strong>Examples:</strong> github.com/actions/starter-workflows</li>
+                            <li><strong>Community:</strong> GitHub Community Discussions</li>
+                            <li><strong>Learning:</strong> GitHub Skills (hands-on tutorials)</li>
+                        </ul>
+                    </div>
+                </section>
+
             </main>
         </div>
     </div>
@@ -1243,6 +2172,29 @@ jobs:
                 searchInput.dispatchEvent(new Event('input'));
             }
         });
+
+        /* === DARK MODE === */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            if (btn) btn.textContent = '☀️ מצב יום';
+        }
+
+        /* === SOLUTION TOGGLE === */
+        function toggleSolution(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
+        }
     </script>
 </body>
 </html>
