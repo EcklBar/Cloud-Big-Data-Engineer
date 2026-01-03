@@ -474,6 +474,182 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 5px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            --bg-body: #1a1c20;
+            --bg-surface: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #4a5568;
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .content-card {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .card-header {
+            background: linear-gradient(to left, #2d3748, #374151);
+        }
+
+        body.dark-mode .code-block {
+            background: #1e293b;
+            border-color: #475569;
+        }
+
+        body.dark-mode .info-box {
+            background: rgba(0, 102, 204, 0.15);
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(0, 204, 102, 0.15);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(255, 153, 0, 0.15);
+        }
+
+        body.dark-mode .theory-sidebar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .theory-nav-item:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .theory-nav-item.active {
+            background: rgba(0, 102, 204, 0.2);
+        }
+
+        body.dark-mode .exercise-card {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .feature-card {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchBar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchInput {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        /* === SEARCH RESULTS === */
+        .search-result-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-right: 4px solid var(--nifi-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-result-item:hover {
+            background: #e9ecef;
+            transform: translateX(-4px);
+        }
+
+        body.dark-mode .search-result-item {
+            background: #374151;
+        }
+
+        body.dark-mode .search-result-item:hover {
+            background: #4b5563;
+        }
+
+        .search-highlight {
+            background: #ffd700;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--nifi-blue), var(--nifi-green));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 204, 102, 0.1);
+            border-right: 4px solid var(--nifi-green);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* === PROCESSOR REFERENCE TABLE === */
+        .processor-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        .processor-table thead {
+            background: linear-gradient(to left, #f0f9ff, #e0f2fe);
+            border-bottom: 2px solid var(--nifi-blue);
+        }
+
+        .processor-table th {
+            padding: 12px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .processor-table td {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .processor-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        body.dark-mode .processor-table thead {
+            background: linear-gradient(to left, #1e3a5f, #2c4a6f);
+        }
+
+        body.dark-mode .processor-table tr:hover {
+            background: #374151;
+        }
     </style>
 </head>
 <body>
@@ -491,12 +667,31 @@
     <div class="nav-tabs">
         <div class="nav-item active" onclick="switchView('theory', this)">📚 תיאוריה</div>
         <div class="nav-item" onclick="switchView('concepts', this)">🔧 מושגים בסיסיים</div>
+        <div class="nav-item" onclick="switchView('processors', this)">🔌 Processors נפוצים</div>
         <div class="nav-item" onclick="switchView('tutorials', this)">💪 תרגילים</div>
         <div class="nav-item" onclick="switchView('registry', this)">📦 Registry</div>
+        <div class="nav-item" onclick="switchView('troubleshooting', this)">🔧 פתרון בעיות</div>
+        <div class="nav-item" onclick="switchView('bestpractices', this)">⭐ Best Practices</div>
     </div>
 
-    <div style="width: 80px;"></div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+            🌙 מצב לילה
+        </button>
+        <button onclick="toggleSearch()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s;">
+            🔍 חיפוש
+        </button>
+    </div>
 </header>
+
+<!-- Search Bar -->
+<div id="searchBar" style="display: none; background: white; padding: 20px 40px; border-bottom: 2px solid var(--border-color); box-shadow: var(--shadow-md);">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+        <input type="text" id="searchInput" placeholder="חפש processors, מושגים, או נושאים..." style="flex: 1; padding: 12px 20px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: 'Heebo', sans-serif;" oninput="performSearch(this.value)">
+        <button onclick="toggleSearch()" style="padding: 12px 24px; background: var(--nifi-blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">סגור</button>
+    </div>
+    <div id="searchResults" style="max-width: 800px; margin: 15px auto 0; max-height: 400px; overflow-y: auto;"></div>
+</div>
 
 <div class="main-wrapper">
 
@@ -915,6 +1110,343 @@ entryDate: 2024-01-15T10:30:00Z</div>
         </div>
     </div>
 
+    <!-- === PROCESSORS VIEW === -->
+    <div id="view-processors" class="view-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">🔌 Processors נפוצים - Quick Reference</h1>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">מדריך מקיף ל-Processors הכי שימושיים ב-NiFi</p>
+            </div>
+
+            <!-- Input Processors -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-blue)">📥</span> Input Processors - קליטת נתונים</h2>
+                </div>
+                <div class="card-body">
+                    <table class="processor-table">
+                        <thead>
+                            <tr>
+                                <th>Processor</th>
+                                <th>תיאור</th>
+                                <th>Use Case נפוץ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">GetFile</td>
+                                <td>קריאת קבצים מתיקייה</td>
+                                <td>קריאת CSV/JSON/XML files מתיקייה מקומית</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">GetHTTP</td>
+                                <td>קריאת תוכן מ-HTTP URL</td>
+                                <td>קריאת API endpoints, RSS feeds</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">ListenHTTP</td>
+                                <td>האזנה להודעות HTTP נכנסות</td>
+                                <td>קבלת webhooks, POST requests</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">ConsumeKafka</td>
+                                <td>צריכת הודעות מ-Kafka topic</td>
+                                <td>קריאת streaming data מ-Kafka</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">ExecuteSQL</td>
+                                <td>ביצוע SQL query וקריאת תוצאות</td>
+                                <td>קריאת נתונים ממסדי נתונים</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">QueryDatabaseTable</td>
+                                <td>קריאת טבלה עם incremental load</td>
+                                <td>CDC - קריאת רק שורות חדשות/מעודכנות</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">GetSFTP</td>
+                                <td>קריאת קבצים מ-SFTP server</td>
+                                <td>העברת קבצים מ-remote servers</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-blue);">GenerateFlowFile</td>
+                                <td>יצירת FlowFile (לבדיקות)</td>
+                                <td>Testing, simulation של data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Transform Processors -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-green)">🔄</span> Transform Processors - עיבוד ושינוי</h2>
+                </div>
+                <div class="card-body">
+                    <table class="processor-table">
+                        <thead>
+                            <tr>
+                                <th>Processor</th>
+                                <th>תיאור</th>
+                                <th>Use Case נפוץ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">UpdateAttribute</td>
+                                <td>עדכון/הוספת FlowFile attributes</td>
+                                <td>הוספת timestamp, metadata, routing info</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">RouteOnAttribute</td>
+                                <td>ניתוב לפי attribute values</td>
+                                <td>פיצול flow לפי תנאים (if-else logic)</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">JoltTransformJSON</td>
+                                <td>טרנספורמציה של JSON</td>
+                                <td>שינוי מבנה JSON, mapping fields</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">ConvertRecord</td>
+                                <td>המרה בין פורמטים (CSV↔JSON↔Avro)</td>
+                                <td>המרת CSV ל-JSON או JSON ל-Parquet</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">SplitText</td>
+                                <td>פיצול קובץ טקסט לשורות</td>
+                                <td>עיבוד קבצים גדולים שורה-שורה</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">MergeContent</td>
+                                <td>איחוד מספר FlowFiles לאחד</td>
+                                <td>צירוף קבצים קטנים לקובץ גדול</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">CompressContent</td>
+                                <td>דחיסה/פריסה של תוכן</td>
+                                <td>דחיסת קבצים לפני העברה</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">ReplaceText</td>
+                                <td>החלפת טקסט עם regex</td>
+                                <td>ניקוי/שינוי תוכן קבצים</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-green);">LookupRecord</td>
+                                <td>העשרת נתונים עם lookup</td>
+                                <td>הוספת מידע מטבלאות reference</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Output Processors -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-orange)">📤</span> Output Processors - שליחת נתונים</h2>
+                </div>
+                <div class="card-body">
+                    <table class="processor-table">
+                        <thead>
+                            <tr>
+                                <th>Processor</th>
+                                <th>תיאור</th>
+                                <th>Use Case נפוץ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PutFile</td>
+                                <td>כתיבת FlowFile לתיקייה</td>
+                                <td>שמירת קבצים לדיסק</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PublishKafka</td>
+                                <td>פרסום הודעות ל-Kafka topic</td>
+                                <td>שליחת events ל-Kafka</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PutDatabaseRecord</td>
+                                <td>כתיבת records למסד נתונים</td>
+                                <td>INSERT/UPDATE/UPSERT לטבלאות</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PutSQL</td>
+                                <td>ביצוע SQL statements</td>
+                                <td>ביצוע SQL מורכב, DDL</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">InvokeHTTP</td>
+                                <td>קריאה ל-REST API</td>
+                                <td>שליחת POST/PUT ל-external APIs</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PutHDFS</td>
+                                <td>כתיבה ל-HDFS</td>
+                                <td>שמירת קבצים ב-Hadoop HDFS</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PutS3Object</td>
+                                <td>העלאה ל-AWS S3</td>
+                                <td>שמירת קבצים ב-cloud storage</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-orange);">PutEmail</td>
+                                <td>שליחת אימייל</td>
+                                <td>התראות, דוחות באימייל</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Special Processors -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-red)">⚙️</span> Special Purpose Processors</h2>
+                </div>
+                <div class="card-body">
+                    <table class="processor-table">
+                        <thead>
+                            <tr>
+                                <th>Processor</th>
+                                <th>תיאור</th>
+                                <th>Use Case נפוץ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-red);">ValidateRecord</td>
+                                <td>בדיקת תקינות נתונים</td>
+                                <td>Data validation, schema validation</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-red);">PartitionRecord</td>
+                                <td>פיצול FlowFiles לפי ערכים</td>
+                                <td>חלוקת נתונים לקבוצות/partitions</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-red);">ExecuteScript</td>
+                                <td>ביצוע קוד מותאם (Python/Groovy)</td>
+                                <td>לוגיקה מורכבת שאין processor מוכן</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-red);">Wait / Notify</td>
+                                <td>סנכרון בין flows</td>
+                                <td>המתנה לסיום תהליך אחר</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-red);">MonitorActivity</td>
+                                <td>ניטור פעילות ב-flow</td>
+                                <td>התראות על lack of activity</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--nifi-red);">LogAttribute</td>
+                                <td>רישום attributes ל-log</td>
+                                <td>Debugging, audit trail</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Expression Language -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-green)">💬</span> Expression Language - דוגמאות נפוצות</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>מהו Expression Language?</h3>
+                        <p>NiFi Expression Language מאפשר להשתמש בערכים דינמיים ב-Processor properties.</p>
+                    </div>
+
+                    <h3>Attributes גישה:</h3>
+                    <div class="code-block"># גישה ל-FlowFile attribute
+${filename}
+${path}
+${uuid}
+${mime.type}
+
+# דוגמה - שינוי שם קובץ
+new_filename: processed_${filename}
+output_path: /output/${now():format('yyyy/MM/dd')}/${filename}</div>
+
+                    <h3>Functions נפוצות:</h3>
+                    <table class="processor-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Function</th>
+                                <th>תיאור</th>
+                                <th>דוגמה</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">now()</td>
+                                <td>תאריך ושעה נוכחיים</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${now():format('yyyy-MM-dd HH:mm:ss')}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">UUID()</td>
+                                <td>יצירת UUID ייחודי</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${UUID()}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">toUpper() / toLower()</td>
+                                <td>המרה לאותיות גדולות/קטנות</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${filename:toUpper()}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">substring()</td>
+                                <td>חלק מ-string</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${filename:substring(0,5)}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">replace()</td>
+                                <td>החלפת טקסט</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${filename:replace('.csv', '.json')}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">matches()</td>
+                                <td>בדיקת regex</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${filename:matches('.*\\.csv')}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">isEmpty() / isNull()</td>
+                                <td>בדיקת ערך ריק/null</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${attribute:isEmpty()}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">equals() / contains()</td>
+                                <td>השוואה/בדיקת תוכן</td>
+                                <td style="font-family: 'JetBrains Mono', monospace; direction: ltr; text-align: left;">${filename:contains('test')}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="success-box" style="margin-top: 25px;">
+                        <h3>💡 דוגמאות מתקדמות:</h3>
+                        <div class="code-block"># Conditional logic
+${filename:endsWith('.json'):ifElse('json_folder', 'other_folder')}
+
+# Math operations
+${fileSize:divide(1024):divide(1024)} MB
+
+# String concatenation
+processed_${now():format('yyyyMMdd')}_${filename}
+
+# Date manipulation
+${now():minus(1):format('yyyy-MM-dd')}  # אתמול</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- === TUTORIALS VIEW === -->
     <div id="view-tutorials" class="view-section">
         <div style="max-width: 1100px; margin: 0 auto;">
@@ -988,13 +1520,13 @@ entryDate: 2024-01-15T10:30:00Z</div>
                         </ol>
 
                         <div class="code-block">GetFile Configuration:
-- Input Directory: /input
-- File Filter: .*
-- Keep Source File: false
+  - Input Directory: /input
+  - File Filter: .*
+  - Keep Source File: false
 
 PutFile Configuration:
-- Directory: /output
-- Conflict Resolution Strategy: replace</div>
+  - Directory: /output
+  - Conflict Resolution Strategy: replace</div>
 
                         <div class="success-box" style="margin-top: 20px;">
                             <h4>✅ בדיקה:</h4>
@@ -1034,15 +1566,15 @@ PutFile Configuration:
                         </ol>
 
                         <div class="code-block">DBCPConnectionPool Configuration:
-- Database Connection URL: jdbc:mysql://localhost:3306/mydb
-- Database User: root
-- Database Password: password
-- Database Driver Class Name: com.mysql.jdbc.Driver
+  - Database Connection URL: jdbc:mysql://localhost:3306/mydb
+  - Database User: root
+  - Database Password: password
+  - Database Driver Class Name: com.mysql.jdbc.Driver
 
 PutDatabaseRecord Configuration:
-- Record Reader: CSVReader
-- Table Name: my_table
-- Statement Type: INSERT</div>
+  - Record Reader: CSVReader
+  - Table Name: my_table
+  - Statement Type: INSERT</div>
 
                         <div class="warning-box" style="margin-top: 20px;">
                             <h4>⚠️ חשוב:</h4>
@@ -1087,10 +1619,10 @@ PutDatabaseRecord Configuration:
                         </ol>
 
                         <div class="code-block">UpdateAttribute Configuration:
-Add new properties:
-- timestamp: ${now():format('yyyy-MM-dd HH:mm:ss')}
-- source_file: ${filename}
-- processed_by: NiFi</div>
+  Add new properties:
+    - timestamp: ${now():format('yyyy-MM-dd HH:mm:ss')}
+    - source_file: ${filename}
+    - processed_by: NiFi</div>
 
                         <div class="info-box" style="margin-top: 20px;">
                             <h4>💡 Expression Language:</h4>
@@ -1131,15 +1663,18 @@ Add new properties:
                         </ol>
 
                         <div class="code-block">ExecuteSQL Configuration:
-- SQL select query: SELECT id, name, email FROM users WHERE status = 'active'
+  - SQL select query:
+    SELECT id, name, email
+    FROM users
+    WHERE status = 'active'
 
 UpdateAttribute Configuration:
-- processed_date: ${now():format('yyyy-MM-dd')}
-- batch_id: ${UUID()}
+  - processed_date: ${now():format('yyyy-MM-dd')}
+  - batch_id: ${UUID()}
 
 PutDatabaseRecord Configuration:
-- Table Name: processed_users
-- Statement Type: INSERT</div>
+  - Table Name: processed_users
+  - Statement Type: INSERT</div>
 
                         <div class="success-box" style="margin-top: 20px;">
                             <h4>✅ תוצאה צפויה:</h4>
@@ -1180,15 +1715,15 @@ PutDatabaseRecord Configuration:
                         </ol>
 
                         <div class="code-block">LookupRecord Configuration:
-- Lookup Service: DatabaseLookupService
-- Lookup Strategy: Simple Key-Value Lookup
-- Key Field: customer_id
-- Result Field: customer_name
+  - Lookup Service: DatabaseLookupService
+  - Lookup Strategy: Simple Key-Value Lookup
+  - Key Field: customer_id
+  - Result Field: customer_name
 
 DatabaseLookupService Configuration:
-- SQL Query: SELECT id, name FROM customers WHERE id = ?
-- Key Column: id
-- Value Column: name</div>
+  - SQL Query: SELECT id, name FROM customers WHERE id = ?
+  - Key Column: id
+  - Value Column: name</div>
 
                         <div class="info-box" style="margin-top: 20px;">
                             <h4>💡 Use Case:</h4>
@@ -1237,15 +1772,15 @@ DatabaseLookupService Configuration:
                         </ol>
 
                         <div class="code-block">PublishKafka Configuration:
-- Kafka Brokers: localhost:9092
-- Topic Name: nifi-topic
-- Delivery Guarantee: best effort
+  - Kafka Brokers: localhost:9092
+  - Topic Name: nifi-topic
+  - Delivery Guarantee: best effort
 
 ConsumeKafka Configuration:
-- Kafka Brokers: localhost:9092
-- Topic Name: nifi-topic
-- Consumer Group: nifi-consumer-group
-- Auto Offset Reset: earliest</div>
+  - Kafka Brokers: localhost:9092
+  - Topic Name: nifi-topic
+  - Consumer Group: nifi-consumer-group
+  - Auto Offset Reset: earliest</div>
 
                         <div class="warning-box" style="margin-top: 20px;">
                             <h4>⚠️ דרישות מוקדמות:</h4>
@@ -1376,9 +1911,9 @@ ConsumeKafka Configuration:
                     </ol>
 
                     <div class="code-block">Registry Client Configuration in NiFi:
-- Registry URL: http://localhost:18080
-- Registry Name: Local Registry
-- Description: Local NiFi Registry instance</div>
+  - Registry URL: http://localhost:18080
+  - Registry Name: Local Registry
+  - Description: Local NiFi Registry instance</div>
 
                     <div class="info-box" style="margin-top: 20px;">
                         <h4>💡 Best Practices:</h4>
@@ -1438,6 +1973,567 @@ ConsumeKafka Configuration:
         </div>
     </div>
 
+    <!-- === TROUBLESHOOTING VIEW === -->
+    <div id="view-troubleshooting" class="view-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">🔧 מדריך פתרון בעיות ב-NiFi</h1>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">פתרונות לבעיות נפוצות</p>
+            </div>
+
+            <!-- Queue Backup -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-red)">⚠️</span> Queue מתמלא (Backpressure)</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>התסמינים:</h3>
+                        <ul>
+                            <li>Queue בין processors מתמלא</li>
+                            <li>Flow נעצר (backpressure applied)</li>
+                            <li>FlowFiles מצטברים ולא מתקדמים</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <h4>1. הגדלת Concurrent Tasks</h4>
+                        <div class="code-block">Processor Configuration → Scheduling Tab:
+  - Concurrent Tasks: 2 → 4 (או יותר)
+
+משמעות:
+  יותר threads יעבדו על הנתונים במקביל</div>
+
+                        <h4>2. הגדרת Run Schedule</h4>
+                        <div class="code-block">Processor Configuration → Scheduling Tab:
+  - Run Schedule: 0 sec (ריצה מתמדת)
+
+  או
+
+  - Run Schedule: 1 sec (ריצה כל שנייה)</div>
+
+                        <h4>3. Batch Processing</h4>
+                        <div class="code-block"># במקום לעבד FlowFile אחד בכל פעם
+# השתמש ב-MergeContent לאיחוד מספר FlowFiles
+
+MergeContent Configuration:
+  - Minimum Number of Entries: 100
+  - Maximum Number of Entries: 1000
+  - Minimum Group Size: 10 MB</div>
+
+                        <h4>4. Backpressure Thresholds</h4>
+                        <div class="code-block">Connection Configuration:
+  - Back Pressure Object Threshold: 10,000 (default)
+  - Back Pressure Data Size Threshold: 1 GB
+
+הערה:
+  הגדל את הערכים אם יש מספיק זיכרון</div>
+
+                        <h4>5. Load Balancing</h4>
+                        <div class="code-block">Connection Configuration → Settings:
+  - Load Balance Strategy:
+    * Round Robin
+    * Partition by Attribute
+
+משמעות:
+  פיזור העומס על פני Nodes ב-Cluster</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slow Performance -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-orange)">🐌</span> ביצועים איטיים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>תסמינים:</h3>
+                        <ul>
+                            <li>Processor לוקח זמן רב לעיבוד FlowFile</li>
+                            <li>Throughput נמוך</li>
+                            <li>CPU/Memory usage גבוה</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <h4>1. Profile הביצועים</h4>
+                        <div class="code-block"># ב-NiFi UI → Summary:
+  - בדוק Processor Statistics
+  - זמן עיבוד ממוצע (Average Task Duration)
+  - Input/Output (5 min) - throughput
+
+# זהה צווארי בקבוק:
+  Processor עם Task Duration גבוה</div>
+
+                        <h4>2. Record-Based Processors</h4>
+                        <div class="code-block"># ❌ לא יעיל - SplitText + ReplaceText על כל שורה
+GetFile → SplitText → ReplaceText → MergeContent
+
+# ✅ יעיל - ConvertRecord (עיבוד כל הקובץ בבת אחת!)
+GetFile → ConvertRecord → PutFile
+
+תוצאה:
+  Record Readers/Writers מהירים פי 10-100!</div>
+
+                        <h4>3. Connection Pooling</h4>
+                        <div class="code-block"># השתמש ב-Controller Services לחיבורי DB
+# במקום ליצור חיבור חדש לכל FlowFile
+
+DBCPConnectionPool Service:
+  - Max Total Connections: 10
+  - Max Idle Connections: 5
+
+תוצאה:
+  שימוש חוזר בחיבורים = ביצועים טובים יותר!</div>
+
+                        <h4>4. Batch Size</h4>
+                        <div class="code-block">PutDatabaseRecord Configuration:
+  - Maximum Batch Size: 1000
+
+משמעות:
+  כתיבת 1000 records בבת אחת במקום 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connection Errors -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-purple)">🔌</span> שגיאות חיבור</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>שגיאות נפוצות:</h3>
+                        <ul>
+                            <li>Failed to connect to database</li>
+                            <li>Connection timeout</li>
+                            <li>Unable to reach HTTP endpoint</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות:</h3>
+                        <h4>1. בדיקת Connectivity</h4>
+                        <div class="code-block"># Database
+  ודא ש-Database Driver נמצא ב: $NIFI_HOME/lib/
+
+# HTTP
+  בדוק firewall, proxy settings
+
+# Kafka
+  ודא ש-Kafka brokers זמינים:
+  telnet kafka-broker 9092</div>
+
+                        <h4>2. Controller Service Validation</h4>
+                        <div class="code-block"># Controller Services → Enable Service
+
+לפני הפעלת Flow:
+  1. הפעל את כל ה-Controller Services
+  2. ודא שהם במצב "Enabled" (ירוק)
+  3. בדוק Bulletin Board לשגיאות</div>
+
+                        <h4>3. Timeout Settings</h4>
+                        <div class="code-block">InvokeHTTP Configuration:
+  - Connection Timeout: 30 sec
+  - Read Timeout: 60 sec
+
+הערה:
+  הגדל אם ה-API איטי</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debugging -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-blue)">🔍</span> איך לנפות באגים ב-NiFi</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>כלים לניפוי באגים:</h3>
+                        <h4>1. Data Provenance</h4>
+                        <ul>
+                            <li>לחץ ימני על Connection → "View Data Provenance"</li>
+                            <li>ראה את כל ה-Events של FlowFiles</li>
+                            <li>בדוק תוכן FlowFile בכל שלב</li>
+                        </ul>
+
+                        <h4>2. Bulletin Board</h4>
+                        <ul>
+                            <li>לחץ על הפעמון בפינה העליונה</li>
+                            <li>ראה שגיאות ואזהרות בזמן אמת</li>
+                        </ul>
+
+                        <h4>3. LogAttribute Processor</h4>
+                        <ul>
+                            <li>הוסף LogAttribute בנקודות קריטיות</li>
+                            <li>בדוק את ה-logs ב-nifi-app.log</li>
+                        </ul>
+
+                        <h4>4. Queue View</h4>
+                        <ul>
+                            <li>לחץ ימני על Queue → "List Queue"</li>
+                            <li>ראה FlowFiles ממתינים</li>
+                            <li>בדוק attributes ותוכן</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># LogAttribute Configuration:
+  - Log Level: info
+  - Log Payload: true (לנתונים קטנים!)
+  - Attributes to Log: filename, path, timestamp
+
+# Logs נמצאים ב:
+  $NIFI_HOME/logs/nifi-app.log</div>
+
+                    <div class="success-box">
+                        <h3>💡 Debug Checklist</h3>
+                        <ol>
+                            <li>✅ בדוק Bulletin Board - יש שגיאות?</li>
+                            <li>✅ ראה Data Provenance - מה קרה ל-FlowFile?</li>
+                            <li>✅ List Queue - מה יש ב-queue?</li>
+                            <li>✅ LogAttribute - בדוק attributes</li>
+                            <li>✅ View Content - ראה תוכן FlowFile</li>
+                            <li>✅ נסה ב-Process Group קטן קודם</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === BEST PRACTICES VIEW === -->
+    <div id="view-bestpractices" class="view-section">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.2rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">⭐ Best Practices ל-NiFi</h1>
+                <p style="color: var(--text-secondary); font-size: 1.05rem;">שיטות עבודה מומלצות</p>
+            </div>
+
+            <!-- Flow Design -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-blue)">🎨</span> עיצוב Flow</h2>
+                </div>
+                <div class="card-body">
+                    <div class="success-box">
+                        <h3>✅ DO - עשה</h3>
+                        <ul>
+                            <li><strong>השתמש ב-Process Groups</strong> - ארגן flows מורכבים לקבוצות לוגיות</li>
+                            <li><strong>שמות משמעותיים</strong> - תן שמות ברורים ל-Processors, Connections, Process Groups</li>
+                            <li><strong>Labels להסברים</strong> - הוסף Labels להסביר לוגיקה מורכבת</li>
+                            <li><strong>Funnel לאיחוד Connections</strong> - במקום חיבורים מרובים</li>
+                            <li><strong>Colors לקטגוריות</strong> - צבע Process Groups לפי פונקציה</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>❌ DON'T - אל תעשה</h3>
+                        <ul>
+                            <li>❌ Flow שטוח ענק - השתמש ב-Process Groups!</li>
+                            <li>❌ שמות default (Processor_1, Processor_2)</li>
+                            <li>❌ חיבורים צולבים מבולגנים</li>
+                            <li>❌ Hard-coded values - השתמש ב-Variables</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># ✅ דוגמה לשמות טובים:
+
+Process Group: "Customer Data Pipeline"
+  ├─ GetFile: "Read Customer CSV Files"
+  ├─ UpdateAttribute: "Add Processing Timestamp"
+  ├─ ConvertRecord: "CSV to JSON Conversion"
+  └─ PutDatabaseRecord: "Insert to PostgreSQL"
+
+# ❌ שמות גרועים:
+
+Process Group: "Group 1"
+  ├─ Processor_1
+  ├─ Processor_2
+  └─ Processor_3</div>
+                </div>
+            </div>
+
+            <!-- Record-Based Processing -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-green)">⚡</span> Record-Based Processing</h2>
+                </div>
+                <div class="card-body">
+                    <div class="success-box">
+                        <h3>✅ מומלץ מאוד!</h3>
+                        <p><strong>Record-based processors</strong> מהירים פי 10-100 מ-content-based processors!</p>
+                    </div>
+
+                    <div class="code-block"># ❌ לא יעיל - Content-Based
+
+GetFile
+  → SplitText (1 FlowFile → 1000 FlowFiles)
+  → EvaluateJsonPath (1000 times)
+  → ReplaceText (1000 times)
+  → MergeContent (1000 FlowFiles → 1)
+  → PutFile
+
+# ✅ יעיל - Record-Based
+
+GetFile
+  → ConvertRecord (1 operation על כל הקובץ!)
+  → PutFile
+
+תוצאה:
+  ביצועים פי 50-100 מהירים יותר!</div>
+
+                    <div class="info-box">
+                        <h3>Record Processors עיקריים:</h3>
+                        <ul>
+                            <li><strong>ConvertRecord</strong> - המרה בין פורמטים</li>
+                            <li><strong>QueryRecord</strong> - SQL על הנתונים</li>
+                            <li><strong>UpdateRecord</strong> - עדכון/הוספת fields</li>
+                            <li><strong>LookupRecord</strong> - העשרת נתונים</li>
+                            <li><strong>PartitionRecord</strong> - חלוקה לקבוצות</li>
+                            <li><strong>ValidateRecord</strong> - בדיקת תקינות</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Handling -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-orange)">🛡️</span> Error Handling</h2>
+                </div>
+                <div class="card-body">
+                    <div class="success-box">
+                        <h3>✅ Best Practices:</h3>
+                        <h4>1. טפל בכל Relationships</h4>
+                        <div class="code-block"># כל Processor יכול להוציא relationships שונים:
+  - success
+  - failure
+  - original
+  - unmatched
+
+חשוב:
+  חובה לחבר את כל ה-relationships!
+  אחרת ה-Processor לא יכול לרוץ (סימן אזהרה)</div>
+
+                        <h4>2. Retry Logic</h4>
+                        <div class="code-block">Processor Configuration → Settings Tab:
+  - Automatically Terminate Relationships: failure
+    (אל תסמן!)
+
+במקום זה:
+
+failure
+  → UpdateAttribute (הוסף retry_count)
+  → RouteOnAttribute
+      ├─ retry_count < 3: חזרה ל-Processor המקורי
+      └─ retry_count >= 3: LogAttribute + PutFile (error folder)</div>
+
+                        <h4>3. Dead Letter Queue</h4>
+                        <div class="code-block"># יצירת "שביל שגיאות"
+
+failure
+  → UpdateAttribute
+      - error_timestamp
+      - error_message
+  → PutFile
+      - Directory: /error_files/${now():format('yyyy-MM-dd')}/
+  → PutEmail
+      - התראה למנהל מערכת</div>
+
+                        <h4>4. MonitorActivity</h4>
+                        <div class="code-block"># הוסף MonitorActivity להתראה על חוסר פעילות
+
+MonitorActivity Configuration:
+  - Continually Send Messages: false
+  - Threshold Duration: 5 min
+
+משמעות:
+  אם אין FlowFiles במשך 5 דקות,
+  שלח inactive relationship</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Tuning -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-red)">⚡</span> שיפור ביצועים</h2>
+                </div>
+                <div class="card-body">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>✅ Record Processors</h4>
+                            <p>במקום Content Processors</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>✅ Concurrent Tasks</h4>
+                            <p>הגדל ל-4-8 לביצועים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>✅ Batch Processing</h4>
+                            <p>MergeContent לפני כתיבה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>✅ Controller Services</h4>
+                            <p>Connection pooling</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>✅ Load Balancing</h4>
+                            <p>בClusters</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>❌ Split מיותר</h4>
+                            <p>הימנע מפיצול אם אפשר</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h3>🎯 Golden Rules</h3>
+                        <ol>
+                            <li><strong>Record-Based</strong> - תמיד העדף Record processors</li>
+                            <li><strong>Batch</strong> - עבד על batches, לא FlowFiles בודדים</li>
+                            <li><strong>Controller Services</strong> - שתף משאבים (DB connections, etc.)</li>
+                            <li><strong>Process Groups</strong> - ארגן flows מורכבים</li>
+                            <li><strong>Monitor</strong> - שים לב ל-Queue sizes ו-Backpressure</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-purple)">🔐</span> אבטחה</h2>
+                </div>
+                <div class="card-body">
+                    <div class="warning-box">
+                        <h3>⚠️ חשוב מאוד!</h3>
+                        <p>אל תשמור סיסמאות ישירות ב-Processor properties!</p>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>✅ פתרונות מאובטחים:</h3>
+                        <h4>1. Variables</h4>
+                        <div class="code-block"># הגדר Variables ברמת Process Group:
+
+Process Group → Variables
+  - db.password: ********
+  - api.key: ********
+
+# שימוש:
+  Database Password: #{db.password}</div>
+
+                        <h4>2. Sensitive Properties</h4>
+                        <div class="code-block"># Properties מסומנים כ-"Sensitive" (🔒)
+# מוצפנים ב-nifi.properties:
+
+nifi.sensitive.props.key=your_encryption_key
+
+# יתרון:
+  לא מופיעים ב-logs או ב-UI</div>
+
+                        <h4>3. SSL/TLS</h4>
+                        <div class="code-block"># SSLContextService
+
+Controller Service → Add Service → SSLContextService
+
+Configuration:
+  - Keystore Filename: /path/to/keystore.jks
+  - Keystore Password: ********
+  - Truststore Filename: /path/to/truststore.jks
+  - Truststore Password: ********</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Production Checklist -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-green)">✅</span> Production Checklist</h2>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <h3>לפני הפצה לפרודקשן:</h3>
+                        <ul style="list-style: none; padding: 0; font-size: 1rem;">
+                            <li>☐ <strong>Security:</strong> SSL מוגדר, passwords ב-Variables</li>
+                            <li>☐ <strong>Error Handling:</strong> כל relationships מחוברים</li>
+                            <li>☐ <strong>Retry Logic:</strong> מנגנון retry לשגיאות זמניות</li>
+                            <li>☐ <strong>Monitoring:</strong> MonitorActivity + Alerts</li>
+                            <li>☐ <strong>Backpressure:</strong> thresholds מוגדרים נכון</li>
+                            <li>☐ <strong>Resource Pools:</strong> Controller Services מוגדרים</li>
+                            <li>☐ <strong>Registry:</strong> Flow שמור ב-Version Control</li>
+                            <li>☐ <strong>Testing:</strong> נבדק עם נתונים אמיתיים</li>
+                            <li>☐ <strong>Documentation:</strong> Process Groups עם Labels</li>
+                            <li>☐ <strong>Clustering:</strong> HA configuration אם נדרש</li>
+                            <li>☐ <strong>Backup:</strong> תצורת backup למידע קריטי</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patterns -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2><span style="color:var(--nifi-orange)">📐</span> תבניות עיצוב נפוצות (Design Patterns)</h2>
+                </div>
+                <div class="card-body">
+                    <h3>1. Fan-Out Pattern</h3>
+                    <div class="code-block">Source
+  → RouteOnAttribute
+      ├─ matched_condition_1 → Process_A
+      ├─ matched_condition_2 → Process_B
+      └─ matched_condition_3 → Process_C
+
+Use Case:
+  ניתוב נתונים למקומות שונים לפי תנאים</div>
+
+                    <h3>2. Fan-In Pattern</h3>
+                    <div class="code-block">Source_A ─┐
+Source_B ─┼→ Funnel → Process → Target
+Source_C ─┘
+
+Use Case:
+  איחוד נתונים ממקורות שונים</div>
+
+                    <h3>3. Enrichment Pattern</h3>
+                    <div class="code-block">Source
+  → LookupRecord (העשרה עם נתונים נוספים)
+  → UpdateAttribute (הוספת metadata)
+  → Target
+
+Use Case:
+  הוספת מידע מטבלאות reference</div>
+
+                    <h3>4. Error Handling Pattern</h3>
+                    <div class="code-block">Source
+  → Processor
+      ├─ success → Target
+      └─ failure
+          → UpdateAttribute (retry_count)
+          → RouteOnAttribute
+              ├─ retry < 3 → Processor (חזרה)
+              └─ retry >= 3 → Error Queue
+
+Use Case:
+  טיפול חכם בשגיאות עם retry logic</div>
+
+                    <h3>5. Batch Processing Pattern</h3>
+                    <div class="code-block">Source (קבצים קטנים רבים)
+  → MergeContent (איחוד ל-batches)
+  → Process (עיבוד batch)
+  → Target
+
+Use Case:
+  שיפור ביצועים לנתונים קטנים רבים</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="copy-notification" id="copyNotification">
@@ -1460,6 +2556,108 @@ ConsumeKafka Configuration:
 
         document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
+    }
+
+    /* === DARK MODE === */
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        const btn = document.getElementById('darkModeToggle');
+        btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+        localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').textContent = '☀️ מצב יום';
+    }
+
+    /* === SEARCH === */
+    function toggleSearch() {
+        const searchBar = document.getElementById('searchBar');
+        const isVisible = searchBar.style.display !== 'none';
+        searchBar.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            document.getElementById('searchInput').focus();
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    }
+
+    // Search database for NiFi
+    const searchDatabase = [
+        { term: 'GetFile', type: 'Input', description: 'קריאת קבצים מתיקייה', example: 'Input Directory: /data', section: 'processors' },
+        { term: 'PutFile', type: 'Output', description: 'כתיבת קבצים', example: 'Directory: /output', section: 'processors' },
+        { term: 'ConsumeKafka', type: 'Input', description: 'קריאה מ-Kafka', example: 'Topic: my-topic', section: 'processors' },
+        { term: 'PublishKafka', type: 'Output', description: 'כתיבה ל-Kafka', example: 'Topic: my-topic', section: 'processors' },
+        { term: 'ExecuteSQL', type: 'Database', description: 'הרצת SQL query', example: 'SELECT * FROM table', section: 'processors' },
+        { term: 'PutDatabaseRecord', type: 'Database', description: 'כתיבה למסד נתונים', example: 'Table Name: users', section: 'processors' },
+        { term: 'UpdateAttribute', type: 'Transform', description: 'עדכון attributes', example: 'timestamp: ${now()}', section: 'processors' },
+        { term: 'RouteOnAttribute', type: 'Route', description: 'ניתוב לפי תנאים', example: 'if ${filename} matches...', section: 'processors' },
+        { term: 'ConvertRecord', type: 'Transform', description: 'המרה בין פורמטים', example: 'CSV → JSON', section: 'processors' },
+        { term: 'JoltTransformJSON', type: 'Transform', description: 'טרנספורמציית JSON', example: 'JOLT Specification', section: 'processors' },
+        { term: 'LookupRecord', type: 'Enrich', description: 'העשרת נתונים', example: 'Lookup Service', section: 'processors' },
+        { term: 'FlowFile', type: 'Concept', description: 'יחידת נתונים ב-NiFi', example: 'Content + Attributes', section: 'concepts' },
+        { term: 'Expression Language', type: 'Concept', description: 'ערכים דינמיים', example: '${filename}', section: 'processors' },
+        { term: 'Controller Service', type: 'Concept', description: 'שירות משותף', example: 'DBCPConnectionPool', section: 'concepts' },
+        { term: 'Process Group', type: 'Concept', description: 'קיבוץ processors', example: 'Organization', section: 'concepts' },
+        { term: 'Registry', type: 'Advanced', description: 'Version control', example: 'Flow versioning', section: 'registry' },
+        { term: 'Backpressure', type: 'Performance', description: 'Queue מלא', example: 'Threshold settings', section: 'troubleshooting' },
+        { term: 'Record-Based', type: 'Performance', description: 'ביצועים מהירים', example: 'ConvertRecord', section: 'bestpractices' }
+    ];
+
+    function performSearch(query) {
+        const resultsDiv = document.getElementById('searchResults');
+
+        if (!query || query.length < 2) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+
+        const results = searchDatabase.filter(item =>
+            item.term.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.includes(query) ||
+            item.example.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">לא נמצאו תוצאות</div>';
+            return;
+        }
+
+        resultsDiv.innerHTML = results.map(item => `
+            <div class="search-result-item" onclick="navigateToView('${item.section}')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: var(--nifi-blue); font-size: 1.1rem;">${highlightText(item.term, query)}</strong>
+                    <span style="background: var(--nifi-green); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem;">${item.type}</span>
+                </div>
+                <div style="color: var(--text-secondary); margin-bottom: 8px;">${item.description}</div>
+                <code style="background: var(--code-bg); color: var(--code-text); padding: 8px 12px; border-radius: 4px; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">${item.example}</code>
+            </div>
+        `).join('');
+    }
+
+    function highlightText(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    function navigateToView(viewId) {
+        toggleSearch(); // Close search
+
+        // Switch to correct view
+        const navItem = document.querySelector(`.nav-item[onclick*="${viewId}"]`);
+        if (navItem) {
+            navItem.click();
+        }
+    }
+
+    /* === SOLUTION TOGGLE === */
+    function toggleSolution(button) {
+        const content = button.nextElementSibling;
+        content.classList.toggle('show');
+        button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
     }
 
     /* === COPY CODE BLOCKS === */
