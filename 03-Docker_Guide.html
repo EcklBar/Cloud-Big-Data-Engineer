@@ -208,70 +208,58 @@
         }
 
         /* ============================================
-           📐 Content Layout - NO SCROLL!
+           🧭 Top Navigation Bar
            ============================================ */
-        .content {
-            display: grid;
-            grid-template-columns: 280px 1fr;
+        .nav-container {
+            background: white;
+            border-bottom: 2px solid var(--bg-lighter);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        /* ============================================
-           🧭 Sidebar Navigation
-           ============================================ */
-        .sidebar {
-            background: var(--bg-light);
-            border-left: 1px solid var(--bg-lighter);
-            padding: var(--space-md) 0;
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            overflow-x: auto;
+            flex-wrap: wrap;
         }
 
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: var(--bg-light);
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: var(--bg-lighter);
-            border-radius: 3px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-color);
-        }
-
-        .nav-item {
-            display: block;
-            padding: 15px 20px;
+        .nav-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
             color: var(--text-secondary);
-            text-decoration: none;
-            border-bottom: 1px solid var(--bg-lighter);
-            transition: all var(--transition-base);
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            font-weight: 500;
-            font-size: var(--text-base);
+            transition: all 0.3s;
+            white-space: nowrap;
         }
 
-        .nav-item:hover {
+        .nav-btn:hover {
+            background: rgba(36, 150, 237, 0.1);
+            color: var(--docker-blue);
+        }
+
+        .nav-btn.active {
             background: var(--docker-blue);
             color: white;
-            transform: translateX(-5px);
-            padding-right: 25px;
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-            color: white;
-            border-right: 4px solid var(--secondary-color);
-            padding-right: 16px;
+            box-shadow: 0 2px 8px rgba(36, 150, 237, 0.3);
         }
 
         /* ============================================
-           📄 Main Content Area - NO MAX HEIGHT!
+           📄 Main Content Area
            ============================================ */
         .main-content {
             padding: var(--space-xl);
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .section {
@@ -508,13 +496,15 @@
            📱 Responsive Design
            ============================================ */
         @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
+            .nav-tabs {
+                justify-content: flex-start;
+                overflow-x: scroll;
+                flex-wrap: nowrap;
             }
 
-            .sidebar {
-                border-left: none;
-                border-bottom: 1px solid var(--bg-lighter);
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 0.85rem;
             }
 
             .header h1 {
@@ -528,6 +518,10 @@
 
             .comparison-container {
                 grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding: var(--space-lg) var(--space-md);
             }
 
             body {
@@ -549,6 +543,119 @@
             font-family: var(--font-mono);
             font-size: 0.9em;
             color: var(--docker-blue);
+        }
+
+        /* ============================================
+           🌙 DARK MODE
+           ============================================ */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1c2e 0%, #2d2f4a 100%);
+        }
+
+        body.dark-mode .container {
+            background: rgba(26, 28, 32, 0.95);
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #000000 0%, #1e3a5f 100%);
+        }
+
+        body.dark-mode .search-container {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .search-box {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .nav-container {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .nav-btn {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .nav-btn:hover {
+            background: rgba(36, 150, 237, 0.2);
+            color: var(--docker-blue);
+        }
+
+        body.dark-mode .nav-btn.active {
+            background: var(--docker-blue);
+            color: white;
+        }
+
+        body.dark-mode .nav-item {
+            color: #cbd5e1;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .nav-item:hover {
+            background: var(--docker-blue);
+            color: white;
+        }
+
+        body.dark-mode .nav-item.active {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+        }
+
+        body.dark-mode .section h2,
+        body.dark-mode .section h3 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .command-card,
+        body.dark-mode .definition-card,
+        body.dark-mode .feature-card,
+        body.dark-mode .comparison-box {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .info-box {
+            background: rgba(36, 150, 237, 0.15);
+            border-right-color: var(--docker-blue);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(230, 126, 34, 0.15);
+            border-right-color: var(--accent-orange);
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(46, 204, 113, 0.15);
+            border-right-color: var(--accent-green);
+        }
+
+        body.dark-mode .stack-item {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode code {
+            background: #1e293b;
+            color: var(--docker-blue);
+        }
+
+        body.dark-mode .command-usage,
+        body.dark-mode .definition-term {
+            color: var(--docker-blue);
+        }
+
+        body.dark-mode .command-code {
+            background: linear-gradient(135deg, #1e1e2e 0%, #0f0f1a 100%);
+        }
+
+        body.dark-mode .definition-text,
+        body.dark-mode p,
+        body.dark-mode li {
+            color: #cbd5e1;
         }
 
         /* ============================================
@@ -619,6 +726,69 @@
             color: var(--docker-blue);
             margin-bottom: var(--space-sm);
         }
+
+        /* ============================================
+           📝 EXERCISES & SOLUTIONS
+           ============================================ */
+        .exercise-card {
+            background: white;
+            border: 2px solid var(--bg-lighter);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
+            box-shadow: var(--shadow-sm);
+            border-right: 5px solid var(--docker-blue);
+        }
+
+        .exercise-card h3 {
+            color: var(--docker-blue);
+            margin-top: 0;
+            margin-bottom: var(--space-md);
+        }
+
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--docker-dark), var(--docker-blue));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(36, 150, 237, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(46, 204, 113, 0.1);
+            border-right: 4px solid var(--accent-green);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeInUp 0.3s;
+        }
+
+        body.dark-mode .sidebar-header {
+            color: #94a3b8;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .exercise-card {
+            background: #374151;
+            border-color: #4a5568;
+            border-right-color: var(--docker-blue);
+        }
     </style>
 </head>
 <body>
@@ -635,54 +805,45 @@
 
         <!-- Search Section -->
         <div class="search-container">
-            <input 
-                type="text" 
-                class="search-box" 
-                placeholder="🔍 חפש פקודות, הגדרות או נושאים... (Ctrl+F)" 
-                id="searchInput"
-                autocomplete="off"
-            >
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+                <input
+                    type="text"
+                    class="search-box"
+                    placeholder="🔍 חפש פקודות, הגדרות או נושאים... (Ctrl+F)"
+                    id="searchInput"
+                    autocomplete="off"
+                    style="flex: 1;"
+                >
+                <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: var(--docker-blue); border: none; padding: 12px 24px; border-radius: 25px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; white-space: nowrap;">
+                    🌙 מצב לילה
+                </button>
+            </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="content">
-            <!-- Sidebar Navigation -->
-            <nav class="sidebar">
-                <a href="#" class="nav-item active" data-section="what-is-docker">🐳 מהו Docker</a>
-                <a href="#" class="nav-item" data-section="docker-vs-vm">⚖️ Docker vs VM</a>
-                <a href="#" class="nav-item" data-section="use-cases">🎯 מקרי שימוש</a>
-                <a href="#" class="nav-item" data-section="architecture">🏗️ ארכיטקטורה</a>
-                <a href="#" class="nav-item" data-section="technology">🔬 טכנולוגיה בסיסית</a>
-                <a href="#" class="nav-item" data-section="definitions">📚 הגדרות</a>
-                <a href="#" class="nav-item" data-section="dockerfile">📝 Dockerfile</a>
-                <a href="#" class="nav-item" data-section="building">🔨 בניית Images</a>
-                <a href="#" class="nav-item" data-section="running">🚀 הרצת קונטיינרים</a>
-                <a href="#" class="nav-item" data-section="inspecting">🔍 בדיקת קונטיינרים</a>
-                <a href="#" class="nav-item" data-section="managing">⚙️ ניהול קונטיינרים</a>
-                <a href="#" class="nav-item" data-section="volumes">💾 Volumes</a>
-                <a href="#" class="nav-item" data-section="networking">🌐 רשתות</a>
-                <a href="#" class="nav-item" data-section="layers">🗂️ מערכת Layers</a>
-                <a href="#" class="nav-item" data-section="cmd-vs-entrypoint">🎭 CMD vs ENTRYPOINT</a>
-                <a href="#" class="nav-item" data-section="copy-vs-add">📄 COPY vs ADD</a>
-                <a href="#" class="nav-item" data-section="signals">🎯 Signal Handling</a>
-                <a href="#" class="nav-item" data-section="dockerignore">📄 .dockerignore</a>
-                <a href="#" class="nav-item" data-section="arg-vs-env">🔀 ARG vs ENV</a>
-                <a href="#" class="nav-item" data-section="registries">📦 Registry</a>
-                <a href="#" class="nav-item" data-section="images">🖼️ ניהול Images</a>
-                <a href="#" class="nav-item" data-section="containers">📋 ניהול מתקדם</a>
-                <a href="#" class="nav-item" data-section="compose">🎼 Docker Compose</a>
-                <a href="#" class="nav-item" data-section="practices">✨ Best Practices</a>
-                <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
-                <a href="#" class="nav-item" data-section="help">❓ עזרה</a>
-                <a href="#" class="nav-item" data-section="linux">🐧 פקודות Linux</a>
-            </nav>
+        <!-- Top Navigation Bar -->
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <button class="nav-btn active" onclick="switchSection('what-is-docker')">🐳 מבוא</button>
+                <button class="nav-btn" onclick="switchSection('architecture')">🏗️ ארכיטקטורה</button>
+                <button class="nav-btn" onclick="switchSection('dockerfile')">📝 Dockerfile</button>
+                <button class="nav-btn" onclick="switchSection('running')">🚀 הרצה</button>
+                <button class="nav-btn" onclick="switchSection('volumes')">💾 Volumes</button>
+                <button class="nav-btn" onclick="switchSection('networking')">🌐 רשתות</button>
+                <button class="nav-btn" onclick="switchSection('compose')">🎼 Compose</button>
+                <button class="nav-btn" onclick="switchSection('exercises')">📝 תרגילים</button>
+                <button class="nav-btn" onclick="switchSection('practices')">✨ Best Practices</button>
+                <button class="nav-btn" onclick="switchSection('troubleshooting')">🔧 פתרון בעיות</button>
+                <button class="nav-btn" onclick="switchSection('quickref')">📚 Quick Ref</button>
+            </div>
+        </div>
 
-            <!-- Main Content Area -->
+        <!-- Main Content Area -->
+        <div style="padding: 20px;">
             <main class="main-content">
                 <!-- What is Docker Section -->
                 <section class="section active" id="what-is-docker">
                     <h2>🐳 מהו Docker?</h2>
-                    
+
                     <div class="info-box">
                         <p><strong>Docker הוא המימוש הפופולרי ביותר של טכנולוגיית Containers</strong></p>
                     </div>
@@ -732,7 +893,7 @@
                 <!-- Docker vs VM Section -->
                 <section class="section" id="docker-vs-vm">
                     <h2>⚖️ Docker vs Virtual Machine</h2>
-                    
+
                     <div class="comparison-container">
                         <div class="comparison-box">
                             <h4>🐳 CONTAINER</h4>
@@ -771,7 +932,7 @@
                 <!-- Use Cases Section -->
                 <section class="section" id="use-cases">
                     <h2>🎯 מקרי שימוש ב-Docker</h2>
-                    
+
                     <div class="command-grid">
                         <div class="command-card">
                             <div class="command-usage">🏗️ ארכיטקטורת Microservices</div>
@@ -814,7 +975,7 @@
                 <!-- Architecture Section -->
                 <section class="section" id="architecture">
                     <h2>🏗️ ארכיטקטורת Docker</h2>
-                    
+
                     <h3>Docker Engine</h3>
                     <div class="comparison-container">
                         <div class="definition-card">
@@ -855,7 +1016,7 @@
                 <!-- Underlying Technology Section -->
                 <section class="section" id="technology">
                     <h2>🔬 הטכנולוגיה מאחורי Docker</h2>
-                    
+
                     <div class="definitions-grid">
                         <div class="definition-card">
                             <div class="definition-term">🔄 Processes</div>
@@ -923,7 +1084,7 @@
                 <!-- Dockerfile Section -->
                 <section class="section" id="dockerfile">
                     <h2>📝 Dockerfile - מושגים ופקודות</h2>
-                    
+
                     <h3>מהו Dockerfile?</h3>
                     <div class="info-box">
                         <p><strong>Dockerfile הוא קובץ טקסט המכיל הוראות לבניית Docker image</strong></p>
@@ -1036,7 +1197,7 @@ CMD ["python", "app.py"]</div>
                 <!-- Building Images Section -->
                 <section class="section" id="building">
                     <h2>🔨 בניית Docker Images</h2>
-                    
+
                     <h3>פקודת docker build</h3>
                     <div class="command-grid">
                         <div class="command-card">
@@ -1080,7 +1241,7 @@ CMD ["python", "app.py"]</div>
                 <!-- Running Containers Section -->
                 <section class="section" id="running">
                     <h2>🚀 הרצת Docker Containers</h2>
-                    
+
                     <div class="command-grid">
                         <div class="command-card">
                             <div class="command-usage">הרץ קונטיינר בסיסי</div>
@@ -1228,7 +1389,7 @@ CMD ["python", "app.py"]</div>
                 <!-- Volumes Section -->
                 <section class="section" id="volumes">
                     <h2>💾 Docker Volumes</h2>
-                    
+
                     <h3>מהם Volumes?</h3>
                     <div class="info-box">
                         <p><strong>Volumes הם מנגנון לשמירת נתונים מחוץ לקונטיינר</strong></p>
@@ -1283,7 +1444,7 @@ CMD ["python", "app.py"]</div>
                 <!-- Networking Section -->
                 <section class="section" id="networking">
                     <h2>🌐 Docker Networking</h2>
-                    
+
                     <h3>ניהול רשתות</h3>
                     <div class="command-grid">
                         <div class="command-card">
@@ -1332,7 +1493,7 @@ CMD ["python", "app.py"]</div>
                 <!-- Layers Section -->
                 <section class="section" id="layers">
                     <h2>🗂️ מערכת Layers של Docker</h2>
-                    
+
                     <div class="info-box">
                         <p><strong>Docker בנוי משכבות (layers) של filesystem</strong></p>
                         <ul>
@@ -1394,7 +1555,7 @@ RUN apt-get update && \
                 <!-- CMD vs ENTRYPOINT Section -->
                 <section class="section" id="cmd-vs-entrypoint">
                     <h2>🎭 CMD vs ENTRYPOINT</h2>
-                    
+
                     <div class="comparison-container">
                         <div class="comparison-box">
                             <h4>CMD</h4>
@@ -1467,7 +1628,7 @@ CMD ["app.py"]
                 <!-- COPY vs ADD Section -->
                 <section class="section" id="copy-vs-add">
                     <h2>📄 COPY vs ADD</h2>
-                    
+
                     <div class="comparison-container">
                         <div class="comparison-box">
                             <h4>COPY</h4>
@@ -1536,7 +1697,7 @@ ADD app.py /app/</div>
             <!-- Signal Handling & PID 1 Section -->
             <section class="section" id="signals">
                 <h2>🎯 Signal Handling & PID 1 Problem</h2>
-                
+
                 <h3>מהי בעיית PID 1?</h3>
                 <div class="warning-box">
                     <p><strong>⚠️ בעיה קריטית:</strong> התהליך הראשון בקונטיינר (PID 1) מקבל טיפול מיוחד מה-kernel של Linux. אם הוא לא מטפל נכון ב-signals, הקונטיינר לא יכבה בצורה נכונה!</p>
@@ -1778,7 +1939,7 @@ FROM python:${PYTHON_VERSION}
 
 ARG BUILD_DATE
 RUN echo "Built on ${BUILD_DATE}"</div>
-                        
+
                         <h5 style="margin-top: 20px; color: var(--accent-blue);">מאפיינים:</h5>
                         <ul>
                             <li>✅ זמין רק בזמן <code>docker build</code></li>
@@ -1800,7 +1961,7 @@ RUN echo "Built on ${BUILD_DATE}"</div>
                         <div class="command-code">ENV PORT=8000
 ENV NODE_ENV=production
 ENV DATABASE_URL=postgres://...</div>
-                        
+
                         <h5 style="margin-top: 20px; color: var(--accent-blue);">מאפיינים:</h5>
                         <ul>
                             <li>✅ זמין בזמן build</li>
@@ -1897,7 +2058,7 @@ docker build \
             <!-- Registry Section -->
             <section class="section" id="registries">
                 <h2>📦 Docker Registry</h2>
-                    
+
                     <h3>מהו Registry?</h3>
                     <div class="info-box">
                         <p><strong>Docker Registry הוא מערכת אחסון והפצה עבור Docker images</strong></p>
@@ -2036,7 +2197,7 @@ gcr.io/my-project/myapp:v1           # Google Container Registry
                 <!-- Docker Compose Section -->
                 <section class="section" id="compose">
                     <h2>🎼 Docker Compose</h2>
-                    
+
                     <h3>מהו Docker Compose?</h3>
                     <div class="info-box">
                         <p><strong>כלי להגדרה והרצה של אפליקציות מרובות קונטיינרים</strong></p>
@@ -2101,7 +2262,7 @@ services:
       - DEBUG=1
     depends_on:
       - db
-  
+
   db:
     image: postgres:13
     environment:
@@ -2113,10 +2274,427 @@ volumes:
   postgres_data:</div>
                 </section>
 
+                <!-- Exercises Section -->
+                <section class="section" id="exercises">
+                    <h2>📝 תרגילים מעשיים</h2>
+
+                    <div class="info-box">
+                        <p><strong>הדרך הטובה ביותר ללמוד Docker היא hands-on!</strong></p>
+                        <p>התרגילים מדורגים מקל לקשה - בצע אותם לפי הסדר</p>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>📝 תרגיל 1: Hello Docker</h3>
+                        <p><strong>רמה:</strong> מתחילים | <strong>זמן:</strong> 5 דקות</p>
+                        <p><strong>מטרה:</strong> הרצת container ראשון והבנת מחזור החיים</p>
+
+                        <p style="margin-top: 15px;"><strong>שלבים:</strong></p>
+                        <ol style="padding-right: 25px;">
+                            <li>הרץ את הcontainer הראשון שלך</li>
+                            <li>הבן מה קרה</li>
+                            <li>נקה אחריך</li>
+                        </ol>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. הרץ hello-world
+docker run hello-world
+
+# 2. הבן מה קרה:
+# - Docker משך את הimage מDocker Hub
+# - יצר container חדש
+# - הריץ את התוכנית
+# - Container נעצר אוטומטית
+
+# 3. בדוק שה-container קיים (stopped)
+docker ps -a
+
+# 4. נקה - הסר את הcontainer
+docker rm [container-id או container-name]
+
+# 5. הסר את הimage
+docker rmi hello-world</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>🐧 תרגיל 2: Interactive Container</h3>
+                        <p><strong>רמה:</strong> מתחילים | <strong>זמן:</strong> 10 דקות</p>
+                        <p><strong>מטרה:</strong> עבודה אינטראקטיבית בcontainer + הבנת ephemeral nature</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. הרץ Ubuntu container אינטראקטיבי
+docker run -it --name my-ubuntu ubuntu bash
+
+# 2. בתוך הcontainer - חקור את הסביבה
+pwd                    # תיקייה נוכחית
+ls -la                 # רשימת קבצים
+cat /etc/os-release    # מידע על המערכת
+whoami                 # משתמש נוכחי
+
+# 3. צור קובץ
+echo "Hello Docker" > /tmp/myfile.txt
+cat /tmp/myfile.txt
+
+# 4. צא מהcontainer
+exit
+
+# 5. בדוק שהcontainer נעצר
+docker ps -a
+
+# 6. הפעל שוב את אותו container
+docker start my-ubuntu
+docker attach my-ubuntu
+
+# 7. בדוק שהקובץ עדיין קיים!
+cat /tmp/myfile.txt    # עדיין שם!
+
+# 8. צא ונקה
+exit
+docker rm my-ubuntu</div>
+                            <p style="margin-top: 15px; color: var(--accent-orange);"><strong>💡 לקח:</strong> הcontainer שומר שינויים כל עוד הוא קיים. רק מחיקתו מוחקת את השינויים!</p>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>🐍 תרגיל 3: Build Python App Image</h3>
+                        <p><strong>רמה:</strong> בסיסי | <strong>זמן:</strong> 15 דקות</p>
+                        <p><strong>מטרה:</strong> כתיבת Dockerfile ובניית image משלך</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. צור תיקייה חדשה
+mkdir my-python-app
+cd my-python-app
+
+# 2. צור app.py
+cat > app.py << 'EOF'
+import time
+print("🐳 Hello from Docker!")
+print(f"⏰ Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+EOF
+
+# 3. צור Dockerfile
+cat > Dockerfile << 'EOF'
+FROM python:3.9-slim
+WORKDIR /app
+COPY app.py .
+CMD ["python", "app.py"]
+EOF
+
+# 4. בנה את הimage
+docker build -t my-python-app:v1 .
+
+# 5. בדוק שה-image נוצר
+docker images | grep my-python-app
+
+# 6. הרץ את הcontainer
+docker run my-python-app:v1
+
+# 7. הרץ שוב - ראה שהשעה משתנה
+docker run my-python-app:v1</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>💾 תרגיל 4: Volumes - נתונים מתמידים</h3>
+                        <p><strong>רמה:</strong> בסיסי | <strong>זמן:</strong> 15 דקות</p>
+                        <p><strong>מטרה:</strong> שמירת נתונים שנשארים גם אחרי מחיקת container</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. צור named volume
+docker volume create my-persistent-data
+
+# 2. הרץ container עם volume
+docker run -it --name container1 -v my-persistent-data:/data ubuntu bash
+
+# 3. בcontainer - צור קובץ
+echo "Data that will persist" > /data/important.txt
+cat /data/important.txt
+exit
+
+# 4. הסר את הcontainer
+docker rm container1
+
+# 5. הרץ container חדש עם אותו volume
+docker run -it --name container2 -v my-persistent-data:/data ubuntu bash
+
+# 6. בcontainer החדש - בדוק את הקובץ
+cat /data/important.txt    # עדיין קיים! 🎉
+
+# 7. נקה
+exit
+docker rm container2
+docker volume rm my-persistent-data</div>
+                            <p style="margin-top: 15px; color: var(--accent-green);"><strong>💡 לקח:</strong> Volumes שומרים נתונים מעבר למחזור החיים של containers!</p>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>🌐 תרגיל 5: Web Server עם Port Mapping</h3>
+                        <p><strong>רמה:</strong> בסיסי-בינוני | <strong>זמן:</strong> 10 דקות</p>
+                        <p><strong>מטרה:</strong> הרצת web server וגישה אליו מהדפדפן</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. הרץ nginx ברקע עם port mapping
+docker run -d --name my-nginx -p 8080:80 nginx
+
+# 2. בדוק שהcontainer רץ
+docker ps
+
+# 3. פתח דפדפן וגש ל:
+# http://localhost:8080
+# אמור לראות את דף ברירת המחדל של nginx!
+
+# 4. בדוק logs
+docker logs my-nginx
+
+# 5. שנה את דף הhome page
+docker exec my-nginx bash -c 'echo "<h1>Hello from Docker!</h1>" > /usr/share/nginx/html/index.html'
+
+# 6. רענן דפדפן - תראה את השינוי!
+
+# 7. עצור ונקה
+docker stop my-nginx
+docker rm my-nginx</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>📦 תרגיל 6: Multi-Container עם Docker Compose</h3>
+                        <p><strong>רמה:</strong> בינוני | <strong>זמן:</strong> 20 דקות</p>
+                        <p><strong>מטרה:</strong> הרצת אפליקציה עם database</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. צור docker-compose.yml
+cat > docker-compose.yml << 'EOF'
+version: '3.8'
+
+services:
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+EOF
+
+# 2. צור תיקיית html עם index
+mkdir html
+echo "<h1>Hello from Compose!</h1>" > html/index.html
+
+# 3. הפעל את כל השירותים
+docker-compose up -d
+
+# 4. בדוק שהכל רץ
+docker-compose ps
+
+# 5. גש לדפדפן: http://localhost:8080
+
+# 6. התחבר לdatabase
+docker-compose exec db psql -U postgres -d mydb
+
+# 7. בpostgres - צור טבלה
+CREATE TABLE users (id SERIAL PRIMARY KEY, name TEXT);
+INSERT INTO users (name) VALUES ('Docker User');
+SELECT * FROM users;
+\q
+
+# 8. עצור והסר
+docker-compose down
+
+# 9. הפעל שוב - הנתונים נשמרו!
+docker-compose up -d
+docker-compose exec db psql -U postgres -d mydb -c "SELECT * FROM users;"
+
+# 10. נקה לגמרי (כולל volumes)
+docker-compose down -v</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>🔧 תרגיל 7: Debug Container</h3>
+                        <p><strong>רמה:</strong> בינוני | <strong>זמן:</strong> 15 דקות</p>
+                        <p><strong>מטרה:</strong> למד לנפות באגים בcontainers</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. הרץ container שנכשל (לא קיים image)
+docker run non-existent-image
+
+# 2. הרץ container שיוצא מיד
+docker run alpine echo "test"
+
+# 3. בדוק למה הוא יצא
+docker ps -a
+docker logs [container-id]
+
+# 4. הרץ container עם שגיאה
+docker run python:3.9 python -c "import non_existent_module"
+
+# 5. בדוק את השגיאה
+docker logs [container-id]
+
+# 6. Debug - היכנס לcontainer דומה
+docker run -it python:3.9 bash
+
+# 7. בcontainer - נסה לתקן
+pip install requests
+python -c "import requests; print('Works!')"
+exit
+
+# 8. נקה containers שנכשלו
+docker container prune</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h3>🚀 תרגיל 8: פרויקט מסכם - Flask App מלא</h3>
+                        <p><strong>רמה:</strong> מתקדם | <strong>זמן:</strong> 30 דקות</p>
+                        <p><strong>מטרה:</strong> בניית אפליקציית Flask מלאה עם best practices</p>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="command-code"># 1. צור מבנה פרויקט
+mkdir flask-docker-app && cd flask-docker-app
+
+# 2. צור app.py
+cat > app.py << 'EOF'
+from flask import Flask
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return f"<h1>Hello from Flask in Docker!</h1><p>Environment: {os.getenv('ENV', 'unknown')}</p>"
+
+@app.route('/health')
+def health():
+    return {'status': 'healthy'}, 200
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+EOF
+
+# 3. צור requirements.txt
+echo "flask==2.3.0" > requirements.txt
+
+# 4. צור .dockerignore
+cat > .dockerignore << 'EOF'
+__pycache__
+*.pyc
+.git
+.env
+.venv
+*.md
+EOF
+
+# 5. צור Dockerfile אופטימלי
+cat > Dockerfile << 'EOF'
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Copy requirements first (for caching)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY app.py .
+
+# Create non-root user
+RUN useradd -m appuser && chown -R appuser:appuser /app
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD python -c "import requests; requests.get('http://localhost:5000/health')"
+
+EXPOSE 5000
+
+# Use exec form
+CMD ["python", "app.py"]
+EOF
+
+# 6. בנה את הimage
+docker build -t flask-app:v1 .
+
+# 7. הרץ בפיתוח
+docker run -d --name flask-dev -p 5000:5000 -e ENV=development flask-app:v1
+
+# 8. בדוק שעובד
+curl http://localhost:5000
+curl http://localhost:5000/health
+
+# 9. בדוק logs
+docker logs flask-dev
+
+# 10. בדוק health
+docker inspect flask-dev --format='{{.State.Health.Status}}'
+
+# 11. Debug - כנס לcontainer
+docker exec -it flask-dev bash
+# ps aux  # בדוק תהליכים
+# exit
+
+# 12. עצור ונקה
+docker stop flask-dev
+docker rm flask-dev
+
+# 13. הרץ בproduction
+docker run -d --name flask-prod \
+    -p 5000:5000 \
+    -e ENV=production \
+    --restart=unless-stopped \
+    --memory=512m \
+    flask-app:v1
+
+# 14. בדוק statistics
+docker stats flask-prod --no-stream</div>
+                        </div>
+                    </div>
+
+                    <div class="success-box" style="margin-top: 40px; text-align: center;">
+                        <h3>🎉 כל הכבוד!</h3>
+                        <p><strong>השלמת את כל התרגילים!</strong></p>
+                        <p>עכשיו אתה מסוגל:</p>
+                        <ul style="text-align: right; margin-top: 15px;">
+                            <li>✅ להריץ containers בסיסיים</li>
+                            <li>✅ לעבוד אינטראקטיבית בcontainers</li>
+                            <li>✅ לכתוב Dockerfiles</li>
+                            <li>✅ לבנות images</li>
+                            <li>✅ לעבוד עם volumes</li>
+                            <li>✅ לעבוד עם port mapping</li>
+                            <li>✅ להשתמש ב-Docker Compose</li>
+                            <li>✅ לנפות באגים בcontainers</li>
+                            <li>✅ לבנות אפליקציה production-ready!</li>
+                        </ul>
+                        <p style="margin-top: 20px; font-weight: 600;">🚀 אתה מוכן לעבוד עם Docker בפרויקטים אמיתיים!</p>
+                    </div>
+                </section>
+
                 <!-- Best Practices Section -->
                 <section class="section" id="practices">
                     <h2>✨ Best Practices ל-Docker</h2>
-                    
+
                     <div class="command-grid">
                         <div class="command-card">
                             <div class="command-usage">🔒 אל תשתמש ב-root</div>
@@ -2285,7 +2863,7 @@ CMD ["python", "app.py"]</div>
                 <!-- Troubleshooting Section -->
                 <section class="section" id="troubleshooting">
                     <h2>🔧 פתרון בעיות נפוצות</h2>
-                    
+
                     <h3>פקודות ניקוי ותחזוקה</h3>
                     <div class="command-grid">
                         <div class="command-card">
@@ -2416,6 +2994,84 @@ docker run -it [image] /bin/bash</div>
                     </div>
                 </section>
 
+                <!-- Quick Reference Section -->
+                <section class="section" id="quickref">
+                    <h2>📚 Quick Reference</h2>
+
+                    <h3>⚡ פקודות יומיומיות</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <div class="command-usage">Pull image</div>
+                            <div class="command-code">docker pull nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Build image</div>
+                            <div class="command-code">docker build -t myapp .</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Run container</div>
+                            <div class="command-code">docker run -d -p 8080:80 nginx</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">List running</div>
+                            <div class="command-code">docker ps</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Stop container</div>
+                            <div class="command-code">docker stop [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Remove container</div>
+                            <div class="command-code">docker rm [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">View logs</div>
+                            <div class="command-code">docker logs -f [container]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Exec into container</div>
+                            <div class="command-code">docker exec -it [container] bash</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">List images</div>
+                            <div class="command-code">docker images</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Remove image</div>
+                            <div class="command-code">docker rmi [image]</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Clean up</div>
+                            <div class="command-code">docker system prune -a</div>
+                        </div>
+                        <div class="command-card">
+                            <div class="command-usage">Docker Compose up</div>
+                            <div class="command-code">docker-compose up -d</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🎯 Workflow מומלץ</h3>
+                    <div class="command-code" style="background: #1e1e1e; color: #d4d4d4; padding: 20px;"># 1. כתוב Dockerfile
+# 2. בנה image
+docker build -t myapp:v1 .
+
+# 3. הרץ לבדיקה
+docker run --rm -it myapp:v1
+
+# 4. הרץ ברקע
+docker run -d --name myapp-prod -p 8080:8000 myapp:v1
+
+# 5. בדוק logs
+docker logs -f myapp-prod
+
+# 6. Debug אם צריך
+docker exec -it myapp-prod bash
+
+# 7. עצור ונקה
+docker stop myapp-prod
+docker rm myapp-prod</div>
+                </section>
+
                 <!-- Help Section -->
                 <section class="section" id="help">
                     <h2>❓ קבלת עזרה</h2>
@@ -2462,7 +3118,7 @@ docker run -it [image] /bin/bash</div>
                 <!-- Linux Commands Section -->
                 <section class="section" id="linux">
                     <h2>🐧 פקודות Linux בסיסיות</h2>
-                    
+
                     <h3>מדוע חשוב ללמוד Linux?</h3>
                     <div class="info-box">
                         <p><strong>רוב ה-Docker containers מבוססים על Linux!</strong></p>
@@ -2608,25 +3264,20 @@ docker run -it [image] /bin/bash</div>
         // ============================================
         // Navigation functionality
         // ============================================
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Remove active class from all nav items and sections
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-                
-                // Add active class to clicked nav item
-                item.classList.add('active');
-                
-                // Show corresponding section
-                const sectionId = item.getAttribute('data-section');
-                document.getElementById(sectionId).classList.add('active');
-                
-                // Scroll to top of main content
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
+        function switchSection(sectionId) {
+            // Remove active class from all buttons and sections
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+
+            // Add active class to clicked button
+            event.currentTarget.classList.add('active');
+
+            // Show corresponding section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         // ============================================
         // Copy to clipboard functionality
@@ -2664,7 +3315,7 @@ docker run -it [image] /bin/bash</div>
 
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
-            
+
             if (searchTerm === '') {
                 // Reset view
                 allCards.forEach(card => {
@@ -2679,13 +3330,13 @@ docker run -it [image] /bin/bash</div>
             }
 
             let hasResults = false;
-            
+
             allCards.forEach(card => {
                 const cardText = card.textContent.toLowerCase();
                 if (cardText.includes(searchTerm)) {
                     card.style.display = 'block';
                     hasResults = true;
-                    
+
                     // Highlight search term
                     const regex = new RegExp(`(${searchTerm})`, 'gi');
                     card.innerHTML = card.originalHTML.replace(regex, '<span class="highlight">$1</span>');
@@ -2724,6 +3375,33 @@ docker run -it [image] /bin/bash</div>
         document.querySelectorAll('.command-code').forEach(code => {
             code.title = 'לחץ להעתקה ללוח';
         });
+
+        // ============================================
+        // Dark Mode
+        // ============================================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            if (btn) btn.textContent = '☀️ מצב יום';
+        }
+
+        // ============================================
+        // Solution Toggle
+        // ============================================
+        function toggleSolution(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
+        }
 
         // ============================================
         // Initialize
