@@ -56,53 +56,67 @@
         .hero p { font-size: 1.5em; font-weight: 300; opacity: 0.9; margin-bottom: 30px; }
 
         /* --- NAVIGATION --- */
-        .nav-container {
+        .main-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            max-width: 1600px;
+            margin: 0 auto;
             background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 10px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: visible;
+            min-height: 600px;
         }
 
-        .nav-scroller {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-            overflow-x: auto;
-            padding: 8px 30px;
+        .sidebar {
+            background: #f8f9fa;
+            border-left: 1px solid #dee2e6;
+            padding: 20px 0;
         }
 
         .nav-btn {
+            display: block;
+            width: 100%;
             background: transparent;
-            border: 2px solid transparent;
-            padding: 10px 24px;
-            border-radius: 30px;
-            font-weight: 700;
+            border: none;
+            border-bottom: 1px solid #e9ecef;
+            padding: 18px 25px;
+            font-weight: 600;
             font-size: 0.95em;
             color: var(--secondary);
             cursor: pointer;
             transition: all 0.3s;
-            white-space: nowrap;
+            text-align: right;
         }
 
-        .nav-btn:hover, .nav-btn.active {
+        .nav-btn:hover {
+            background: rgba(241, 80, 47, 0.1);
+            color: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        .nav-btn.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 10px rgba(241, 80, 47, 0.4);
+            transform: translateX(-5px);
+            box-shadow: inset 5px 0 0 var(--primary-dark);
+        }
+
+        .content-area {
+            padding: 40px 60px;
         }
 
         /* --- MAIN CONTENT --- */
-        .container { max-width: 1400px; margin: 40px auto; padding: 0 30px; }
+        .container {
+            max-width: 1600px;
+            margin: 20px auto 60px;
+            padding: 0 20px;
+        }
 
         .section {
-            background: white;
-            border-radius: 20px;
-            padding: 60px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             display: none;
             animation: fadeIn 0.5s ease-out;
+            padding: 20px 0;
         }
 
         .section.active { display: block; }
@@ -384,14 +398,171 @@
             border-top: 1px solid #eee; margin-top: 60px;
         }
 
-        @media (max-width: 768px) {
+        /* === DARK MODE === */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1c2e 0%, #2d1f3f 100%);
+        }
+
+        body.dark-mode .container {
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .hero {
+            background: linear-gradient(135deg, #000000 0%, #1e293b 100%);
+        }
+
+        body.dark-mode .main-layout {
+            background: #1a1c20;
+        }
+
+        body.dark-mode .sidebar {
+            background: #2d3748;
+            border-left-color: #4a5568;
+        }
+
+        body.dark-mode .nav-btn {
+            color: #cbd5e1;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .nav-btn:hover {
+            background: rgba(241, 80, 47, 0.2);
+            color: var(--primary);
+        }
+
+        body.dark-mode .nav-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        body.dark-mode #darkModeBtn {
+            background: var(--primary);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        body.dark-mode .content-area {
+            background: #1a1c20;
+        }
+
+        body.dark-mode .section {
+            background: transparent;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode h4 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode h2 {
+            border-bottom-color: var(--primary);
+        }
+
+        body.dark-mode h3 {
+            color: var(--primary);
+        }
+
+        body.dark-mode p,
+        body.dark-mode li {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .info-card {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .info-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .diagram-container {
+            background: #1e293b;
+        }
+
+        body.dark-mode .stage {
+            background: #374151;
+        }
+
+        body.dark-mode .tab-content {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .tab-btn {
+            background: #374151;
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .tab-btn.active {
+            background: var(--secondary);
+        }
+
+        body.dark-mode .exercise {
+            background: rgba(245, 124, 0, 0.15);
+            border-color: #fb8c00;
+        }
+
+        body.dark-mode .legend-item {
+            background: #374151;
+        }
+
+        body.dark-mode #git-graph {
+            background: #1e293b;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #merge-description {
+            background: #374151;
+            border-left-color: var(--primary);
+        }
+
+        body.dark-mode strong {
+            color: var(--primary);
+        }
+
+        body.dark-mode code {
+            background: #1e293b;
+            color: var(--primary);
+        }
+
+        body.dark-mode footer {
+            border-top-color: #4a5568;
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                border-left: none;
+                border-bottom: 1px solid #dee2e6;
+                padding: 10px;
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+            }
+            .nav-btn {
+                white-space: nowrap;
+                padding: 12px 20px;
+                border-bottom: none;
+                border-radius: 25px;
+            }
+            .nav-btn.active {
+                box-shadow: none;
+            }
             .hero h1 { font-size: 2.5em; }
-            .section { padding: 30px; }
             .arrow { transform: rotate(90deg); margin: 10px 0; }
-            .container { padding: 0 20px; }
+            .container { padding: 0 15px; }
             .grid { grid-template-columns: 1fr; gap: 20px; }
             .info-card { padding: 20px; }
             .command-box { padding: 20px 25px; }
+            .content-area {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
@@ -405,24 +576,29 @@
             <h1><span>Git</span> למהנדסי נתונים</h1>
             <p>מדריך אינטראקטיבי מקיף</p>
             <div style="font-size: 3em; margin-top: 20px;">🚀 💾 🌿</div>
+            <button id="darkModeBtn" onclick="toggleDarkMode()" style="position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3); padding: 10px 20px; border-radius: 25px; color: white; cursor: pointer; font-weight: 600; font-size: 1.1em; transition: all 0.3s;">🌙</button>
         </div>
     </header>
 
-    <div class="nav-container">
-        <div class="nav-scroller">
-            <button class="nav-btn active" onclick="switchSection('intro')">מבוא ומושגים</button>
-            <button class="nav-btn" onclick="switchSection('basics')">פקודות בסיסיות</button>
-            <button class="nav-btn" onclick="switchSection('workflow')">תהליך עבודה</button>
-            <button class="nav-btn" onclick="switchSection('branching')">הסתעפות ומיזוג</button>
-            <button class="nav-btn" onclick="switchSection('mergevis')">הדמיית מיזוג</button>
-            <button class="nav-btn" onclick="switchSection('conflicts')">פתרון קונפליקטים</button>
-            <button class="nav-btn" onclick="switchSection('commands')">רשימת פקודות מלאה</button>
-            <button class="nav-btn" onclick="switchSection('advanced')">פקודות מתקדמות</button>
-            <button class="nav-btn" onclick="switchSection('exercises')">תרגילים מעשיים</button>
-        </div>
-    </div>
-
     <div class="container">
+        <div class="main-layout">
+            <nav class="sidebar">
+                <button class="nav-btn active" onclick="switchSection('intro')">🎯 מבוא ומושגים</button>
+                <button class="nav-btn" onclick="switchSection('basics')">⚡ פקודות בסיסיות</button>
+                <button class="nav-btn" onclick="switchSection('workflow')">🔄 תהליך עבודה</button>
+                <button class="nav-btn" onclick="switchSection('branching')">🌿 הסתעפות ומיזוג</button>
+                <button class="nav-btn" onclick="switchSection('mergevis')">🎨 הדמיית מיזוג</button>
+                <button class="nav-btn" onclick="switchSection('conflicts')">💥 פתרון קונפליקטים</button>
+                <button class="nav-btn" onclick="switchSection('commands')">📋 רשימת פקודות</button>
+                <button class="nav-btn" onclick="switchSection('advanced')">🚀 פקודות מתקדמות</button>
+                <button class="nav-btn" onclick="switchSection('data-eng')">💾 למהנדסי נתונים</button>
+                <button class="nav-btn" onclick="switchSection('exercises')">📝 תרגילים</button>
+                <button class="nav-btn" onclick="switchSection('troubleshooting')">🔧 פתרון בעיות</button>
+                <button class="nav-btn" onclick="switchSection('quickref')">📚 Quick Reference</button>
+                <button class="nav-btn" onclick="switchSection('bestpractices')">✨ Best Practices</button>
+            </nav>
+
+            <div class="content-area">
 
         <div id="intro" class="section active">
             <h2>מבוא לבקרת גרסאות (VCS)</h2>
@@ -996,6 +1172,253 @@
             </div>
         </div>
 
+        <div id="data-eng" class="section">
+            <h2>Git למהנדסי נתונים</h2>
+            <p>תרחישים ו-workflows ספציפיים לעולם ה-Data Engineering</p>
+
+            <h3>📊 ניהול Notebooks (Jupyter)</h3>
+            <div class="info-card" style="background: #fff3e0;">
+                <h4>⚠️ אתגרים:</h4>
+                <ul>
+                    <li>Notebooks הם קבצי JSON - קשה ל-diff/merge</li>
+                    <li>Outputs גדולים מנפחים את הגודל</li>
+                    <li>Binary data (images) בתוך notebooks</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ פתרונות:</h4>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># התקן nbdime לdiff/merge טובים יותר</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">pip install nbdime</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">nbdime config-git --enable</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># או נקה outputs לפני commit:</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">jupyter nbconvert --clear-output --inplace</span> <span class="arg">*.ipynb</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🗄️ קבצי נתונים גדולים</h3>
+            <div class="warning-box">
+                <p><strong>⚠️ Git לא מתאים לקבצים גדולים (>100MB)</strong></p>
+                <p>GitHub דוחה push של קבצים >100MB</p>
+            </div>
+
+            <div class="success-box">
+                <h4>✅ Git LFS (Large File Storage):</h4>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># התקנת Git LFS</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git lfs install</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># Track קבצים גדולים</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git lfs track</span> <span class="arg">"*.csv"</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git lfs track</span> <span class="arg">"*.parquet"</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git add .gitattributes</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git add</span> <span class="arg">data.csv</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git commit -m</span> <span class="arg">"Add large dataset"</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">📂 .gitignore למהנדסי נתונים</h3>
+            <div class="command-box">
+                <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Python</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>__pycache__/</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.py[cod]</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>.venv/</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>.env</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Jupyter</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>.ipynb_checkpoints/</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.ipynb</span> <span class="comment"># אם לא רוצה לtrack notebooks</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Data files (לא לcommit!)</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>data/</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.csv</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.parquet</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.json</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Database files</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.db</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.sqlite</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="comment"># Credentials</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>credentials.json</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.key</span>
+                    </div>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span>*.pem</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔄 Workflow מומלץ למהנדס נתונים</h3>
+            <div class="grid">
+                <div class="info-card">
+                    <h4>1. Feature Branch</h4>
+                    <div class="command-box">
+                        <div><span class="cmd">git checkout -b feature/new-pipeline</span></div>
+                        <div><span class="comment"># עבוד על pipeline חדש</span></div>
+                        <div><span class="cmd">git add .</span></div>
+                        <div><span class="cmd">git commit -m</span> <span class="arg">"Add ETL pipeline"</span></div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h4>2. Pull Request</h4>
+                    <div class="command-box">
+                        <div><span class="cmd">git push origin feature/new-pipeline</span></div>
+                        <div><span class="comment"># צור PR ב-GitHub</span></div>
+                        <div><span class="comment"># בקש code review</span></div>
+                        <div><span class="comment"># תקן לפי feedback</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card" style="margin-top: 30px;">
+                <h4>💡 טיפים למהנדסי נתונים:</h4>
+                <ul>
+                    <li><strong>אל תcommit קבצי נתונים גדולים</strong> - השתמש ב-Git LFS או שמור ב-S3/Cloud Storage</li>
+                    <li><strong>נקה notebook outputs</strong> לפני commit</li>
+                    <li><strong>Version control לschema</strong> - commit קבצי schema/DDL</li>
+                    <li><strong>תעד pipelines</strong> - README ברור לכל pipeline</li>
+                    <li><strong>שמור credentials ב-.env</strong> - אף פעם לא בקוד!</li>
+                </ul>
+            </div>
+        </div>
+
         <div id="exercises" class="section">
             <h2>תרגילים מעשיים</h2>
             <p>הדרך הטובה ביותר ללמוד היא על ידי עשייה. פתח את הטרמינל שלך.</p>
@@ -1045,6 +1468,32 @@
                 </ol>
             </div>
 
+            <div class="exercise">
+                <h3>🔄 תרגיל 5: Stash - שמירה זמנית</h3>
+                <p><strong>מטרה:</strong> למד להשתמש ב-stash לשמירת עבודה זמנית</p>
+                <ol>
+                    <li>עשה שינויים בקבצים (אל תcommit!)</li>
+                    <li>שמור זמנית: <code>git stash</code></li>
+                    <li>ודא ששינויים נעלמו: <code>git status</code></li>
+                    <li>עבור לענף אחר ועשה משהו</li>
+                    <li>חזור לענף המקורי</li>
+                    <li>החזר שינויים: <code>git stash pop</code></li>
+                    <li>ודא שהשינויים חזרו!</li>
+                </ol>
+            </div>
+
+            <div class="exercise">
+                <h3>↩️ תרגיל 6: Revert - ביטול Commit</h3>
+                <p><strong>מטרה:</strong> למד לבטל commit באופן בטוח</p>
+                <ol>
+                    <li>בדוק היסטוריה: <code>git log --oneline</code></li>
+                    <li>בטל את ה-commit האחרון: <code>git revert HEAD</code></li>
+                    <li>Git יצור commit חדש שמבטל את השינויים</li>
+                    <li>בדוק שוב את ההיסטוריה - יש commit נוסף!</li>
+                </ol>
+                <p style="margin-top: 15px;"><strong>💡 למה revert ולא reset?</strong> Revert בטוח - לא משכתב היסטוריה!</p>
+            </div>
+
             <div class="info-card" style="margin-top: 30px; text-align: center;">
                 <h3>📚 משאבים נוספים</h3>
                 <p>נסה את המשחק האינטראקטיבי: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a></p>
@@ -1052,6 +1501,338 @@
             </div>
         </div>
 
+        <div id="troubleshooting" class="section">
+            <h2>🔧 פתרון בעיות נפוצות</h2>
+
+            <h3>❌ "fatal: not a git repository"</h3>
+            <div class="warning-box">
+                <p><strong>בעיה:</strong> Git לא מזהה את התיקייה כmאגר</p>
+            </div>
+            <div class="success-box">
+                <h4>✅ פתרון:</h4>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># אתחל מאגר חדש</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git init</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># או clone מאגר קיים</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔐 "Permission denied (publickey)"</h3>
+            <div class="warning-box">
+                <p><strong>בעיה:</strong> אין הרשאה ל-push/pull</p>
+            </div>
+            <div class="success-box">
+                <h4>✅ פתרון:</h4>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># בדוק אם יש SSH key</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">ls -la ~/.ssh</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># צור SSH key חדש</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">ssh-keygen -t ed25519 -C</span> <span class="arg">"your_email@example.com"</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># הוסף ל-GitHub: Settings → SSH Keys</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">cat ~/.ssh/id_ed25519.pub</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">💥 "Your local changes would be overwritten"</h3>
+            <div class="warning-box">
+                <p><strong>בעיה:</strong> יש שינויים מקומיים שלא נשמרו</p>
+            </div>
+            <div class="success-box">
+                <h4>✅ פתרונות:</h4>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># אופציה 1: שמור שינויים</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git stash</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git pull</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git stash pop</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># אופציה 2: commit שינויים</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git add .</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git commit -m</span> <span class="arg">"WIP"</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git pull</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="comment"># אופציה 3: זרוק שינויים (⚠️ אובדן מידע!)</span>
+                        </div>
+                    </div>
+                    <div class="command-line">
+                        <div class="command-line-content">
+                            <span class="cmd">git reset --hard</span>
+                        </div>
+                        <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔀 קונפליקט במיזוג</h3>
+            <div class="info-card" style="background: #fff3e0;">
+                <h4>תהליך פתרון קונפליקט:</h4>
+                <ol>
+                    <li><code>git merge feature-branch</code> - יש קונפליקט!</li>
+                    <li><code>git status</code> - ראה אילו קבצים בקונפליקט</li>
+                    <li>פתח קובץ, מצא את הסימנים <<<<<<<, =======, >>>>>>></li>
+                    <li>ערוך את הקובץ - בחר איזה קוד לשמור</li>
+                    <li>מחק את הסימנים של Git</li>
+                    <li><code>git add &lt;file&gt;</code> - סמן כפתור</li>
+                    <li><code>git commit</code> - סיים מיזוג</li>
+                </ol>
+                <p style="margin-top: 15px;"><strong>💡 טיפ:</strong> VSCode מציג כפתורים מועילים לפתרון קונפליקטים!</p>
+            </div>
+
+            <div class="info-card" style="margin-top: 30px; text-align: center;">
+                <h3>📚 משאבים נוספים</h3>
+                <p>נסה את המשחק האינטראקטיבי: <a href="https://learngitbranching.js.org/" target="_blank" style="color: var(--primary); font-weight: bold;">Learn Git Branching</a></p>
+                <p style="margin-top: 10px;">קרא את הספר הרשמי: <a href="https://git-scm.com/book/en/v2" target="_blank" style="color: var(--accent); font-weight: bold;">Pro Git Book</a></p>
+            </div>
+        </div>
+
+        <div id="quickref" class="section">
+            <h2>📋 Quick Reference</h2>
+
+            <h3>⚡ פקודות יומיומיות</h3>
+            <div class="grid">
+                <div class="info-card">
+                    <h4>Setup & Config</h4>
+                    <div class="command-box">
+                        <div><span class="cmd">git config --global user.name</span> <span class="arg">"Name"</span></div>
+                        <div><span class="cmd">git config --global user.email</span> <span class="arg">"email@example.com"</span></div>
+                        <div><span class="cmd">git config --list</span></div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h4>Start Project</h4>
+                    <div class="command-box">
+                        <div><span class="cmd">git init</span></div>
+                        <div><span class="cmd">git clone</span> <span class="arg">&lt;url&gt;</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔄 Daily Workflow</h3>
+            <div class="command-box">
+                <button class="copy-btn" onclick="copyCode(this)">העתק הכל</button>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git pull</span> <span class="comment"># עדכן מהremote</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git status</span> <span class="comment"># בדוק שינויים</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git add .</span> <span class="comment"># העבר הכל</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git commit -m</span> <span class="arg">"message"</span> <span class="comment"># שמור</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                </div>
+                <div class="command-line">
+                    <div class="command-line-content">
+                        <span class="cmd">git push</span> <span class="comment"># העלה לremote</span>
+                    </div>
+                    <button class="copy-line-btn" onclick="copyLine(this)">העתק</button>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🚨 Emergency Commands</h3>
+            <div class="warning-box">
+                <h4>ביטול שינויים:</h4>
+                <div class="command-box">
+                    <div><span class="cmd">git restore</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># בטל שינויים בקובץ</span></div>
+                    <div><span class="cmd">git restore --staged</span> <span class="arg">&lt;file&gt;</span> <span class="comment"># הורד מstaging</span></div>
+                    <div><span class="cmd">git reset --hard HEAD</span> <span class="comment"># זרוק הכל (⚠️)</span></div>
+                    <div><span class="cmd">git revert</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># בטל commit (בטוח)</span></div>
+                    <div><span class="cmd">git reflog</span> <span class="comment"># ראה היסטוריה מלאה</span></div>
+                    <div><span class="cmd">git reset --hard</span> <span class="arg">&lt;commit&gt;</span> <span class="comment"># חזור לcommit ספציפי</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bestpractices" class="section">
+            <h2>✨ Best Practices למהנדסי נתונים</h2>
+
+            <h3>📝 Commit Messages</h3>
+            <div class="success-box">
+                <h4>✅ טוב:</h4>
+                <ul>
+                    <li>✅ <code>"Add ETL pipeline for user events"</code></li>
+                    <li>✅ <code>"Fix bug in data validation logic"</code></li>
+                    <li>✅ <code>"Update Spark job configuration"</code></li>
+                    <li>✅ <code>"Add tests for transformation function"</code></li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>❌ רע:</h4>
+                <ul>
+                    <li>❌ <code>"fix"</code></li>
+                    <li>❌ <code>"changes"</code></li>
+                    <li>❌ <code>"asdfgh"</code></li>
+                    <li>❌ <code>"final version 3"</code></li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 40px;">🌿 Branch Naming</h3>
+            <div class="grid">
+                <div class="info-card" style="background: #e8f5e9;">
+                    <h4>✅ ברור ומתאר:</h4>
+                    <ul>
+                        <li><code>feature/user-analytics-pipeline</code></li>
+                        <li><code>fix/data-validation-bug</code></li>
+                        <li><code>hotfix/production-crash</code></li>
+                        <li><code>refactor/clean-sql-queries</code></li>
+                    </ul>
+                </div>
+                <div class="info-card" style="background: #ffebee;">
+                    <h4>❌ לא ברור:</h4>
+                    <ul>
+                        <li><code>branch1</code></li>
+                        <li><code>test</code></li>
+                        <li><code>my-branch</code></li>
+                        <li><code>new-stuff</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🎯 Workflow מומלץ</h3>
+            <div class="grid">
+                <div class="info-card">
+                    <h4>1. Main/Master</h4>
+                    <p><strong>Production code</strong> - תמיד יציב ועובד</p>
+                </div>
+                <div class="info-card">
+                    <h4>2. Develop</h4>
+                    <p><strong>Integration branch</strong> - שילוב features</p>
+                </div>
+                <div class="info-card">
+                    <h4>3. Feature Branches</h4>
+                    <p><strong>תכונות חדשות</strong> - כל feature בענף נפרד</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔐 אבטחה</h3>
+            <div class="warning-box">
+                <h4>⚠️ אף פעם אל ת-commit:</h4>
+                <ul>
+                    <li>❌ <strong>Passwords / API Keys</strong></li>
+                    <li>❌ <strong>Credentials files</strong> (credentials.json, .env)</li>
+                    <li>❌ <strong>SSH keys</strong> (*.pem, *.key)</li>
+                    <li>❌ <strong>Database connection strings</strong></li>
+                    <li>❌ <strong>Cloud credentials</strong> (AWS keys, etc.)</li>
+                </ul>
+                <p style="margin-top: 15px;"><strong>✅ פתרון:</strong> השתמש ב-.gitignore ושמור credentials ב-environment variables</p>
+            </div>
+
+            <h3 style="margin-top: 40px;">🎯 Production Checklist</h3>
+            <div class="info-card">
+                <h4>לפני Push לProduction:</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li>☐ <strong>Tests passed:</strong> כל הtests עברו</li>
+                    <li>☐ <strong>Code reviewed:</strong> קיבלת approval</li>
+                    <li>☐ <strong>No secrets:</strong> אין credentials בקוד</li>
+                    <li>☐ <strong>README updated:</strong> תיעוד עדכני</li>
+                    <li>☐ <strong>Clean commits:</strong> היסטוריה ברורה</li>
+                    <li>☐ <strong>Tested locally:</strong> עובד על המחשב שלך</li>
+                </ul>
+            </div>
+        </div>
+
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -1449,6 +2230,22 @@
             const event = { currentTarget: document.querySelector('.merge-btn.active') };
             showMergeType('fast-forward');
         }, 100);
+
+        /* === DARK MODE === */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const btn = document.getElementById('darkModeBtn');
+            btn.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            const btn = document.getElementById('darkModeBtn');
+            if (btn) btn.textContent = '☀️';
+        }
     </script>
 </body>
 </html>
