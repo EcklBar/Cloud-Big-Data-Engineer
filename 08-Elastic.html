@@ -773,6 +773,270 @@
             font-weight: 700;
         }
 
+        /* === SEARCH === */
+        .search-result-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-right: 4px solid var(--elastic-blue);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-result-item:hover {
+            background: #e9ecef;
+            transform: translateX(-4px);
+        }
+
+        .search-highlight {
+            background: var(--elastic-yellow);
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* === COPY NOTIFICATION === */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--elastic-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        /* === TABLES === */
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+            background: white;
+        }
+
+        .reference-table thead {
+            background: linear-gradient(to left, #f0f9ff, #dbeafe);
+            border-bottom: 2px solid var(--elastic-blue);
+        }
+
+        .reference-table th {
+            padding: 14px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .reference-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .reference-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .reference-table code {
+            background: #e0f2fe;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--elastic-blue);
+            direction: ltr;
+        }
+
+        /* === WARNING/SUCCESS BOXES === */
+        .warning-box {
+            background: linear-gradient(135deg, #fff7ed, #fed7aa);
+            border: 2px solid #fb923c;
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border: 2px solid var(--elastic-green);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            --bg-body: #1a1c20;
+            --bg-surface: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #4a5568;
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode header {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .brand-text h1 {
+            -webkit-text-fill-color: var(--elastic-blue);
+        }
+
+        body.dark-mode .nav-tabs {
+            background: #1e293b;
+        }
+
+        body.dark-mode .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .nav-item.active {
+            background: #374151;
+            color: var(--elastic-blue);
+        }
+
+        body.dark-mode .content-card,
+        body.dark-mode .comparison-card,
+        body.dark-mode .exercise-card,
+        body.dark-mode .api-item {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .card-header,
+        body.dark-mode .api-item-header {
+            background: linear-gradient(to left, #2d3748, #374151);
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .info-card {
+            background: rgba(0, 119, 204, 0.15);
+            border-color: var(--elastic-blue);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(251, 146, 60, 0.15);
+            border-color: #fb923c;
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(0, 191, 179, 0.15);
+            border-color: var(--elastic-green);
+        }
+
+        body.dark-mode .concept-highlight {
+            background: #374151;
+            border-right-color: var(--elastic-yellow);
+        }
+
+        body.dark-mode .theory-sidebar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .theory-nav-item:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .theory-nav-item.active {
+            background: rgba(0, 119, 204, 0.2);
+        }
+
+        body.dark-mode .pipeline-stage,
+        body.dark-mode .node-box {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .pipeline-line {
+            background: linear-gradient(to left, #4a5568, var(--elastic-blue), #4a5568);
+        }
+
+        body.dark-mode .kibana-discover {
+            background: #1e293b;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .input-field {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #374151;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background: #4b5563;
+            border-color: var(--elastic-blue);
+        }
+
+        body.dark-mode .reference-table {
+            background: #2d3748;
+        }
+
+        body.dark-mode .reference-table thead {
+            background: linear-gradient(to left, #1e3a5f, #2c4a6f);
+        }
+
+        body.dark-mode .reference-table tr:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .reference-table code {
+            background: #1e293b;
+            color: var(--elastic-accent);
+        }
+
+        body.dark-mode #searchBar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchInput {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .search-result-item {
+            background: #374151;
+        }
+
+        body.dark-mode .search-result-item:hover {
+            background: #4b5563;
+        }
+
+        body.dark-mode #darkModeToggle {
+            background: #374151;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode button[onclick="toggleSearch()"] {
+            background: #374151;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .nav-tabs { flex-wrap: wrap; }
@@ -808,10 +1072,29 @@
         <div class="nav-item" onclick="switchView('theory', this)">📚 תיאוריה</div>
         <div class="nav-item" onclick="switchView('api', this)">⚙️ API Reference</div>
         <div class="nav-item" onclick="switchView('lab', this)">💪 תרגילים</div>
+        <div class="nav-item" onclick="switchView('cli', this)">⌨️ CLI & cURL</div>
+        <div class="nav-item" onclick="switchView('troubleshooting', this)">🔧 פתרון בעיות</div>
+        <div class="nav-item" onclick="switchView('quickref', this)">📋 Quick Reference</div>
     </div>
 
-    <div style="width: 80px;"></div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: rgba(0,0,0,0.05); border: 2px solid var(--border-color); padding: 10px 20px; border-radius: 8px; color: var(--text-primary); cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Heebo', sans-serif;">
+            🌙 מצב לילה
+        </button>
+        <button onclick="toggleSearch()" style="background: rgba(0,0,0,0.05); border: 2px solid var(--border-color); padding: 10px 20px; border-radius: 8px; color: var(--text-primary); cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Heebo', sans-serif;">
+            🔍 חיפוש
+        </button>
+    </div>
 </header>
+
+<!-- Search Bar -->
+<div id="searchBar" style="display: none; background: white; padding: 20px 40px; border-bottom: 2px solid var(--border-color); box-shadow: var(--shadow-md); z-index: 99;">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+        <input type="text" id="searchInput" placeholder="חפש queries, aggregations, API calls..." style="flex: 1; padding: 12px 20px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: 'Heebo', sans-serif;" oninput="performSearch(this.value)">
+        <button onclick="toggleSearch()" style="padding: 12px 24px; background: var(--elastic-blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Heebo', sans-serif;">סגור</button>
+    </div>
+    <div id="searchResults" style="max-width: 800px; margin: 15px auto 0; max-height: 400px; overflow-y: auto;"></div>
+</div>
 
 <div class="main-wrapper">
 
@@ -1414,69 +1697,387 @@
 
                 <!-- Best Practices -->
                 <div id="theory-best-practices" class="theory-section">
-                    <h1>✨ Best Practices</h1>
+                    <h1>✨ Best Practices ל-Elasticsearch</h1>
 
                     <h2>🏗️ תכנון Index</h2>
                     <div class="concept-highlight">
-                        <h4>מספר Shards</h4>
+                        <h4>מספר Shards אופטימלי</h4>
                         <ul>
-                            <li>יותר מדי shards = overhead</li>
-                            <li>מעט מדי = bottleneck</li>
+                            <li>יותר מדי shards = overhead של ניהול</li>
+                            <li>מעט מדי = bottleneck ב-performance</li>
                             <li><strong>כלל אצבע:</strong> shard size בין 10GB-50GB</li>
-                            <li>למידע קטן: 1-2 shards מספיק</li>
+                            <li>למידע קטן (< 5GB): 1 shard מספיק</li>
+                            <li>למידע בינוני (5-50GB): 2-5 shards</li>
+                            <li>למידע גדול: חשב לפי הנוסחה: (Total GB / 30GB)</li>
                         </ul>
                     </div>
 
                     <h3>Replicas</h3>
-                    <ul>
-                        <li><strong>מינימום 1 replica</strong> לפרודקשן (high availability)</li>
-                        <li>יותר replicas = יותר search throughput</li>
-                        <li>אבל: דורש יותר אחסון ויותר indexing overhead</li>
-                    </ul>
-
-                    <h2>📝 Mappings</h2>
-                    <ul>
-                        <li><strong>הגדר mapping מפורש</strong> לפרודקשן (אל תסמוך על dynamic mapping)</li>
-                        <li>השתמש ב-<strong>keyword</strong> לשדות שאתה לא צריך full-text search עליהם</li>
-                        <li>השבת <code>_all</code> field אם לא צריך (מיושן ממילא)</li>
-                        <li>השתמש ב-<strong>index: false</strong> לשדות שלא צריך לחפש בהם</li>
-                    </ul>
-
-                    <h2>🔍 Queries</h2>
-                    <div class="concept-highlight">
-                        <h4>⚡ ביצועים:</h4>
+                    <div class="success-box">
+                        <h4>✅ מומלץ:</h4>
                         <ul>
-                            <li>השתמש ב-<strong>filter context</strong> כשאין צורך ב-scoring (cacheable!)</li>
-                            <li>הגבל את מספר התוצאות עם <code>size</code></li>
-                            <li>השתמש ב-<code>_source</code> filtering כדי להחזיר רק שדות שצריך</li>
-                            <li>העדף <code>term</code> queries על <code>match</code> כשמחפשים ערכים מדויקים</li>
+                            <li><strong>מינימום 1 replica</strong> לפרודקשן (high availability)</li>
+                            <li><strong>2+ replicas</strong> לנתונים קריטיים</li>
+                            <li>יותר replicas = יותר search throughput (queries במקביל)</li>
+                            <li>אבל: דורש יותר אחסון ו-indexing overhead</li>
+                            <li>ניתן לשנות מספר replicas בכל זמן (בניגוד ל-shards!)</li>
                         </ul>
                     </div>
 
-                    <h2>🗂️ Index Lifecycle</h2>
-                    <p>עבור נתונים time-based (לוגים):</p>
-                    <ul>
-                        <li>צור indices חדשים לפי זמן (daily/weekly)</li>
-                        <li>השתמש ב-<strong>Index Lifecycle Management (ILM)</strong></li>
-                        <li>העבר indices ישנים ל-cold/frozen tier</li>
-                        <li>מחק או ארכב indices ישנים מדי</li>
-                    </ul>
+                    <h3>חישוב משאבים:</h3>
+                    <div class="code-snippet">## דוגמה: 90GB data
+Shards: 90GB / 30GB = 3 primary shards
+Replicas: 2 (לפרודקשן)
+Total Shards: 3 primary + 6 replica = 9 shards
+Nodes מינימום: 3 (כל primary + replica על nodes שונים)
+Storage: 90GB × (1 + 2 replicas) = 270GB</div>
 
-                    <h2>🔐 Security</h2>
-                    <ul>
-                        <li>אל תחשוף Elasticsearch ישירות לאינטרנט</li>
-                        <li>השתמש ב-authentication & authorization</li>
-                        <li>הגדר HTTPS/TLS</li>
-                        <li>גבה (backup) את הנתונים באופן קבוע</li>
-                    </ul>
+                    <h2>📝 Mappings Best Practices</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>✅ DO - עשה</h4>
+                            <ul style="font-size: 0.9rem;">
+                                <li>הגדר mapping מפורש בפרודקשן</li>
+                                <li>השתמש ב-keyword לשדות exact-value</li>
+                                <li>multi-fields: text + keyword</li>
+                                <li>הגדר date format מפורש</li>
+                                <li>index: false לשדות שלא מחפשים</li>
+                            </ul>
+                        </div>
 
-                    <h2>📊 Monitoring</h2>
-                    <ul>
-                        <li>עקוב אחר <strong>cluster health</strong> (green/yellow/red)</li>
-                        <li>נטר disk space, memory, CPU</li>
-                        <li>בדוק slow queries</li>
-                        <li>השתמש ב-Elastic Stack Monitoring</li>
-                    </ul>
+                        <div class="comparison-card">
+                            <h4>❌ DON'T - אל תעשה</h4>
+                            <ul style="font-size: 0.9rem;">
+                                <li>❌ Dynamic mapping בפרודקשן</li>
+                                <li>❌ text לכל שדה (יקר!)</li>
+                                <li>❌ שינוי mapping אחרי יצירה</li>
+                                <li>❌ שדות מיותרים באינדקס</li>
+                                <li>❌ Nested types בלי צורך</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>דוגמה למapping טוב:</h3>
+                    <div class="code-snippet">{
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "fields": {"keyword": {"type": "keyword"}}  # Multi-field!
+      },
+      "status": {
+        "type": "keyword"  # Exact values
+      },
+      "created_at": {
+        "type": "date",
+        "format": "yyyy-MM-dd HH:mm:ss||epoch_millis"
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "english"  # Language-specific
+      },
+      "internal_notes": {
+        "type": "text",
+        "index": false  # לא צריך לחפש - לא לאנדקס!
+      }
+    }
+  }
+}</div>
+
+                    <h2>🔍 Query Optimization</h2>
+                    <div class="concept-highlight">
+                        <h4>⚡ מהירות:</h4>
+
+                        <h5 style="margin-top: 20px;">1. Filter במקום Must (כשאפשר)</h5>
+                        <div class="code-snippet"># ❌ לא יעיל - must מחשב score
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"status": "active"}}  # לא צריך score!
+      ]
+    }
+  }
+}
+
+# ✅ יעיל - filter (cacheable!)
+{
+  "query": {
+    "bool": {
+      "filter": [
+        {"term": {"status": "active"}}
+      ]
+    }
+  }
+}</div>
+
+                        <h5 style="margin-top: 20px;">2. הגבל size</h5>
+                        <div class="code-snippet"># ❌ לא טוב - מחזיר הכל
+{
+  "query": {...}
+}
+
+# ✅ טוב - הגבל תוצאות
+{
+  "size": 10,  # רק 10 תוצאות
+  "query": {...}
+}</div>
+
+                        <h5 style="margin-top: 20px;">3. _source Filtering</h5>
+                        <div class="code-snippet"># ✅ טוב - רק שדות נדרשים
+{
+  "_source": ["title", "author"],  # לא כל הdocument
+  "query": {...}
+}</div>
+
+                        <h5 style="margin-top: 20px;">4. השתמש ב-Search After (לא from/size)</h5>
+                        <div class="code-snippet"># ❌ לא טוב לכמויות גדולות - from + size
+{
+  "from": 10000,
+  "size": 10  # יקר מאוד!
+}
+
+# ✅ טוב - search_after
+{
+  "size": 10,
+  "search_after": [previous_sort_values],
+  "sort": [{"timestamp": "asc"}]
+}</div>
+                    </div>
+
+                    <h2>🗂️ Index Lifecycle Management (ILM)</h2>
+                    <div class="info-card">
+                        <h4>תוכנית לניהול indices:</h4>
+                        <p><strong>Hot Tier</strong> → <strong>Warm Tier</strong> → <strong>Cold Tier</strong> → <strong>Delete</strong></p>
+
+                        <ul style="margin-top: 15px;">
+                            <li><strong>Hot:</strong> כתיבה וקריאה אקטיבית (SSDs מהירים)</li>
+                            <li><strong>Warm:</strong> רק קריאה, פחות תכוף (SSDs רגילים)</li>
+                            <li><strong>Cold:</strong> קריאה נדירה (HDDs)</li>
+                            <li><strong>Frozen:</strong> ארכיון (searchable snapshot)</li>
+                            <li><strong>Delete:</strong> מחיקה אוטומטית</li>
+                        </ul>
+                    </div>
+
+                    <h3>דוגמת ILM Policy:</h3>
+                    <div class="code-snippet">PUT /_ilm/policy/logs_policy
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_age": "1d",
+            "max_size": "50GB"
+          }
+        }
+      },
+      "warm": {
+        "min_age": "7d",
+        "actions": {
+          "shrink": {"number_of_shards": 1},
+          "forcemerge": {"max_num_segments": 1}
+        }
+      },
+      "cold": {
+        "min_age": "30d",
+        "actions": {
+          "freeze": {}
+        }
+      },
+      "delete": {
+        "min_age": "90d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}</div>
+
+                    <h2>🔐 Security Best Practices</h2>
+                    <div class="warning-box">
+                        <h4>⚠️ אבטחה קריטית:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>☐ <strong>Network:</strong> אל תחשוף ES ישירות לאינטרנט!</li>
+                            <li>☐ <strong>Authentication:</strong> הפעל Security features (X-Pack)</li>
+                            <li>☐ <strong>HTTPS/TLS:</strong> הצפן תעבורה</li>
+                            <li>☐ <strong>Role-Based Access:</strong> הגבל גישה לפי roles</li>
+                            <li>☐ <strong>Audit Logging:</strong> עקוב אחר פעילות</li>
+                            <li>☐ <strong>Snapshots:</strong> גיבויים קבועים</li>
+                            <li>☐ <strong>Firewall:</strong> הגבל IP addresses</li>
+                            <li>☐ <strong>Updates:</strong> עדכוני אבטחה</li>
+                        </ul>
+                    </div>
+
+                    <h2>📊 Monitoring & Alerting</h2>
+                    <div class="success-box">
+                        <h4>✅ מה לנטר?</h4>
+                        <ul>
+                            <li><strong>Cluster Health:</strong> green/yellow/red status</li>
+                            <li><strong>Disk Space:</strong> watermarks (85%, 90%, 95%)</li>
+                            <li><strong>JVM Heap:</strong> לא צריך לעבור 75%</li>
+                            <li><strong>CPU Usage:</strong> sustained high CPU = בעיה</li>
+                            <li><strong>Indexing Rate:</strong> documents/second</li>
+                            <li><strong>Search Rate:</strong> queries/second</li>
+                            <li><strong>Search Latency:</strong> זמן תגובה</li>
+                            <li><strong>Rejected Threads:</strong> אינדיקטור לעומס</li>
+                        </ul>
+                    </div>
+
+                    <h3>כלי ניטור:</h3>
+                    <div class="code-snippet"># Elasticsearch monitoring APIs
+GET /_cluster/health
+GET /_nodes/stats
+GET /_cat/indices?v&health=yellow
+GET /_cat/shards?v&h=index,shard,prirep,state,unassigned.reason
+
+# Kibana Stack Monitoring
+# Built-in dashboard לניטור ES cluster</div>
+
+                    <h2>⚡ Performance Tuning</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>💾 JVM Heap</h4>
+                            <p><strong>כלל:</strong> 50% מה-RAM, מקסימום 32GB</p>
+                            <div class="code-snippet" style="font-size: 0.75rem; margin-top: 10px;"># jvm.options
+-Xms16g
+-Xmx16g</div>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🔄 Refresh Interval</h4>
+                            <p>הגדל ל-30s/60s לbulk indexing</p>
+                            <div class="code-snippet" style="font-size: 0.75rem; margin-top: 10px;">PUT /my-index/_settings
+{
+  "refresh_interval": "30s"
+}</div>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>📦 Bulk Size</h4>
+                            <p>5-15MB per request (אופטימלי)</p>
+                            <div class="code-snippet" style="font-size: 0.75rem; margin-top: 10px;"># בצעו batching
+1000-5000 docs per bulk</div>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🗜️ Compression</h4>
+                            <p>הפעל compression לחיסכון</p>
+                            <div class="code-snippet" style="font-size: 0.75rem; margin-top: 10px;">PUT /my-index/_settings
+{
+  "codec": "best_compression"
+}</div>
+                        </div>
+                    </div>
+
+                    <h2>🎯 Production Checklist</h2>
+                    <div class="info-card">
+                        <h4>לפני Deploy לפרודקשן:</h4>
+                        <ul style="list-style: none; padding: 0; font-size: 1.05rem;">
+                            <li>☐ <strong>Cluster Size:</strong> לפחות 3 nodes (master-eligible)</li>
+                            <li>☐ <strong>Sharding:</strong> מספר shards מחושב נכון</li>
+                            <li>☐ <strong>Replicas:</strong> לפחות 1 (מומלץ 2)</li>
+                            <li>☐ <strong>Mappings:</strong> Explicit mappings מוגדרים</li>
+                            <li>☐ <strong>ILM Policy:</strong> ניהול lifecycle אוטומטי</li>
+                            <li>☐ <strong>Security:</strong> Authentication + TLS מופעלים</li>
+                            <li>☐ <strong>Monitoring:</strong> Stack Monitoring פעיל</li>
+                            <li>☐ <strong>Snapshots:</strong> גיבויים אוטומטיים מוגדרים</li>
+                            <li>☐ <strong>Heap Size:</strong> JVM heap מוגדר (50% RAM, max 32GB)</li>
+                            <li>☐ <strong>Disk Space:</strong> לפחות 20% פנוי</li>
+                            <li>☐ <strong>Network:</strong> Firewall + Load Balancer</li>
+                            <li>☐ <strong>Testing:</strong> נבדק עם נתונים אמיתיים</li>
+                        </ul>
+                    </div>
+
+                    <h2>🚀 Scaling Strategies</h2>
+                    <div class="comparison-grid">
+                        <div class="comparison-card">
+                            <h4>⬆️ Vertical Scaling</h4>
+                            <p>הוסף RAM, CPU, SSD מהירים</p>
+                            <p><strong>טוב ל:</strong> התחלה, indices קטנים</p>
+                            <p><strong>מוגבל:</strong> לפי גודל machine</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>➡️ Horizontal Scaling</h4>
+                            <p>הוסף nodes ל-cluster</p>
+                            <p><strong>טוב ל:</strong> כמויות גדולות, HA</p>
+                            <p><strong>אינסופי:</strong> ניתן להוסיף ללא הגבלה</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🔄 Index Splitting</h4>
+                            <p>פצל indices גדולים לקטנים</p>
+                            <p><strong>טוב ל:</strong> time-based data</p>
+                            <p><strong>דוגמה:</strong> logs-2024-01-15</p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4>🗂️ Tiered Architecture</h4>
+                            <p>Hot/Warm/Cold nodes</p>
+                            <p><strong>טוב ל:</strong> אופטימיזציה של עלויות</p>
+                            <p><strong>חיסכון:</strong> 50-70% בעלויות!</p>
+                        </div>
+                    </div>
+
+                    <h2>💡 Common Patterns</h2>
+
+                    <h3>Pattern 1: Time-Series Data (Logs)</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li>Index per day/week: <code>logs-2024-01-15</code></li>
+                            <li>ILM policy להעברה בין tiers</li>
+                            <li>Index aliases לקריאה/כתיבה</li>
+                            <li>מחיקה אוטומטית אחרי X ימים</li>
+                        </ul>
+                        <div class="code-snippet" style="margin-top: 15px;"># Index template עם ILM
+PUT /_index_template/logs_template
+{
+  "index_patterns": ["logs-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "index.lifecycle.name": "logs_policy"
+    }
+  }
+}</div>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Pattern 2: Full-Text Search (Products)</h3>
+                    <div class="info-card">
+                        <ul>
+                            <li>Index אחד עם mappings מותאמים</li>
+                            <li>text + keyword multi-fields</li>
+                            <li>Analyzers לשפות שונות</li>
+                            <li>Suggesters ל-autocomplete</li>
+                            <li>Replicas לביצועי קריאה</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Pattern 3: Analytics (Metrics)</h3>
+                    <div class="concept-highlight">
+                        <ul>
+                            <li>Rollup jobs לאגרגציה מראש</li>
+                            <li>Data streams לזמן-אמת</li>
+                            <li>Pre-computed aggregations</li>
+                            <li>Cold tier לנתונים היסטוריים</li>
+                        </ul>
+                    </div>
+
+                    <h2>📚 משאבים נוספים</h2>
+                    <div class="success-box">
+                        <h4>למידה:</h4>
+                        <ul>
+                            <li><strong>Documentation:</strong> elastic.co/guide/en/elasticsearch</li>
+                            <li><strong>Forums:</strong> discuss.elastic.co</li>
+                            <li><strong>GitHub:</strong> github.com/elastic/elasticsearch</li>
+                            <li><strong>Blog:</strong> elastic.co/blog</li>
+                            <li><strong>Elastic Stack:</strong> YouTube channel</li>
+                            <li><strong>Certification:</strong> Elastic Certified Engineer</li>
+                        </ul>
+                    </div>
                 </div>
 
             </main>
@@ -1963,20 +2564,1122 @@ POST /bookdb_index/_doc/_bulk
 }</div>
                 </div>
 
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <span class="ex-number">10</span>
+                            <span class="ex-title">Aggregations - ספירה לפי מוציא לאור</span>
+                        </div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-10')">הצג פתרון</button>
+                    </div>
+                    <p style="margin-bottom: 15px;">קבץ את הספרים לפי מוציא לאור וחשב ממוצע ביקורות לכל מוציא.</p>
+                    <div id="sol-10" class="solution-box">POST /bookdb_index/_search
+{
+  "size": 0,
+  "aggs": {
+    "publishers": {
+      "terms": {
+        "field": "publisher.keyword"
+      },
+      "aggs": {
+        "avg_reviews": {
+          "avg": {
+            "field": "num_reviews"
+          }
+        }
+      }
+    }
+  }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <span class="ex-number">11</span>
+                            <span class="ex-title">Stats Aggregation</span>
+                        </div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-11')">הצג פתרון</button>
+                    </div>
+                    <p style="margin-bottom: 15px;">קבל סטטיסטיקות מלאות (min, max, avg, sum, count) על מספר הביקורות.</p>
+                    <div id="sol-11" class="solution-box">POST /bookdb_index/_search
+{
+  "size": 0,
+  "aggs": {
+    "review_stats": {
+      "stats": {
+        "field": "num_reviews"
+      }
+    }
+  }
+}</div>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="ex-header">
+                        <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                            <span class="ex-number">12</span>
+                            <span class="ex-title">Update by Query</span>
+                        </div>
+                        <button class="reveal-btn" onclick="toggleSolution('sol-12')">הצג פתרון</button>
+                    </div>
+                    <p style="margin-bottom: 15px;">עדכן את כל הספרים של "manning" - הוסף field <code>verified: true</code>.</p>
+                    <div id="sol-12" class="solution-box">POST /bookdb_index/_update_by_query
+{
+  "script": {
+    "source": "ctx._source.verified = true"
+  },
+  "query": {
+    "term": {
+      "publisher.keyword": "manning"
+    }
+  }
+}</div>
+                </div>
+
                 <div class="exercise-card" style="border-right: 5px solid var(--elastic-pink);">
                     <div class="ex-header">
                         <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
                             <span class="ex-number">אתגר</span>
-                            <span class="ex-title">📊 Kibana Dashboard</span>
+                            <span class="ex-title">📊 Kibana Dashboard מלא</span>
                         </div>
                     </div>
-                    <p>השתמש ב-Kibana ליצירת dashboard מהספרים שהוספת (למשל: תרשים עוגה של מוציאים לאור).</p>
+                    <p><strong>צור Dashboard ב-Kibana עם:</strong></p>
+                    <ul style="padding-right: 25px; margin: 15px 0;">
+                        <li>תרשים Pie של מוציאים לאור</li>
+                        <li>Bar chart של ממוצע ביקורות לפי מוציא</li>
+                        <li>Metric של סך כל הספרים</li>
+                        <li>Data Table של הספרים הפופולריים ביותר</li>
+                        <li>Filter לפי מוציא לאור</li>
+                    </ul>
+
+                    <div class="info-card" style="margin-top: 20px;">
+                        <h4>💡 שלבים:</h4>
+                        <ol style="padding-right: 25px;">
+                            <li>צור Index Pattern ב-Kibana: Management → Index Patterns → Create</li>
+                            <li>שם Pattern: <code>bookdb_index</code></li>
+                            <li>Visualize → Create visualization → בחר סוג</li>
+                            <li>הגדר aggregations ו-buckets</li>
+                            <li>שמור כל visualization</li>
+                            <li>Dashboard → Create → הוסף את כל הvisualizations</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="success-box" style="margin-top: 40px;">
+                    <h3 style="margin-top: 0;">🎓 סיימת את התרגילים!</h3>
+                    <p><strong>עכשיו אתה יודע:</strong></p>
+                    <ul>
+                        <li>✅ ליצור indices עם settings</li>
+                        <li>✅ להוסיף documents (בודדים ו-bulk)</li>
+                        <li>✅ לבצע חיפושים פשוטים ומורכבים</li>
+                        <li>✅ להשתמש ב-Bool Queries</li>
+                        <li>✅ לעבוד עם Wildcards ו-Regex</li>
+                        <li>✅ לבצע Range queries</li>
+                        <li>✅ לסנן עם Filter Context</li>
+                        <li>✅ לעבוד עם Aggregations</li>
+                        <li>✅ לעדכן documents</li>
+                        <li>✅ ליצור Kibana Dashboard!</li>
+                    </ul>
+                    <p style="margin-top: 20px; font-weight: 600; font-size: 1.1rem;">
+                        🚀 המשך ל-CLI & cURL למדריך מעשי נוסף!
+                    </p>
                 </div>
 
             </div>
         </div>
     </div>
 
+    <!-- === CLI VIEW === -->
+    <div id="view-cli" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">⌨️ CLI & cURL - מדריך מעשי</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                פקודות חיוניות לניהול Elasticsearch דרך שורת הפקודה
+            </p>
+
+            <!-- Cluster Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-blue);">🏥 Cluster Health & Info</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">פקודה</th>
+                            <th>תיאור</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /_cluster/health</code></td>
+                            <td>בריאות כללית של ה-cluster (green/yellow/red)</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /_cluster/stats</code></td>
+                            <td>סטטיסטיקות מפורטות על ה-cluster</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /_nodes</code></td>
+                            <td>מידע על כל ה-nodes ב-cluster</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /_nodes/stats</code></td>
+                            <td>סטטיסטיקות של nodes (CPU, RAM, Disk)</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /_cat/nodes?v</code></td>
+                            <td>תצוגה טבלאית של nodes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 25px;">דוגמאות cURL:</h3>
+                <div class="code-snippet"># Check cluster health
+curl -X GET "localhost:9200/_cluster/health?pretty"
+
+# List all nodes
+curl -X GET "localhost:9200/_cat/nodes?v"
+
+# Cluster stats
+curl -X GET "localhost:9200/_cluster/stats?pretty"</div>
+            </div>
+
+            <!-- Index Management -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-green);">📂 ניהול Indices</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">פקודה</th>
+                            <th>תיאור</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /_cat/indices?v</code></td>
+                            <td>רשימת כל ה-indices</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>PUT /my-index</code></td>
+                            <td>יצירת index חדש</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>DELETE /my-index</code></td>
+                            <td>מחיקת index</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /my-index</code></td>
+                            <td>מידע על index (settings, mappings)</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /my-index/_mapping</code></td>
+                            <td>הצגת mapping של index</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>GET /my-index/_settings</code></td>
+                            <td>הצגת settings של index</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>POST /my-index/_close</code></td>
+                            <td>סגירת index (אי אפשר לקרוא/לכתוב)</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>POST /my-index/_open</code></td>
+                            <td>פתיחת index</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 25px;">דוגמאות cURL:</h3>
+                <div class="code-snippet"># Create index with settings
+curl -X PUT "localhost:9200/my-index" -H 'Content-Type: application/json' -d'
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 2
+  }
+}'
+
+# List all indices
+curl -X GET "localhost:9200/_cat/indices?v"
+
+# Delete index
+curl -X DELETE "localhost:9200/my-index"
+
+# Get mapping
+curl -X GET "localhost:9200/my-index/_mapping?pretty"</div>
+            </div>
+
+            <!-- Document Operations -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-yellow);">📄 CRUD על Documents</h2>
+
+                <h3>Create / Index:</h3>
+                <div class="code-snippet"># Index with auto-generated ID
+curl -X POST "localhost:9200/my-index/_doc" -H 'Content-Type: application/json' -d'
+{
+  "user": "John",
+  "message": "Hello Elasticsearch",
+  "timestamp": "2024-01-15T12:00:00"
+}'
+
+# Index with specific ID
+curl -X PUT "localhost:9200/my-index/_doc/1" -H 'Content-Type: application/json' -d'
+{
+  "user": "Jane",
+  "message": "Welcome"
+}'</div>
+
+                <h3 style="margin-top: 25px;">Read:</h3>
+                <div class="code-snippet"># Get document by ID
+curl -X GET "localhost:9200/my-index/_doc/1?pretty"
+
+# Get only _source
+curl -X GET "localhost:9200/my-index/_source/1?pretty"
+
+# Get specific fields
+curl -X GET "localhost:9200/my-index/_doc/1?_source=user,message"</div>
+
+                <h3 style="margin-top: 25px;">Update:</h3>
+                <div class="code-snippet"># Partial update
+curl -X POST "localhost:9200/my-index/_update/1" -H 'Content-Type: application/json' -d'
+{
+  "doc": {
+    "message": "Updated message"
+  }
+}'
+
+# Update with script
+curl -X POST "localhost:9200/my-index/_update/1" -H 'Content-Type: application/json' -d'
+{
+  "script": {
+    "source": "ctx._source.counter += params.count",
+    "params": {
+      "count": 1
+    }
+  }
+}'</div>
+
+                <h3 style="margin-top: 25px;">Delete:</h3>
+                <div class="code-snippet"># Delete document
+curl -X DELETE "localhost:9200/my-index/_doc/1"
+
+# Delete by query
+curl -X POST "localhost:9200/my-index/_delete_by_query" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "match": {
+      "user": "John"
+    }
+  }
+}'</div>
+            </div>
+
+            <!-- Search Queries -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-pink);">🔍 Search Queries נפוצות</h2>
+
+                <h3>Match All:</h3>
+                <div class="code-snippet">curl -X GET "localhost:9200/my-index/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "match_all": {}
+  }
+}'</div>
+
+                <h3 style="margin-top: 25px;">Match Query:</h3>
+                <div class="code-snippet">curl -X POST "localhost:9200/my-index/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "match": {
+      "message": "elasticsearch guide"
+    }
+  }
+}'</div>
+
+                <h3 style="margin-top: 25px;">Bool Query (מורכב):</h3>
+                <div class="code-snippet">curl -X POST "localhost:9200/my-index/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "title": "elasticsearch" }}
+      ],
+      "filter": [
+        { "range": { "num_reviews": { "gte": 20 }}}
+      ],
+      "must_not": [
+        { "match": { "publisher": "manning" }}
+      ],
+      "should": [
+        { "match": { "summary": "distributed" }}
+      ]
+    }
+  }
+}'</div>
+
+                <h3 style="margin-top: 25px;">Aggregations:</h3>
+                <div class="code-snippet">curl -X POST "localhost:9200/my-index/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "size": 0,
+  "aggs": {
+    "publishers": {
+      "terms": {
+        "field": "publisher.keyword"
+      }
+    },
+    "avg_reviews": {
+      "avg": {
+        "field": "num_reviews"
+      }
+    }
+  }
+}'</div>
+            </div>
+
+            <!-- Bulk Operations -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-blue);">📦 Bulk Operations</h2>
+
+                <div class="code-snippet"># Bulk API - multiple operations in one call
+curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' -d'
+{ "index": { "_index": "test", "_id": "1" }}
+{ "field1": "value1" }
+{ "delete": { "_index": "test", "_id": "2" }}
+{ "create": { "_index": "test", "_id": "3" }}
+{ "field1": "value3" }
+{ "update": { "_index": "test", "_id": "1" }}
+{ "doc": { "field2": "value2" }}
+'
+
+# From file
+curl -X POST "localhost:9200/_bulk" -H 'Content-Type: application/json' --data-binary "@requests.json"</div>
+
+                <div class="success-box" style="margin-top: 25px;">
+                    <h4>💡 טיפ:</h4>
+                    <p>Bulk API הרבה יותר יעיל מביצוע operations בודדות - השתמש בו לכמויות גדולות!</p>
+                </div>
+            </div>
+
+            <!-- Useful Commands -->
+            <div class="success-box">
+                <h3 style="margin-top: 0;">💡 פקודות שימושיות</h3>
+
+                <h4>מחיקה מהירה של כל ה-Indices:</h4>
+                <div class="code-snippet"># ⚠️ זהירות! מוחק הכל
+curl -X DELETE "localhost:9200/*"
+
+# מחיקת indices ספציפיים
+curl -X DELETE "localhost:9200/logs-*"</div>
+
+                <h4 style="margin-top: 20px;">Reindex:</h4>
+                <div class="code-snippet"># העתקת נתונים מ-index אחד לאחר
+curl -X POST "localhost:9200/_reindex" -H 'Content-Type: application/json' -d'
+{
+  "source": {
+    "index": "old-index"
+  },
+  "dest": {
+    "index": "new-index"
+  }
+}'</div>
+
+                <h4 style="margin-top: 20px;">Count:</h4>
+                <div class="code-snippet"># ספירת documents
+curl -X GET "localhost:9200/my-index/_count?pretty"
+
+# ספירה עם query
+curl -X POST "localhost:9200/my-index/_count" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "match": { "status": "active" }
+  }
+}'</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === TROUBLESHOOTING VIEW === -->
+    <div id="view-troubleshooting" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">🔧 מדריך פתרון בעיות</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                פתרונות לבעיות הנפוצות ביותר ב-Elasticsearch
+            </p>
+
+            <!-- Issue 1: Cluster Health Red/Yellow -->
+            <div class="warning-box" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: #dc2626;">🔴 Cluster Status: Red/Yellow</h2>
+
+                <h3>Red = אובדן נתונים!</h3>
+                <ul>
+                    <li>לפחות shard אחד primary חסר</li>
+                    <li>חלק מהנתונים לא זמינים</li>
+                    <li><strong>דחוף!</strong> צריך לטפל מיד</li>
+                </ul>
+
+                <h3 style="margin-top: 25px;">Yellow = לא אופטימלי</h3>
+                <ul>
+                    <li>כל ה-primary shards זמינים</li>
+                    <li>אבל לפחות replica shard אחד חסר</li>
+                    <li>פחות high availability</li>
+                </ul>
+
+                <h3 style="margin-top: 25px;">✅ פתרונות:</h3>
+
+                <h4>1. בדוק מה הבעיה:</h4>
+                <div class="code-snippet">curl -X GET "localhost:9200/_cluster/health?pretty"
+
+curl -X GET "localhost:9200/_cat/shards?v"
+
+# חפש shards עם state UNASSIGNED
+curl -X GET "localhost:9200/_cat/shards?v&h=index,shard,prirep,state,node" | grep UNASSIGNED</div>
+
+                <h4>2. בדוק Allocation Explain:</h4>
+                <div class="code-snippet">curl -X GET "localhost:9200/_cluster/allocation/explain?pretty"
+
+# מסביר למה shard לא מוקצה</div>
+
+                <h4>3. פתרונות נפוצים:</h4>
+                <div class="code-snippet"># הקטנת מספר Replicas (אם אין מספיק nodes)
+curl -X PUT "localhost:9200/my-index/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index": {
+    "number_of_replicas": 0
+  }
+}'
+
+# Retry allocation של failed shards
+curl -X POST "localhost:9200/_cluster/reroute?retry_failed=true"
+
+# הגדלת timeout
+curl -X PUT "localhost:9200/_cluster/settings" -H 'Content-Type: application/json' -d'
+{
+  "persistent": {
+    "cluster.routing.allocation.node_initial_primaries_recoveries": 4
+  }
+}'</div>
+            </div>
+
+            <!-- Issue 2: Out of Disk Space -->
+            <div class="warning-box" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: #dc2626;">💾 Out of Disk Space</h2>
+
+                <h3>סימפטומים:</h3>
+                <ul>
+                    <li>Read-only indices</li>
+                    <li>לא מצליח להוסיף documents</li>
+                    <li>הודעת שגיאה: "disk usage exceeded flood-stage watermark"</li>
+                </ul>
+
+                <h3 style="margin-top: 25px;">✅ פתרונות:</h3>
+
+                <h4>1. בדוק שימוש בדיסק:</h4>
+                <div class="code-snippet">curl -X GET "localhost:9200/_cat/allocation?v"
+
+curl -X GET "localhost:9200/_nodes/stats/fs?pretty"</div>
+
+                <h4>2. מחק indices ישנים:</h4>
+                <div class="code-snippet"># מחק indices ישנים מתאריך מסוים
+curl -X DELETE "localhost:9200/logs-2023-*"
+
+# Curator לניהול אוטומטי של indices
+# pip install elasticsearch-curator</div>
+
+                <h4>3. הסר Read-Only Mode:</h4>
+                <div class="code-snippet"># הסרת read-only mode מכל ה-indices
+curl -X PUT "localhost:9200/*/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.blocks.read_only_allow_delete": null
+}'</div>
+
+                <h4>4. הגדל Disk Watermarks:</h4>
+                <div class="code-snippet">curl -X PUT "localhost:9200/_cluster/settings" -H 'Content-Type: application/json' -d'
+{
+  "persistent": {
+    "cluster.routing.allocation.disk.watermark.low": "90%",
+    "cluster.routing.allocation.disk.watermark.high": "95%",
+    "cluster.routing.allocation.disk.watermark.flood_stage": "97%"
+  }
+}'</div>
+            </div>
+
+            <!-- Issue 3: Slow Queries -->
+            <div class="warning-box" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: #f59e0b;">🐌 Queries איטיות</h2>
+
+                <h3>✅ Debug Steps:</h3>
+
+                <h4>1. Profile Query:</h4>
+                <div class="code-snippet">curl -X POST "localhost:9200/my-index/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "profile": true,
+  "query": {
+    "match": { "message": "search term" }
+  }
+}'
+
+# יציג breakdown מפורט של זמני ביצוע</div>
+
+                <h4>2. בדוק Slow Logs:</h4>
+                <div class="code-snippet"># הפעלת slow query logging
+curl -X PUT "localhost:9200/my-index/_settings" -H 'Content-Type: application/json' -d'
+{
+  "index.search.slowlog.threshold.query.warn": "10s",
+  "index.search.slowlog.threshold.query.info": "5s",
+  "index.search.slowlog.threshold.fetch.warn": "1s"
+}'
+
+# Logs ב:
+# /var/log/elasticsearch/my-cluster_index_search_slowlog.log</div>
+
+                <h4>3. אופטימיזציות:</h4>
+                <div class="code-snippet"># השתמש ב-Filter Context (cacheable!)
+{
+  "query": {
+    "bool": {
+      "filter": [  # במקום "must"
+        { "term": { "status": "active" }}
+      ]
+    }
+  }
+}
+
+# הגבל תוצאות
+{
+  "size": 10,  # לא 10000!
+  "query": {...}
+}
+
+# _source filtering - רק שדות נדרשים
+{
+  "_source": ["title", "author"],
+  "query": {...}
+}</div>
+
+                <h4>4. Force Merge (indices ישנים בלבד!):</h4>
+                <div class="code-snippet"># לא לעשות על indices פעילים!
+curl -X POST "localhost:9200/old-index/_forcemerge?max_num_segments=1"</div>
+            </div>
+
+            <!-- Issue 4: Memory Issues -->
+            <div class="warning-box" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: #dc2626;">💥 OutOfMemory Errors</h2>
+
+                <h3>✅ פתרונות:</h3>
+
+                <h4>1. הגדר Heap Size נכון:</h4>
+                <div class="code-snippet"># jvm.options
+# כלל אצבע: 50% מה-RAM, מקסימום 32GB
+
+-Xms4g
+-Xmx4g  # חייב להיות זהה ל-Xms!</div>
+
+                <h4>2. בדוק שימוש בזיכרון:</h4>
+                <div class="code-snippet">curl -X GET "localhost:9200/_nodes/stats/jvm?pretty"
+
+# בדוק heap_used_percent - לא צריך לעבור 75%</div>
+
+                <h4>3. נקה Caches:</h4>
+                <div class="code-snippet"># ניקוי cache
+curl -X POST "localhost:9200/_cache/clear"
+
+# ניקוי fielddata
+curl -X POST "localhost:9200/my-index/_cache/clear?fielddata=true"</div>
+
+                <h4>4. הגבל Aggregations:</h4>
+                <div class="code-snippet"># הגבל cardinality aggregations
+{
+  "aggs": {
+    "unique_users": {
+      "cardinality": {
+        "field": "user_id",
+        "precision_threshold": 3000  # default: 3000
+      }
+    }
+  }
+}</div>
+            </div>
+
+            <!-- Issue 5: Connection Refused -->
+            <div class="warning-box" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: #dc2626;">🔌 Connection Refused</h2>
+
+                <h3>✅ בדיקות:</h3>
+
+                <h4>1. בדוק ש-Elasticsearch רץ:</h4>
+                <div class="code-snippet"># Check process
+ps aux | grep elasticsearch
+
+# Check port
+netstat -tlnp | grep 9200
+
+# With Docker
+docker ps | grep elasticsearch</div>
+
+                <h4>2. בדוק Logs:</h4>
+                <div class="code-snippet"># Logs location (depends on installation)
+tail -f /var/log/elasticsearch/my-cluster.log
+
+# Docker logs
+docker logs elasticsearch</div>
+
+                <h4>3. בדוק network.host:</h4>
+                <div class="code-snippet"># elasticsearch.yml
+network.host: 0.0.0.0  # Listen on all interfaces
+
+# או
+network.host: localhost  # Only local connections</div>
+            </div>
+
+            <!-- Debug Checklist -->
+            <div class="success-box">
+                <h3 style="margin-top: 0;">✅ Debug Checklist</h3>
+                <ol style="font-size: 1.05rem; line-height: 2;">
+                    <li>✅ <strong>Cluster Health:</strong> <code>GET /_cluster/health</code></li>
+                    <li>✅ <strong>Check Nodes:</strong> <code>GET /_cat/nodes?v</code></li>
+                    <li>✅ <strong>Check Indices:</strong> <code>GET /_cat/indices?v</code></li>
+                    <li>✅ <strong>Check Shards:</strong> <code>GET /_cat/shards?v</code></li>
+                    <li>✅ <strong>Disk Space:</strong> <code>GET /_cat/allocation?v</code></li>
+                    <li>✅ <strong>Logs:</strong> tail -f elasticsearch.log</li>
+                    <li>✅ <strong>Profile Slow Query:</strong> profile: true</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- === QUICK REFERENCE VIEW === -->
+    <div id="view-quickref" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">📋 Quick Reference</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                כל מה שצריך במקום אחד
+            </p>
+
+            <!-- Query Types -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-blue);">🔍 Query Types</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Query Type</th>
+                            <th>תיאור</th>
+                            <th>Use Case</th>
+                            <th style="text-align: left; direction: ltr;">דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>match</code></td>
+                            <td>Full-text search (עם analysis)</td>
+                            <td>חיפוש טקסט רגיל</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"match": {"field": "text"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>match_phrase</code></td>
+                            <td>ביטוי מדויק (בסדר)</td>
+                            <td>חיפוש צירוף מילים</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"match_phrase": {"field": "quick brown"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>multi_match</code></td>
+                            <td>חיפוש במספר fields</td>
+                            <td>חיפוש גלובלי</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"multi_match": {"query": "x", "fields": ["*"]}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>term</code></td>
+                            <td>ערך מדויק (ללא analysis)</td>
+                            <td>IDs, statuses, keywords</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"term": {"status": "active"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>terms</code></td>
+                            <td>מספר ערכים (OR)</td>
+                            <td>חיפוש ברשימה</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"terms": {"tag": ["a", "b"]}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>range</code></td>
+                            <td>טווח (תאריכים, מספרים)</td>
+                            <td>סינון לפי טווח</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"range": {"age": {"gte": 18}}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>exists</code></td>
+                            <td>field קיים (not null)</td>
+                            <td>בדיקת שדות חסרים</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"exists": {"field": "email"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>wildcard</code></td>
+                            <td>תווים כלליים (* ?)</td>
+                            <td>pattern matching</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"wildcard": {"name": "john*"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>regexp</code></td>
+                            <td>Regular expressions</td>
+                            <td>חיפוש מורכב</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"regexp": {"name": "j.*n"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>bool</code></td>
+                            <td>שילוב queries (must/should/must_not)</td>
+                            <td>לוגיקה מורכבת</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"bool": {"must": [...], "filter": [...]}}</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Aggregations Reference -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-green);">📊 Aggregations Reference</h2>
+
+                <h3>Metric Aggregations:</h3>
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Type</th>
+                            <th>תיאור</th>
+                            <th style="text-align: left; direction: ltr;">דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>avg</code></td>
+                            <td>ממוצע</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"avg": {"field": "price"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>sum</code></td>
+                            <td>סכום</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"sum": {"field": "amount"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>min / max</code></td>
+                            <td>מינימום / מקסימום</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"max": {"field": "age"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>stats</code></td>
+                            <td>כל הנ"ל (count, min, max, avg, sum)</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"stats": {"field": "price"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>cardinality</code></td>
+                            <td>ספירת ערכים ייחודיים (distinct)</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"cardinality": {"field": "user_id"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>percentiles</code></td>
+                            <td>אחוזונים (50th, 95th, 99th)</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"percentiles": {"field": "response_time"}}</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 30px;">Bucket Aggregations:</h3>
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Type</th>
+                            <th>תיאור</th>
+                            <th style="text-align: left; direction: ltr;">דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>terms</code></td>
+                            <td>קיבוץ לפי ערכים (top N)</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"terms": {"field": "category.keyword", "size": 10}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>date_histogram</code></td>
+                            <td>קיבוץ לפי תאריכים</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"date_histogram": {"field": "date", "interval": "1d"}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>histogram</code></td>
+                            <td>קיבוץ לפי מספרים</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"histogram": {"field": "price", "interval": 50}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>range</code></td>
+                            <td>קיבוץ לפי טווחים מותאמים</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"range": {"field": "age", "ranges": [...]}}</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>filter</code></td>
+                            <td>bucket אחד עם filter</td>
+                            <td style="direction: ltr; text-align: left;"><code>{"filter": {"term": {"status": "active"}}}</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Field Data Types -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-yellow);">📝 Field Data Types</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Type</th>
+                            <th>תיאור</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>text</code></td>
+                            <td>Full-text search (analyzed)</td>
+                            <td>תיאורים, תוכן, הודעות</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>keyword</code></td>
+                            <td>Exact values (not analyzed)</td>
+                            <td>IDs, statuses, tags, emails</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>long / integer / short</code></td>
+                            <td>מספרים שלמים</td>
+                            <td>age, count, IDs</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>float / double</code></td>
+                            <td>מספרים עשרוניים</td>
+                            <td>price, coordinates</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>date</code></td>
+                            <td>תאריכים ושעות</td>
+                            <td>timestamps, created_at</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>boolean</code></td>
+                            <td>true / false</td>
+                            <td>flags, states</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>ip</code></td>
+                            <td>כתובות IP</td>
+                            <td>source_ip, client_ip</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>geo_point</code></td>
+                            <td>נקודה גיאוגרפית (lat/lon)</td>
+                            <td>מיקומים, GPS</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>object</code></td>
+                            <td>JSON object מקונן</td>
+                            <td>מבנים מורכבים</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>nested</code></td>
+                            <td>Array of objects (ניתן לquery נפרד)</td>
+                            <td>רשימות של אובייקטים</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Common API Endpoints -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-pink);">🌐 Common API Endpoints</h2>
+
+                <h3>Cluster APIs:</h3>
+                <div class="code-snippet">GET /_cluster/health
+GET /_cluster/stats
+GET /_cluster/state
+GET /_nodes
+GET /_nodes/stats
+PUT /_cluster/settings</div>
+
+                <h3 style="margin-top: 25px;">Index APIs:</h3>
+                <div class="code-snippet">GET /_cat/indices?v
+PUT /my-index
+DELETE /my-index
+GET /my-index
+GET /my-index/_mapping
+GET /my-index/_settings
+POST /my-index/_refresh
+POST /my-index/_flush
+POST /my-index/_forcemerge</div>
+
+                <h3 style="margin-top: 25px;">Document APIs:</h3>
+                <div class="code-snippet">POST /my-index/_doc
+PUT /my-index/_doc/1
+GET /my-index/_doc/1
+DELETE /my-index/_doc/1
+POST /my-index/_update/1
+POST /my-index/_search
+POST /_bulk
+POST /my-index/_delete_by_query</div>
+
+                <h3 style="margin-top: 25px;">Search & Aggregation:</h3>
+                <div class="code-snippet">POST /my-index/_search
+POST /my-index/_count
+POST /my-index/_validate/query
+POST /my-index/_explain/1</div>
+            </div>
+
+            <!-- Bool Query Structure -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-blue);">🔀 Bool Query - מבנה</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Clause</th>
+                            <th>משמעות</th>
+                            <th>Score?</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>must</code></td>
+                            <td>חייב להתאים (AND)</td>
+                            <td>✅ כן</td>
+                            <td>תנאי חובה שמשפיע על רלוונטיות</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>filter</code></td>
+                            <td>חייב להתאים (AND)</td>
+                            <td>❌ לא</td>
+                            <td>סינון ללא השפעה על score (מהיר, cacheable!)</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>should</code></td>
+                            <td>רצוי שיתאים (OR)</td>
+                            <td>✅ כן</td>
+                            <td>תנאי אופציונלי שמשפר את ה-score</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>must_not</code></td>
+                            <td>לא צריך להתאים (NOT)</td>
+                            <td>❌ לא</td>
+                            <td>החרגה</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="success-box" style="margin-top: 25px;">
+                    <h4>💡 Best Practice:</h4>
+                    <p>השתמש ב-<strong>filter</strong> במקום <strong>must</strong> כאשר אין צורך ב-scoring!</p>
+                    <p>filter = cacheable = הרבה יותר מהיר! ⚡</p>
+                </div>
+            </div>
+
+            <!-- Mapping Example -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--elastic-green);">🗺️ Mapping Template</h2>
+                <div class="code-snippet">PUT /my-index
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 2,
+    "refresh_interval": "1s"
+  },
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "fields": {
+          "keyword": {  # Multi-field
+            "type": "keyword"
+          }
+        }
+      },
+      "author": {
+        "type": "keyword"
+      },
+      "published_date": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "pages": {
+        "type": "integer"
+      },
+      "price": {
+        "type": "float"
+      },
+      "available": {
+        "type": "boolean"
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "english"
+      },
+      "location": {
+        "type": "geo_point"
+      },
+      "tags": {
+        "type": "keyword"  # Array of keywords
+      }
+    }
+  }
+}</div>
+            </div>
+
+            <!-- Useful Patterns -->
+            <div class="success-box">
+                <h3 style="margin-top: 0;">🎯 Patterns שימושיים</h3>
+
+                <h4>Pagination:</h4>
+                <div class="code-snippet"># from + size
+{
+  "from": 0,
+  "size": 10,
+  "query": {...}
+}
+
+# Search After (מומלץ לכמויות גדולות)
+{
+  "size": 10,
+  "query": {...},
+  "search_after": [1463538857, "654323"],
+  "sort": [
+    {"timestamp": "asc"},
+    {"_id": "asc"}
+  ]
+}</div>
+
+                <h4 style="margin-top: 20px;">Highlighting:</h4>
+                <div class="code-snippet">{
+  "query": {...},
+  "highlight": {
+    "fields": {
+      "message": {}
+    },
+    "pre_tags": ["<em>"],
+    "post_tags": ["</em>"]
+  }
+}</div>
+
+                <h4 style="margin-top: 20px;">Sorting:</h4>
+                <div class="code-snippet">{
+  "query": {...},
+  "sort": [
+    { "publish_date": "desc" },
+    { "title.keyword": "asc" },
+    "_score"
+  ]
+}</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Copy Notification -->
+<div class="copy-notification" id="copyNotification">
+    ✅ הועתק ללוח!
 </div>
 
 <script>
@@ -2154,6 +3857,167 @@ POST /bookdb_index/_doc/_bulk
         );
 
         document.getElementById('logstash-out').innerText = '// Waiting for data...';
+    }
+
+    /* === DARK MODE === */
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        const btn = document.getElementById('darkModeToggle');
+        btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+        localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load dark mode preference
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').textContent = '☀️ מצב יום';
+        }
+
+        // Copy code blocks
+        document.querySelectorAll('.code-snippet, .solution-box, .output-box').forEach(code => {
+            code.style.cursor = 'pointer';
+            code.addEventListener('click', () => {
+                const text = code.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    const notification = document.getElementById('copyNotification');
+                    notification.classList.add('show');
+                    setTimeout(() => notification.classList.remove('show'), 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+    });
+
+    /* === SEARCH === */
+    function toggleSearch() {
+        const searchBar = document.getElementById('searchBar');
+        const isVisible = searchBar.style.display !== 'none';
+        searchBar.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            document.getElementById('searchInput').focus();
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    }
+
+    // Search database
+    const searchDatabase = [
+        { term: 'match', type: 'Query', description: 'Full-text search', example: '{"match": {"field": "text"}}', section: 'queries' },
+        { term: 'term', type: 'Query', description: 'ערך מדויק', example: '{"term": {"status": "active"}}', section: 'queries' },
+        { term: 'bool', type: 'Query', description: 'לוגיקה בוליאנית', example: '{"bool": {"must": [...], "filter": [...]}}', section: 'queries' },
+        { term: 'range', type: 'Query', description: 'טווח ערכים', example: '{"range": {"age": {"gte": 18}}}', section: 'queries' },
+        { term: 'wildcard', type: 'Query', description: 'תווים כלליים', example: '{"wildcard": {"name": "john*"}}', section: 'queries' },
+        { term: 'match_phrase', type: 'Query', description: 'ביטוי מדויק', example: '{"match_phrase": {"text": "exact phrase"}}', section: 'queries' },
+        { term: 'multi_match', type: 'Query', description: 'חיפוש במספר fields', example: '{"multi_match": {"query": "x", "fields": ["*"]}}', section: 'queries' },
+
+        { term: 'avg', type: 'Aggregation', description: 'ממוצע', example: '{"avg": {"field": "price"}}', section: 'aggregations' },
+        { term: 'sum', type: 'Aggregation', description: 'סכום', example: '{"sum": {"field": "amount"}}', section: 'aggregations' },
+        { term: 'terms', type: 'Aggregation', description: 'קיבוץ לפי ערכים', example: '{"terms": {"field": "category.keyword"}}', section: 'aggregations' },
+        { term: 'date_histogram', type: 'Aggregation', description: 'קיבוץ לפי תאריכים', example: '{"date_histogram": {"field": "date", "interval": "1d"}}', section: 'aggregations' },
+        { term: 'cardinality', type: 'Aggregation', description: 'ספירה ייחודית', example: '{"cardinality": {"field": "user_id"}}', section: 'aggregations' },
+
+        { term: 'Sharding', type: 'Concept', description: 'פיצול index למספר חלקים', example: 'number_of_shards: 3', section: 'sharding' },
+        { term: 'Replica', type: 'Concept', description: 'עותק של primary shard', example: 'number_of_replicas: 2', section: 'sharding' },
+        { term: 'Inverted Index', type: 'Concept', description: 'מבנה נתונים לחיפוש מהיר', example: 'word → [doc1, doc2]', section: 'inverted-index' },
+        { term: 'Mapping', type: 'Concept', description: 'הגדרת schema', example: '{"type": "text"}', section: 'mappings' },
+
+        { term: 'Filebeat', type: 'Beat', description: 'שליחת logs מקבצים', example: 'filebeat.yml', section: 'beats-types' },
+        { term: 'Metricbeat', type: 'Beat', description: 'שליחת metrics', example: 'metricbeat.yml', section: 'beats-types' },
+        { term: 'Packetbeat', type: 'Beat', description: 'ניתוח traffic', example: 'network monitoring', section: 'beats-types' },
+
+        { term: 'Kibana', type: 'Tool', description: 'ויזואליזציה וניתוח', example: 'Discover, Visualize, Dashboard', section: 'elk-stack' },
+        { term: 'Logstash', type: 'Tool', description: 'עיבוד data pipeline', example: 'Input → Filter → Output', section: 'elk-stack' },
+
+        { term: '_bulk', type: 'API', description: 'פעולות מרובות', example: 'POST /_bulk', section: 'api' },
+        { term: '_search', type: 'API', description: 'חיפוש', example: 'POST /index/_search', section: 'api' },
+        { term: '_cluster/health', type: 'API', description: 'בריאות cluster', example: 'GET /_cluster/health', section: 'cli' },
+
+        { term: 'red status', type: 'Troubleshooting', description: 'cluster אדום', example: 'אובדן נתונים', section: 'troubleshooting' },
+        { term: 'yellow status', type: 'Troubleshooting', description: 'cluster צהוב', example: 'replica חסר', section: 'troubleshooting' },
+        { term: 'out of memory', type: 'Troubleshooting', description: 'בעיות זיכרון', example: 'הגדל heap size', section: 'troubleshooting' },
+        { term: 'slow query', type: 'Troubleshooting', description: 'queries איטיות', example: 'profile: true', section: 'troubleshooting' },
+    ];
+
+    function performSearch(query) {
+        const resultsDiv = document.getElementById('searchResults');
+
+        if (!query || query.length < 2) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+
+        const results = searchDatabase.filter(item =>
+            item.term.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.includes(query) ||
+            item.example.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">לא נמצאו תוצאות</div>';
+            return;
+        }
+
+        resultsDiv.innerHTML = results.map(item => `
+            <div class="search-result-item" onclick="navigateToSection('${item.section}')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: var(--elastic-blue); font-size: 1.1rem; font-family: 'JetBrains Mono', monospace;">${highlightText(item.term, query)}</strong>
+                    <span style="background: var(--elastic-green); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem;">${item.type}</span>
+                </div>
+                <div style="color: var(--text-secondary); margin-bottom: 8px;">${item.description}</div>
+                <code style="background: var(--code-bg); color: var(--code-text); padding: 8px 12px; border-radius: 4px; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; direction: ltr; text-align: left;">${item.example}</code>
+            </div>
+        `).join('');
+    }
+
+    function highlightText(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    function navigateToSection(sectionId) {
+        toggleSearch(); // Close search
+
+        // Map sections to views
+        const sectionToView = {
+            'intro': 'theory',
+            'what-is': 'theory',
+            'elk-stack': 'theory',
+            'architecture': 'theory',
+            'sharding': 'theory',
+            'inverted-index': 'theory',
+            'documents': 'theory',
+            'mappings': 'theory',
+            'queries': 'theory',
+            'aggregations': 'theory',
+            'kibana-deep': 'theory',
+            'beats-types': 'theory',
+            'best-practices': 'theory',
+            'api': 'api',
+            'cli': 'cli',
+            'troubleshooting': 'troubleshooting',
+            'quickref': 'quickref',
+        };
+
+        const targetView = sectionToView[sectionId] || 'theory';
+
+        // Switch to correct view
+        const navItem = document.querySelector(`.nav-item[onclick*="${targetView}"]`);
+        if (navItem) {
+            navItem.click();
+        }
+
+        // If theory section, navigate to specific section
+        if (targetView === 'theory') {
+            setTimeout(() => {
+                const sidebarItem = document.querySelector(`.theory-nav-item[onclick*="${sectionId}"]`);
+                if (sidebarItem) {
+                    sidebarItem.click();
+                }
+            }, 100);
+        }
     }
 </script>
 
