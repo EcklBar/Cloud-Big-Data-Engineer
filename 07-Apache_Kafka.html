@@ -429,6 +429,34 @@
             overflow-x: auto;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.1);
+            white-space: pre-wrap;
+            word-break: break-word;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .code-block:hover {
+            background: #252538;
+            border-color: var(--kafka-accent);
+        }
+
+        .code-block::before {
+            content: '📋 לחץ להעתקה';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.6);
+            color: #94a3b8;
+            padding: 4px 10px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover::before {
+            opacity: 1;
         }
 
         .code-block pre {
@@ -545,6 +573,304 @@
             background: #868e96;
         }
 
+        /* === EXERCISES === */
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .exercise-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .exercise-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .ex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .ex-number {
+            background: linear-gradient(135deg, var(--kafka-primary), var(--kafka-accent));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+        }
+
+        .ex-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .ex-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .ex-content ul, .ex-content ol {
+            padding-right: 25px;
+            margin: 15px 0;
+        }
+
+        .ex-content li {
+            margin-bottom: 10px;
+        }
+
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--kafka-primary), var(--kafka-accent));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(81, 207, 102, 0.1);
+            border-right: 4px solid var(--kafka-green);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* === TABLES === */
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+            background: white;
+        }
+
+        .reference-table thead {
+            background: linear-gradient(to left, #fff5f5, #ffe9e9);
+            border-bottom: 2px solid var(--kafka-accent);
+        }
+
+        .reference-table th {
+            padding: 14px;
+            text-align: right;
+            border: 1px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .reference-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .reference-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .reference-table code {
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--kafka-accent);
+            direction: ltr;
+        }
+
+        /* === COPY NOTIFICATION === */
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--kafka-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        /* === SEARCH === */
+        .search-result-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-right: 4px solid var(--kafka-accent);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-result-item:hover {
+            background: #e9ecef;
+            transform: translateX(-4px);
+        }
+
+        .search-highlight {
+            background: #fff3bf;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            --bg-body: #1a1c20;
+            --bg-surface: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            --border-color: #4a5568;
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #000000, #1a1c20);
+        }
+
+        body.dark-mode .nav-tabs {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .nav-item.active {
+            background: #374151;
+            color: var(--kafka-accent);
+        }
+
+        body.dark-mode .comparison-card,
+        body.dark-mode .exercise-card,
+        body.dark-mode .usecase-card,
+        body.dark-mode .company-badge {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .info-card {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: var(--kafka-accent);
+        }
+
+        body.dark-mode .success-card {
+            background: rgba(81, 207, 102, 0.15);
+            border-color: var(--kafka-green);
+        }
+
+        body.dark-mode .warning-card {
+            background: rgba(255, 146, 43, 0.15);
+            border-color: var(--kafka-orange);
+        }
+
+        body.dark-mode .concept-card {
+            background: #374151;
+            border-right-color: var(--kafka-blue);
+        }
+
+        body.dark-mode .theory-sidebar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .theory-nav-item:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .theory-nav-item.active {
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        body.dark-mode .architecture-diagram {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .diagram-box {
+            background: #374151;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .reference-table {
+            background: #2d3748;
+        }
+
+        body.dark-mode .reference-table thead {
+            background: linear-gradient(to left, #4a1d1d, #5a2d2d);
+        }
+
+        body.dark-mode .reference-table tr:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .reference-table code {
+            background: #1e293b;
+            color: var(--kafka-accent);
+        }
+
+        body.dark-mode #searchBar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode #searchInput {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .search-result-item {
+            background: #374151;
+        }
+
+        body.dark-mode .search-result-item:hover {
+            background: #4b5563;
+        }
+
+        body.dark-mode .usecase-header {
+            background: linear-gradient(135deg, #1a1c20, #2d3748);
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 1024px) {
             .theory-layout {
@@ -562,6 +888,7 @@
             .nav-tabs {
                 width: 100%;
                 justify-content: center;
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -581,11 +908,31 @@
     <div class="nav-tabs">
         <div class="nav-item active" onclick="switchView('theory', this)">📚 תיאוריה</div>
         <div class="nav-item" onclick="switchView('architecture', this)">🏗️ ארכיטקטורה</div>
-        <div class="nav-item" onclick="switchView('commands', this)">⚙️ פקודות</div>
+        <div class="nav-item" onclick="switchView('code-examples', this)">💻 דוגמאות קוד</div>
+        <div class="nav-item" onclick="switchView('exercises', this)">📝 תרגילים</div>
+        <div class="nav-item" onclick="switchView('commands', this)">⚙️ CLI</div>
+        <div class="nav-item" onclick="switchView('troubleshooting', this)">🔧 פתרון בעיות</div>
+        <div class="nav-item" onclick="switchView('quickref', this)">📋 Quick Reference</div>
     </div>
 
-    <div style="width: 80px;"></div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Heebo', sans-serif;">
+            🌙 מצב לילה
+        </button>
+        <button onclick="toggleSearch()" style="background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 8px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Heebo', sans-serif;">
+            🔍 חיפוש
+        </button>
+    </div>
 </header>
+
+<!-- Search Bar -->
+<div id="searchBar" style="display: none; background: white; padding: 20px 40px; border-bottom: 2px solid var(--border-color); box-shadow: var(--shadow-md); z-index: 99;">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+        <input type="text" id="searchInput" placeholder="חפש topics, producers, consumers, או פקודות..." style="flex: 1; padding: 12px 20px; font-size: 1rem; border: 2px solid var(--border-color); border-radius: 8px; font-family: 'Heebo', sans-serif;" oninput="performSearch(this.value)">
+        <button onclick="toggleSearch()" style="padding: 12px 24px; background: var(--kafka-accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Heebo', sans-serif;">סגור</button>
+    </div>
+    <div id="searchResults" style="max-width: 800px; margin: 15px auto 0; max-height: 400px; overflow-y: auto;"></div>
+</div>
 
 <div class="main-wrapper">
 
@@ -2189,6 +2536,1180 @@ $ curl -X DELETE localhost:8083/connectors/my-connector
         </div>
     </div>
 
+    <!-- === CODE EXAMPLES VIEW === -->
+    <div id="view-code-examples" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">💻 דוגמאות קוד - Producer & Consumer</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                קוד מוכן לשימוש ב-Java ו-Python
+            </p>
+
+            <!-- Python Producer -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-primary);">🐍 Python Producer - פשוט</h2>
+                <p style="margin-bottom: 20px;">שליחת messages ל-Kafka עם kafka-python</p>
+                <div class="code-block">from kafka import KafkaProducer
+import json
+from datetime import datetime
+
+# Create producer
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092'],
+    value_serializer=lambda v: json.dumps(v).encode('utf-8')
+)
+
+# Send message
+message = {
+    'user_id': 123,
+    'event': 'page_view',
+    'page': '/products',
+    'timestamp': datetime.now().isoformat()
+}
+
+future = producer.send('user-events', value=message)
+
+# Wait for confirmation
+record_metadata = future.get(timeout=10)
+
+print(f"Message sent to topic: {record_metadata.topic}")
+print(f"Partition: {record_metadata.partition}")
+print(f"Offset: {record_metadata.offset}")
+
+# Close producer
+producer.close()</div>
+            </div>
+
+            <!-- Python Producer with Key -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-primary);">🐍 Python Producer - עם Key</h2>
+                <p style="margin-bottom: 20px;">שליחת messages עם key (מבטיח partition קבוע)</p>
+                <div class="code-block">from kafka import KafkaProducer
+import json
+
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092'],
+    key_serializer=lambda k: k.encode('utf-8'),
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    # Performance optimizations
+    compression_type='lz4',
+    batch_size=16384,
+    linger_ms=10,
+    acks='all',  # Wait for all replicas
+    retries=3
+)
+
+# Send with key (same key = same partition)
+user_id = 'user123'
+for i in range(5):
+    message = {
+        'user_id': user_id,
+        'action': f'Action {i}',
+        'timestamp': datetime.now().isoformat()
+    }
+
+    producer.send(
+        topic='user-events',
+        key=user_id,  # Key determines partition
+        value=message
+    )
+
+producer.flush()  # Wait for all messages
+producer.close()</div>
+            </div>
+
+            <!-- Python Consumer -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-primary);">🐍 Python Consumer</h2>
+                <p style="margin-bottom: 20px;">קריאת messages מ-Kafka</p>
+                <div class="code-block">from kafka import KafkaConsumer
+import json
+
+# Create consumer
+consumer = KafkaConsumer(
+    'user-events',  # Topic name
+    bootstrap_servers=['localhost:9092'],
+    auto_offset_reset='earliest',  # Start from beginning
+    enable_auto_commit=True,
+    group_id='my-consumer-group',
+    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+)
+
+print("Listening for messages...")
+
+# Consume messages
+try:
+    for message in consumer:
+        print(f"\n--- New Message ---")
+        print(f"Topic: {message.topic}")
+        print(f"Partition: {message.partition}")
+        print(f"Offset: {message.offset}")
+        print(f"Key: {message.key}")
+        print(f"Value: {message.value}")
+
+        # Process the message
+        event = message.value
+        print(f"User {event['user_id']} did: {event['event']}")
+
+except KeyboardInterrupt:
+    print("\nShutting down...")
+finally:
+    consumer.close()</div>
+            </div>
+
+            <!-- Python Consumer Manual Commit -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-primary);">🐍 Consumer - Manual Commit</h2>
+                <p style="margin-bottom: 20px;">שליטה מלאה על commit (at-least-once delivery)</p>
+                <div class="code-block">from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'user-events',
+    bootstrap_servers=['localhost:9092'],
+    group_id='my-group',
+    enable_auto_commit=False,  # Manual commit
+    auto_offset_reset='earliest'
+)
+
+for message in consumer:
+    try:
+        # Process message
+        print(f"Processing: {message.value}")
+
+        # Your business logic here
+        process_event(message.value)
+
+        # Commit only after successful processing
+        consumer.commit()
+        print(f"✅ Committed offset: {message.offset}")
+
+    except Exception as e:
+        print(f"❌ Error processing message: {e}")
+        # Don't commit - will reprocess on next run
+        continue</div>
+            </div>
+
+            <!-- Java Producer -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-accent);">☕ Java Producer</h2>
+                <p style="margin-bottom: 20px;">Producer עם Java (הקוד המקורי של Kafka)</p>
+                <div class="code-block">import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.serialization.StringSerializer;
+import java.util.Properties;
+
+public class SimpleProducer {
+    public static void main(String[] args) {
+        // Configuration
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        // Reliability settings
+        props.put(ProducerConfig.ACKS_CONFIG, "all");
+        props.put(ProducerConfig.RETRIES_CONFIG, 3);
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+
+        // Performance settings
+        props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "lz4");
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
+        props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
+
+        // Create producer
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+
+        try {
+            // Send message
+            ProducerRecord<String, String> record =
+                new ProducerRecord<>("user-events", "user123", "Login event");
+
+            producer.send(record, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception exception) {
+                    if (exception == null) {
+                        System.out.printf("Sent to partition %d with offset %d%n",
+                                        metadata.partition(), metadata.offset());
+                    } else {
+                        exception.printStackTrace();
+                    }
+                }
+            });
+
+        } finally {
+            producer.close();
+        }
+    }
+}</div>
+            </div>
+
+            <!-- Java Consumer -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-accent);">☕ Java Consumer</h2>
+                <p style="margin-bottom: 20px;">Consumer עם Java</p>
+                <div class="code-block">import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import java.time.Duration;
+import java.util.Collections;
+import java.util.Properties;
+
+public class SimpleConsumer {
+    public static void main(String[] args) {
+        // Configuration
+        Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "my-consumer-group");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");  // Manual commit
+
+        // Create consumer
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+
+        // Subscribe to topic
+        consumer.subscribe(Collections.singletonList("user-events"));
+
+        try {
+            while (true) {
+                ConsumerRecords<String, String> records =
+                    consumer.poll(Duration.ofMillis(100));
+
+                for (ConsumerRecord<String, String> record : records) {
+                    System.out.printf("Received: topic=%s, partition=%d, offset=%d, key=%s, value=%s%n",
+                                    record.topic(), record.partition(), record.offset(),
+                                    record.key(), record.value());
+
+                    // Process record
+                    processRecord(record);
+                }
+
+                // Commit offsets
+                consumer.commitSync();
+            }
+        } finally {
+            consumer.close();
+        }
+    }
+
+    private static void processRecord(ConsumerRecord<String, String> record) {
+        // Your business logic here
+    }
+}</div>
+            </div>
+
+            <div class="success-card">
+                <h3 style="margin-top: 0;">💡 Dependencies</h3>
+
+                <h4>Python:</h4>
+                <div class="code-block"># Install kafka-python
+pip install kafka-python
+
+# requirements.txt
+kafka-python==2.0.2</div>
+
+                <h4 style="margin-top: 20px;">Java (Maven):</h4>
+                <div class="code-block">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.kafka&lt;/groupId&gt;
+    &lt;artifactId&gt;kafka-clients&lt;/artifactId&gt;
+    &lt;version&gt;3.6.0&lt;/version&gt;
+&lt;/dependency&gt;</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === EXERCISES VIEW === -->
+    <div id="view-exercises" class="view-section">
+        <div class="exercise-list" style="padding: 40px;">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 12px; font-weight: 800; color: var(--text-primary);">📝 תרגילים מעשיים</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">תרגלו את Kafka hands-on!</p>
+            </div>
+
+            <!-- Exercise 1 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 1</span>
+                        <span class="ex-title">יצירת Topic + שליחת Messages</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>צור topic, שלח messages ואז קרא אותם.</p>
+
+                    <h3>שלבים:</h3>
+                    <ol>
+                        <li>צור topic בשם "test-topic" עם 3 partitions</li>
+                        <li>שלח 5 messages עם Console Producer</li>
+                        <li>קרא את כל ה-messages עם Console Consumer</li>
+                    </ol>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block"># 1. Create topic
+kafka-topics.sh \
+    --create \
+    --bootstrap-server localhost:9092 \
+    --topic test-topic \
+    --partitions 3 \
+    --replication-factor 1
+
+# 2. Produce messages (Terminal 1)
+kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic test-topic
+
+> Hello Kafka
+> Message 2
+> Message 3
+> Message 4
+> Message 5
+
+# 3. Consume messages (Terminal 2)
+kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic test-topic \
+    --from-beginning</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 2 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 2</span>
+                        <span class="ex-title">Producer עם Key</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>הבן איך key משפיע על partition routing.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>צור topic עם 2 partitions</li>
+                        <li>שלח messages עם keys שונים</li>
+                        <li>קרא עם consumer שמציג partition number</li>
+                        <li>שים לב שאותו key הולך לאותו partition</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block"># 1. Create topic
+kafka-topics.sh \
+    --create \
+    --bootstrap-server localhost:9092 \
+    --topic keyed-topic \
+    --partitions 2 \
+    --replication-factor 1
+
+# 2. Producer with key
+kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic keyed-topic \
+    --property "parse.key=true" \
+    --property "key.separator=:"
+
+> user1:Login
+> user2:Login
+> user1:View Product
+> user2:Add to Cart
+> user1:Checkout
+
+# 3. Consumer showing partition
+kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic keyed-topic \
+    --from-beginning \
+    --property "print.key=true" \
+    --property "print.partition=true"
+
+# תשים לב: כל ה-messages עם user1 באותו partition!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 3 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 3</span>
+                        <span class="ex-title">Consumer Groups</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>הבן איך consumer groups עובדים ומחלקים partitions.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>צור topic עם 4 partitions</li>
+                        <li>הרץ 2 consumers באותו group</li>
+                        <li>שלח messages</li>
+                        <li>ראה איך הם מתחלקים בעבודה</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block"># 1. Create topic
+kafka-topics.sh \
+    --create \
+    --bootstrap-server localhost:9092 \
+    --topic multi-partition \
+    --partitions 4 \
+    --replication-factor 1
+
+# 2. Consumer 1 (Terminal 1)
+kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic multi-partition \
+    --group group1 \
+    --property "print.partition=true"
+
+# 3. Consumer 2 (Terminal 2)
+kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic multi-partition \
+    --group group1 \
+    --property "print.partition=true"
+
+# 4. Producer (Terminal 3)
+kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic multi-partition
+
+> Message 1
+> Message 2
+> Message 3
+> Message 4
+
+# תשים לב: כל consumer מקבל messages מpartitions שונים!
+
+# 5. Check group status
+kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group group1 \
+    --describe</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 4 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 4</span>
+                        <span class="ex-title">Python Producer - יישום מעשי</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>כתוב Python script ששולח JSON messages ל-Kafka.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>צור producer עם kafka-python</li>
+                        <li>שלח 10 user events (user_id, event_type, timestamp)</li>
+                        <li>השתמש ב-user_id כkey</li>
+                        <li>הדפס confirmation לכל message</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from kafka import KafkaProducer
+import json
+from datetime import datetime
+import time
+
+# Create producer
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092'],
+    key_serializer=lambda k: k.encode('utf-8'),
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    acks='all'
+)
+
+# Generate and send 10 events
+events = [
+    ('user1', 'login'),
+    ('user2', 'login'),
+    ('user1', 'view_product'),
+    ('user3', 'login'),
+    ('user1', 'add_to_cart'),
+    ('user2', 'view_product'),
+    ('user3', 'view_product'),
+    ('user1', 'checkout'),
+    ('user2', 'logout'),
+    ('user3', 'logout')
+]
+
+for user_id, event_type in events:
+    message = {
+        'user_id': user_id,
+        'event_type': event_type,
+        'timestamp': datetime.now().isoformat()
+    }
+
+    future = producer.send(
+        topic='user-events',
+        key=user_id,
+        value=message
+    )
+
+    # Wait for confirmation
+    metadata = future.get(timeout=10)
+    print(f"✅ Sent: {event_type} for {user_id} → partition {metadata.partition}")
+
+    time.sleep(0.5)  # Small delay
+
+producer.close()
+print("\n🎉 All messages sent!")</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 5 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 5</span>
+                        <span class="ex-title">Python Consumer - עיבוד Events</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>כתוב consumer שמעבד events ומחשב סטטיסטיקות.</p>
+
+                    <h3>דרישות:</h3>
+                    <ul>
+                        <li>קרא messages מהtopic שיצרת בתרגיל 4</li>
+                        <li>ספור כמה events מכל סוג (login, logout, etc.)</li>
+                        <li>הדפס סיכום כל 5 messages</li>
+                        <li>השתמש ב-manual commit</li>
+                    </ul>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block">from kafka import KafkaConsumer
+import json
+from collections import defaultdict
+
+# Create consumer
+consumer = KafkaConsumer(
+    'user-events',
+    bootstrap_servers=['localhost:9092'],
+    group_id='stats-group',
+    auto_offset_reset='earliest',
+    enable_auto_commit=False,
+    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+)
+
+# Statistics
+event_counts = defaultdict(int)
+message_count = 0
+
+print("📊 Processing events...\n")
+
+try:
+    for message in consumer:
+        event = message.value
+        event_type = event['event_type']
+        user_id = event['user_id']
+
+        # Count events
+        event_counts[event_type] += 1
+        message_count += 1
+
+        print(f"✅ {user_id}: {event_type}")
+
+        # Print stats every 5 messages
+        if message_count % 5 == 0:
+            print("\n--- Statistics ---")
+            for event, count in event_counts.items():
+                print(f"{event}: {count}")
+            print(f"Total: {message_count}\n")
+
+        # Commit after processing
+        consumer.commit()
+
+except KeyboardInterrupt:
+    print("\n\n📊 Final Statistics:")
+    for event, count in event_counts.items():
+        print(f"{event}: {count}")
+    print(f"\nTotal processed: {message_count}")
+finally:
+    consumer.close()</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 6 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 6</span>
+                        <span class="ex-title">Monitor Consumer Lag</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>למד לנטר consumer lag ולזהות בעיות.</p>
+
+                    <h3>שלבים:</h3>
+                    <ol>
+                        <li>צור topic ושלח 100 messages</li>
+                        <li>צור slow consumer שמעבד message כל 2 שניות</li>
+                        <li>בדוק את ה-lag של הconsumer group</li>
+                        <li>ראה איך ה-lag גדל</li>
+                    </ol>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block"># 1. Create topic
+kafka-topics.sh \
+    --create \
+    --bootstrap-server localhost:9092 \
+    --topic lag-demo \
+    --partitions 2 \
+    --replication-factor 1
+
+# 2. Send 100 messages quickly (Terminal 1)
+for i in {1..100}; do
+    echo "Message $i"
+done | kafka-console-producer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic lag-demo
+
+# 3. Slow consumer (Terminal 2)
+# Create file: slow_consumer.py
+
+from kafka import KafkaConsumer
+import time
+
+consumer = KafkaConsumer(
+    'lag-demo',
+    bootstrap_servers=['localhost:9092'],
+    group_id='slow-group',
+    auto_offset_reset='earliest'
+)
+
+for message in consumer:
+    print(f"Processing: {message.value.decode('utf-8')}")
+    time.sleep(2)  # Slow processing!
+
+# 4. Check lag (Terminal 3)
+# Run this while consumer is running:
+kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group slow-group \
+    --describe
+
+# תראה LAG גדול - Consumer לא מספיק מהיר!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercise 7 -->
+            <div class="exercise-card">
+                <div class="ex-header">
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                        <span class="ex-number">תרגיל 7</span>
+                        <span class="ex-title">Replication & Fault Tolerance</span>
+                    </div>
+                </div>
+                <div class="ex-content">
+                    <h3>מטרה:</h3>
+                    <p>הבן איך replication מגן מפני אובדן נתונים.</p>
+
+                    <h3>שלבים (דורש cluster עם 3 brokers):</h3>
+                    <ol>
+                        <li>צור topic עם replication factor של 3</li>
+                        <li>תאר את הtopic - ראה leader ו-replicas</li>
+                        <li>(אופציונלי) עצור broker ו-ראה leader election</li>
+                    </ol>
+
+                    <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                    <div class="solution-content">
+                        <div class="code-block"># 1. Create topic with replication
+kafka-topics.sh \
+    --create \
+    --bootstrap-server localhost:9092 \
+    --topic replicated-topic \
+    --partitions 3 \
+    --replication-factor 3
+
+# 2. Describe topic - see leader and replicas
+kafka-topics.sh \
+    --describe \
+    --bootstrap-server localhost:9092 \
+    --topic replicated-topic
+
+# Output will show:
+# Topic: replicated-topic   Partition: 0    Leader: 1    Replicas: 1,2,3    Isr: 1,2,3
+# Topic: replicated-topic   Partition: 1    Leader: 2    Replicas: 2,3,1    Isr: 2,3,1
+# Topic: replicated-topic   Partition: 2    Leader: 3    Replicas: 3,1,2    Isr: 3,1,2
+
+# כל partition יש leader שונה - load balanced!
+# Replicas = כל העותקים
+# Isr = In-Sync Replicas (עדכניים)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-card" style="margin-top: 40px;">
+                <h3 style="margin-top: 0;">🎓 מעולה!</h3>
+                <p><strong>עכשיו אתה יודע:</strong></p>
+                <ul>
+                    <li>✅ ליצור topics עם settings שונים</li>
+                    <li>✅ לשלוח messages (עם ובלי key)</li>
+                    <li>✅ לקרוא messages מbeginning או current</li>
+                    <li>✅ לעבוד עם consumer groups</li>
+                    <li>✅ לנטר consumer lag</li>
+                    <li>✅ להבין replication ו-fault tolerance</li>
+                    <li>✅ לכתוב Python Producer/Consumer</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- === TROUBLESHOOTING VIEW === -->
+    <div id="view-troubleshooting" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">🔧 פתרון בעיות ב-Kafka</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                פתרונות לבעיות הנפוצות ביותר
+            </p>
+
+            <!-- Issue 1: Consumer Lag -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-accent);">🐌 Consumer Lag גבוה</h2>
+
+                <h3>סימפטומים:</h3>
+                <ul>
+                    <li>Consumer לא מספיק לעבד messages</li>
+                    <li>LAG גדל כל הזמן</li>
+                    <li>Messages מתעכבים</li>
+                </ul>
+
+                <h3 style="margin-top: 25px;">✅ פתרונות:</h3>
+
+                <h4>1. בדוק את ה-Lag:</h4>
+                <div class="code-block">kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 \
+    --group my-group \
+    --describe
+
+# בדוק עמודת LAG - כמה messages מאחור?</div>
+
+                <h4>2. הוסף Consumers (Scaling Out):</h4>
+                <div class="code-block"># אם יש 4 partitions והconsumer איטי
+# הוסף עוד consumers לאותו group (עד 4 max)
+
+# Consumer 1
+kafka-console-consumer.sh --group my-group --topic my-topic
+
+# Consumer 2 (Terminal חדש)
+kafka-console-consumer.sh --group my-group --topic my-topic
+
+# עכשיו הם יחלקו את העבודה!</div>
+
+                <h4>3. אופטמז את העיבוד:</h4>
+                <div class="code-block"># Python Consumer - batch processing
+consumer = KafkaConsumer(
+    'my-topic',
+    max_poll_records=500,  # More records per poll
+    fetch_min_bytes=1024,  # Wait for more data
+)
+
+# Process in batches
+records = consumer.poll(timeout_ms=1000)
+for topic_partition, messages in records.items():
+    # Process all messages together
+    process_batch(messages)</div>
+
+                <h4>4. הגדל Partitions (לעתיד):</h4>
+                <div class="code-block"># אם כל ה-consumers תפוסים, הוסף partitions
+# ⚠️ אי אפשר להקטין, רק להגדיל!
+
+kafka-topics.sh \
+    --alter \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic \
+    --partitions 8</div>
+            </div>
+
+            <!-- Issue 2: Under Replicated Partitions -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-accent);">⚠️ Under-Replicated Partitions</h2>
+
+                <h3>מה זה אומר?</h3>
+                <p>יש partitions שאין להם מספיק replicas in-sync (ISR).</p>
+                <p><strong>סיכון:</strong> אובדן נתונים אם broker נופל!</p>
+
+                <h3 style="margin-top: 25px;">✅ בדיקה ופתרון:</h3>
+
+                <h4>1. זהה את הבעיה:</h4>
+                <div class="code-block"># בדוק אילו partitions under-replicated
+kafka-topics.sh \
+    --describe \
+    --bootstrap-server localhost:9092 \
+    --under-replicated-partitions
+
+# בדוק ISR vs Replicas
+kafka-topics.sh \
+    --describe \
+    --bootstrap-server localhost:9092 \
+    --topic my-topic</div>
+
+                <h4>2. בדוק Broker Status:</h4>
+                <div class="code-block"># האם כל ה-brokers רצים?
+# בדוק logs של Kafka
+
+tail -f /var/log/kafka/server.log
+
+# או עם Docker
+docker logs kafka-broker-1</div>
+
+                <h4>3. פתרונות נפוצים:</h4>
+                <div class="code-block"># Restart broker שלא מסונכרן
+# Restart kafka service
+
+# בדוק network connectivity בין brokers
+ping broker-2-hostname
+
+# בדוק disk space על brokers
+df -h</div>
+            </div>
+
+            <!-- Issue 3: Connection Issues -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-accent);">🔌 Producer/Consumer לא מצליחים להתחבר</h2>
+
+                <h3>✅ Debug Steps:</h3>
+
+                <h4>1. בדוק ש-Kafka רץ:</h4>
+                <div class="code-block"># Check Kafka process
+ps aux | grep kafka
+
+# Check port 9092
+netstat -tlnp | grep 9092
+
+# With Docker
+docker ps | grep kafka</div>
+
+                <h4>2. בדוק Listeners Configuration:</h4>
+                <div class="code-block"># server.properties
+listeners=PLAINTEXT://0.0.0.0:9092
+advertised.listeners=PLAINTEXT://localhost:9092
+
+# אם ה-clients על machines אחרים:
+advertised.listeners=PLAINTEXT://your-server-ip:9092</div>
+
+                <h4>3. בדוק Network/Firewall:</h4>
+                <div class="code-block"># Test connection from client machine
+telnet kafka-server 9092
+
+# Check firewall
+sudo ufw status  # Ubuntu
+sudo firewall-cmd --list-all  # CentOS</div>
+            </div>
+
+            <!-- Issue 4: Performance Issues -->
+            <div class="warning-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-accent);">🐢 Kafka איטי</h2>
+
+                <h3>✅ אופטימיזציות:</h3>
+
+                <h4>1. Producer Optimizations:</h4>
+                <div class="code-block"># Python
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092'],
+    # Batching
+    batch_size=32768,      # Larger batches
+    linger_ms=20,          # Wait 20ms for more messages
+    # Compression
+    compression_type='lz4',  # Fast compression
+    # Buffer
+    buffer_memory=67108864,  # 64MB buffer
+)</div>
+
+                <h4>2. Consumer Optimizations:</h4>
+                <div class="code-block"># Python
+consumer = KafkaConsumer(
+    'my-topic',
+    # Fetch more data
+    fetch_min_bytes=1024,
+    fetch_max_wait_ms=500,
+    max_poll_records=500,
+    # Session timeout
+    session_timeout_ms=30000,
+)</div>
+
+                <h4>3. Broker Optimizations:</h4>
+                <div class="code-block"># server.properties
+
+# Increase threads
+num.network.threads=8
+num.io.threads=16
+
+# Log flush settings
+log.flush.interval.messages=10000
+log.flush.interval.ms=1000
+
+# Increase buffer
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400</div>
+            </div>
+
+            <!-- Debug Checklist -->
+            <div class="success-card">
+                <h3 style="margin-top: 0;">✅ Debug Checklist</h3>
+                <ol style="font-size: 1.05rem; line-height: 2;">
+                    <li>✅ <strong>Kafka רץ?</strong> <code>ps aux | grep kafka</code></li>
+                    <li>✅ <strong>ZooKeeper רץ?</strong> <code>ps aux | grep zookeeper</code></li>
+                    <li>✅ <strong>Topics קיימים?</strong> <code>kafka-topics.sh --list</code></li>
+                    <li>✅ <strong>Consumer lag?</strong> <code>kafka-consumer-groups.sh --describe</code></li>
+                    <li>✅ <strong>Under-replicated?</strong> <code>--under-replicated-partitions</code></li>
+                    <li>✅ <strong>Network?</strong> <code>telnet broker-host 9092</code></li>
+                    <li>✅ <strong>Logs?</strong> <code>tail -f server.log</code></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- === QUICK REFERENCE VIEW === -->
+    <div id="view-quickref" class="view-section">
+        <div style="padding: 60px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center;">📋 Quick Reference</h1>
+            <p style="text-align: center; font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 50px;">
+                כל מה שצריך במקום אחד
+            </p>
+
+            <!-- Core Concepts -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-primary);">🎯 מושגי ליבה</h2>
+
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th>מושג</th>
+                            <th>תיאור</th>
+                            <th>דוגמה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Topic</strong></td>
+                            <td>stream של records, כמו "טבלה"</td>
+                            <td><code>user-events</code>, <code>orders</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Partition</strong></td>
+                            <td>חלוקה פיזית של topic</td>
+                            <td>topic עם 3 partitions (0, 1, 2)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Offset</strong></td>
+                            <td>מספר ייחודי של message ב-partition</td>
+                            <td>0, 1, 2, 3...</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Producer</strong></td>
+                            <td>שולח messages ל-topic</td>
+                            <td>Web app, IoT device</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Consumer</strong></td>
+                            <td>קורא messages מ-topic</td>
+                            <td>Analytics app, Database sink</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Consumer Group</strong></td>
+                            <td>קבוצת consumers שעובדים יחד</td>
+                            <td><code>analytics-group</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Broker</strong></td>
+                            <td>שרת Kafka</td>
+                            <td>Broker ID: 0, 1, 2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cluster</strong></td>
+                            <td>אוסף של brokers</td>
+                            <td>3 brokers = 1 cluster</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Replication Factor</strong></td>
+                            <td>כמה עותקים של partition</td>
+                            <td>RF=3 → 1 leader + 2 followers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ISR</strong></td>
+                            <td>In-Sync Replicas (מסונכרנים)</td>
+                            <td>Replicas שעדכניים</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Common Commands -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-green);">⚙️ פקודות נפוצות</h2>
+
+                <h3>Topics:</h3>
+                <div class="code-block"># Create
+kafka-topics.sh --create --topic T --partitions 3 --replication-factor 2
+
+# List
+kafka-topics.sh --list
+
+# Describe
+kafka-topics.sh --describe --topic T
+
+# Delete
+kafka-topics.sh --delete --topic T</div>
+
+                <h3 style="margin-top: 25px;">Producer/Consumer:</h3>
+                <div class="code-block"># Console Producer
+kafka-console-producer.sh --topic T
+
+# Console Consumer
+kafka-console-consumer.sh --topic T --from-beginning
+
+# With Group
+kafka-console-consumer.sh --topic T --group G</div>
+
+                <h3 style="margin-top: 25px;">Consumer Groups:</h3>
+                <div class="code-block"># List groups
+kafka-consumer-groups.sh --list
+
+# Describe (check lag!)
+kafka-consumer-groups.sh --group G --describe
+
+# Reset offsets
+kafka-consumer-groups.sh --group G --topic T --reset-offsets --to-earliest --execute</div>
+            </div>
+
+            <!-- Configuration Reference -->
+            <div class="comparison-card" style="margin-bottom: 30px;">
+                <h2 style="margin-top: 0; color: var(--kafka-blue);">⚙️ הגדרות חשובות</h2>
+
+                <h3>Producer Settings:</h3>
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Parameter</th>
+                            <th>תיאור</th>
+                            <th>ברירת מחדל</th>
+                            <th>מומלץ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>acks</code></td>
+                            <td>אישור מהbrוker</td>
+                            <td>1</td>
+                            <td><code>all</code> (לקריטי)</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>batch.size</code></td>
+                            <td>גודל batch בbytes</td>
+                            <td>16384</td>
+                            <td>32768-65536</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>linger.ms</code></td>
+                            <td>זמן המתנה לbatch</td>
+                            <td>0</td>
+                            <td>10-20ms</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>compression.type</code></td>
+                            <td>סוג דחיסה</td>
+                            <td>none</td>
+                            <td><code>lz4</code> / <code>snappy</code></td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>retries</code></td>
+                            <td>ניסיונות חוזרים</td>
+                            <td>MAX_INT</td>
+                            <td>3-5</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>enable.idempotence</code></td>
+                            <td>מניעת duplicates</td>
+                            <td>false</td>
+                            <td><code>true</code> (לקריטי)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 30px;">Consumer Settings:</h3>
+                <table class="reference-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left; direction: ltr;">Parameter</th>
+                            <th>תיאור</th>
+                            <th>ברירת מחדל</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>group.id</code></td>
+                            <td>Consumer group ID</td>
+                            <td>required</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>auto.offset.reset</code></td>
+                            <td>מאיפה להתחיל?</td>
+                            <td>latest</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>enable.auto.commit</code></td>
+                            <td>commit אוטומטי?</td>
+                            <td>true</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>max.poll.records</code></td>
+                            <td>records בpoll אחד</td>
+                            <td>500</td>
+                        </tr>
+                        <tr>
+                            <td style="direction: ltr; text-align: left;"><code>session.timeout.ms</code></td>
+                            <td>timeout לrebalancing</td>
+                            <td>10000 (10s)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Best Practices Summary -->
+            <div class="success-card">
+                <h3 style="margin-top: 0;">🎯 Best Practices - סיכום</h3>
+
+                <h4>Production Checklist:</h4>
+                <ul style="list-style: none; padding: 0; font-size: 1.05rem;">
+                    <li>☐ <strong>Cluster:</strong> לפחות 3 brokers</li>
+                    <li>☐ <strong>Replication:</strong> RF >= 3</li>
+                    <li>☐ <strong>Partitions:</strong> מספר מחושב לפי throughput</li>
+                    <li>☐ <strong>Producer acks:</strong> all (לדאטה קריטי)</li>
+                    <li>☐ <strong>Consumer offset:</strong> manual commit</li>
+                    <li>☐ <strong>Monitoring:</strong> consumer lag, under-replicated</li>
+                    <li>☐ <strong>Security:</strong> SSL/SASL + ACLs</li>
+                    <li>☐ <strong>Retention:</strong> מוגדר לפי צורך</li>
+                    <li>☐ <strong>Compression:</strong> lz4/snappy enabled</li>
+                    <li>☐ <strong>Backup:</strong> ZooKeeper snapshots</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Copy Notification -->
+<div class="copy-notification" id="copyNotification">
+    ✅ הועתק ללוח!
 </div>
 
 <script>
@@ -2206,6 +3727,146 @@ $ curl -X DELETE localhost:8083/connectors/my-connector
 
         document.querySelectorAll('.theory-nav-item').forEach(el => el.classList.remove('active'));
         btn.classList.add('active');
+    }
+
+    /* === SOLUTION TOGGLE === */
+    function toggleSolution(button) {
+        const content = button.nextElementSibling;
+        content.classList.toggle('show');
+        button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
+    }
+
+    /* === DARK MODE === */
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        const btn = document.getElementById('darkModeToggle');
+        btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+        localStorage.setItem('darkMode', isDark);
+    }
+
+    // Load dark mode preference
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').textContent = '☀️ מצב יום';
+        }
+
+        // Copy code blocks
+        document.querySelectorAll('.code-block').forEach(code => {
+            code.style.cursor = 'pointer';
+            code.addEventListener('click', () => {
+                const text = code.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    const notification = document.getElementById('copyNotification');
+                    notification.classList.add('show');
+                    setTimeout(() => notification.classList.remove('show'), 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            });
+        });
+    });
+
+    /* === SEARCH === */
+    function toggleSearch() {
+        const searchBar = document.getElementById('searchBar');
+        const isVisible = searchBar.style.display !== 'none';
+        searchBar.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) {
+            document.getElementById('searchInput').focus();
+        } else {
+            document.getElementById('searchResults').innerHTML = '';
+        }
+    }
+
+    // Search database
+    const searchDatabase = [
+        { term: 'Producer', type: 'Core', description: 'שולח messages ל-topic', example: 'kafka-console-producer.sh', section: 'producers' },
+        { term: 'Consumer', type: 'Core', description: 'קורא messages מ-topic', example: 'kafka-console-consumer.sh', section: 'consumers' },
+        { term: 'Topic', type: 'Core', description: 'stream של records', example: 'kafka-topics.sh --create --topic T', section: 'topics-partitions' },
+        { term: 'Partition', type: 'Core', description: 'חלוקה של topic', example: '--partitions 3', section: 'topics-partitions' },
+        { term: 'Broker', type: 'Core', description: 'שרת Kafka', example: 'kafka-server-start.sh', section: 'brokers-clusters' },
+        { term: 'Offset', type: 'Core', description: 'מספר message ב-partition', example: 'offset: 42', section: 'consumers' },
+        { term: 'Consumer Group', type: 'Core', description: 'קבוצת consumers', example: '--group my-group', section: 'consumers' },
+        { term: 'Replication Factor', type: 'Core', description: 'כמה עותקים', example: '--replication-factor 3', section: 'brokers-clusters' },
+
+        { term: 'ZooKeeper', type: 'Component', description: 'ניהול cluster', example: 'zookeeper-server-start.sh', section: 'components' },
+        { term: 'Kafka Connect', type: 'Component', description: 'חיבור למערכות חיצוניות', example: 'connect-standalone.sh', section: 'kafka-connect' },
+        { term: 'Kafka Streams', type: 'Component', description: 'עיבוד stream', example: 'stream processing library', section: 'streaming' },
+
+        { term: 'acks', type: 'Config', description: 'אישור מbroker', example: 'acks=all', section: 'producers' },
+        { term: 'batch.size', type: 'Config', description: 'גודל batch', example: 'batch.size=32768', section: 'quickref' },
+        { term: 'compression', type: 'Config', description: 'דחיסת messages', example: 'compression.type=lz4', section: 'quickref' },
+        { term: 'enable.idempotence', type: 'Config', description: 'מניעת duplicates', example: 'enable.idempotence=true', section: 'producers' },
+
+        { term: 'consumer lag', type: 'Monitoring', description: 'messages שמאחור', example: '--describe', section: 'monitoring' },
+        { term: 'under-replicated', type: 'Monitoring', description: 'partitions ללא replicas', example: '--under-replicated-partitions', section: 'troubleshooting' },
+
+        { term: 'Netflix', type: 'UseCase', description: 'המלצות + tracking', example: 'User behavior analysis', section: 'real-world' },
+        { term: 'Uber', type: 'UseCase', description: 'Real-time location', example: 'Driver-rider matching', section: 'real-world' },
+        { term: 'PayPal', type: 'UseCase', description: 'Fraud detection', example: 'Transaction monitoring', section: 'use-cases' },
+    ];
+
+    function performSearch(query) {
+        const resultsDiv = document.getElementById('searchResults');
+
+        if (!query || query.length < 2) {
+            resultsDiv.innerHTML = '';
+            return;
+        }
+
+        const results = searchDatabase.filter(item =>
+            item.term.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.includes(query) ||
+            item.example.toLowerCase().includes(query.toLowerCase())
+        );
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">לא נמצאו תוצאות</div>';
+            return;
+        }
+
+        resultsDiv.innerHTML = results.map(item => `
+            <div class="search-result-item" onclick="navigateToSection('${item.section}')">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <strong style="color: var(--kafka-accent); font-size: 1.1rem;">${highlightText(item.term, query)}</strong>
+                    <span style="background: var(--kafka-green); color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.75rem;">${item.type}</span>
+                </div>
+                <div style="color: var(--text-secondary); margin-bottom: 8px;">${item.description}</div>
+                <code style="background: var(--code-bg); color: var(--code-text); padding: 8px 12px; border-radius: 4px; display: block; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; direction: ltr; text-align: left;">${item.example}</code>
+            </div>
+        `).join('');
+    }
+
+    function highlightText(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<span class="search-highlight">$1</span>');
+    }
+
+    function navigateToSection(sectionId) {
+        toggleSearch(); // Close search
+
+        // If it's a theory section
+        const theorySections = ['intro', 'etl-vs-streaming', 'what-is-kafka', 'architecture', 'components',
+                                'topics-partitions', 'brokers-clusters', 'use-cases', 'real-world', 'streaming',
+                                'producers', 'consumers', 'kafka-connect', 'monitoring', 'best-practices'];
+
+        if (theorySections.includes(sectionId)) {
+            const theoryTab = document.querySelector(`.nav-item[onclick*="theory"]`);
+            if (theoryTab) theoryTab.click();
+
+            setTimeout(() => {
+                const sidebarItem = document.querySelector(`.theory-nav-item[onclick*="${sectionId}"]`);
+                if (sidebarItem) sidebarItem.click();
+            }, 100);
+        } else if (sectionId === 'quickref') {
+            const tab = document.querySelector(`.nav-item[onclick*="quickref"]`);
+            if (tab) tab.click();
+        } else if (sectionId === 'troubleshooting') {
+            const tab = document.querySelector(`.nav-item[onclick*="troubleshooting"]`);
+            if (tab) tab.click();
+        }
     }
 </script>
 
