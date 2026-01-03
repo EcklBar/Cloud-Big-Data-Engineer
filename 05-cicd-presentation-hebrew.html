@@ -92,39 +92,53 @@
             box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
         }
 
-        .content {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: 600px;
+        /* Top Navigation Bar */
+        .nav-container {
+            background: white;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .sidebar {
-            background: var(--bg-secondary);
-            border-left: 1px solid var(--border-color);
-            padding: 20px 0;
-            overflow-y: auto;
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            overflow-x: auto;
+            flex-wrap: wrap;
         }
 
-        .nav-item {
-            display: block;
-            padding: 15px 25px;
+        .nav-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
             color: var(--text-secondary);
-            text-decoration: none;
-            border-bottom: 1px solid var(--border-color);
-            transition: all var(--transition-normal);
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            font-weight: 500;
+            transition: all 0.3s;
+            white-space: nowrap;
         }
 
-        .nav-item:hover, .nav-item.active {
+        .nav-btn:hover {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .nav-btn.active {
             background: var(--primary-blue);
             color: white;
-            transform: translateX(-5px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
         }
 
         .main-content {
             padding: 40px;
-            overflow-y: auto;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .section {
@@ -424,18 +438,21 @@
             border-color: #4a5568;
         }
 
-        body.dark-mode .sidebar {
+        body.dark-mode .nav-container {
             background: #2d3748;
-            border-left-color: #4a5568;
-        }
-
-        body.dark-mode .nav-item {
-            color: #cbd5e1;
             border-bottom-color: #4a5568;
         }
 
-        body.dark-mode .nav-item:hover,
-        body.dark-mode .nav-item.active {
+        body.dark-mode .nav-btn {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .nav-btn:hover {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode .nav-btn.active {
             background: var(--primary-blue);
             color: white;
         }
@@ -506,9 +523,24 @@
         }
 
         @media (max-width: 768px) {
-            .content { grid-template-columns: 1fr; }
-            .sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
-            .header h1 { font-size: 2rem; }
+            .nav-tabs {
+                justify-content: flex-start;
+                overflow-x: scroll;
+                flex-wrap: nowrap;
+            }
+
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 0.85rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -534,30 +566,24 @@
             </div>
         </div>
 
-        <div class="content">
-            <nav class="sidebar">
-                <a href="#" class="nav-item active" data-section="intro">🎯 מבוא ל-CI/CD</a>
-                <a href="#" class="nav-item" data-section="history">📜 SDLC ההיסטורי</a>
-                <a href="#" class="nav-item" data-section="drawbacks">⚠️ החסרונות</a>
-                <a href="#" class="nav-item" data-section="evolution">📈 התפתחות התוכנה</a>
-                <a href="#" class="nav-item" data-section="containers">🐳 Containers</a>
-                <a href="#" class="nav-item" data-section="cloud">☁️ עידן הענן</a>
-                <a href="#" class="nav-item" data-section="kubernetes">☸️ Kubernetes</a>
-                <a href="#" class="nav-item" data-section="cicd-overview">🔄 סקירת CI/CD</a>
-                <a href="#" class="nav-item" data-section="jenkins">🔧 Jenkins</a>
-                <a href="#" class="nav-item" data-section="cicd-systems">🛠️ מערכות CI/CD</a>
-                <a href="#" class="nav-item" data-section="iac">📝 Infrastructure as Code</a>
-                <a href="#" class="nav-item" data-section="devops">👥 DevOps</a>
-                <a href="#" class="nav-item" data-section="github-actions">🎬 GitHub Actions</a>
-                <a href="#" class="nav-item" data-section="workflows">📋 Workflows</a>
-                <a href="#" class="nav-item" data-section="example">💡 דוגמה מעשית</a>
-                <a href="#" class="nav-item" data-section="more-examples">🔥 דוגמאות נוספות</a>
-                <a href="#" class="nav-item" data-section="exercises">📝 תרגילים</a>
-                <a href="#" class="nav-item" data-section="troubleshooting">🔧 פתרון בעיות</a>
-                <a href="#" class="nav-item" data-section="quickref">📋 Quick Reference</a>
-                <a href="#" class="nav-item" data-section="bestpractices">✨ Best Practices</a>
-            </nav>
+        <!-- Top Navigation Bar -->
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <button class="nav-btn active" onclick="switchSection('intro')">🎯 מבוא</button>
+                <button class="nav-btn" onclick="switchSection('cicd-overview')">🔄 CI/CD</button>
+                <button class="nav-btn" onclick="switchSection('containers')">🐳 Containers</button>
+                <button class="nav-btn" onclick="switchSection('kubernetes')">☸️ Kubernetes</button>
+                <button class="nav-btn" onclick="switchSection('github-actions')">🎬 GitHub Actions</button>
+                <button class="nav-btn" onclick="switchSection('workflows')">📋 Workflows</button>
+                <button class="nav-btn" onclick="switchSection('more-examples')">🔥 דוגמאות</button>
+                <button class="nav-btn" onclick="switchSection('exercises')">📝 תרגילים</button>
+                <button class="nav-btn" onclick="switchSection('troubleshooting')">🔧 פתרון בעיות</button>
+                <button class="nav-btn" onclick="switchSection('bestpractices')">✨ Best Practices</button>
+                <button class="nav-btn" onclick="switchSection('quickref')">📚 Quick Ref</button>
+            </div>
+        </div>
 
+        <div style="padding: 20px;">
             <main class="main-content">
                 <!-- מבוא -->
                 <section class="section active" id="intro">
@@ -2088,16 +2114,20 @@ ${{ steps.step-id.outputs.result }}  # Output from step</div>
 
     <script>
         // Navigation
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-                item.classList.add('active');
-                const sectionId = item.getAttribute('data-section');
-                document.getElementById(sectionId).classList.add('active');
-            });
-        });
+        function switchSection(sectionId) {
+            // Remove active from all buttons and sections
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+
+            // Add active to clicked button
+            event.currentTarget.classList.add('active');
+
+            // Show section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         // Copy code blocks
         document.querySelectorAll('.code-block').forEach(code => {
