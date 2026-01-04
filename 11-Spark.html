@@ -2259,6 +2259,19 @@ df.withColumn("prev_salary", lag("salary", 1).over(window_spec)) \
   .withColumn("next_salary", lead("salary", 1).over(window_spec))
 
 
+# Ntile - חלוקה לקבוצות (quartiles, percentiles)
+from pyspark.sql.functions import ntile
+
+df.withColumn("quartile", ntile(4).over(window_spec)) \
+  .withColumn("decile", ntile(10).over(window_spec))
+
+
+# Percent Rank - אחוזון יחסי (0 עד 1)
+from pyspark.sql.functions import percent_rank
+
+df.withColumn("percent_rank", percent_rank().over(window_spec))
+
+
 # Aggregations על Window
 from pyspark.sql.functions import sum, avg, max, min
 
@@ -2852,6 +2865,16 @@ df.write \
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-blue); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">lead()</td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color);">ערך מהשורה הבאה</td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">lead("salary", 1).over(window_spec)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-blue); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">ntile()</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color);">חלוקה ל-N קבוצות שוות</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">ntile(4).over(window_spec)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-blue); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">percent_rank()</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color);">אחוזון יחסי (0-1)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">percent_rank().over(window_spec)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -4923,6 +4946,8 @@ result.show()</div>
         { term: 'parquet', type: 'I/O', description: 'קריאת/כתיבת Parquet', example: 'spark.read.parquet(path)', section: 'df-sources' },
         { term: 'broadcast', type: 'Advanced', description: 'Broadcast Join', example: 'broadcast(small_df)', section: 'rdd-broadcast' },
         { term: 'window', type: 'SQL', description: 'Window Functions', example: 'row_number().over(window_spec)', section: 'df-window' },
+        { term: 'ntile', type: 'Window', description: 'חלוקה ל-N קבוצות', example: 'ntile(4).over(window_spec)', section: 'df-window' },
+        { term: 'percent_rank', type: 'Window', description: 'אחוזון יחסי', example: 'percent_rank().over(window_spec)', section: 'df-window' },
         { term: 'UDF', type: 'SQL', description: 'User Defined Functions', example: '@udf(returnType=StringType())', section: 'df-udfs' },
         { term: 'streaming', type: 'Streaming', description: 'Structured Streaming', example: 'spark.readStream', section: 'stream-structured' },
         { term: 'kafka', type: 'Streaming', description: 'קריאה מ-Kafka', example: '.format("kafka")', section: 'stream-kafka' },
