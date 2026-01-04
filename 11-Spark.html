@@ -971,6 +971,199 @@ val conf = new SparkConf()
     .setMaster("local[*]")
 
 val sc = new SparkContext(conf)</div>
+
+                    <h2>Medallion Architecture - Data Lake Layers</h2>
+                    <div class="info-box">
+                        <h3>ארכיטקטורת שכבות נתונים</h3>
+                        <p>ארכיטקטורה מודרנית לניהול נתונים במערכות Big Data, המבוססת על שכבות איכות עולה.</p>
+                    </div>
+
+                    <div class="content-card" style="margin: 30px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="card-header" style="background: linear-gradient(135deg, var(--spark-orange), #FFB74D);">
+                            <h3 style="color: white; margin: 0;">🏗️ Data Lake Architecture - זרימת נתונים מלאה</h3>
+                        </div>
+                        <div class="card-body">
+                            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.8; direction: ltr; text-align: left; overflow-x: auto; padding: 20px; background: white; border-radius: 8px;">
+<pre style="margin: 0; direction: ltr; text-align: left;">
+┌─────────────┐
+│   <strong style="color: var(--spark-blue);">SYSTEM</strong>   │  📊 מקורות נתונים
+│  (Sources)  │
+└──────┬──────┘
+       │
+       ├──────────────────────────────────────────────────────────────────┐
+       │                                                                  │
+       ▼                                                                  ▼
+┌─────────────────────┐         ┌──────────────────────┐         ┌─────────────────────┐
+│    <strong style="color: #8B4513;">BRONZE STORAGE</strong>   │────────▶│  	<strong style="color: #C0C0C0;">SILVER STORAGE</strong> │────────▶│   	<strong style="color: #FFD700;">GOLD STORAGE</strong>   │
+│   Raw Data/Logs     │  Clean  │    Transform         │   AGG   │   Business Level    │
+│                     │  Parse  │                      │         │                     │
+│  📄 JSON            │         │  📦 Parquet          │         │  📦 Parquet         │
+│  📄 CSV             │  using  │  ✅ Schema           │  using  │  ✅ Partitioned     │
+│  📄 Logs            │  ⚡Spark │  ✅ Validated        │  ⚡Spark │  ✅ Aggregated      │
+└─────────────────────┘         └──────────┬───────────┘         └──────────┬──────────┘
+                                          │                                 │
+                                          │                                 │
+                                          ▼                                 ▼
+                                   ┌─────────────┐                  ┌────────────────┐
+                                   │     DWH     │◀─────────────────│  QUERY ENGINE  │
+                                   │  (Optional) │                  │                │
+                                   │             │                  │  🔍 Trino      │
+                                   │ Snowflake   │                  │  🐘 Hive       │
+                                   │ Redshift    │                  │  🦅 Impala     │
+                                   │ BigQuery    │                  │  ☁️  Athena    │
+                                   └─────────────┘                  │  🔴 Redshift   │
+                                                                    │     Spectrum   │
+                                                                    │  ☁️  BigQuery  │
+                                                                    │  📊 Kusto/ADX  │
+                                                                    └────────┬───────┘
+                                                                             │
+                                                                             ▼
+                                                                    ┌─────────────────┐
+                                                                    │   <strong style="color: var(--spark-green);">BI TOOLS</strong>      │
+                                                                    │                 │
+                                                                    │  📊 Tableau     │
+                                                                    │  📈 Power BI    │
+                                                                    │  📉 Looker      │
+                                                                    │  📱 Grafana     │
+                                                                    └─────────────────┘
+
+<strong style="color: var(--spark-orange);">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</strong>
+
+<strong>💡 הערות חשובות:</strong>
+
+<strong style="color: var(--spark-blue);">📍 Deployment Options:</strong>
+  • ☁️  Cloud          - AWS S3, Azure Data Lake, GCP Cloud Storage
+  • 🏢 On-premise     - HDFS, Local Storage, NAS
+  • 🔀 Hybrid         - שילוב Cloud + On-premise
+
+<strong style="color: var(--spark-green);">⚡ Processing Types:</strong>
+  • RT  (Real-time)        - Streaming עם Kafka + Spark Streaming
+  • NRT (Near Real-time)   - Micro-batches כל דקות ספורות
+  • Batch                  - עיבוד מחזורי (שעתי/יומי)
+
+<strong style="color: var(--spark-purple);">📊 Data Scale:</strong>
+  • Big Data      - Petabytes, מאות TB
+  • Medium Data   - Terabytes, מאות GB
+  • Small Data    - Gigabytes
+
+<strong style="color: var(--spark-red);">🔧 טכנולוגיות עיקריות:</strong>
+  • Ingestion:  Kafka, Flume, NiFi, AWS Kinesis
+  • Processing: <strong>Apache Spark</strong> (PySpark/Scala), Flink, Beam
+  • Storage:    HDFS, S3, Azure Data Lake, GCS
+  • Formats:    Parquet, ORC, Avro, Delta Lake
+  • Query:      Trino/Presto, Hive, Athena, BigQuery
+</pre>
+                            </div>
+
+                            <div class="warning-box" style="margin-top: 20px;">
+                                <h3>🎯 למה הארכיטקטורה הזו?</h3>
+                                <ul>
+                                    <li><strong>Separation of Concerns</strong> - כל שכבה עם אחריות ברורה</li>
+                                    <li><strong>Reprocessing</strong> - אפשר תמיד לחזור ל-Bronze ולעבד מחדש</li>
+                                    <li><strong>Performance</strong> - Gold מוכן ומהיר לשאילתות</li>
+                                    <li><strong>Flexibility</strong> - קל להוסיף צרכנים חדשים (BI/ML/Apps)</li>
+                                    <li><strong>Cost Effective</strong> - Parquet חוסך אחסון, Partitioning חוסך חישוב</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🥉 Bronze Layer</h4>
+                            <p><strong>Raw Data / Landing Zone</strong></p>
+                            <p>• נתונים גולמיים כפי שהתקבלו</p>
+                            <p>• פורמט: JSON, CSV, Logs</p>
+                            <p>• ללא טרנספורמציות</p>
+                            <p>• Single source of truth</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🥈 Silver Layer</h4>
+                            <p><strong>Cleaned & Transformed</strong></p>
+                            <p>• ניקוי וולידציה</p>
+                            <p>• פורמט: Parquet (מומלץ!)</p>
+                            <p>• Schema enforcement</p>
+                            <p>• Deduplication</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🥇 Gold Layer</h4>
+                            <p><strong>Business-Level Aggregates</strong></p>
+                            <p>• Aggregations מוכנים</p>
+                            <p>• פורמט: Parquet + Partitioning</p>
+                            <p>• מוכן ל-BI / Analytics</p>
+                            <p>• אופטימלי לשאילתות</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>🔄 זרימת הנתונים</h3>
+                        <ol style="line-height: 2; margin-top: 15px;">
+                            <li><strong>Ingestion:</strong> System → Bronze Storage (JSON/CSV)</li>
+                            <li><strong>Cleaning/Parsing:</strong> Bronze → Silver (Parquet) באמצעות PySpark</li>
+                            <li><strong>Aggregation:</strong> Silver → Gold (Parquet Partitioned) באמצעות PySpark AGG</li>
+                            <li><strong>Consumption:</strong> Gold → Query Engines (Trino, Hive, Impala, Athena, Redshift Spectrum, BigQuery, Kusto/ADX)</li>
+                            <li><strong>Analytics:</strong> Query Engines → BI Tools (Tableau, Power BI, Looker)</li>
+                            <li><strong>DWH:</strong> אופציה להעביר נתונים ל-Data Warehouse (Snowflake, Redshift, BigQuery)</li>
+                        </ol>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>💡 Best Practices</h3>
+                        <ul>
+                            <li><strong>Bronze:</strong> שמור הכל - אפשר תמיד לחזור למקור</li>
+                            <li><strong>Silver:</strong> Parquet + Schema validation - מהיר לקריאה</li>
+                            <li><strong>Gold:</strong> Partitioning לפי שימוש (date, region, category)</li>
+                            <li><strong>Cloud/On-premise/Hybrid:</strong> הארכיטקטורה עובדת בכל הסביבות</li>
+                            <li><strong>RT/NRT/Batch:</strong> תומך בכל דפוסי עיבוד (Real-time, Near-real-time, Batch)</li>
+                            <li><strong>Big Data / Medium Data / Small Data:</strong> ניתן להתאים לכל סקאלה</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה - Pipeline מלא
+
+# === BRONZE → SILVER ===
+# קריאת נתונים גולמיים (JSON)
+bronze_df = spark.read.json("/data/bronze/events/")
+
+# ניקוי ווולידציה
+silver_df = bronze_df \
+    .filter(col("timestamp").isNotNull()) \
+    .filter(col("user_id").isNotNull()) \
+    .dropDuplicates(["event_id"]) \
+    .withColumn("date", to_date(col("timestamp"))) \
+    .withColumn("hour", hour(col("timestamp")))
+
+# שמירה ל-Silver (Parquet)
+silver_df.write \
+    .mode("overwrite") \
+    .parquet("/data/silver/events/")
+
+
+# === SILVER → GOLD ===
+# קריאה מ-Silver
+silver_df = spark.read.parquet("/data/silver/events/")
+
+# Aggregations
+gold_df = silver_df \
+    .groupBy("date", "event_type", "country") \
+    .agg(
+        count("*").alias("event_count"),
+        countDistinct("user_id").alias("unique_users"),
+        avg("session_duration").alias("avg_duration")
+    )
+
+# שמירה ל-Gold עם Partitioning
+gold_df.write \
+    .partitionBy("date", "country") \
+    .mode("overwrite") \
+    .parquet("/data/gold/events_summary/")
+
+
+# === CONSUMPTION ===
+# כעת ניתן לקרוא מ-Gold ב-Trino/Athena/Hive:
+# SELECT * FROM events_summary
+# WHERE date = '2024-01-01' AND country = 'US'
+# → Partition Pruning = קריאה רק של נתונים רלוונטיים!</div>
                 </div>
             </main>
         </div>
