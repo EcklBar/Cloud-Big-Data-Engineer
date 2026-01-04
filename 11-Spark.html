@@ -2272,6 +2272,12 @@ from pyspark.sql.functions import percent_rank
 df.withColumn("percent_rank", percent_rank().over(window_spec))
 
 
+# Cumulative Distribution - התפלגות מצטברת
+from pyspark.sql.functions import cume_dist
+
+df.withColumn("cume_dist", cume_dist().over(window_spec))
+
+
 # Aggregations על Window
 from pyspark.sql.functions import sum, avg, max, min
 
@@ -2297,6 +2303,21 @@ top_earners = df.withColumn("rank", rank().over(window_spec3)) \
                             <li><strong>unboundedPreceding</strong> - מתחילת ה-partition</li>
                             <li><strong>unboundedFollowing</strong> - עד סוף ה-partition</li>
                             <li><strong>currentRow</strong> - השורה הנוכחית</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>💡 ההבדל בין percent_rank ו-cume_dist</h3>
+                        <ul>
+                            <li><strong>percent_rank()</strong> - (rank - 1) / (total - 1) → אחוזון של ה-rank</li>
+                            <li><strong>cume_dist()</strong> - מספר שורות ≤ ערך נוכחי / סך שורות → אחוז מצטבר</li>
+                            <li><strong>ntile(N)</strong> - חלוקה שווה ל-N קבוצות (quartiles, deciles, וכו')</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>דוגמה:</strong> בקבוצה של 5 שורות עם ערכים [10, 20, 30, 40, 50]:</p>
+                        <ul>
+                            <li>percent_rank: [0.0, 0.25, 0.5, 0.75, 1.0]</li>
+                            <li>cume_dist: [0.2, 0.4, 0.6, 0.8, 1.0]</li>
+                            <li>ntile(4): [1, 1, 2, 3, 4]</li>
                         </ul>
                     </div>
                 </div>
@@ -2875,6 +2896,11 @@ df.write \
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-blue); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">percent_rank()</td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color);">אחוזון יחסי (0-1)</td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">percent_rank().over(window_spec)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-blue); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">cume_dist()</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color);">התפלגות מצטברת (0-1)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">cume_dist().over(window_spec)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -4948,6 +4974,7 @@ result.show()</div>
         { term: 'window', type: 'SQL', description: 'Window Functions', example: 'row_number().over(window_spec)', section: 'df-window' },
         { term: 'ntile', type: 'Window', description: 'חלוקה ל-N קבוצות', example: 'ntile(4).over(window_spec)', section: 'df-window' },
         { term: 'percent_rank', type: 'Window', description: 'אחוזון יחסי', example: 'percent_rank().over(window_spec)', section: 'df-window' },
+        { term: 'cume_dist', type: 'Window', description: 'התפלגות מצטברת', example: 'cume_dist().over(window_spec)', section: 'df-window' },
         { term: 'UDF', type: 'SQL', description: 'User Defined Functions', example: '@udf(returnType=StringType())', section: 'df-udfs' },
         { term: 'streaming', type: 'Streaming', description: 'Structured Streaming', example: 'spark.readStream', section: 'stream-structured' },
         { term: 'kafka', type: 'Streaming', description: 'קריאה מ-Kafka', example: '.format("kafka")', section: 'stream-kafka' },
