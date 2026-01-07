@@ -3465,6 +3465,86 @@ query = df \
 # - Metadata של ה-stream
 # - State של aggregations</div>
 
+                    <h3>awaitTermination() - המתנה לסיום</h3>
+                    <div class="info-box">
+                        <h3>מהו awaitTermination()?</h3>
+                        <p><strong>awaitTermination()</strong> היא מתודה שחוסמת את ה-thread הראשי ומונעת מהתוכנית להסתיים.</p>
+                        <p>בלעדיה, התוכנית תסתיים מיד אחרי הפעלת ה-streaming query!</p>
+                    </div>
+
+                    <div class="code-block"># ✅ נכון - עם awaitTermination
+query = df.writeStream \
+    .format("console") \
+    .start()
+
+query.awaitTermination()  # התוכנית ממתינה כאן!
+# הקוד כאן לא יתבצע עד שה-query יסתיים
+
+
+# ❌ לא נכון - בלי awaitTermination
+query = df.writeStream \
+    .format("console") \
+    .start()
+
+# התוכנית תסתיים מיד כאן!
+# ה-query לא יספיק לעבד כלום!</div>
+
+                    <div class="success-box">
+                        <h3>✅ אפשרויות שימוש</h3>
+                        <div class="code-block"># 1. המתנה ללא הגבלת זמן (נפוץ!)
+query.awaitTermination()
+
+
+# 2. המתנה עם timeout (שניות)
+query.awaitTermination(timeout=60)
+# מחזיר True אם ה-query הסתיים, False אם timeout
+
+
+# 3. בדיקת סטטוס בלולאה
+while query.isActive:
+    time.sleep(1)
+    # ניתן לבצע בדיקות נוספות כאן
+
+
+# 4. שימוש עם מספר queries
+query1 = df1.writeStream.start()
+query2 = df2.writeStream.start()
+
+# המתנה לכולם
+spark.streams.awaitAnyTermination()  # עד שאחד מסתיים</div>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>💡 מתי ה-query מסתיים?</h3>
+                        <ul>
+                            <li><strong>שגיאה</strong> - אם יש exception בעיבוד</li>
+                            <li><strong>query.stop()</strong> - עצירה ידנית</li>
+                            <li><strong>SIGTERM/SIGINT</strong> - אות מהמערכת (Ctrl+C)</li>
+                            <li><strong>trigger(once=True)</strong> - batch יחיד</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block"># דוגמה מלאה עם error handling
+try:
+    query = df.writeStream \
+        .format("console") \
+        .option("checkpointLocation", "/tmp/checkpoint") \
+        .start()
+
+    print("Streaming started. Press Ctrl+C to stop.")
+    query.awaitTermination()
+
+except KeyboardInterrupt:
+    print("Stopping gracefully...")
+    query.stop()
+
+except Exception as e:
+    print(f"Error: {e}")
+    query.stop()
+
+finally:
+    spark.stop()</div>
+
                     <h3>Triggers - שליטה בתדירות</h3>
                     <div class="info-box">
                         <p>Trigger קובע מתי Spark מעבד batch חדש של נתונים.</p>
