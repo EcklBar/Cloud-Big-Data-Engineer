@@ -1797,6 +1797,97 @@
                         </div>
                     </div>
 
+                    <h2>👆 כלל אצבע: מתי להשתמש במה?</h2>
+
+                    <div class="info-card" style="background: linear-gradient(135deg, #e7f5ff, #d0ebff); border-color: var(--kafka-blue);">
+                        <h4 style="margin-top: 0; color: var(--kafka-primary);">🔑 הכלל הזהב:</h4>
+                        <p style="font-size: 1.1rem; line-height: 1.8; margin: 0;">
+                            <strong>Consumer Group = מספר consumers שעושים את <span style="color: var(--kafka-accent);">אותה משימה ביחד</span></strong><br>
+                            <span style="font-size: 0.95rem; color: var(--text-secondary);">(חולקים את העומס של <strong>אותו</strong> topic באותו אופן)</span>
+                        </p>
+                    </div>
+
+                    <div class="comparison-grid" style="margin-top: 25px;">
+                        <div class="comparison-card">
+                            <h4 style="color: var(--kafka-green); margin-top: 0;">✅ תרחיש 1: משימה כבדה</h4>
+                            <p><strong>צריך לעבד מיליון הזמנות ביום</strong></p>
+                            <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; font-size: 0.85rem; direction: ltr; text-align: left; margin-top: 10px;">
+Topic: orders<br>
+└─ Group: "order-processors"<br>
+&nbsp;&nbsp;&nbsp;├─ Consumer 1<br>
+&nbsp;&nbsp;&nbsp;├─ Consumer 2<br>
+&nbsp;&nbsp;&nbsp;├─ Consumer 3<br>
+&nbsp;&nbsp;&nbsp;└─ Consumer 4
+                            </div>
+                            <p style="margin: 10px 0 0 0; font-size: 0.95rem; color: var(--kafka-green);"><strong>→ כולם עושים אותו דבר! מחלקים עומס</strong></p>
+                        </div>
+
+                        <div class="comparison-card">
+                            <h4 style="color: var(--kafka-purple); margin-top: 0;">✅ תרחיש 2: משימות שונות</h4>
+                            <p><strong>מעבד אותם events בדרכים שונות</strong></p>
+                            <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; font-size: 0.85rem; direction: ltr; text-align: left; margin-top: 10px;">
+Topic: user-events<br>
+├─ Group: "analytics" → DB<br>
+├─ Group: "email-service" → Emails<br>
+└─ Group: "fraud-detection" → ML
+                            </div>
+                            <p style="margin: 10px 0 0 0; font-size: 0.95rem; color: var(--kafka-purple);"><strong>→ כל group עושה משהו אחר!</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="comparison-grid" style="margin-top: 25px;">
+                        <div class="comparison-card" style="border-right: 4px solid var(--kafka-accent);">
+                            <h4 style="color: var(--kafka-accent); margin-top: 0;">📥 Consumer בודד (ללא Group)</h4>
+                            <p style="font-size: 0.95rem; margin-bottom: 12px;">השתמש רק למקרים אלה:</p>
+                            <ul style="font-size: 0.9rem; margin: 0;">
+                                <li><strong>🧪 Debug/Testing</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">צריך לראות מה יש בtopic</span>
+                                </li>
+                                <li><strong>📊 Monitoring זמני</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">הצצה מהירה ב-live data</span>
+                                </li>
+                                <li><strong>🔄 One-time script</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">רץ פעם אחת ונגמר</span>
+                                </li>
+                            </ul>
+                            <div style="background: #fff9db; padding: 10px; border-radius: 6px; margin-top: 12px; font-size: 0.85rem;">
+                                <strong>⚠️</strong> לא מתאים לפרודקשן!
+                            </div>
+                        </div>
+
+                        <div class="comparison-card" style="border-right: 4px solid var(--kafka-green);">
+                            <h4 style="color: var(--kafka-green); margin-top: 0;">👥 Consumer Group</h4>
+                            <p style="font-size: 0.95rem; margin-bottom: 12px;">השתמש לכל הדברים האמיתיים:</p>
+                            <ul style="font-size: 0.9rem; margin: 0;">
+                                <li><strong>🚀 פרודקשן</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">גם עם consumer אחד!</span>
+                                </li>
+                                <li><strong>📈 Scale out</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">צריך מספר consumers</span>
+                                </li>
+                                <li><strong>💾 Offset tracking</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">זוכר איפה הפסקת</span>
+                                </li>
+                                <li><strong>🔒 Fault tolerance</strong><br>
+                                    <span style="color: var(--text-tertiary); font-size: 0.85rem;">consumer נופל? אחר ממשיך</span>
+                                </li>
+                            </ul>
+                            <div style="background: #d3f9d8; padding: 10px; border-radius: 6px; margin-top: 12px; font-size: 0.85rem;">
+                                <strong>✅</strong> תמיד הבחירה הנכונה!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="success-card" style="margin-top: 25px;">
+                        <h4 style="margin-top: 0;">💡 לסיכום מהיר:</h4>
+                        <ul style="margin: 10px 0 0 0; font-size: 1rem; line-height: 2;">
+                            <li><strong>Consumer בודד:</strong> רק debug/test/one-time</li>
+                            <li><strong>Consumer Group:</strong> כל השאר (כולל פרודקשן!)</li>
+                            <li><strong>משימה כבדה?</strong> → Group אחד + מספר consumers</li>
+                            <li><strong>משימות שונות?</strong> → כל משימה = Group נפרד</li>
+                        </ul>
+                    </div>
+
                     <h2>Offsets</h2>
                     <div class="success-card">
                         <h4>🔢 מהו Offset?</h4>
