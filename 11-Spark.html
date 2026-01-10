@@ -4261,7 +4261,7 @@ pairs.reduceByKey(lambda a,b: a+b)</div>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">select()</td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color);">בחירת עמודות (עם cast ו-alias)</td>
-                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">df.select(col("id").cast("int").alias("user_id"), col("name"))</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">df.select(F.col("id").cast("int").alias("user_id"), F.col("name"))</td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">filter() / where()</td>
