@@ -1450,8 +1450,8 @@ rdd.distinct()
 rdd1.union(rdd2)
 
 
-# intersection - חיתוך (ערכים משותפים)
-rdd1.intersection(rdd2)
+# intersect - חיתוך (ערכים משותפים)
+rdd1.intersect(rdd2)
 
 
 # subtract - הפרש (ערכים ב-rdd1 שלא ב-rdd2)
@@ -4056,9 +4056,9 @@ rdd = df.rdd</div>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">rdd1.union(rdd2)</td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">intersection(other)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">intersect(other)</td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color);">חיתוך - ערכים משותפים</td>
-                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">rdd1.intersection(rdd2)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">rdd1.intersect(rdd2)</td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">subtract(other)</td>
@@ -6046,42 +6046,110 @@ result.show()</div>
         }
     }
 
-    // Search database - מעודכן לCheat Sheet החדש
+    // Search database - כל הפונקציות מה-Cheat Sheet
     const searchDatabase = [
-        // RDD
-        { term: 'map', type: 'RDD', description: 'מיפוי 1:1', example: 'rdd.map(lambda x: x * 2)', view: 'cheatsheet' },
-        { term: 'filter', type: 'RDD', description: 'סינון אלמנטים', example: 'rdd.filter(lambda x: x > 10)', view: 'cheatsheet' },
-        { term: 'flatMap', type: 'RDD', description: 'מיפוי והשטחה', example: 'rdd.flatMap(lambda x: x.split())', view: 'cheatsheet' },
-        { term: 'reduceByKey', type: 'RDD', description: 'צמצום לפי מפתח', example: 'pairs.reduceByKey(lambda a,b: a+b)', view: 'cheatsheet' },
-        { term: 'groupByKey', type: 'RDD', description: 'קיבוץ לפי מפתח', example: 'pairs.groupByKey()', view: 'cheatsheet' },
-        { term: 'collect', type: 'RDD/DF', description: 'החזרת כל האלמנטים', example: 'rdd.collect()', view: 'cheatsheet' },
-        { term: 'count', type: 'RDD/DF', description: 'ספירת אלמנטים', example: 'rdd.count()', view: 'cheatsheet' },
-        // DataFrame
-        { term: 'select', type: 'DataFrame', description: 'בחירת עמודות', example: 'df.select("name", "age")', view: 'cheatsheet' },
-        { term: 'where', type: 'DataFrame', description: 'סינון שורות', example: 'df.filter(col("age") > 25)', view: 'cheatsheet' },
-        { term: 'groupBy', type: 'DataFrame', description: 'קיבוץ', example: 'df.groupBy("dept").count()', view: 'cheatsheet' },
-        { term: 'join', type: 'DataFrame', description: 'חיבור טבלאות', example: 'df1.join(df2, "id")', view: 'cheatsheet' },
-        { term: 'withColumn', type: 'DataFrame', description: 'הוספת עמודה', example: 'df.withColumn("new", col("age")+1)', view: 'cheatsheet' },
-        // Cache
-        { term: 'cache', type: 'Performance', description: 'שמירה בזיכרון', example: 'rdd.cache()', view: 'cheatsheet' },
-        { term: 'persist', type: 'Performance', description: 'שמירה מותאמת', example: 'rdd.persist(MEMORY_AND_DISK)', view: 'cheatsheet' },
-        // I/O
+        // === RDD Transformations ===
+        { term: 'map', type: 'RDD Transform', description: 'מיפוי 1:1 - מחזיר RDD חדש עם func על כל אלמנט', example: 'rdd.map(lambda x: x * 2)', view: 'cheatsheet' },
+        { term: 'filter', type: 'RDD Transform', description: 'סינון - מחזיר רק אלמנטים שעוברים את התנאי', example: 'rdd.filter(lambda x: x > 10)', view: 'cheatsheet' },
+        { term: 'flatMap', type: 'RDD Transform', description: 'מיפוי 1:N + השטחה - כל אלמנט יכול להחזיר 0 או יותר', example: 'rdd.flatMap(lambda x: x.split())', view: 'cheatsheet' },
+        { term: 'mapPartitions', type: 'RDD Transform', description: 'עיבוד partition שלם בבת אחת (יעיל!)', example: 'rdd.mapPartitions(process_part)', view: 'cheatsheet' },
+        { term: 'distinct', type: 'RDD Transform', description: 'ערכים ייחודיים בלבד', example: 'rdd.distinct()', view: 'cheatsheet' },
+        { term: 'union', type: 'RDD Transform', description: 'איחוד שני RDDs (כולל כפילויות)', example: 'rdd1.union(rdd2)', view: 'cheatsheet' },
+        { term: 'intersect', aliases: ['intersection'], type: 'RDD Transform', description: 'חיתוך - ערכים משותפים', example: 'rdd1.intersect(rdd2)', view: 'cheatsheet' },
+        { term: 'subtract', type: 'RDD Transform', description: 'הפרש - ערכים ב-rdd1 שלא ב-rdd2', example: 'rdd1.subtract(rdd2)', view: 'cheatsheet' },
+        { term: 'sample', type: 'RDD Transform', description: 'דגימה אקראית', example: 'rdd.sample(False, 0.1)', view: 'cheatsheet' },
+        { term: 'coalesce', type: 'RDD Transform', description: 'הקטנת מספר partitions (ללא shuffle)', example: 'rdd.coalesce(1)', view: 'cheatsheet' },
+        { term: 'repartition', type: 'RDD Transform', description: 'שינוי מספר partitions (עם shuffle)', example: 'rdd.repartition(10)', view: 'cheatsheet' },
+
+        // === Pair RDD (Key-Value) ===
+        { term: 'reduceByKey', type: 'Pair RDD', description: 'צמצום לפי מפתח (יעיל! עם local reduce)', example: 'pairs.reduceByKey(lambda a,b: a+b)', view: 'cheatsheet' },
+        { term: 'groupByKey', type: 'Pair RDD', description: 'קיבוץ ערכים לפי מפתח (פחות יעיל!)', example: 'pairs.groupByKey()', view: 'cheatsheet' },
+        { term: 'mapValues', type: 'Pair RDD', description: 'map רק על הערכים (שומר partitioning!)', example: 'pairs.mapValues(lambda x: x * 2)', view: 'cheatsheet' },
+        { term: 'flatMapValues', type: 'Pair RDD', description: 'flatMap רק על הערכים', example: 'pairs.flatMapValues(lambda x: x)', view: 'cheatsheet' },
+        { term: 'keys', type: 'Pair RDD', description: 'החזרת רק המפתחות', example: 'pairs.keys()', view: 'cheatsheet' },
+        { term: 'values', type: 'Pair RDD', description: 'החזרת רק הערכים', example: 'pairs.values()', view: 'cheatsheet' },
+        { term: 'sortByKey', type: 'Pair RDD', description: 'מיון לפי מפתח', example: 'pairs.sortByKey(ascending=True)', view: 'cheatsheet' },
+        { term: 'join', aliases: ['rdd join'], type: 'Pair RDD', description: 'Inner join על מפתח', example: 'rdd1.join(rdd2)', view: 'cheatsheet' },
+        { term: 'leftOuterJoin', type: 'Pair RDD', description: 'Left outer join', example: 'rdd1.leftOuterJoin(rdd2)', view: 'cheatsheet' },
+
+        // === RDD Actions ===
+        { term: 'collect', type: 'RDD Action', description: 'החזרת כל האלמנטים ל-Driver (זהירות!)', example: 'rdd.collect()', view: 'cheatsheet' },
+        { term: 'count', type: 'RDD Action', description: 'ספירת מספר אלמנטים', example: 'rdd.count()', view: 'cheatsheet' },
+        { term: 'first', type: 'RDD Action', description: 'החזרת אלמנט ראשון', example: 'rdd.first()', view: 'cheatsheet' },
+        { term: 'take', type: 'RDD Action', description: 'החזרת N אלמנטים ראשונים', example: 'rdd.take(10)', view: 'cheatsheet' },
+        { term: 'reduce', type: 'RDD Action', description: 'צמצום לערך יחיד', example: 'rdd.reduce(lambda a,b: a+b)', view: 'cheatsheet' },
+        { term: 'saveAsTextFile', type: 'RDD Action', description: 'שמירה כקבצי טקסט', example: 'rdd.saveAsTextFile("/path")', view: 'cheatsheet' },
+        { term: 'countByKey', type: 'RDD Action', description: 'ספירת ערכים לכל מפתח (Pair RDD)', example: 'pairs.countByKey()', view: 'cheatsheet' },
+        { term: 'collectAsMap', type: 'RDD Action', description: 'המרה ל-dictionary (Pair RDD)', example: 'pairs.collectAsMap()', view: 'cheatsheet' },
+
+        // === Cache & Persistence ===
+        { term: 'cache', type: 'Performance', description: 'שמירה בזיכרון (MEMORY_ONLY)', example: 'rdd.cache()', view: 'cheatsheet' },
+        { term: 'persist', type: 'Performance', description: 'שמירה עם storage level מותאם', example: 'rdd.persist(MEMORY_AND_DISK)', view: 'cheatsheet' },
+        { term: 'unpersist', type: 'Performance', description: 'הסרה מ-cache', example: 'rdd.unpersist()', view: 'cheatsheet' },
+        { term: 'getNumPartitions', type: 'RDD Info', description: 'מספר partitions', example: 'rdd.getNumPartitions()', view: 'cheatsheet' },
+
+        // === DataFrame Operations ===
+        { term: 'select', type: 'DataFrame', description: 'בחירת עמודות (עם cast ו-alias)', example: 'df.select(F.col("id").cast("int").alias("user_id"))', view: 'cheatsheet' },
+        { term: 'filter', aliases: ['where'], type: 'DataFrame', description: 'סינון שורות לפי תנאי', example: 'df.filter(col("age") > 25)', view: 'cheatsheet' },
+        { term: 'where', aliases: ['filter'], type: 'DataFrame', description: 'סינון שורות לפי תנאי', example: 'df.where(col("age") > 25)', view: 'cheatsheet' },
+        { term: 'groupBy', type: 'DataFrame', description: 'קיבוץ לפי עמודות', example: 'df.groupBy("dept").count()', view: 'cheatsheet' },
+        { term: 'agg', aliases: ['aggregate'], type: 'DataFrame', description: 'aggregation מרובה', example: 'df.groupBy("dept").agg(avg("salary"), max("age"))', view: 'cheatsheet' },
+        { term: 'orderBy', aliases: ['sort'], type: 'DataFrame', description: 'מיון שורות', example: 'df.orderBy(col("age").desc())', view: 'cheatsheet' },
+        { term: 'sort', aliases: ['orderBy'], type: 'DataFrame', description: 'מיון שורות', example: 'df.sort(col("age").desc())', view: 'cheatsheet' },
+        { term: 'withColumn', type: 'DataFrame', description: 'הוספת/עדכון עמודה', example: 'df.withColumn("new", col("age") + 1)', view: 'cheatsheet' },
+        { term: 'withColumnRenamed', type: 'DataFrame', description: 'שינוי שם עמודה', example: 'df.withColumnRenamed("old", "new")', view: 'cheatsheet' },
+        { term: 'drop', type: 'DataFrame', description: 'מחיקת עמודות', example: 'df.drop("column_name")', view: 'cheatsheet' },
+        { term: 'dropDuplicates', aliases: ['drop_duplicates'], type: 'DataFrame', description: 'הסרת כפילויות לפי עמודות', example: 'df.dropDuplicates(["id"])', view: 'cheatsheet' },
+        { term: 'show', type: 'DataFrame', description: 'הצגת שורות', example: 'df.show(10, truncate=False)', view: 'cheatsheet' },
+        { term: 'printSchema', type: 'DataFrame', description: 'הצגת Schema', example: 'df.printSchema()', view: 'cheatsheet' },
+        { term: 'describe', type: 'DataFrame', description: 'סטטיסטיקות', example: 'df.describe().show()', view: 'cheatsheet' },
+
+        // === I/O ===
         { term: 'parquet', type: 'I/O', description: 'קריאת/כתיבת Parquet', example: 'spark.read.parquet(path)', view: 'cheatsheet' },
-        // Advanced
-        { term: 'broadcast', type: 'Advanced', description: 'Broadcast Join', example: 'broadcast(small_df)', view: 'cheatsheet' },
-        { term: 'window', type: 'SQL', description: 'Window Functions', example: 'row_number().over(window_spec)', view: 'cheatsheet' },
+        { term: 'csv', type: 'I/O', description: 'קריאת/כתיבת CSV', example: 'spark.read.csv(path, header=True)', view: 'cheatsheet' },
+        { term: 'json', type: 'I/O', description: 'קריאת/כתיבת JSON', example: 'spark.read.json(path)', view: 'cheatsheet' },
+        { term: 'read', type: 'I/O', description: 'קריאת קבצים', example: 'spark.read.format("csv").load()', view: 'cheatsheet' },
+        { term: 'write', type: 'I/O', description: 'כתיבת קבצים', example: 'df.write.parquet(path)', view: 'cheatsheet' },
+
+        // === Advanced ===
+        { term: 'broadcast', type: 'Advanced', description: 'Broadcast Join - יעיל לטבלאות קטנות', example: 'broadcast(small_df)', view: 'cheatsheet' },
+        { term: 'window', type: 'SQL Functions', description: 'Window Functions', example: 'row_number().over(window_spec)', view: 'cheatsheet' },
+        { term: 'row_number', type: 'Window', description: 'מספור שורות', example: 'row_number().over(window_spec)', view: 'cheatsheet' },
+        { term: 'rank', type: 'Window', description: 'דירוג עם דילוגים', example: 'rank().over(window_spec)', view: 'cheatsheet' },
+        { term: 'dense_rank', type: 'Window', description: 'דירוג ללא דילוגים', example: 'dense_rank().over(window_spec)', view: 'cheatsheet' },
         { term: 'ntile', type: 'Window', description: 'חלוקה ל-N קבוצות', example: 'ntile(4).over(window_spec)', view: 'cheatsheet' },
         { term: 'percent_rank', type: 'Window', description: 'אחוזון יחסי', example: 'percent_rank().over(window_spec)', view: 'cheatsheet' },
         { term: 'cume_dist', type: 'Window', description: 'התפלגות מצטברת', example: 'cume_dist().over(window_spec)', view: 'cheatsheet' },
-        { term: 'UDF', type: 'SQL', description: 'User Defined Functions', example: '@udf(returnType=StringType())', view: 'cheatsheet' },
-        // Streaming
-        { term: 'streaming', type: 'Streaming', description: 'Structured Streaming', example: 'spark.readStream', section: 'stream-structured' },
-        { term: 'kafka', type: 'Streaming', description: 'קריאה מ-Kafka', example: '.format("kafka")', section: 'stream-kafka' },
-        // Errors
-        { term: 'memory', type: 'Error', description: 'Out of Memory', example: '--executor-memory 4g', view: 'cheatsheet' },
+        { term: 'lag', type: 'Window', description: 'ערך קודם', example: 'lag("col", 1).over(window_spec)', view: 'cheatsheet' },
+        { term: 'lead', type: 'Window', description: 'ערך הבא', example: 'lead("col", 1).over(window_spec)', view: 'cheatsheet' },
+        { term: 'UDF', aliases: ['udf'], type: 'Functions', description: 'User Defined Functions', example: '@udf(returnType=StringType())', view: 'cheatsheet' },
+
+        // === Aggregations ===
+        { term: 'sum', type: 'Aggregation', description: 'סכום', example: 'sum("column")', view: 'cheatsheet' },
+        { term: 'avg', aliases: ['mean'], type: 'Aggregation', description: 'ממוצע', example: 'avg("salary")', view: 'cheatsheet' },
+        { term: 'max', type: 'Aggregation', description: 'מקסימום', example: 'max("age")', view: 'cheatsheet' },
+        { term: 'min', type: 'Aggregation', description: 'מינימום', example: 'min("age")', view: 'cheatsheet' },
+        { term: 'count', type: 'Aggregation', description: 'ספירה', example: 'count("*")', view: 'cheatsheet' },
+        { term: 'countDistinct', type: 'Aggregation', description: 'ספירת ערכים ייחודיים', example: 'countDistinct("user_id")', view: 'cheatsheet' },
+
+        // === Streaming ===
+        { term: 'readStream', type: 'Streaming', description: 'Structured Streaming - קריאה', example: 'spark.readStream.format("kafka")', view: 'cheatsheet' },
+        { term: 'writeStream', type: 'Streaming', description: 'Structured Streaming - כתיבה', example: 'df.writeStream.format("console")', view: 'cheatsheet' },
+        { term: 'kafka', type: 'Streaming', description: 'קריאה/כתיבה מ-Kafka', example: '.format("kafka").option("subscribe", "topic")', view: 'cheatsheet' },
+        { term: 'watermark', type: 'Streaming', description: 'Watermark לאירועים מאוחרים', example: 'withWatermark("timestamp", "10 minutes")', view: 'cheatsheet' },
+
+        // === Performance & Tuning ===
         { term: 'shuffle', type: 'Performance', description: 'Shuffle Optimization', example: 'reduceByKey vs groupByKey', view: 'cheatsheet' },
-        // Spark Submit
-        { term: 'spark-submit', type: 'Advanced', description: 'הרצת Spark Application', example: 'spark-submit --master yarn', view: 'cheatsheet' }
+        { term: 'partition', aliases: ['partitioning'], type: 'Performance', description: 'ניהול Partitions', example: 'repartition(), coalesce()', view: 'cheatsheet' },
+        { term: 'spark-submit', type: 'Deployment', description: 'הרצת Spark Application', example: 'spark-submit --master yarn --executor-memory 4g', view: 'cheatsheet' },
+
+        // === Common Functions ===
+        { term: 'col', type: 'Functions', description: 'התייחסות לעמודה', example: 'col("name")', view: 'cheatsheet' },
+        { term: 'lit', type: 'Functions', description: 'ערך קבוע', example: 'lit(100)', view: 'cheatsheet' },
+        { term: 'when', type: 'Functions', description: 'תנאי if-then', example: 'when(col("age") > 18, "adult")', view: 'cheatsheet' },
+        { term: 'coalesce', aliases: ['coalesce function'], type: 'Functions', description: 'ערך ראשון שאינו null', example: 'coalesce(col("a"), col("b"))', view: 'cheatsheet' },
+        { term: 'cast', type: 'Functions', description: 'המרת טיפוס', example: 'col("id").cast("int")', view: 'cheatsheet' },
+        { term: 'alias', type: 'Functions', description: 'שינוי שם עמודה', example: 'col("name").alias("full_name")', view: 'cheatsheet' }
     ];
 
     function performSearch(query) {
@@ -6092,11 +6160,29 @@ result.show()</div>
             return;
         }
 
-        const results = searchDatabase.filter(item =>
-            item.term.toLowerCase().includes(query.toLowerCase()) ||
-            item.description.includes(query) ||
-            item.example.toLowerCase().includes(query.toLowerCase())
-        );
+        // נקה את השאילתא מסוגריים ותווים מיוחדים לחיפוש גמיש יותר
+        const cleanQuery = query.toLowerCase().replace(/[()]/g, '').trim();
+
+        const results = searchDatabase.filter(item => {
+            const cleanTerm = item.term.toLowerCase().replace(/[()]/g, '');
+            const cleanExample = item.example.toLowerCase().replace(/[()]/g, '');
+
+            // חיפוש במונח עצמו (עם ובלי סוגריים)
+            if (cleanTerm.includes(cleanQuery)) return true;
+
+            // חיפוש ב-aliases אם קיימים
+            if (item.aliases && item.aliases.some(alias =>
+                alias.toLowerCase().replace(/[()]/g, '').includes(cleanQuery)
+            )) return true;
+
+            // חיפוש בתיאור
+            if (item.description.includes(query)) return true;
+
+            // חיפוש בדוגמא
+            if (cleanExample.includes(cleanQuery)) return true;
+
+            return false;
+        });
 
         if (results.length === 0) {
             resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-secondary);">לא נמצאו תוצאות</div>';
