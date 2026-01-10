@@ -1886,7 +1886,7 @@ df = spark.createDataFrame(pandas_df)</div>
                 </div>
                 <div class="card-body">
                     <h3>בחירת עמודות (Select)</h3>
-                    <div class="code-block"># בחירת עמודות
+                    <div class="code-block"># בחירת עמודות - דרכים שונות
 df.select("name", "age")
 
 df.select(df.name, df.age)
@@ -1896,8 +1896,32 @@ df.select(df["name"], df["age"])
 
 # בחירה עם ביטויים
 from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType, DoubleType
 
-df.select(col("age") + 1)</div>
+df.select(col("age") + 1)
+
+
+# ✅ דוגמה מעשית - cast, alias, transformations
+airports_df = airports_raw_df.select(
+    col('airport_id').cast(IntegerType()).alias('airport_id'),
+    col('airport_name').alias('name'),
+    col('city'),
+    col('country'),
+    col('latitude').cast(DoubleType()),
+    col('longitude').cast(DoubleType()),
+    (col('latitude') + col('longitude')).alias('geo_sum')
+)</div>
+</invoke>
+
+                    <div class="info-box" style="margin-top: 20px;">
+                        <h3>💡 טיפ חשוב - select מתקדם</h3>
+                        <p><strong>תמיד השתמש ב-col() עם cast() ו-alias()</strong> לקוד נקי ומקצועי!</p>
+                        <ul>
+                            <li><code>.cast(IntegerType())</code> - המרת טיפוס נתונים</li>
+                            <li><code>.alias("new_name")</code> - שינוי שם עמודה</li>
+                            <li><code>col("name")</code> - גישה לעמודה (עדיף על df.name)</li>
+                        </ul>
+                    </div>
 
                     <h3>סינון (Filter / Where)</h3>
                     <div class="code-block"># סינון
@@ -1910,6 +1934,7 @@ df.filter("age > 25")
 
 # סינון מורכב
 df.filter((df.age > 25) & (df.name.startswith("A")))</div>
+</invoke>
 
                     <h3>קיבוץ (GroupBy)</h3>
                     <div class="code-block"># קיבוץ וספירה
@@ -4235,8 +4260,8 @@ pairs.reduceByKey(lambda a,b: a+b)</div>
                             <tbody>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">select()</td>
-                                    <td style="padding: 10px; border: 1px solid var(--border-color);">בחירת עמודות</td>
-                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">df.select("name", "age")</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color);">בחירת עמודות (עם cast ו-alias)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--border-color); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; background: #f8f9fa;">df.select(col("id").cast("int").alias("user_id"), col("name"))</td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: 600; color: var(--spark-orange); direction: ltr; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">filter() / where()</td>
@@ -5106,6 +5131,38 @@ spark.conf.set("spark.sql.adaptive.enabled", "true")</div>
                     <h2><span style="color:var(--spark-purple)">●</span> 💼 דוגמאות שימושיות (Common Patterns)</h2>
                 </div>
                 <div class="card-body">
+                    <h3>🔧 Select מתקדם - Cast & Alias (מומלץ!)</h3>
+                    <div class="code-block"># ✅ דוגמה מעשית - קריאה וניקוי נתונים
+from pyspark.sql.functions import col, trim, upper, when
+from pyspark.sql.types import IntegerType, DoubleType, DateType
+
+# קריאת נתונים גולמיים
+raw_df = spark.read.csv("/data/airports.csv", header=True)
+
+# ✅ select עם cast, alias, ו-transformations
+clean_df = raw_df.select(
+    # המרת טיפוסים + שינוי שמות
+    col('airport_id').cast(IntegerType()).alias('id'),
+    trim(upper(col('airport_name'))).alias('name'),
+    col('city'),
+    col('country'),
+
+    # המרה למספרים
+    col('latitude').cast(DoubleType()).alias('lat'),
+    col('longitude').cast(DoubleType()).alias('lon'),
+
+    # המרה לתאריך
+    col('last_updated').cast(DateType()).alias('updated_date'),
+
+    # חישובים
+    (col('latitude') + col('longitude')).alias('geo_sum'),
+
+    # תנאים
+    when(col('active') == 'Y', True).otherwise(False).alias('is_active')
+)
+
+clean_df.show(5)</div>
+
                     <h3>🔍 Word Count (דוגמה קלאסית)</h3>
                     <div class="code-block"># RDD
 lines = sc.textFile("/path/to/file.txt")
@@ -5120,6 +5177,7 @@ df = spark.read.text("/path/to/file.txt")
 words = df.select(explode(split(col("value"), " ")).alias("word"))
 word_counts = words.groupBy(lower(col("word"))).count()
 word_counts.orderBy(col("count").desc()).show(10)</div>
+</invoke>
 
                     <h3>📊 ETL Pipeline - Bronze → Silver → Gold</h3>
                     <div class="code-block"># Bronze → Silver (ניקוי)
