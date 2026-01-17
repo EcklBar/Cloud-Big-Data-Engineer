@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="מדריך מקצועי ומקיף לתחום הנדסת הנתונים - טכנולוגיות, כלים ושיטות עבודה">
+    <title>הנדסת נתונים | מדריך מקצועי למהנדסי נתונים</title>
+
+    <style>
+        /* ============================================
+           🎨 Design System - Color Palette & Variables
+           ============================================ */
+        :root {
+            /* Primary Brand Colors */
+            --primary-gradient-start: #667eea;
+            --primary-gradient-end: #764ba2;
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+
+            /* Neutral Colors */
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --text-muted: #555;
+            --text-light: #666;
+
+            /* Background Colors */
+            --bg-white: #ffffff;
+            --bg-light: #f8f9fa;
+            --bg-lighter: #e9ecef;
+            --bg-card: rgba(255, 255, 255, 0.95);
+
+            /* Accent Colors */
+            --accent-green: #2ecc71;
+            --accent-blue: #3498db;
+            --accent-orange: #e67e22;
+            --accent-red: #e74c3c;
+
+            /* Cloud Provider Colors */
+            --aws-orange: #ff9900;
+            --aws-dark: #232f3e;
+            --gcp-blue: #4285f4;
+            --gcp-green: #34a853;
+            --azure-blue: #0078d4;
+            --azure-teal: #40e0d0;
+
+            /* Spacing System */
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 20px;
+            --space-lg: 30px;
+            --space-xl: 40px;
+
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 25px;
+            --radius-full: 50%;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+
+            /* Typography */
+            --font-primary: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            --font-display: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            /* Font Sizes */
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 2rem;
+            --text-4xl: 2.5rem;
+            --text-5xl: 3rem;
+
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-base: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ============================================
+           🔧 Base Styles & Reset
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ============================================
+           📦 Layout Components
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-md);
+        }
+
+        /* ============================================
+           🎯 Header Section
+           ============================================ */
+        .header {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl) var(--space-lg);
+            text-align: center;
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+        }
+
+        .header-logo {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: var(--space-sm);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-md);
+            font-family: var(--font-display);
+        }
+
+        .header p {
+            font-size: var(--text-xl);
+            color: var(--text-light);
+            font-weight: 300;
+        }
+
+        /* ============================================
+           📄 Section Components
+           ============================================ */
+        .section {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+        }
+
+        .section:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .section h2 {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            animation: slideRight 0.6s ease;
+        }
+
+        .section h3 {
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: var(--space-lg) 0 var(--space-md) 0;
+        }
+
+        /* ============================================
+           🎨 Card Components
+           ============================================ */
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
+            color: var(--bg-white);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            margin: var(--space-lg) 0;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .highlight-box h3 {
+            color: var(--bg-white);
+            margin-bottom: var(--space-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .highlight-box p {
+            position: relative;
+            z-index: 1;
+            font-size: var(--text-lg);
+            line-height: 1.8;
+        }
+
+        /* ============================================
+           📊 Grid Layouts
+           ============================================ */
+        .tech-grid,
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .tech-category,
+        .capability-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .capability-card {
+            border-left: none;
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        .tech-category:hover,
+        .capability-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tech-category h4,
+        .capability-card h4 {
+            font-size: var(--text-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .tech-category p,
+        .capability-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: var(--space-sm);
+        }
+
+        /* ============================================
+           🏷️ Tags & Badges
+           ============================================ */
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+        }
+
+        .tech-tag {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            color: var(--bg-white);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            display: inline-block;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tech-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ============================================
+           🔄 Flow Diagram
+           ============================================ */
+        .data-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--space-lg) 0;
+            padding: var(--space-lg);
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
+            border-radius: var(--radius-md);
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .flow-step {
+            background: var(--bg-white);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            min-width: 140px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+            animation: fadeInUp 0.6s ease;
+            animation-fill-mode: both;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .flow-step::after {
+            content: "←";
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: var(--text-2xl);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .flow-step h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            font-size: var(--text-base);
+        }
+
+        .flow-step p {
+            color: var(--text-light);
+            font-size: var(--text-sm);
+        }
+
+        /* ============================================
+           📝 Lists
+           ============================================ */
+        ul {
+            list-style: none;
+            padding-right: var(--space-md);
+        }
+
+        li {
+            margin: var(--space-sm) 0;
+            padding-right: var(--space-lg);
+            position: relative;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        li::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+
+        li strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ============================================
+           🎯 Cloud Provider Cards
+           ============================================ */
+        .cloud-card-aws {
+            background: linear-gradient(135deg, var(--aws-orange) 0%, var(--aws-dark) 100%) !important;
+        }
+
+        .cloud-card-gcp {
+            background: linear-gradient(135deg, var(--gcp-blue) 0%, var(--gcp-green) 100%) !important;
+        }
+
+        .cloud-card-azure {
+            background: linear-gradient(135deg, var(--azure-blue) 0%, var(--azure-teal) 100%) !important;
+        }
+
+        .cloud-card-aws h4,
+        .cloud-card-gcp h4,
+        .cloud-card-azure h4 {
+            color: var(--bg-white) !important;
+        }
+
+        /* ============================================
+           📊 Service Model Diagram
+           ============================================ */
+        .service-model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .service-model-card {
+            border: 2px solid var(--bg-lighter);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
+        }
+
+        .service-model-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .service-model-card h3 {
+            background: var(--primary-color);
+            color: var(--bg-white);
+            padding: var(--space-md);
+            margin: 0;
+            text-align: center;
+            font-size: var(--text-lg);
+        }
+
+        .service-layer {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--bg-white);
+            font-size: var(--text-sm);
+            transition: background var(--transition-fast);
+        }
+
+        .service-layer:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .layer-user {
+            background: #5a7fdb;
+            color: var(--bg-white);
+        }
+
+        .layer-provider {
+            background: #90ee90;
+            color: var(--text-primary);
+        }
+
+        .service-model-footer {
+            text-align: center;
+            padding: var(--space-md);
+            background: var(--bg-light);
+            color: var(--text-light);
+            font-size: var(--text-sm);
+        }
+
+        /* ============================================
+           🎨 Icon System (SVG Icons)
+           ============================================ */
+        .icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+        }
+
+        /* ============================================
+           ✨ Animations
+           ============================================ */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideRight {
+            from {
+                width: 0;
+            }
+            to {
+                width: 60px;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Staggered animation for sections */
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Staggered animation for flow steps */
+        .flow-step:nth-child(1) { animation-delay: 0.1s; }
+        .flow-step:nth-child(2) { animation-delay: 0.2s; }
+        .flow-step:nth-child(3) { animation-delay: 0.3s; }
+        .flow-step:nth-child(4) { animation-delay: 0.4s; }
+        .flow-step:nth-child(5) { animation-delay: 0.5s; }
+
+        /* ============================================
+           📱 Responsive Design
+           ============================================ */
+        @media (max-width: 768px) {
+            :root {
+                --text-5xl: 2rem;
+                --text-4xl: 1.75rem;
+                --text-3xl: 1.5rem;
+            }
+
+            .container {
+                padding: var(--space-sm);
+            }
+
+            .section {
+                padding: var(--space-md);
+            }
+
+            .data-flow {
+                flex-direction: column;
+            }
+
+            .flow-step::after {
+                content: "↓";
+                right: 50%;
+                top: auto;
+                bottom: -25px;
+                transform: translateX(50%);
+            }
+
+            .service-model-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           🎯 Utility Classes
+           ============================================ */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-lg {
+            margin-top: var(--space-lg);
+        }
+
+        .mb-lg {
+            margin-bottom: var(--space-lg);
+        }
+
+        .fw-bold {
+            font-weight: 700;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ============================================
+           🌟 Special Effects
+           ============================================ */
+        .emphasis-text {
+            color: var(--accent-red);
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: var(--accent-red);
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        .info-banner {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-lighter));
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            border-right: 4px solid var(--accent-blue);
+            margin: var(--space-lg) 0;
+        }
+
+        .info-banner p {
+            font-style: italic;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: var(--text-lg);
+            line-height: 1.8;
+        }
+
+        /* ============================================
+           🎨 4 V's Cards
+           ============================================ */
+        .vs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+
+        .v-card {
+            background: var(--bg-white);
+            padding: var(--space-lg);
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .v-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .v-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .v-card h4 {
+            font-size: var(--text-xl);
+            color: var(--primary-color);
+            margin-bottom: var(--space-sm);
+        }
+
+        .v-card p {
+            color: var(--text-muted);
+            font-size: var(--text-base);
+        }
+
+        /* ============================================
+           🎯 Conclusion Section
+           ============================================ */
+        .conclusion-box {
+            text-align: center;
+            margin: var(--space-xl) 0;
+            padding: var(--space-xl);
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-lighter) 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .conclusion-box h3 {
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+            font-size: var(--text-3xl);
+        }
+
+        .conclusion-box p {
+            font-size: var(--text-xl);
+            line-height: 1.9;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           🎨 Print Styles
+           ============================================ */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header" role="banner">
+            <div class="header-logo">DATA ENGINEERING HUB</div>
+            <h1>הנדסת נתונים</h1>
+            <p>מדריך מקצועי ומקיף לתחום הנדסת הנתונים</p>
+        </header>
+
+        <!-- Section 1: What is Data Engineering -->
+        <section class="section">
+            <h2>מהי הנדסת נתונים?</h2>
+
+            <div class="highlight-box">
+                <h3>המטרה העיקרית</h3>
+                <p>להפוך נתונים גולמיים לידע ותובנות פעילות</p>
+            </div>
+
+            <div class="data-flow">
+                <div class="flow-step">
+                    <h4>נתונים גולמיים</h4>
+                    <p>Raw Data</p>
+                </div>
+                <div class="flow-step">
+                    <h4>מידע</h4>
+                    <p>Information</p>
+                </div>
+                <div class="flow-step">
+                    <h4>ידע</h4>
+                    <p>Knowledge</p>
+                </div>
+                <div class="flow-step">
+                    <h4>תובנות</h4>
+                    <p>Insights</p>
+                </div>
+                <div class="flow-step">
+                    <h4>חכמה</h4>
+                    <p>Wisdom</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Apache NiFi -->
+        <section class="section">
+            <h2>Apache NiFi</h2>
+
+            <div class="highlight-box">
+                <h3>פלטפורמת אינטגרציית נתונים</h3>
+                <p>Apache NiFi היא פלטפורמת קוד פתוח המאפשרת אוטומציה של זרימת נתונים בין מערכות,<br>
+                ומקלה על איסוף, הפצה וניהול נתונים בזמן אמת</p>
+            </div>
+
+            <h3>Big Data Integration - ארכיטקטורת NiFi</h3>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>📥 Sources - מקורות נתונים</h4>
+                    <ul>
+                        <li><strong>Business data</strong> - בסיסי נתונים ומערכות ארגוניות</li>
+                        <li><strong>Internet & Social Media</strong> - רשתות חברתיות ואינטרנט</li>
+                        <li><strong>Sensors & machines</strong> - חיישנים ומכונות IoT</li>
+                        <li><strong>Archives & Open Data</strong> - ארכיונים ונתונים פתוחים</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>⚙️ יכולות עיבוד ב-NiFi</h4>
+                    <ul>
+                        <li><strong>Route</strong> - ניתוב נתונים לפי תנאים</li>
+                        <li><strong>Transform</strong> - המרת פורמטים ומבנים</li>
+                        <li><strong>Enrich</strong> - העשרת נתונים</li>
+                        <li><strong>Validate</strong> - אימות איכות הנתונים</li>
+                        <li><strong>Distribute</strong> - חלוקה למערכות יעד</li>
+                        <li><strong>Mediate</strong> - תיווך בין פרוטוקולים</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🎯 יעדים ושימושים</h4>
+                    <ul>
+                        <li><strong>Data Warehouse</strong> - מחסני נתונים</li>
+                        <li><strong>Data Lake</strong> - אגמי נתונים</li>
+                        <li><strong>Apps & Processing</strong> - אפליקציות ועיבוד</li>
+                        <li><strong>Visualizing</strong> - כלי ויזואליזציה</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>מאפייני הנתונים (4 V's)</h3>
+            <div class="vs-grid">
+                <div class="v-card">
+                    <h4>Volume</h4>
+                    <p>KB עד PB</p>
+                </div>
+                <div class="v-card">
+                    <h4>Velocity</h4>
+                    <p>Batch עד Real-time</p>
+                </div>
+                <div class="v-card">
+                    <h4>Variety</h4>
+                    <p>מובנה עד לא-מובנה</p>
+                </div>
+                <div class="v-card">
+                    <h4>Veracity</h4>
+                    <p>אמין עד לא-אמין</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Modern Data Systems -->
+        <section class="section">
+            <h2>עיצוב מערכות נתונים מודרניות</h2>
+
+            <div class="highlight-box">
+                <h3>ארכיטקטורה משולבת</h3>
+                <p>שילוב של טכנולוגיות שונות למענה על צרכים מגוונים</p>
+            </div>
+
+            <h3>סוגי נתונים ופתרונות</h3>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>📊 מקורות נתונים</h4>
+                    <ul>
+                        <li><strong>Unstructured Data</strong> - נתונים לא מובנים</li>
+                        <li><strong>Relational Data</strong> - נתונים יחסיים (RDBMS)</li>
+                        <li><strong>JSON Documents</strong> - מסמכי JSON</li>
+                        <li><strong>Key/Value Data</strong> - נתוני מפתח-ערך</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🔧 פתרונות טכנולוגיים</h4>
+                    <p><strong>NoSQL:</strong> MongoDB, Couchbase</p>
+                    <p><strong>Analytics:</strong> Spark, Hadoop, Drill</p>
+                    <p><strong>BI Tools:</strong> Cloudera, Apache Drill</p>
+                    <p><strong>Real-time:</strong> HBase, Cassandra</p>
+                    <p><strong>SQL on Big Data:</strong> Phoenix, Drill</p>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🎯 מקרי שימוש</h4>
+                    <ul>
+                        <li><strong>Transactional Workloads</strong> - עומסי עבודה טרנזקציוניים</li>
+                        <li><strong>BigData BI via SQL</strong> - BI על ביג דאטה</li>
+                        <li><strong>Operational reads/writes</strong> - קריאות/כתיבות תפעוליות</li>
+                        <li><strong>Advanced Analytics</strong> - אנליטיקה מתקדמת</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-banner">
+                <p>הארכיטקטורה המודרנית משלבת טכנולוגיות מרובות כדי לתת מענה אופטימלי לכל סוג של צורך עסקי וטכני</p>
+            </div>
+        </section>
+
+        <!-- Section 4: Cloud Computing -->
+        <section class="section">
+            <h2>מחשוב ענן (Cloud Computing)</h2>
+
+            <div class="highlight-box">
+                <h3>הספקים המובילים</h3>
+                <p>שלושת ענקיות הענן המספקות תשתית גלובלית</p>
+            </div>
+
+            <div class="tech-grid mt-lg">
+                <div class="tech-category cloud-card-gcp">
+                    <h4>☁️ Google Cloud</h4>
+                    <div class="tech-list mt-lg">
+                        <span class="tech-tag">BigQuery</span>
+                        <span class="tech-tag">Dataflow</span>
+                        <span class="tech-tag">Dataproc</span>
+                        <span class="tech-tag">Pub/Sub</span>
+                    </div>
+                </div>
+
+                <div class="tech-category cloud-card-aws">
+                    <h4>☁️ AWS</h4>
+                    <div class="tech-list mt-lg">
+                        <span class="tech-tag">S3</span>
+                        <span class="tech-tag">EMR</span>
+                        <span class="tech-tag">Redshift</span>
+                        <span class="tech-tag">Athena</span>
+                        <span class="tech-tag">Glue</span>
+                    </div>
+                </div>
+
+                <div class="tech-category cloud-card-azure">
+                    <h4>☁️ Microsoft Azure</h4>
+                    <div class="tech-list mt-lg">
+                        <span class="tech-tag">Synapse</span>
+                        <span class="tech-tag">Data Factory</span>
+                        <span class="tech-tag">Databricks</span>
+                        <span class="tech-tag">Stream Analytics</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-lg">
+                <p style="font-size: var(--text-2xl); font-weight: 600; margin-bottom: var(--space-sm);">🏢 ↔️ ☁️</p>
+                <p style="font-size: var(--text-lg);">העברה דו-כיוונית של נתונים ועומסי עבודה בין הארגון לענן</p>
+            </div>
+
+            <h3>יתרונות מחשוב הענן להנדסת נתונים</h3>
+            <ul>
+                <li><strong>סקלביליות אינסופית</strong> - הרחבה וצמצום לפי דרישה</li>
+                <li><strong>עלויות גמישות</strong> - תשלום לפי שימוש בפועל</li>
+                <li><strong>זמינות גלובלית</strong> - גישה מכל מקום בעולם</li>
+                <li><strong>שירותים מנוהלים</strong> - פחות תחזוקה, יותר פיתוח</li>
+                <li><strong>חדשנות מתמדת</strong> - גישה לטכנולוגיות החדשות ביותר</li>
+            </ul>
+        </section>
+
+        <!-- Section 5: Cloud Service Models -->
+        <section class="section">
+            <h2>מודלי שירותי ענן (Cloud Service Models)</h2>
+
+            <div class="service-model-grid">
+                <div class="service-model-card">
+                    <h3>On Premise</h3>
+                    <div>
+                        <div class="service-layer layer-user">Applications</div>
+                        <div class="service-layer layer-user">Data</div>
+                        <div class="service-layer layer-user">Runtime</div>
+                        <div class="service-layer layer-user">Middleware</div>
+                        <div class="service-layer layer-user">OS</div>
+                        <div class="service-layer layer-user">Virtualization</div>
+                        <div class="service-layer layer-user">Servers</div>
+                        <div class="service-layer layer-user">Storage</div>
+                        <div class="service-layer layer-user">Networking</div>
+                    </div>
+                    <div class="service-model-footer">אתה מנהל הכל</div>
+                </div>
+
+                <div class="service-model-card">
+                    <h3>IaaS</h3>
+                    <div>
+                        <div class="service-layer layer-user">Applications</div>
+                        <div class="service-layer layer-user">Data</div>
+                        <div class="service-layer layer-user">Runtime</div>
+                        <div class="service-layer layer-user">Middleware</div>
+                        <div class="service-layer layer-user">OS</div>
+                        <div class="service-layer layer-provider">Virtualization</div>
+                        <div class="service-layer layer-provider">Servers</div>
+                        <div class="service-layer layer-provider">Storage</div>
+                        <div class="service-layer layer-provider">Networking</div>
+                    </div>
+                    <div class="service-model-footer">אתה מנהל | הספק מנהל</div>
+                </div>
+
+                <div class="service-model-card">
+                    <h3>PaaS</h3>
+                    <div>
+                        <div class="service-layer layer-user">Applications</div>
+                        <div class="service-layer layer-user">Data</div>
+                        <div class="service-layer layer-provider">Runtime</div>
+                        <div class="service-layer layer-provider">Middleware</div>
+                        <div class="service-layer layer-provider">OS</div>
+                        <div class="service-layer layer-provider">Virtualization</div>
+                        <div class="service-layer layer-provider">Servers</div>
+                        <div class="service-layer layer-provider">Storage</div>
+                        <div class="service-layer layer-provider">Networking</div>
+                    </div>
+                    <div class="service-model-footer">Microsoft Azure</div>
+                </div>
+
+                <div class="service-model-card">
+                    <h3>SaaS</h3>
+                    <div>
+                        <div class="service-layer layer-provider">Applications</div>
+                        <div class="service-layer layer-provider">Data</div>
+                        <div class="service-layer layer-provider">Runtime</div>
+                        <div class="service-layer layer-provider">Middleware</div>
+                        <div class="service-layer layer-provider">OS</div>
+                        <div class="service-layer layer-provider">Virtualization</div>
+                        <div class="service-layer layer-provider">Servers</div>
+                        <div class="service-layer layer-provider">Storage</div>
+                        <div class="service-layer layer-provider">Networking</div>
+                    </div>
+                    <div class="service-model-footer">הספק מנהל הכל</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Cloud Benefits -->
+        <section class="section">
+            <h2>יתרונות מחשוב ענן</h2>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>💰 עלות (Cost)</h4>
+                    <p><strong>לא צריך יותר:</strong></p>
+                    <ul>
+                        <li>לקנות חומרה ותוכנה</li>
+                        <li>להקים ולתפעל מרכזי נתונים באתר</li>
+                        <li>להשקיע בתשתיות פיזיות</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>⚡ מהירות (Speed)</h4>
+                    <ul>
+                        <li><strong>Self service</strong> - קבלת משאבי מחשוב עצומים תוך דקות</li>
+                        <li>מסיר את האחריות לתכנון קיבולת</li>
+                        <li>הפעלה מהירה של סביבות חדשות</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🌍 סקאלה גלובלית</h4>
+                    <ul>
+                        <li>יכולת לגדול באופן אלסטי</li>
+                        <li>הוספה/הפחתה של כוח מחשוב, אחסון ורוחב פס לפי הצורך</li>
+                        <li>פריסה גלובלית במספר אזורים</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🚀 פרודוקטיביות</h4>
+                    <p>צוותי IT יכולים להקדיש זמן להשגת יעדים עסקיים חשובים יותר במקום תחזוקת תשתיות</p>
+                </div>
+
+                <div class="capability-card">
+                    <h4>📊 ביצועים</h4>
+                    <ul>
+                        <li>רשת עולמית של מרכזי נתונים מאובטחים</li>
+                        <li>שדרוג מתמיד לחומרה החדשה ביותר</li>
+                        <li>טוב יותר ממרכזי נתונים בודדים בארגון</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🔒 אבטחה</h4>
+                    <ul>
+                        <li>סט של מדיניות, טכנולוגיות ובקרות שמחזקות את תנוחת האבטחה</li>
+                        <li>הגנה על הנתונים, האפליקציות והתשתית מפני איומים פוטנציאליים</li>
+                        <li>עמידה בתקנים ורגולציות בינלאומיות</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: AWS Services -->
+        <section class="section">
+            <h2>AWS - שירותי ענן</h2>
+
+            <div class="highlight-box">
+                <h3>Amazon Web Services</h3>
+                <p>הענן של אמזון - הספק המוביל בשירותי ענן</p>
+            </div>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>💻 EC2 - Elastic Compute Cloud</h4>
+                    <ul>
+                        <li>יצירת instances, מכונות וירטואליות ושירותים מסוגים שונים</li>
+                        <li>תשלום על מה שאתה צריך כשאתה צריך</li>
+                        <li>סקלביליות מלאה - הגדלה/הקטנה לפי דרישה</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🗄️ S3 - Simple Storage Service</h4>
+                    <ul>
+                        <li>אחסון ענן כללי (זול אך לא מהיר במיוחד)</li>
+                        <li>זמינות (Availability) של 99.99%</li>
+                        <li>עמידות (Durability) של 99.999999999% (11 תשיעיות!)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tech-grid mt-lg">
+                <div class="tech-category">
+                    <h4>שירותי AWS נוספים להנדסת נתונים</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">EMR - Elastic MapReduce</span>
+                        <span class="tech-tag">Redshift - Data Warehouse</span>
+                        <span class="tech-tag">Athena - SQL on S3</span>
+                        <span class="tech-tag">Glue - ETL Service</span>
+                        <span class="tech-tag">Kinesis - Real-time Streaming</span>
+                        <span class="tech-tag">Lambda - Serverless Compute</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Main Activity Areas -->
+        <section class="section">
+            <h2>תחומי פעילות עיקריים</h2>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🔧 בסיסי נתונים יחסיים</h4>
+                    <p>ניהול וארגון נתונים מובנים במבנה טבלאי מסורתי</p>
+                </div>
+                <div class="capability-card">
+                    <h4>📊 BI והנדסת נתונים</h4>
+                    <p>פיתוח מערכות בינה עסקית וכלי דיווח</p>
+                </div>
+                <div class="capability-card">
+                    <h4>☁️ פתרונות ענן</h4>
+                    <p>פיתוח פתרונות מבוססי ענן גמישים ומדרגים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>🗄️ ביג דאטה ו-NoSQL</h4>
+                    <p>עבודה עם נפחי נתונים גדולים ומבני נתונים לא מובנים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>🧠 מדע הנתונים</h4>
+                    <p>פיתוח מודלים אנליטיים ואלגוריתמי למידת מכונה</p>
+                </div>
+                <div class="capability-card">
+                    <h4>💻 פיתוח תוכנה</h4>
+                    <p>בניית אפליקציות ומערכות לעיבוד נתונים</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 9: Technology Stack -->
+        <section class="section">
+            <h2>מחסנית הטכנולוגיות</h2>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4>אנליטיקה, BI ומדע נתונים</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Tableau</span>
+                        <span class="tech-tag">Power BI</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">Oracle BI</span>
+                        <span class="tech-tag">R</span>
+                        <span class="tech-tag">Python</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>פלטפורמות ענן</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">AWS</span>
+                        <span class="tech-tag">Microsoft Azure</span>
+                        <span class="tech-tag">Google Cloud</span>
+                        <span class="tech-tag">Snowflake</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>בסיסי נתונים יחסיים</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Oracle Database</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">Microsoft SQL Server</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>ביג דאטה ו-NoSQL</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Hadoop</span>
+                        <span class="tech-tag">Spark</span>
+                        <span class="tech-tag">Cassandra</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Elasticsearch</span>
+                        <span class="tech-tag">Redis</span>
+                        <span class="tech-tag">Kafka</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Data Engineer Capabilities -->
+        <section class="section">
+            <h2>יכולות מהנדס נתונים</h2>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🏗️ בניית תשתיות נתונים</h4>
+                    <p>יצירת ארכיטקטורות מתקדמות לניהול ועיבוד נתונים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>🔄 פיתוח צינורות נתונים</h4>
+                    <p>בניית תהליכי ETL/ELT מתקדמים ואוטומטיים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>🔗 יצירת אפליקציות ו-API</h4>
+                    <p>פיתוח ממשקי תכנות ואפליקציות לעיבוד נתונים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>⚡ הפיכת נתונים לשימושיים</h4>
+                    <p>טרנספורמציה של נתונים גולמיים לפורמט מובן ופעיל</p>
+                </div>
+                <div class="capability-card">
+                    <h4>☁️ פתרונות ענן</h4>
+                    <p>יצירת פתרונות מבוססי ענן מדרגים ויעילים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>🔍 אופטימיזציה וביצועים</h4>
+                    <p>שיפור ביצועי שאילתות ותהליכי עיבוד נתונים</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 11: Data Pipelines -->
+        <section class="section">
+            <h2>צינורות נתונים (Data Pipelines)</h2>
+
+            <div class="highlight-box">
+                <h3>הגדרה</h3>
+                <p>סדרה של שלבים ללכידה, טרנספורמציה וטעינת נתונים ליעדים מוגדרים</p>
+            </div>
+
+            <h3>דרישות עיקריות:</h3>
+            <ul>
+                <li><strong>תמיכה בפונקציונליות מגוונת</strong> - טרנספורמציות מורכבות</li>
+                <li><strong>עמידה בדרישות ביצועים</strong> - זמני תגובה, throughput</li>
+                <li><strong>יכולות הרחבה</strong> (Scalability) - התמודדות עם גידול בנפחים</li>
+                <li><strong>עמידות בתקלות</strong> (Fault Tolerance) - המשכיות עסקית</li>
+                <li><strong>ניטור ותחזוקה</strong> - logging, alerting, debugging</li>
+            </ul>
+        </section>
+
+        <!-- Section 12: Batch vs Streaming -->
+        <section class="section">
+            <h2>Batch vs Streaming Processing</h2>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>📦 Batch Processing</h4>
+                    <p><strong>עיבוד קבוצתי:</strong></p>
+                    <ul>
+                        <li>מטפל בסטים גדולים של נתונים במרווחי זמן מוגדרים</li>
+                        <li>תהליך ETL מסורתי - העברת נתונים ממקורות ליעדים</li>
+                        <li>יעיל כאשר לא נדרשת זמינות נתונים בזמן אמת</li>
+                        <li>דוגמאות: דוחות יומיים, סיכומים חודשיים</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>⚡ Streaming Processing</h4>
+                    <p><strong>עיבוד בזמן אמת:</strong></p>
+                    <ul>
+                        <li>נתונים נוצרים ומועברים ברציפות ממקורות רבים</li>
+                        <li>אלפי קלטי נתונים בגדלים קטנים (KB) במקביל</li>
+                        <li>איסוף נתונים ממכשירים מפוזרים גיאוגרפית בזמן יצירתם</li>
+                        <li>דוגמאות: IoT sensors, financial trading, real-time analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 13: Big Data Birth -->
+        <section class="section">
+            <h2>הולדת הביג דאטה</h2>
+
+            <div class="highlight-box">
+                <h3>האתגר</h3>
+                <p>מערכות RDBMS מסורתיות לא יכלו להתמודד עם סקאלות של ביג דאטה</p>
+            </div>
+
+            <ul>
+                <li><strong>חברות נאלצו למצוא פתרונות חלופיים</strong> - מגבלות הטכנולוגיה המסורתית</li>
+                <li><strong>BigData ו-NoSQL נכנסו לעולם</strong> - והציגו מגוון רחב של פתרונות נתונים</li>
+                <li><strong>יכולות חדשות:</strong> רכישה, אחסון וניתוח של נפחי נתונים עצומים</li>
+                <li><strong>הדגש עבר מ-Schema on Write ל-Schema on Read</strong> - גמישות מקסימלית</li>
+            </ul>
+
+            <div class="info-banner">
+                <p>הביג דאטה שינה את הדרך שבה חברות חושבות על נתונים - מנכס מוגבל לאינסוף אפשרויות</p>
+            </div>
+        </section>
+
+        <!-- Section 14: Cloud Migration -->
+        <section class="section">
+            <h2>המעבר לענן</h2>
+
+            <p style="font-size: var(--text-lg); margin-bottom: var(--space-md);">
+                חברות עוברות יותר ויותר לארכיטקטורות מבוססות ענן עם ספקים כמו:
+            </p>
+
+            <div class="tech-list mb-lg">
+                <span class="tech-tag">AWS</span>
+                <span class="tech-tag">Google Cloud Platform</span>
+                <span class="tech-tag">Microsoft Azure</span>
+                <span class="tech-tag">Alibaba Cloud</span>
+                <span class="tech-tag">Oracle Cloud</span>
+            </div>
+
+            <div class="info-banner">
+                <p>הענן הציבורי מציע סט מקיף ויעיל של שירותים מנוהלים לרכישה, אחסון וניתוח נתונים בכל סקאלה ומהירות.</p>
+            </div>
+        </section>
+
+        <!-- Section 15: ACID vs BASE -->
+        <section class="section">
+            <h2>ACID vs BASE</h2>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🔒 ACID</h4>
+                    <p><strong>Synchronous Replication</strong></p>
+                    <ul>
+                        <li>רפליקציה סינכרונית בין Master ו-Replica</li>
+                        <li>המתנה לאישור כתיבה משני הצדדים</li>
+                        <li>עקביות מלאה של הנתונים (Consistency)</li>
+                        <li>מתאים למערכות בנקאות, טרנזקציות כספיות</li>
+                    </ul>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🔄 BASE</h4>
+                    <p><strong>Asynchronous Replication</strong></p>
+                    <ul>
+                        <li>רפליקציה א-סינכרונית</li>
+                        <li>אישור מיידי ללקוח לאחר כתיבה ל-Master</li>
+                        <li>עקביות בסופו של דבר (Eventual Consistency)</li>
+                        <li>מתאים לרשתות חברתיות, e-commerce, analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 16: Modern Data Platforms -->
+        <section class="section">
+            <h2>פלטפורמות נתונים מודרניות</h2>
+
+            <h3>On-premises או בענן</h3>
+
+            <div class="tech-grid">
+                <div class="tech-category">
+                    <h4>בסיסי נתונים יחסיים</h4>
+                    <p><strong>Commercial:</strong></p>
+                    <div class="tech-list">
+                        <span class="tech-tag">Oracle</span>
+                        <span class="tech-tag">SQL Server</span>
+                        <span class="tech-tag">IBM DB2</span>
+                    </div>
+                    <p style="margin-top: var(--space-sm);"><strong>Open Source:</strong></p>
+                    <div class="tech-list">
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">MariaDB</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>ביג דאטה</h4>
+                    <p><strong>Data Lakes (Analytics):</strong></p>
+                    <div class="tech-list">
+                        <span class="tech-tag">Cloudera</span>
+                        <span class="tech-tag">Amazon S3</span>
+                        <span class="tech-tag">Amazon EMR</span>
+                        <span class="tech-tag">Amazon Athena</span>
+                        <span class="tech-tag">Azure Data Lake</span>
+                    </div>
+                    <p style="margin-top: var(--space-sm);"><strong>NoSQL (Operational):</strong></p>
+                    <div class="tech-list">
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Redis</span>
+                        <span class="tech-tag">Cassandra</span>
+                        <span class="tech-tag">DynamoDB</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>Cloud Data Warehouse</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Amazon Redshift</span>
+                        <span class="tech-tag">Snowflake</span>
+                        <span class="tech-tag">Google BigQuery</span>
+                        <span class="tech-tag">Azure Synapse</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>Search Engines</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Elasticsearch</span>
+                        <span class="tech-tag">Splunk</span>
+                        <span class="tech-tag">Apache Solr</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 17: Hadoop -->
+        <section class="section">
+            <h2>Apache Hadoop - הדור הראשון של Data Lakes</h2>
+
+            <div class="highlight-box">
+                <h3>פלטפורמת האנליטיקה של ביג דאטה</h3>
+                <p>הפלטפורמה המובילה הראשונה לניתוח נפחי נתונים גדולים</p>
+            </div>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🎯 Hadoop Core</h4>
+                    <p>פלטפורמה מבוזרת לניתוח batch של נפחים גדולים של נתונים מובנים ולא מובנים</p>
+                </div>
+                <div class="capability-card">
+                    <h4>🌐 Hadoop Ecosystem</h4>
+                    <p>מרחיב את יכולות Hadoop עם כלים לטעינת נתונים, ניתוח, ויזואליזציה, אינטגרציה ותמיכה בזמן אמת</p>
+                </div>
+            </div>
+
+            <h3>למה Hadoop חשוב?</h3>
+
+            <div class="tech-grid">
+                <div class="v-card">
+                    <h4>מהירות</h4>
+                    <p>עיבוד ואחסון מהיר</p>
+                </div>
+                <div class="v-card">
+                    <h4>עלות</h4>
+                    <p>עלות נמוכה</p>
+                </div>
+                <div class="v-card">
+                    <h4>סקלביליות</h4>
+                    <p>גדילה אופקית</p>
+                </div>
+                <div class="v-card">
+                    <h4>כוח מחשוב</h4>
+                    <p>עיבוד מבוזר</p>
+                </div>
+                <div class="v-card">
+                    <h4>גמישות</h4>
+                    <p>כל סוגי הנתונים</p>
+                </div>
+                <div class="v-card">
+                    <h4>עמידות</h4>
+                    <p>סובלנות לתקלות</p>
+                </div>
+            </div>
+
+            <ul style="margin-top: var(--space-lg);">
+                <li>התחיל כפתרון on-premises, כיום זמין גם בענן</li>
+                <li>ההפצה המובילה של Hadoop היא <strong>Cloudera</strong></li>
+            </ul>
+        </section>
+
+        <!-- Section 18: Apache Spark -->
+        <section class="section">
+            <h2>Apache Spark</h2>
+
+            <div class="highlight-box">
+                <h3>מנוע מהיר וכללי לעיבוד נתונים בקנה מידה גדול</h3>
+                <p>אחד מפרויקטי Apache הצומחים במהירות הגבוהה ביותר</p>
+            </div>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>⚡ מאפיינים עיקריים</h4>
+                    <ul>
+                        <li>כולל map ו-reduce וגם מודלים לעיבוד non-batch</li>
+                        <li>עובד ישירות עם HDFS</li>
+                        <li>עיבוד כמעט בזמן אמת</li>
+                        <li>Caching בזיכרון לאיטרציות יעילות</li>
+                        <li>מהיר פי 100 מ-MapReduce</li>
+                    </ul>
+                </div>
+                <div class="capability-card">
+                    <h4>🛠️ Framework ברמה גבוהה</h4>
+                    <ul>
+                        <li>מתכנתים יכולים להתמקד בלוגיקה ולא בתשתית</li>
+                        <li>עיבוד מבוזר על פני צמתי worker</li>
+                        <li>אחסון מבוזר עם סקלביליות אופקית</li>
+                        <li>סובלנות לתקלות מובנית</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>רכיבי Spark העיקריים</h3>
+            <div class="vs-grid">
+                <div class="v-card">
+                    <h4>Spark SQL</h4>
+                    <p>עיבוד נתונים מובנים</p>
+                </div>
+                <div class="v-card">
+                    <h4>Spark Streaming</h4>
+                    <p>עיבוד נתונים בזמן אמת</p>
+                </div>
+                <div class="v-card">
+                    <h4>Spark ML</h4>
+                    <p>למידת מכונה וניתוח מתקדם</p>
+                </div>
+                <div class="v-card">
+                    <h4>GraphX</h4>
+                    <p>עיבוד וניתוח גרפים</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 19: NoSQL -->
+        <section class="section">
+            <h2>NoSQL Databases - ביג דאטה תפעולי</h2>
+
+            <div class="highlight-box">
+                <h3>יכולות עיקריות</h3>
+                <p>אחסון ושליפת נתונים בזמן אמת במהירות וסקאלה גבוהה<br>
+                (תומך במיליוני פעולות הכנסה/שליפה בשנייה)</p>
+            </div>
+
+            <ul>
+                <li><strong>משמש באפליקציות ביג דאטה</strong> ואפליקציות web בזמן אמת</li>
+                <li><strong>דוחה את המגבלות</strong> של המודל היחסי לטובת ביצועים וזמינות</li>
+                <li><strong>גמישות סכמה</strong> - Schema-less או Schema-flexible</li>
+                <li><strong>סקלביליות אופקית</strong> - הוספת שרתים לגדילה</li>
+            </ul>
+
+            <div class="tech-grid mt-lg">
+                <div class="tech-category">
+                    <h4>Document Stores</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">Couchbase</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>Key-Value Stores</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Redis</span>
+                        <span class="tech-tag">DynamoDB</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>Wide Column Stores</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Cassandra</span>
+                        <span class="tech-tag">HBase</span>
+                    </div>
+                </div>
+
+                <div class="tech-category">
+                    <h4>Graph Databases</h4>
+                    <div class="tech-list">
+                        <span class="tech-tag">Neo4j</span>
+                        <span class="tech-tag">Amazon Neptune</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 20: Search Engines -->
+        <section class="section">
+            <h2>מנועי חיפוש (Search Engines)</h2>
+
+            <p style="font-size: var(--text-lg); margin-bottom: var(--space-md);">
+                מנועי חיפוש ואנליטיקה אינטואיטיביים המסוגלים לחקור כמויות עצומות של נתונים למקרי שימוש שונים.
+            </p>
+
+            <div class="info-banner">
+                <p>דוגמאות: Google Ngram Viewer ו-Google Trends הם דוגמאות נאות לכוח של מנועי חיפוש בניתוח נתונים בסקאלה גדולה</p>
+            </div>
+
+            <h3>Elastic Stack - מנוע החיפוש הפופולרי ביותר</h3>
+
+            <div class="data-flow">
+                <div class="flow-step">
+                    <h4>1. Collection</h4>
+                    <p>Beats</p>
+                </div>
+                <div class="flow-step">
+                    <h4>2. Enrichment</h4>
+                    <p>Logstash</p>
+                </div>
+                <div class="flow-step">
+                    <h4>3. Storage</h4>
+                    <p>Elasticsearch</p>
+                </div>
+                <div class="flow-step">
+                    <h4>4. Alerting</h4>
+                    <p>X-Pack</p>
+                </div>
+                <div class="flow-step">
+                    <h4>5. Visualization</h4>
+                    <p>Kibana</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 21: Streaming Platforms -->
+        <section class="section">
+            <h2>פלטפורמות Data Streaming</h2>
+
+            <div class="highlight-box">
+                <h3>מטרה</h3>
+                <p>פלטפורמות streaming מתוכננות לטפל בנפחים גבוהים של זרמי נתונים בזמן אמת<br>
+                ומאפשרות בניית אפליקציות סקלביליות, עמידות לתקלות וזמינות גבוהה</p>
+            </div>
+
+            <h3>Apache Kafka</h3>
+            <div class="capability-card">
+                <h4>🔄 פלטפורמת ה-Streaming המובילה</h4>
+                <p>משמשת כ"מרכז מבוזר" בו <strong>Producers</strong> מפרסמים הודעות לנושאים (topics) ספציפיים,
+                ו-<strong>Consumers</strong> נרשמים לנושאים אלה כדי לקבל את ההודעות בזמן אמת.</p>
+
+                <div style="margin-top: var(--space-md);">
+                    <p><strong>ארכיטקטורה:</strong></p>
+                    <ul>
+                        <li><strong>Producers</strong> - שולחים הודעות ל-Kafka Cluster</li>
+                        <li><strong>Topics</strong> - מחולקים ל-Partitions לסקלביליות</li>
+                        <li><strong>Consumers</strong> - קוראים הודעות מה-Topics</li>
+                        <li><strong>ZooKeeper/KRaft</strong> - ניהול ותיאום המערכת</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: var(--space-md);">
+                    <p><strong>שימושים נפוצים:</strong></p>
+                    <div class="tech-list">
+                        <span class="tech-tag">Web Activity Tracking</span>
+                        <span class="tech-tag">Microservices</span>
+                        <span class="tech-tag">Monitoring</span>
+                        <span class="tech-tag">Real-time Analytics</span>
+                        <span class="tech-tag">IoT Data</span>
+                        <span class="tech-tag">Log Aggregation</span>
+                        <span class="tech-tag">Event Sourcing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 22: The Rise of Data Engineering -->
+        <section class="section">
+            <h2>עליית הנדסת הנתונים</h2>
+
+            <div class="highlight-box">
+                <h3>The Rise of Data Engineering</h3>
+                <p style="font-size: var(--text-xl);">מהנדסי נתונים הם עמוד השדרה של ארכיטקטורת הנתונים המודרנית</p>
+            </div>
+
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <h4>🏗️ עמוד השדרה של הארכיטקטורה</h4>
+                    <p>ברור כיום שמהנדסי נתונים מהווים את <span class="emphasis-text">עמוד השדרה</span> של ארכיטקטורת הנתונים המודרנית, המאפשרת פונקציונליות עסקית וצמיחה</p>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🎯 תפקיד רב-תחומי</h4>
+                    <p>הנדסת נתונים היא תפקיד רב-תחומי הדורש מערך רחב של כישורים, כמו גם ידע טכני ועסקי עמוק</p>
+                </div>
+
+                <div class="capability-card">
+                    <h4>🚀 חיוניות בעידן המודרני</h4>
+                    <p>העידן המודרני של ביג דאטה ובינה מלאכותית לא יכול לשרוד יום אחד ללא מהנדסי נתונים</p>
+                </div>
+            </div>
+
+            <h3 class="text-center mt-lg">מסע הנדסת הנתונים</h3>
+
+            <div class="data-flow">
+                <div class="flow-step">
+                    <h4>📚 לימוד</h4>
+                    <p>רכישת מיומנויות</p>
+                </div>
+                <div class="flow-step">
+                    <h4>🔧 יישום</h4>
+                    <p>בניית פתרונות</p>
+                </div>
+                <div class="flow-step">
+                    <h4>📊 ניתוח</h4>
+                    <p>הפקת תובנות</p>
+                </div>
+                <div class="flow-step">
+                    <h4>💡 חדשנות</h4>
+                    <p>יצירת ערך</p>
+                </div>
+                <div class="flow-step">
+                    <h4>🎯 השפעה</h4>
+                    <p>צמיחה עסקית</p>
+                </div>
+            </div>
+
+            <div class="conclusion-box">
+                <h3>המסקנה</h3>
+                <p>
+                    הנדסת נתונים היא לא רק מקצוע - היא התשתית הקריטית שעליה נבנה העתיד הדיגיטלי.<br>
+                    <strong class="text-gradient">כל ארגון מודרני זקוק למהנדסי נתונים מיומנים כדי להצליח בעידן הנתונים.</strong>
+                </p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

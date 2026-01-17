@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD & GitHub Actions - מדריך מקיף</title>
+    <style>
+        :root {
+            --primary-purple: #667eea;
+            --primary-blue: #3498db;
+            --primary-dark: #2c3e50;
+            --accent-orange: #e67e22;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #2c3e50;
+            --text-secondary: #555;
+            --border-color: #e9ecef;
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --space-md: 20px;
+            --space-lg: 30px;
+            --radius-md: 10px;
+            --transition-normal: 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-purple) 0%, #764ba2 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 20px auto;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .cicd-logo {
+            font-size: 3rem;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .search-container {
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            outline: none;
+            transition: all var(--transition-normal);
+        }
+
+        .search-box:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Top Navigation Bar */
+        .nav-container {
+            background: white;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .main-content {
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: var(--primary-dark);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-blue);
+        }
+
+        .section h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .info-box, .warning-box, .success-box {
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            border-right: 4px solid;
+        }
+
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: var(--primary-blue);
+        }
+
+        .warning-box {
+            background: rgba(231, 76, 60, 0.1);
+            border-color: var(--accent-red);
+        }
+
+        .success-box {
+            background: rgba(39, 174, 96, 0.1);
+            border-color: var(--accent-green);
+        }
+
+        .timeline {
+            position: relative;
+            padding-right: 40px;
+            margin: 30px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 20px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary-blue);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -28px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            border: 3px solid white;
+        }
+
+        .timeline-item h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid var(--primary-blue);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .pros-cons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pros-box, .cons-box {
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .pros-box {
+            background: rgba(39, 174, 96, 0.1);
+            border-right: 4px solid var(--accent-green);
+        }
+
+        .cons-box {
+            background: rgba(231, 76, 60, 0.1);
+            border-right: 4px solid var(--accent-red);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .code-block:hover {
+            background: #2a2a2a;
+        }
+
+        .code-block::before {
+            content: '📋 לחץ להעתקה';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.6);
+            color: #94a3b8;
+            padding: 4px 10px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover::before {
+            opacity: 1;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--primary-blue);
+        }
+
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--accent-green);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            transform: translateX(-400px);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        ul { padding-right: 25px; margin: 15px 0; }
+        li { margin-bottom: 10px; }
+        strong { color: var(--primary-dark); }
+        code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+
+        /* === SOLUTION TOGGLE === */
+        .solution-toggle {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .solution-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* === EXERCISE CARDS === */
+        .exercise-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .exercise-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        /* === DARK MODE === */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1c2e 0%, #3d2f5f 100%);
+        }
+
+        body.dark-mode .container {
+            background: #1a1c20;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .header {
+            background: linear-gradient(135deg, #000000 0%, #1e3a8a 100%);
+        }
+
+        body.dark-mode .search-container {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .search-box {
+            background: #374151;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .nav-container {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .nav-btn {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .nav-btn:hover {
+            background: rgba(52, 152, 219, 0.2);
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode .nav-btn.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        body.dark-mode .main-content {
+            background: #1a1c20;
+        }
+
+        body.dark-mode .section h2 {
+            color: #e2e8f0;
+            border-bottom-color: var(--primary-blue);
+        }
+
+        body.dark-mode .section h3,
+        body.dark-mode .section h4 {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .section p,
+        body.dark-mode .section li {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .info-box {
+            background: rgba(52, 152, 219, 0.15);
+            border-color: var(--primary-blue);
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(231, 76, 60, 0.15);
+            border-color: var(--accent-red);
+        }
+
+        body.dark-mode .success-box {
+            background: rgba(39, 174, 96, 0.15);
+            border-color: var(--accent-green);
+        }
+
+        body.dark-mode .feature-card,
+        body.dark-mode .comparison-box,
+        body.dark-mode .timeline-item,
+        body.dark-mode .exercise-card {
+            background: #2d3748;
+            border-top-color: var(--primary-blue);
+        }
+
+        body.dark-mode .feature-card h4,
+        body.dark-mode .comparison-box h4,
+        body.dark-mode .timeline-item h4 {
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode .pros-box {
+            background: rgba(39, 174, 96, 0.15);
+        }
+
+        body.dark-mode .cons-box {
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        body.dark-mode strong {
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode code {
+            background: #374151;
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                justify-content: flex-start;
+                overflow-x: scroll;
+                flex-wrap: nowrap;
+            }
+
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 0.85rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div style="font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; opacity: 0.9; margin-bottom: 10px;">
+                DATA ENGINEERING HUB
+            </div>
+            <h1>
+                <span class="cicd-logo">⚙️</span>
+                CI/CD & GitHub Actions
+            </h1>
+            <p>מדריך מקיף למהנדסי נתונים - אינטגרציה ופריסה רציפה</p>
+        </header>
+
+        <div class="search-container">
+            <div style="max-width: 1200px; margin: 0 auto; display: flex; gap: 15px; align-items: center;">
+                <input type="text" class="search-box" placeholder="🔍 חפש נושאים, מושגים או כלים..." id="searchInput" style="flex: 1;">
+                <button id="darkModeToggle" onclick="toggleDarkMode()" style="background: var(--primary-blue); border: none; padding: 12px 24px; border-radius: 25px; color: white; cursor: pointer; font-weight: 600; transition: all 0.3s; font-family: 'Segoe UI', sans-serif; white-space: nowrap;">
+                    🌙 מצב לילה
+                </button>
+            </div>
+        </div>
+
+        <!-- Top Navigation Bar -->
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <button class="nav-btn active" onclick="switchSection('intro')">🎯 מבוא</button>
+                <button class="nav-btn" onclick="switchSection('cicd-overview')">🔄 CI/CD</button>
+                <button class="nav-btn" onclick="switchSection('containers')">🐳 Containers</button>
+                <button class="nav-btn" onclick="switchSection('kubernetes')">☸️ Kubernetes</button>
+                <button class="nav-btn" onclick="switchSection('github-actions')">🎬 GitHub Actions</button>
+                <button class="nav-btn" onclick="switchSection('workflows')">📋 Workflows</button>
+                <button class="nav-btn" onclick="switchSection('more-examples')">🔥 דוגמאות</button>
+                <button class="nav-btn" onclick="switchSection('exercises')">📝 תרגילים</button>
+                <button class="nav-btn" onclick="switchSection('troubleshooting')">🔧 פתרון בעיות</button>
+                <button class="nav-btn" onclick="switchSection('bestpractices')">✨ Best Practices</button>
+                <button class="nav-btn" onclick="switchSection('quickref')">📚 Quick Ref</button>
+            </div>
+        </div>
+
+        <div style="padding: 20px;">
+            <main class="main-content">
+                <!-- מבוא -->
+                <section class="section active" id="intro">
+                    <h2>🎯 מבוא ל-CI/CD</h2>
+
+                    <div class="info-box">
+                        <h3>מהו CI/CD?</h3>
+                        <p><strong>CI/CD</strong> מייצג שני תהליכים מרכזיים בפיתוח תוכנה מודרני:</p>
+                        <ul>
+                            <li><strong>CI - Continuous Integration (אינטגרציה רציפה)</strong>: תהליך של שילוב שינויי קוד באופן תכוף ואוטומטי</li>
+                            <li><strong>CD - Continuous Deployment (פריסה רציפה)</strong>: תהליך של פריסת שינויים לסביבת הייצור באופן אוטומטי</li>
+                        </ul>
+                    </div>
+
+                    <h3>מטרות CI/CD</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>⚡ מהירות</h4>
+                            <p>קיצור זמן הגעת features למשתמשים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔒 אמינות</h4>
+                            <p>בדיקות אוטומטיות לפני כל פריסה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 אוטומציה</h4>
+                            <p>הפחתת טעויות אנוש</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 שקיפות</h4>
+                            <p>מעקב אחר כל שינוי</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- היסטוריה -->
+                <section class="section" id="history">
+                    <h2>📜 SDLC ההיסטורי</h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>ניהול גרסאות מרכזי</h4>
+                            <p>פיתוח תוכנה נוהל באמצעות מערכות ניהול גרסאות מרכזיות (Centralized VCS)</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>מחזורי פיתוח ארוכים</h4>
+                            <p>כל release עבר מחזורים ארוכים: פיתוח → בדיקה → תיקון → חזרה</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>גרסאות מוגבלות</h4>
+                            <p>הפקת גרסה לא הייתה אירוע תכוף</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>הפצה פיזית</h4>
+                            <p>תוכנה שוחררה בחבילות גרסה: דיסקים, חבילות התקנה</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>עדכון ידני</h4>
+                            <p>לקוחות עדכנו באופן אקטיבי את גרסת התוכנה שלהם</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- חסרונות -->
+                <section class="section" id="drawbacks">
+                    <h2>⚠️ החסרונות של SDLC ההיסטורי</h2>
+
+                    <div class="warning-box">
+                        <h3>בעיות מרכזיות:</h3>
+                        <ul>
+                            <li><strong>תיקוני באגים לוקחים זמן רב</strong> - מגיעים רק בגרסאות עתידיות</li>
+                            <li><strong>שיפורים מתרחשים בקפיצות</strong> - לא בצורה הדרגתית</li>
+                            <li><strong>הפקת release ידנית</strong> - מופעלת באופן ידני ולא אוטומטי</li>
+                            <li><strong>עלות גבוהה</strong> - של תיאום, בדיקות והפצה</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>💡 התוצאה:</strong> חוסר גמישות, תגובה איטית לבאגים, וחוויית משתמש לא אופטימלית</p>
+                    </div>
+                </section>
+
+                <!-- התפתחות -->
+                <section class="section" id="evolution">
+                    <h2>📈 התפתחות התוכנה</h2>
+
+                    <h3>🔀 מורכבות התוכנה</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li>מערכות הפכו מתוחכמות ומורכבות יותר</li>
+                            <li>מעבר ל-<strong>Microservices</strong> - הרבה חלקים נעים חלקית-עצמאיים</li>
+                            <li>קודי בסיס (codebase) הפכו מורכבים</li>
+                            <li><strong>ניהול גרסאות, תלויות ותאימות</strong> הפך קריטי</li>
+                        </ul>
+                    </div>
+
+                    <h3>📊 Git והמהפכה המבוזרת</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>Git</strong> הציג דרך סקלבילית וזריזה לפתח תוכנה</li>
+                            <li>מודל ה-branching המבוזר מאפשר פיתוח סימולטני</li>
+                            <li>מיזוג קוד ל-mainline הפך לאירוע תכוף</li>
+                            <li><strong>האתגר:</strong> ניהול ותיאום החלקים</li>
+                            <li><strong>קוד ה-mainline חייב להישאר יציב</strong> - באג בו מחייב החזרה וא restart תהליך הבדיקה</li>
+                        </ul>
+                    </div>
+
+                    <h3>👥 ארגוני R&D</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>📈 צמיחה</h4>
+                            <p>גידול במספר המפתחים והצוותים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏃 Agile</h4>
+                            <p>מתודולוגיות חדשות (Scrum)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>💎 ערך</h4>
+                            <p>התמקדות בערך וגמישות</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 מחזורים קצרים</h4>
+                            <p>פיתוח → בדיקה → שחרור</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Containers -->
+                <section class="section" id="containers">
+                    <h2>🐳 Containers & Microservices</h2>
+
+                    <div class="info-box">
+                        <h3>Containers מספקים דרכים חדשות להפוך את ה-SDLC לחזק:</h3>
+                        <ul>
+                            <li><strong>סביבות פיתוח ובדיקה מאוחדות</strong> - כולם עובדים באותה סביבה</li>
+                            <li><strong>הפקת חבילה (bundling) פשוטה</strong> - הכל ארוז ב-container</li>
+                            <li><strong>הפחתת חיכוך בפריסה</strong> - פחות תלות בסביבת ההרצה</li>
+                            <li><strong>Microservices הפכה לפופולרית</strong> - פירוק האפליקציה לחלקים עצמאיים רבים עם releases נפרדים אך מתואמים</li>
+                        </ul>
+                    </div>
+
+                    <h3>יתרונות Containers ב-SDLC</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>📦 אריזה</h4>
+                            <p>כל התלויות בתוך ה-container</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 העתקה</h4>
+                            <p>רץ זהה בכל סביבה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⚡ מהירות</h4>
+                            <p>עליה ופריסה מהירות</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔐 בידוד</h4>
+                            <p>אפליקציות מבודדות</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cloud -->
+                <section class="section" id="cloud">
+                    <h2>☁️ עידן הענן</h2>
+
+                    <h3>המהפכה: "As a Service"</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>IaaS - Infrastructure as a Service</h4>
+                            <p>ניהול קל של תשתית (servers, storage, networking)</p>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>PaaS - Platform as a Service</h4>
+                            <p>פלטפורמת פיתוח והרצה מוכנה</p>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>SaaS - Software as a Service</h4>
+                            <p>תוכנה כשירות - ללא versioning ידני</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h3>השפעה על SDLC:</h3>
+                        <ul>
+                            <li><strong>SaaS ביטל versioning ו-releasing מסורתיים</strong></li>
+                            <li>תוכנה מתעדכנת ומתוקנת באופן רציף</li>
+                            <li>לקוחות מצפים לעדכונים פרואקטיביים ללא פעולה מצידם</li>
+                            <li>דגש על <strong>continuous delivery</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Kubernetes -->
+                <section class="section" id="kubernetes">
+                    <h2>☸️ Kubernetes (K8s)</h2>
+
+                    <div class="info-box">
+                        <h3>מהו Kubernetes?</h3>
+                        <p><strong>Kubernetes</strong> הוא מערכת לתזמור קונטיינרים (Container Orchestration)</p>
+                        <ul>
+                            <li>שוחרר על ידי Google ב-2014 כפרויקט קוד פתוח</li>
+                            <li>חולל מהפכה בסביבות ההרצה המודרניות</li>
+                        </ul>
+                    </div>
+
+                    <h3>מאפיינים עיקריים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🎯 Orchestration</h4>
+                            <p>הרצת cluster של containers</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📈 Scale</h4>
+                            <p>נבנה להתרחב ולתמוך במשאבים דינמיים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>☁️ כל הענן</h4>
+                            <p>כל ספק ענן מספק K8s מנוהל</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🌍 סטנדרט</h4>
+                            <p>כל סביבת הרצה היא K8s cluster</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 התוצאה:</strong> K8s הפך לסטנדרט בתעשייה לניהול אפליקציות containerized בסביבות production</p>
+                    </div>
+                </section>
+
+                <!-- סקירת CI/CD -->
+                <section class="section" id="cicd-overview">
+                    <h2>🔄 סקירת CI/CD</h2>
+
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>🔄 Continuous Integration</h4>
+                            <ul>
+                                <li>שילוב רציף של חלקי קוד ו-branches שונים</li>
+                                <li>בנייה ובדיקה אוטומטית של הקוד</li>
+                                <li>זיהוי מוקדם של בעיות</li>
+                                <li>שמירה על mainline יציב</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>🚀 Continuous Deployment</h4>
+                            <ul>
+                                <li>גרסאות חדשות ארוזות ונבדקות אוטומטית</li>
+                                <li>פרסום תיקונים ושיפורים ברגע שהם מוכנים</li>
+                                <li>פריסה לסביבות שונות באוטומציה</li>
+                                <li>מעקב וניטור אחר deployments</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>תהליך CI/CD טיפוסי:</h3>
+                        <ol style="padding-right: 25px;">
+                            <li><strong>Code</strong> - המפתח כותב קוד</li>
+                            <li><strong>Commit</strong> - העלאה ל-Git</li>
+                            <li><strong>Build</strong> - בנייה אוטומטית</li>
+                            <li><strong>Test</strong> - הרצת בדיקות</li>
+                            <li><strong>Package</strong> - יצירת artifact (Docker image)</li>
+                            <li><strong>Deploy</strong> - פריסה לסביבה</li>
+                            <li><strong>Monitor</strong> - ניטור ומעקב</li>
+                        </ol>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>🎯 המטרה:</strong> מחזור קצר ככל האפשר מקוד לייצור, עם אוטומציה מקסימלית ואמינות גבוהה</p>
+                    </div>
+                </section>
+
+                <!-- Jenkins -->
+                <section class="section" id="jenkins">
+                    <h2>🔧 Jenkins</h2>
+
+                    <div class="info-box">
+                        <h3>מהו Jenkins?</h3>
+                        <ul>
+                            <li>פלטפורמת אוטומציה לתהליכי CI/CD</li>
+                            <li>הוצג ב-2011</li>
+                            <li><strong>קוד פתוח</strong> (Open-Source)</li>
+                            <li>ניתן להתאמה אישית והרחבה רחבה</li>
+                            <li>שוק של plugins חינמיים</li>
+                        </ul>
+                    </div>
+
+                    <h3>מאפיינים מרכזיים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>⚙️ Job Runner</h4>
+                            <p>הגדרת jobs לטסקים שונים</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🌳 היררכיה</h4>
+                            <p>מבנה jobs היררכי</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔐 הרשאות</h4>
+                            <p>ניהול משתמשים וקבוצות</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔄 Triggers</h4>
+                            <p>הפעלה אוטומטית (git push, merge)</p>
+                        </div>
+                    </div>
+
+                    <h3>ארכיטקטורה מבוזרת</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><strong>Master-Slave Architecture</strong></li>
+                            <li>אחד או יותר Jenkins masters מנהלים את ה-jobs</li>
+                            <li>Jobs רצים על slaves שונים (servers)</li>
+                            <li>שיפור ביצועים ומהירות לפרויקטים גדולים</li>
+                            <li>סקלביליות של מערכת ה-CI/CD</li>
+                        </ul>
+                    </div>
+
+                    <h3>Jenkinsfile</h3>
+                    <div class="code-block">pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'make test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'make deploy'
+            }
+        }
+    }
+}</div>
+
+                    <div class="pros-cons-container">
+                        <div class="pros-box">
+                            <h4>✅ יתרונות Jenkins</h4>
+                            <ul>
+                                <li>קוד פתוח וקהילתי</li>
+                                <li>רב-תכליתי</li>
+                                <li>ניתן להתאמה אישית רבה</li>
+                                <li>ניתן להרחבה</li>
+                                <li>חלוץ - לא היה משהו טוב יותר בזמנו</li>
+                            </ul>
+                        </div>
+                        <div class="cons-box">
+                            <h4>❌ חסרונות Jenkins</h4>
+                            <ul>
+                                <li>התקנה ותחזוקה מורכבות</li>
+                                <li>מיושן (לא חלק כמו CI/CD מודרני)</li>
+                                <li>שפת Groovy (שנאויה)</li>
+                                <li>בעיות אבטחה ב-platform וב-plugins</li>
+                                <li>over-customizable - כל ארגון ממציא את הגלגל</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- מערכות CI/CD -->
+                <section class="section" id="cicd-systems">
+                    <h2>🛠️ מערכות CI/CD</h2>
+
+                    <div class="info-box">
+                        <p>לצד ואחרי Jenkins, פותחו מערכות אחרות שמתמקדות ספציפית ב-CI/CD</p>
+                    </div>
+
+                    <h3>מערכות CI/CD פופולריות</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔄 Travis CI</h4>
+                            <p>פופולרי בקוד פתוח</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>⭕ Circle CI</h4>
+                            <p>מהיר וגמיש</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏢 TeamCity</h4>
+                            <p>מ-JetBrains</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🚀 GoCD</h4>
+                            <p>מתמקד ב-CD</p>
+                        </div>
+                    </div>
+
+                    <h3>☁️ CI/CD מגובה ענן</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>AWS</h4>
+                            <ul>
+                                <li>AWS CodeBuild</li>
+                                <li>AWS CodePipeline</li>
+                                <li>AWS CodeDeploy</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>GCP</h4>
+                            <ul>
+                                <li>Google Cloud Build</li>
+                                <li>Google Cloud Run</li>
+                                <li>Cloud Deploy</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>Azure</h4>
+                            <ul>
+                                <li>Azure Pipelines</li>
+                                <li>Azure DevOps</li>
+                                <li>Azure Container Registry</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>📦 VCS-Backed CI/CD</h3>
+                    <div class="success-box">
+                        <p>מערכות ניהול גרסאות פיתחו מערכות CI/CD משלהן:</p>
+                        <ul>
+                            <li><strong>GitHub Actions</strong> - אינטגרציה מלאה עם GitHub</li>
+                            <li><strong>GitLab CI/Pipelines</strong> - חלק מ-GitLab</li>
+                            <li><strong>BitBucket Pipelines</strong> - מאת Atlassian</li>
+                        </ul>
+                        <p><strong>💡 יתרון:</strong> קישור טבעי בין ניהול קוד ל-CI/CD - מערכת אחת לכל ה-SDLC</p>
+                    </div>
+                </section>
+
+                <!-- Infrastructure as Code -->
+                <section class="section" id="iac">
+                    <h2>📝 Infrastructure as Code (IaC)</h2>
+
+                    <div class="info-box">
+                        <h3>מהו IaC?</h3>
+                        <p><strong>Infrastructure as Code</strong> הוא הקונספט של ניהול התשתית דרך קוד</p>
+                        <ul>
+                            <li>מניפסטים מתארים את דרישות ה-provisioning</li>
+                            <li>Stack של IaC שומר את המצב הנוכחי של משאבים</li>
+                            <li>שינויים במניפסטים מובילים ל-delta של דרישות</li>
+                            <li>משאבים מוחלפים אוטומטית כדי לשקף את הדרישות החדשות</li>
+                        </ul>
+                    </div>
+
+                    <h3>טכנולוגיות IaC מובילות</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>🌍 Terraform</h4>
+                            <p><strong>Stateful provisioning</strong> של תשתית (cross-)cloud</p>
+                            <div class="code-block" style="margin-top: 15px;">resource "aws_instance" "web" {
+  ami           = "ami-12345678"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "WebServer"
+  }
+}</div>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>⎈ Helm</h4>
+                            <p>ניהול (define, install, upgrade) אפליקציות K8s</p>
+                            <div class="code-block" style="margin-top: 15px;">helm install my-app ./my-chart
+helm upgrade my-app ./my-chart
+helm rollback my-app</div>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>🔧 Cloud SDKs</h4>
+                            <p>AWS CDK, Go CDK - SDKs לענן</p>
+                            <ul style="margin-top: 10px;">
+                                <li>Templates לשלד הכללי</li>
+                                <li>Values/Variables לפרטים ספציפיים</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 שימוש ב-CD:</strong> jobs של CD משתמשים ב-IaC לניהול התשתית והפריסה</p>
+                    </div>
+                </section>
+
+                <!-- DevOps -->
+                <section class="section" id="devops">
+                    <h2>👥 עליית DevOps</h2>
+
+                    <div class="info-box">
+                        <h3>מהו DevOps?</h3>
+                        <p><strong>DevOps = Development + Operations</strong></p>
+                        <p>מתודולוגיה: סט של עקרונות ופרקטיקות</p>
+                        <ul>
+                            <li>שילוב ואוטומציה של עבודת פיתוח תוכנה ו-IT</li>
+                            <li>ניהול ופיתוח באמצעות הכלים שתוארו קודם</li>
+                        </ul>
+                    </div>
+
+                    <h3>תפקידי מהנדסי DevOps</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>🔄 CI Management</h4>
+                            <p>ניהול ופיתוח אוטומציית אינטגרציה רציפה</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🚀 Deployment</h4>
+                            <p>פריסה לסביבות (tests, production)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🏗️ Infrastructure</h4>
+                            <p>ניהול תשתית עם IaC</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Monitoring</h4>
+                            <p>ניטור ו-observability</p>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <p><strong>💡 שיתוף פעולה:</strong> מהנדסי R&D מסתמכים ומתקשרים באופן תכוף עם תשתית DevOps</p>
+                    </div>
+                </section>
+
+                <!-- GitHub Actions -->
+                <section class="section" id="github-actions">
+                    <h2>🎬 GitHub Actions</h2>
+
+                    <div class="info-box">
+                        <h3>למה GitHub Actions?</h3>
+                        <ul>
+                            <li>המקום המוביל לאירוח פרויקטי קוד פתוח</li>
+                            <li>מגוון פרויקטים מציע טווח רחב של דוגמאות CI/CD</li>
+                            <li>פרויקטים ציבוריים נהנים מ-features מתקדמים בחינם</li>
+                            <li>תמיכה נרחבת ב-actions ו-workflows של צד שלישי</li>
+                            <li>framework יחסית פשוט וישיר</li>
+                        </ul>
+                    </div>
+
+                    <h3>מושגים מרכזיים</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>📅 Events</h4>
+                            <p>אירועים שמפעילים workflows:</p>
+                            <ul>
+                                <li>Push לענף</li>
+                                <li>Pull Request</li>
+                                <li>Timer (schedule)</li>
+                                <li>ועוד...</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>📋 Workflows</h4>
+                            <p>תהליכים אוטומטיים:</p>
+                            <ul>
+                                <li>מוגדרים בקבצי YAML</li>
+                                <li>נמצאים ב-.github/workflows</li>
+                                <li>מכילים job אחד או יותר</li>
+                            </ul>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>⚙️ Jobs & Steps</h4>
+                            <p>יחידות ביצוע:</p>
+                            <ul>
+                                <li>Job רץ על container ייעודי</li>
+                                <li>Steps מבצעים פעולות</li>
+                                <li>רצים ברצף או במקביל</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>מבנה ארכיטקטורה</h3>
+                    <div class="code-block">Workflow
+├── Event (trigger)
+├── Job 1
+│   ├── runs-on: ubuntu-latest
+│   ├── Step 1: Checkout code
+│   ├── Step 2: Setup Node
+│   └── Step 3: Run tests
+└── Job 2
+    ├── needs: Job 1
+    ├── Step 1: Build
+    └── Step 2: Deploy</div>
+                </section>
+
+                <!-- Workflows -->
+                <section class="section" id="workflows">
+                    <h2>📋 Workflows ב-GitHub Actions</h2>
+
+                    <div class="info-box">
+                        <h3>הגדרת Workflow</h3>
+                        <ul>
+                            <li>כל workflow מוגדר בקובץ YAML</li>
+                            <li>קבצים נמצאים תחת <code>.github/workflows</code></li>
+                            <li>Workflow חייב להגדיר:
+                                <ul style="margin-top: 10px;">
+                                    <li>איזה events מפעילים אותו</li>
+                                    <li>Job אחד או יותר</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3>Jobs</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li>כל job רץ על container ייעודי בתוך מכונה וירטואלית</li>
+                            <li>Job חייב להגדיר:
+                                <ul style="margin-top: 10px;">
+                                    <li>את ה-container image לשימוש</li>
+                                    <li>Step אחד או יותר לביצוע</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3>Steps</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <h4>Script Steps</h4>
+                            <p>Steps שמריצים script חייבים להגדיר את ה-script</p>
+                            <div class="code-block" style="margin-top: 10px;">- name: Run tests
+  run: npm test</div>
+                        </div>
+                        <div class="comparison-box">
+                            <h4>Action Steps</h4>
+                            <p>Steps שמשתמשים ב-actions קיימים חייבים להגדיר:</p>
+                            <ul style="margin-top: 10px;">
+                                <li>נתיב מלא וגרסה</li>
+                                <li>כל הארגומנטים הנדרשים</li>
+                            </ul>
+                            <div class="code-block" style="margin-top: 10px;">- uses: actions/checkout@v3
+  with:
+    ref: main</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- דוגמה -->
+                <section class="section" id="example">
+                    <h2>💡 דוגמה מעשית</h2>
+
+                    <div class="info-box">
+                        <h3>Workflow פשוט שרץ על כל push:</h3>
+                    </div>
+
+                    <div class="code-block">name: learn-github-actions
+on: [push]
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install -g bats
+      - run: |
+          echo "testing bats version:"
+          bats -v</div>
+
+                    <h3>הסבר שלב אחר שלב</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>name: learn-github-actions</h4>
+                            <p>שם ה-workflow שיוצג ב-UI</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>on: [push]</h4>
+                            <p>הפעלה על כל push לכל ענף</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>jobs: check-bats-version</h4>
+                            <p>job בודד בשם check-bats-version</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>runs-on: ubuntu-latest</h4>
+                            <p>שימוש ב-container image של Ubuntu</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>actions/checkout@v3</h4>
+                            <p>git checkout של הקוד (ברירת מחדל: main)</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>actions/setup-node@v3</h4>
+                            <p>התקנת Node.js גרסה 14</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>run: npm install -g bats</h4>
+                            <p>הרצת script שמתקין את חבילת bats</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>run: | (multiline)</h4>
+                            <p>הדפסת הודעה והצגת גרסת bats</p>
+                        </div>
+                    </div>
+
+                    <h3>🔍 צפייה ב-Actions</h3>
+                    <div class="success-box">
+                        <ol style="padding-right: 25px;">
+                            <li>עבור לטאב <strong>Actions</strong> ב-repository שלך ב-GitHub</li>
+                            <li>לחץ על workflow בפאנל הצדדי השמאלי</li>
+                            <li>לחץ על הרצת workflow מהרשימה</li>
+                            <li>בחר job מהגרף</li>
+                            <li>בחר step</li>
+                            <li>ראה את ה-console output של ה-step הספציפי</li>
+                        </ol>
+                    </div>
+
+                    <h3>דוגמאות נוספות</h3>
+
+                    <h4>CI למהנדסי נתונים - Python</h4>
+                    <div class="code-block">name: Python CI
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: pytest --cov=./ --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3</div>
+
+                    <h4>Docker Build & Push</h4>
+                    <div class="code-block">name: Docker Build
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: myusername/myapp:latest</div>
+
+                    <h3>📚 משאבים נוספים</h3>
+                    <div class="info-box">
+                        <ul>
+                            <li><a href="https://docs.github.com/en/actions" target="_blank">GitHub Actions - תיעוד מלא</a></li>
+                            <li><a href="https://docs.github.com/en/actions/learn-github-actions" target="_blank">Learn GitHub Actions</a></li>
+                            <li><a href="https://docs.github.com/en/actions/quickstart" target="_blank">Quickstart</a></li>
+                            <li><a href="https://github.com/marketplace?type=actions" target="_blank">GitHub Actions Marketplace</a></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- דוגמאות נוספות -->
+                <section class="section" id="more-examples">
+                    <h2>🔥 דוגמאות Workflows נוספות</h2>
+
+                    <h3>1. CI/CD למהנדסי נתונים - Spark Job</h3>
+                    <div class="code-block">name: Spark Job CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install PySpark
+        run: |
+          pip install pyspark pytest
+          pip install -r requirements.txt
+
+      - name: Run Unit Tests
+        run: pytest tests/
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: docker build -t my-spark-job:${{ github.sha }} .
+
+      - name: Push to Registry
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push my-spark-job:${{ github.sha }}</div>
+
+                    <h3 style="margin-top: 40px;">2. Airflow DAG Validation</h3>
+                    <div class="code-block">name: Airflow DAG Validation
+
+on:
+  pull_request:
+    paths:
+      - 'dags/**'
+
+jobs:
+  validate-dags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Airflow
+        run: |
+          pip install apache-airflow==2.7.0
+          pip install -r requirements.txt
+
+      - name: Validate DAG Syntax
+        run: |
+          python -m py_compile dags/*.py
+
+      - name: Test DAG Imports
+        run: |
+          python -c "from airflow.models import DagBag; d = DagBag(dag_folder='dags/'); assert len(d.import_errors) == 0"</div>
+
+                    <h3 style="margin-top: 40px;">3. Data Quality Tests</h3>
+                    <div class="code-block">name: Data Quality Tests
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Daily at 8 AM
+  workflow_dispatch:
+
+jobs:
+  data-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install great_expectations pandas
+
+      - name: Run Data Quality Checks
+        run: |
+          python scripts/run_data_quality.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+      - name: Send Slack Notification on Failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "❌ Data Quality checks failed!"
+            }</div>
+
+                    <h3 style="margin-top: 40px;">4. Deploy to Kubernetes</h3>
+                    <div class="code-block">name: Deploy to K8s
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure kubectl
+        uses: azure/k8s-set-context@v1
+        with:
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+          kubectl rollout status deployment/my-app
+
+      - name: Verify Deployment
+        run: |
+          kubectl get pods
+          kubectl get services</div>
+
+                    <h3 style="margin-top: 40px;">5. Multi-Environment Deployment</h3>
+                    <div class="code-block">name: Multi-Environment Deploy
+
+on:
+  push:
+    branches: [ main, staging, develop ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Determine Environment
+        id: env
+        run: |
+          if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+            echo "environment=production" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == 'refs/heads/staging' ]]; then
+            echo "environment=staging" >> $GITHUB_OUTPUT
+          else
+            echo "environment=development" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to ${{ steps.env.outputs.environment }}
+        run: |
+          echo "Deploying to ${{ steps.env.outputs.environment }}"
+          ./deploy.sh ${{ steps.env.outputs.environment }}</div>
+
+                    <h3 style="margin-top: 40px;">6. Scheduled Data Pipeline</h3>
+                    <div class="code-block">name: Daily ETL Pipeline
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM daily
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  etl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run ETL
+        run: python scripts/daily_etl.py
+        env:
+          SOURCE_DB: ${{ secrets.SOURCE_DB }}
+          TARGET_DB: ${{ secrets.TARGET_DB }}
+
+      - name: Notify on Success
+        if: success()
+        run: echo "ETL completed successfully"
+
+      - name: Notify on Failure
+        if: failure()
+        run: echo "ETL failed - check logs"</div>
+
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h4>💡 טיפים לWorkflows:</h4>
+                        <ul>
+                            <li>השתמש ב-<code>workflow_dispatch</code> להפעלה ידנית</li>
+                            <li>הגדר <code>needs</code> לתלויות בין jobs</li>
+                            <li>השתמש ב-<code>if: success()</code> או <code>if: failure()</code> לlogic תנאי</li>
+                            <li>שמור secrets ב-GitHub Secrets (לא בקוד!)</li>
+                            <li>הוסף caching ל-dependencies (מהיר יותר!)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- תרגילים -->
+                <section class="section" id="exercises">
+                    <h2>📝 תרגילים מעשיים</h2>
+
+                    <div class="exercise-card">
+                        <h4>תרגיל 1: Workflow ראשון - Python Testing</h4>
+                        <p><strong>מטרה:</strong> צור workflow שמריץ tests על כל push</p>
+                        <p><strong>דרישות:</strong></p>
+                        <ul>
+                            <li>יווצר ב-<code>.github/workflows/test.yml</code></li>
+                            <li>ירוץ על push ל-main</li>
+                            <li>יתקין Python 3.9</li>
+                            <li>יתקין dependencies מ-requirements.txt</li>
+                            <li>ירוץ pytest</li>
+                        </ul>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="code-block">name: Python Tests
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: pytest tests/ -v</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h4>תרגיל 2: Docker Build & Push</h4>
+                        <p><strong>מטרה:</strong> בנה Docker image ושלח ל-DockerHub</p>
+                        <p><strong>דרישות:</strong></p>
+                        <ul>
+                            <li>Build image רק אחרי tests מצליחים</li>
+                            <li>Tag עם commit SHA</li>
+                            <li>Push ל-DockerHub</li>
+                            <li>השתמש ב-GitHub Secrets לcredentials</li>
+                        </ul>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="code-block">name: Docker Build and Push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: |
+          pip install pytest
+          pytest tests/
+
+  build:
+    needs: test  # רק אחרי שtests עברו
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            myusername/myapp:latest
+            myusername/myapp:${{ github.sha }}</div>
+                        </div>
+                    </div>
+
+                    <div class="exercise-card">
+                        <h4>תרגיל 3: Scheduled Workflow - Daily Report</h4>
+                        <p><strong>מטרה:</strong> צור workflow שרץ אוטומטית כל יום</p>
+                        <p><strong>דרישות:</strong></p>
+                        <ul>
+                            <li>ירוץ כל יום ב-7 בבוקר</li>
+                            <li>ירוץ גם באופן ידני (workflow_dispatch)</li>
+                            <li>יריץ סקריפט Python</li>
+                            <li>ישלח notification על הצלחה/כשלון</li>
+                        </ul>
+
+                        <button class="solution-toggle" onclick="toggleSolution(this)">🔓 הצג פתרון</button>
+                        <div class="solution-content">
+                            <div class="code-block">name: Daily Report
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 7 AM daily
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Generate Report
+        run: python scripts/daily_report.py
+
+      - name: Success Notification
+        if: success()
+        run: echo "✅ Report generated successfully"
+
+      - name: Failure Notification
+        if: failure()
+        run: echo "❌ Report generation failed"</div>
+                        </div>
+                    </div>
+
+                    <div class="success-box" style="margin-top: 30px;">
+                        <h4>🎓 מעולה!</h4>
+                        <p>עכשיו אתה יודע:</p>
+                        <ul>
+                            <li>✅ ליצור workflows בסיסיים</li>
+                            <li>✅ לבנות ולהעלות Docker images</li>
+                            <li>✅ להגדיר scheduled workflows</li>
+                            <li>✅ להשתמש ב-GitHub Secrets</li>
+                            <li>✅ ליצור תלויות בין jobs</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- פתרון בעיות -->
+                <section class="section" id="troubleshooting">
+                    <h2>🔧 פתרון בעיות ב-GitHub Actions</h2>
+
+                    <h3>❌ Workflow לא רץ</h3>
+                    <div class="warning-box">
+                        <h4>סיבות אפשריות:</h4>
+                        <ul>
+                            <li>קובץ ה-YAML לא ב-<code>.github/workflows/</code></li>
+                            <li>שגיאת syntax ב-YAML</li>
+                            <li>ה-trigger (on:) לא התקיים</li>
+                            <li>Workflow disabled</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ פתרונות:</h4>
+                        <div class="code-block"># 1. בדוק מיקום הקובץ
+ls .github/workflows/
+
+# 2. validate YAML syntax
+# השתמש ב-YAML validator online או:
+yamllint .github/workflows/my-workflow.yml
+
+# 3. בדוק ב-GitHub UI
+# Actions tab → All workflows → בחר workflow
+# תראה אם יש שגיאות</div>
+
+                        <p style="margin-top: 20px;"><strong>טיפ:</strong> בדוק את ה-"Actions" tab ב-repository - תראה לוג של כל ההרצות</p>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">⏱️ Workflow איטי מדי</h3>
+                    <div class="warning-box">
+                        <h4>בעיות נפוצות:</h4>
+                        <ul>
+                            <li>התקנת dependencies לוקחת זמן</li>
+                            <li>Build כבד</li>
+                            <li>Tests ארוכים</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ אופטימיזציות:</h4>
+
+                        <h5>1. Cache Dependencies:</h5>
+                        <div class="code-block">- name: Cache pip packages
+  uses: actions/cache@v3
+  with:
+    path: ~/.cache/pip
+    key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+- name: Install dependencies
+  run: pip install -r requirements.txt</div>
+
+                        <h5 style="margin-top: 20px;">2. Matrix Strategy (Parallel):</h5>
+                        <div class="code-block">jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}</div>
+
+                        <h5 style="margin-top: 20px;">3. Job Dependencies:</h5>
+                        <div class="code-block"># הרץ jobs קלים קודם, כבדים רק אם הקלים עברו
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: flake8 .  # Fast!
+
+  test:
+    needs: lint  # רק אם lint עבר
+    runs-on: ubuntu-latest
+    steps:
+      - run: pytest  # Slower
+
+  deploy:
+    needs: [lint, test]  # רק אם שניהם עברו
+    runs-on: ubuntu-latest
+    steps:
+      - run: ./deploy.sh</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔐 Secrets לא עובדים</h3>
+                    <div class="warning-box">
+                        <h4>בעיות:</h4>
+                        <ul>
+                            <li>Secret לא מוגדר</li>
+                            <li>שם Secret לא נכון</li>
+                            <li>Secret לא זמין לworkflow</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4>✅ פתרון:</h4>
+                        <ol>
+                            <li>Settings → Secrets and variables → Actions</li>
+                            <li>New repository secret</li>
+                            <li>שם ב-UPPERCASE (convention)</li>
+                            <li>גישה ב-workflow: <code>${{ secrets.SECRET_NAME }}</code></li>
+                        </ol>
+
+                        <div class="code-block" style="margin-top: 15px;">- name: Use Secret
+  run: echo "API Key is set"
+  env:
+    API_KEY: ${{ secrets.API_KEY }}
+
+# ⚠️ לעולם אל תדפיס secrets!
+# ❌ run: echo ${{ secrets.API_KEY }}  # BAD!
+# ✅ run: echo "Using API key..."     # GOOD!</div>
+                    </div>
+
+                    <div class="info-box" style="margin-top: 40px;">
+                        <h4>🔍 Debug Checklist:</h4>
+                        <ol>
+                            <li>✅ קובץ ב-<code>.github/workflows/</code>?</li>
+                            <li>✅ YAML syntax תקין?</li>
+                            <li>✅ Trigger event קרה?</li>
+                            <li>✅ Secrets מוגדרים?</li>
+                            <li>✅ Permissions נכונים?</li>
+                            <li>✅ בדוק logs ב-Actions tab</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Quick Reference -->
+                <section class="section" id="quickref">
+                    <h2>📋 Quick Reference</h2>
+
+                    <h3>🎯 Trigger Events נפוצים</h3>
+                    <div class="code-block"># Push to specific branch
+on:
+  push:
+    branches: [ main, develop ]
+
+# Pull Request
+on:
+  pull_request:
+    branches: [ main ]
+
+# Multiple events
+on: [push, pull_request]
+
+# Scheduled (cron)
+on:
+  schedule:
+    - cron: '0 8 * * *'  # 8 AM daily
+
+# Manual trigger
+on:
+  workflow_dispatch:
+
+# Tag creation
+on:
+  push:
+    tags:
+      - 'v*'  # v1.0, v2.0, etc.
+
+# Path filtering
+on:
+  push:
+    paths:
+      - 'src/**'
+      - '!docs/**'  # Ignore docs</div>
+
+                    <h3 style="margin-top: 40px;">⚙️ Job Configuration</h3>
+                    <div class="code-block">jobs:
+  my-job:
+    # OS
+    runs-on: ubuntu-latest  # or: windows-latest, macos-latest
+
+    # Environment
+    env:
+      NODE_ENV: production
+
+    # Dependencies
+    needs: [previous-job]
+
+    # Conditional
+    if: github.ref == 'refs/heads/main'
+
+    # Timeout
+    timeout-minutes: 30
+
+    # Strategy (parallel)
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+
+    steps:
+      # your steps here...</div>
+
+                    <h3 style="margin-top: 40px;">📦 Actions שימושיים</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h4>actions/checkout@v3</h4>
+                            <p>Clone הrepository</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>actions/setup-python@v4</h4>
+                            <p>התקנת Python</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>actions/setup-node@v3</h4>
+                            <p>התקנת Node.js</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>actions/cache@v3</h4>
+                            <p>Cache dependencies</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>docker/login-action@v2</h4>
+                            <p>Login ל-DockerHub</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>docker/build-push-action@v4</h4>
+                            <p>Build & Push Docker</p>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔑 Context Variables</h3>
+                    <div class="code-block"># GitHub Context
+${{ github.sha }}           # Commit SHA
+${{ github.ref }}           # Branch/tag ref
+${{ github.repository }}    # owner/repo
+${{ github.actor }}         # User who triggered
+${{ github.event_name }}    # Event type
+
+# Runner Context
+${{ runner.os }}            # Linux, Windows, macOS
+${{ runner.temp }}          # Temp directory
+
+# Job Context
+${{ job.status }}           # success, failure, cancelled
+
+# Steps Context
+${{ steps.step-id.outputs.result }}  # Output from step</div>
+                </section>
+
+                <!-- Best Practices -->
+                <section class="section" id="bestpractices">
+                    <h2>✨ CI/CD Best Practices</h2>
+
+                    <h3>🎯 Workflow Design</h3>
+                    <div class="success-box">
+                        <h4>✅ עשה:</h4>
+                        <ul>
+                            <li><strong>קטן ומהיר:</strong> שמור workflows פשוטים וממוקדים</li>
+                            <li><strong>Fail Fast:</strong> הרץ tests מהירים קודם</li>
+                            <li><strong>Cache:</strong> השתמש ב-caching לdependencies</li>
+                            <li><strong>Parallel Jobs:</strong> הרץ במקביל כשאפשר</li>
+                            <li><strong>Descriptive Names:</strong> שמות ברורים ל-workflows, jobs, steps</li>
+                            <li><strong>Status Badges:</strong> הוסף badges ל-README</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>❌ אל תעשה:</h4>
+                        <ul>
+                            <li>❌ Hardcode secrets בקוד</li>
+                            <li>❌ workflows ענקיים בקובץ אחד</li>
+                            <li>❌ הרצת tests איטיים על כל commit קטן</li>
+                            <li>❌ Deploy לproduction ללא tests</li>
+                            <li>❌ שכחת timeout (workflow יכול לרוץ לנצח!)</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🔒 Security Best Practices</h3>
+                    <div class="warning-box">
+                        <h4>⚠️ אבטחה:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li>☐ <strong>Secrets:</strong> כל credentials ב-GitHub Secrets</li>
+                            <li>☐ <strong>Pin Versions:</strong> השתמש ב-@v3 לא @main</li>
+                            <li>☐ <strong>Least Privilege:</strong> הרשאות מינימליות</li>
+                            <li>☐ <strong>Review Actions:</strong> בדוק third-party actions</li>
+                            <li>☐ <strong>Branch Protection:</strong> הגן על main branch</li>
+                            <li>☐ <strong>Required Reviews:</strong> approve לפני merge</li>
+                            <li>☐ <strong>Audit Logs:</strong> עקוב אחר פעילות</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">⚡ Performance Tips</h3>
+                    <div class="success-box">
+                        <h4>מהירות:</h4>
+                        <ul>
+                            <li><strong>Cache:</strong> dependencies, build artifacts</li>
+                            <li><strong>Artifacts:</strong> שמור בין jobs</li>
+                            <li><strong>Conditional Steps:</strong> <code>if:</code> להרצה סלקטיבית</li>
+                            <li><strong>Matrix:</strong> parallel testing</li>
+                            <li><strong>Self-Hosted Runners:</strong> לפרויקטים גדולים</li>
+                        </ul>
+
+                        <div class="code-block" style="margin-top: 15px;"># Cache example
+- name: Cache node modules
+  uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+# Conditional step
+- name: Deploy
+  if: github.ref == 'refs/heads/main'
+  run: ./deploy.sh</div>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">🎯 Production Checklist</h3>
+                    <div class="info-box">
+                        <h4>לפני Production:</h4>
+                        <ul style="list-style: none; padding: 0; font-size: 1.05rem;">
+                            <li>☐ <strong>Tests:</strong> unit, integration, e2e</li>
+                            <li>☐ <strong>Linting:</strong> code quality checks</li>
+                            <li>☐ <strong>Security Scan:</strong> vulnerability scanning</li>
+                            <li>☐ <strong>Build:</strong> אוטומטי ועובד</li>
+                            <li>☐ <strong>Deploy:</strong> staging אוטומטי</li>
+                            <li>☐ <strong>Approval:</strong> manual approval לproduction</li>
+                            <li>☐ <strong>Rollback:</strong> תוכנית rollback</li>
+                            <li>☐ <strong>Monitoring:</strong> alerts על failures</li>
+                            <li>☐ <strong>Documentation:</strong> README עם badges</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">📊 Monitoring & Notifications</h3>
+                    <div class="code-block"># Slack notification on failure
+- name: Slack Notification
+  if: failure()
+  uses: slackapi/slack-github-action@v1
+  with:
+    webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+    payload: |
+      {
+        "text": "❌ Build failed: ${{ github.repository }}",
+        "blocks": [
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": "*Build Failed*\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref }}\nCommit: ${{ github.sha }}"
+            }
+          }
+        ]
+      }
+
+# Email notification (built-in)
+# Settings → Notifications → Actions → Email</div>
+
+                    <h3 style="margin-top: 40px;">📚 משאבים נוספים</h3>
+                    <div class="success-box">
+                        <ul>
+                            <li><strong>Documentation:</strong> docs.github.com/actions</li>
+                            <li><strong>Marketplace:</strong> github.com/marketplace (אלפי actions מוכנים!)</li>
+                            <li><strong>Examples:</strong> github.com/actions/starter-workflows</li>
+                            <li><strong>Community:</strong> GitHub Community Discussions</li>
+                            <li><strong>Learning:</strong> GitHub Skills (hands-on tutorials)</li>
+                        </ul>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <div class="copy-notification" id="copyNotification">
+        ✅ הועתק ללוח!
+    </div>
+
+    <script>
+        // Navigation
+        function switchSection(sectionId) {
+            // Remove active from all buttons and sections
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+
+            // Add active to clicked button
+            event.currentTarget.classList.add('active');
+
+            // Show section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Copy code blocks
+        document.querySelectorAll('.code-block').forEach(code => {
+            code.addEventListener('click', () => {
+                navigator.clipboard.writeText(code.textContent).then(() => {
+                    const notification = document.getElementById('copyNotification');
+                    notification.classList.add('show');
+                    setTimeout(() => notification.classList.remove('show'), 2000);
+                });
+            });
+            code.style.cursor = 'pointer';
+            code.title = 'לחץ להעתקה';
+        });
+
+        // Search
+        const searchInput = document.getElementById('searchInput');
+        const allSections = document.querySelectorAll('.section');
+        const allContent = document.querySelectorAll('.section *');
+
+        const originalContent = new Map();
+        allContent.forEach(el => {
+            originalContent.set(el, el.innerHTML);
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            if (searchTerm === '') {
+                allContent.forEach(el => {
+                    el.innerHTML = originalContent.get(el);
+                });
+                allSections.forEach(section => section.classList.remove('active'));
+                document.getElementById('intro').classList.add('active');
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelector('.nav-item[data-section="intro"]').classList.add('active');
+                return;
+            }
+
+            let hasResults = false;
+            allSections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.classList.add('active');
+                    hasResults = true;
+
+                    // Highlight
+                    section.querySelectorAll('p, li, h3, h4').forEach(el => {
+                        const original = originalContent.get(el);
+                        if (original && el.textContent.toLowerCase().includes(searchTerm)) {
+                            const regex = new RegExp(`(${searchTerm})`, 'gi');
+                            el.innerHTML = original.replace(regex, '<span class="highlight">$1</span>');
+                        }
+                    });
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            if (hasResults) {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+
+        /* === DARK MODE === */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            btn.textContent = isDark ? '☀️ מצב יום' : '🌙 מצב לילה';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            const btn = document.getElementById('darkModeToggle');
+            if (btn) btn.textContent = '☀️ מצב יום';
+        }
+
+        /* === SOLUTION TOGGLE === */
+        function toggleSolution(button) {
+            const content = button.nextElementSibling;
+            content.classList.toggle('show');
+            button.textContent = content.classList.contains('show') ? '🔒 הסתר פתרון' : '🔓 הצג פתרון';
+        }
+    </script>
+</body>
+</html>
